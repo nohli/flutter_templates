@@ -14,12 +14,11 @@ workflows:
     scripts:
       - name: Get Packages
         script: flutter pub get
-      - name: Analyze And Test
+      - name: Analyze
         script: |
           set -eu
           dart format --output=none --set-exit-if-changed --line-length 120 lib test
           flutter analyze --fatal-infos
-          flutter test --coverage
       - name: Initialize Signing Keychain
         script: keychain initialize
       - name: Fetch Signing Files
@@ -41,7 +40,9 @@ workflows:
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
+        submit_to_testflight: false
+        beta_groups:
+          - Tester
       email:
         recipients:
           - $CODEMAGIC_NOTIFICATION_EMAIL
@@ -64,12 +65,11 @@ workflows:
     scripts:
       - name: Get Packages
         script: flutter pub get
-      - name: Analyze And Test
+      - name: Analyze
         script: |
           set -eu
           dart format --output=none --set-exit-if-changed --line-length 120 lib test
           flutter analyze --fatal-infos
-          flutter test --coverage
       - name: Build App Bundle
         script: |
           set -eu

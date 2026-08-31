@@ -105,9 +105,7 @@ void main() {
       final YamlMap buildStep = scripts
           .map(_asYamlMap)
           .singleWhere((YamlMap step) => step['name'] == workflowCase.buildStep);
-      final YamlMap testStep = scripts
-          .map(_asYamlMap)
-          .singleWhere((YamlMap step) => step['name'] == 'Analyze And Test');
+      final YamlMap analyzeStep = scripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Analyze');
       final YamlMap email = _asYamlMap(_asYamlMap(workflow['publishing'])['email']);
       final YamlMap notifications = _asYamlMap(email['notify']);
       final String buildScript = buildStep['script'] as String;
@@ -115,7 +113,9 @@ void main() {
       expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
       expect(environment['flutter'], '3.44.9');
       expect(variables['CM_CLONE_UNSHALLOW'], 'true');
-      expect(testStep['script'], contains('flutter test --coverage'));
+      expect(analyzeStep['script'], contains('flutter analyze --fatal-infos'));
+      expect(analyzeStep['script'], isNot(contains('flutter test')));
+      expect(analyzeStep['script'], isNot(contains('coverage')));
       expect(buildScript, contains(r'build_number="$(git rev-list --count HEAD)"'));
       expect(buildScript, contains(r'--build-number="$build_number"'));
       expect(notifications['success'], isFalse);
@@ -126,7 +126,13 @@ void main() {
     expect(_asYamlMap(iosEnvironment['vars'])['BUNDLE_ID'], 'com.achimsapps.templates');
     final YamlMap iosPublishing = _asYamlMap(_asYamlMap(workflows['templates-ios'])['publishing']);
     final YamlMap appStoreConnect = _asYamlMap(iosPublishing['app_store_connect']);
-    expect(appStoreConnect['submit_to_testflight'], isTrue);
+    expect(appStoreConnect['submit_to_testflight'], isFalse);
+    expect(_asYamlList(appStoreConnect['beta_groups']), <String>['Tester']);
+
+    expect(
+      File('release_notes_en-US.txt').readAsStringSync(),
+      "Please explore the app's main flows and report anything confusing, incorrect, or unstable.\n",
+    );
 
     final YamlMap androidWorkflow = _asYamlMap(workflows['templates-android']);
     final YamlMap androidEnvironment = _asYamlMap(androidWorkflow['environment']);

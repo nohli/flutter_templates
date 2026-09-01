@@ -18,7 +18,7 @@ fvm flutter run
 ## Verification
 
 ```sh
-fvm dart format --output=none --set-exit-if-changed --line-length 120 lib test
+fvm dart format --output=none --set-exit-if-changed --page-width 120 lib test
 fvm dart analyze --fatal-infos
 fvm flutter test --coverage
 ```

@@ -211,6 +211,8 @@ void main() {
             .map(_asYamlMap)
             .map((YamlMap step) => step['run'])
             .whereType<String>();
+        expect(commands, contains('dart format --page-width 120 --output=none --set-exit-if-changed lib test'));
+        expect(commands.any((String command) => command.contains('--line-length')), isFalse);
         expect(commands, contains('flutter test --coverage'));
       }
     }

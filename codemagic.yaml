@@ -17,12 +17,16 @@ workflows:
       - name: Analyze
         script: |
           set -eu
-          dart format --output=none --set-exit-if-changed --line-length 120 lib test
+          dart format --page-width 120 --output=none --set-exit-if-changed lib test
           flutter analyze --fatal-infos
       - name: Initialize Signing Keychain
         script: keychain initialize
       - name: Fetch Signing Files
-        script: app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+        script: |
+          set -eu
+          : "${APP_STORE_CONNECT_PRIVATE_KEY:?APP_STORE_CONNECT_PRIVATE_KEY must be configured in appstore_credentials}"
+          : "${CERTIFICATE_PRIVATE_KEY:?CERTIFICATE_PRIVATE_KEY must be configured in appstore_credentials}"
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
       - name: Add Signing Certificates
         script: keychain add-certificates
       - name: Apply Signing Profiles
@@ -30,6 +34,8 @@ workflows:
       - name: Build IPA
         script: |
           set -eu
+          shallow_repository="$(git rev-parse --is-shallow-repository)"
+          [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
           build_number="$(git rev-list --count HEAD)"
           flutter build ipa --release --build-number="$build_number"
     artifacts:
@@ -68,11 +74,13 @@ workflows:
       - name: Analyze
         script: |
           set -eu
-          dart format --output=none --set-exit-if-changed --line-length 120 lib test
+          dart format --page-width 120 --output=none --set-exit-if-changed lib test
           flutter analyze --fatal-infos
       - name: Build App Bundle
         script: |
           set -eu
+          shallow_repository="$(git rev-parse --is-shallow-repository)"
+          [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
           build_number="$(git rev-list --count HEAD)"
           flutter build appbundle --release --build-number="$build_number"
     artifacts:

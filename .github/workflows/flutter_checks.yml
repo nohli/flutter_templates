@@ -23,7 +23,7 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
       - name: Check Dart formatting
-        run: dart format --line-length 120 --output=none --set-exit-if-changed lib test
+        run: dart format --page-width 120 --output=none --set-exit-if-changed lib test
 
   analyze:
     name: Analyze Dart

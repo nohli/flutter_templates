@@ -113,26 +113,46 @@ void main() {
       expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
       expect(environment['flutter'], '3.44.9');
       expect(variables['CM_CLONE_UNSHALLOW'], 'true');
+      expect(analyzeStep['script'], contains('dart format --page-width 120'));
+      expect(analyzeStep['script'], isNot(contains('--line-length')));
       expect(analyzeStep['script'], contains('flutter analyze --fatal-infos'));
       expect(analyzeStep['script'], isNot(contains('flutter test')));
       expect(analyzeStep['script'], isNot(contains('coverage')));
+      expect(scripts.map(_asYamlMap).map((YamlMap step) => step['name']), isNot(contains('Test')));
+      expect(buildScript, contains(r'git rev-parse --is-shallow-repository'));
       expect(buildScript, contains(r'build_number="$(git rev-list --count HEAD)"'));
       expect(buildScript, contains(r'--build-number="$build_number"'));
+      expect(buildScript, isNot(contains('--build-name')));
       expect(notifications['success'], isFalse);
       expect(notifications['failure'], isTrue);
     }
 
     final YamlMap iosEnvironment = _asYamlMap(_asYamlMap(workflows['templates-ios'])['environment']);
-    expect(_asYamlMap(iosEnvironment['vars'])['BUNDLE_ID'], 'com.achimsapps.templates');
+    final YamlList iosScripts = _asYamlList(_asYamlMap(workflows['templates-ios'])['scripts']);
+    final String fetchSigningScript =
+        iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Fetch Signing Files')['script']
+            as String;
+    expect(_asYamlList(iosEnvironment['groups']), <String>['appstore_credentials']);
+    final YamlMap iosVariables = _asYamlMap(iosEnvironment['vars']);
+    expect(iosVariables['BUNDLE_ID'], 'com.achimsapps.templates');
+    expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_PRIVATE_KEY:?'));
+    expect(fetchSigningScript, contains(r'${CERTIFICATE_PRIVATE_KEY:?'));
     final YamlMap iosPublishing = _asYamlMap(_asYamlMap(workflows['templates-ios'])['publishing']);
     final YamlMap appStoreConnect = _asYamlMap(iosPublishing['app_store_connect']);
+    expect(appStoreConnect['api_key'], r'$APP_STORE_CONNECT_PRIVATE_KEY');
+    expect(appStoreConnect['key_id'], r'$APP_STORE_CONNECT_KEY_IDENTIFIER');
+    expect(appStoreConnect['issuer_id'], r'$APP_STORE_CONNECT_ISSUER_ID');
     expect(appStoreConnect['submit_to_testflight'], isFalse);
     expect(_asYamlList(appStoreConnect['beta_groups']), <String>['Tester']);
 
-    expect(
-      File('release_notes_en-US.txt').readAsStringSync(),
-      "Please explore the app's main flows and report anything confusing, incorrect, or unstable.\n",
-    );
+    final List<Object?> releaseNotes = (jsonDecode(File('release_notes.json').readAsStringSync()) as List<Object?>);
+    expect(releaseNotes, <Object?>[
+      <String, String>{
+        'language': 'en-US',
+        'text': "Please explore the app's main flows and report anything confusing, incorrect, or unstable.",
+      },
+    ]);
+    expect(File('release_notes_en-US.txt').existsSync(), isFalse);
 
     final YamlMap androidWorkflow = _asYamlMap(workflows['templates-android']);
     final YamlMap androidEnvironment = _asYamlMap(androidWorkflow['environment']);

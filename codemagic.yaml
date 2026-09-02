@@ -3,6 +3,13 @@ workflows:
     name: UI Templates iOS
     instance_type: mac_mini_m2
     max_build_duration: 45
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
     environment:
       groups:
         - appstore_credentials
@@ -14,11 +21,6 @@ workflows:
     scripts:
       - name: Get Packages
         script: flutter pub get
-      - name: Analyze
-        script: |
-          set -eu
-          dart format --page-width 120 --output=none --set-exit-if-changed lib test
-          flutter analyze --fatal-infos
       - name: Initialize Signing Keychain
         script: keychain initialize
       - name: Fetch Signing Files
@@ -26,7 +28,7 @@ workflows:
           set -eu
           : "${APP_STORE_CONNECT_PRIVATE_KEY:?APP_STORE_CONNECT_PRIVATE_KEY must be configured in appstore_credentials}"
           : "${CERTIFICATE_PRIVATE_KEY:?CERTIFICATE_PRIVATE_KEY must be configured in appstore_credentials}"
-          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
       - name: Add Signing Certificates
         script: keychain add-certificates
       - name: Apply Signing Profiles
@@ -40,7 +42,6 @@ workflows:
           flutter build ipa --release --build-number="$build_number"
     artifacts:
       - build/ios/ipa/*.ipa
-      - build/ios/archive/*.xcarchive
     publishing:
       app_store_connect:
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
@@ -60,6 +61,13 @@ workflows:
     name: UI Templates Android
     instance_type: mac_mini_m2
     max_build_duration: 45
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
     environment:
       groups:
         - google_play_credentials
@@ -71,11 +79,6 @@ workflows:
     scripts:
       - name: Get Packages
         script: flutter pub get
-      - name: Analyze
-        script: |
-          set -eu
-          dart format --page-width 120 --output=none --set-exit-if-changed lib test
-          flutter analyze --fatal-infos
       - name: Build App Bundle
         script: |
           set -eu

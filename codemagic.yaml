@@ -26,7 +26,7 @@ workflows:
           set -eu
           : "${APP_STORE_CONNECT_PRIVATE_KEY:?APP_STORE_CONNECT_PRIVATE_KEY must be configured in appstore_credentials}"
           : "${CERTIFICATE_PRIVATE_KEY:?CERTIFICATE_PRIVATE_KEY must be configured in appstore_credentials}"
-          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE
       - name: Add Signing Certificates
         script: keychain add-certificates
       - name: Apply Signing Profiles

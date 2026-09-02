@@ -15,11 +15,13 @@ fvm flutter pub get
 fvm flutter run
 ```
 
-## Verification
+## Full handoff suite
+
+Run every command before a full handoff; these local gates intentionally stay out of the quota-sensitive Codemagic release workflows.
 
 ```sh
 fvm dart format --output=none --set-exit-if-changed --page-width 120 lib test
-fvm dart analyze --fatal-infos
+fvm flutter analyze --fatal-infos
 fvm flutter test --coverage
 ```
 

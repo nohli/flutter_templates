@@ -105,7 +105,7 @@ void main() {
       final YamlMap buildStep = scripts
           .map(_asYamlMap)
           .singleWhere((YamlMap step) => step['name'] == workflowCase.buildStep);
-      final YamlMap analyzeStep = scripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Analyze');
+      final List<Object?> scriptNames = scripts.map(_asYamlMap).map((YamlMap step) => step['name']).toList();
       final YamlMap email = _asYamlMap(_asYamlMap(workflow['publishing'])['email']);
       final YamlMap notifications = _asYamlMap(email['notify']);
       final String buildScript = buildStep['script'] as String;
@@ -113,12 +113,8 @@ void main() {
       expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
       expect(environment['flutter'], '3.44.9');
       expect(variables['CM_CLONE_UNSHALLOW'], 'true');
-      expect(analyzeStep['script'], contains('dart format --page-width 120'));
-      expect(analyzeStep['script'], isNot(contains('--line-length')));
-      expect(analyzeStep['script'], contains('flutter analyze --fatal-infos'));
-      expect(analyzeStep['script'], isNot(contains('flutter test')));
-      expect(analyzeStep['script'], isNot(contains('coverage')));
-      expect(scripts.map(_asYamlMap).map((YamlMap step) => step['name']), isNot(contains('Test')));
+      expect(scriptNames, isNot(contains('Analyze')));
+      expect(scriptNames, isNot(contains('Test')));
       expect(buildScript, contains(r'git rev-parse --is-shallow-repository'));
       expect(buildScript, contains(r'build_number="$(git rev-list --count HEAD)"'));
       expect(buildScript, contains(r'--build-number="$build_number"'));
@@ -329,7 +325,7 @@ void main() {
     expect(File('windows/runner/resources/app_icon.ico').existsSync(), isTrue);
   });
 
-  test('startup surfaces stay aligned with the fixed light app theme', () {
+  test('startup surfaces keep the adaptive iOS launch and fixed-light platform shells', () {
     final String launchStoryboard = File('ios/Runner/Base.lproj/LaunchScreen.storyboard').readAsStringSync();
     final String mainStoryboard = File('ios/Runner/Base.lproj/Main.storyboard').readAsStringSync();
     final String iosInfo = File('ios/Runner/Info.plist').readAsStringSync();
@@ -342,19 +338,20 @@ void main() {
     final Map<String, dynamic> webManifest =
         jsonDecode(File('web/manifest.json').readAsStringSync()) as Map<String, dynamic>;
 
-    for (final String storyboard in <String>[launchStoryboard, mainStoryboard]) {
-      expect(
-        storyboard,
-        anyOf(
-          contains('<color key="backgroundColor" white="1"'),
-          contains('<color key="backgroundColor" red="1" green="1" blue="1"'),
-        ),
-      );
-      expect(storyboard, isNot(contains('systemColor="systemBackgroundColor"')));
-    }
+    expect(launchStoryboard, contains('<color key="backgroundColor" systemColor="systemBackgroundColor"'));
+    expect(launchStoryboard, isNot(contains('<color key="backgroundColor" white="1"')));
+    expect(launchStoryboard, isNot(contains('<color key="backgroundColor" red="1" green="1" blue="1"')));
+    expect(
+      mainStoryboard,
+      anyOf(
+        contains('<color key="backgroundColor" white="1"'),
+        contains('<color key="backgroundColor" red="1" green="1" blue="1"'),
+      ),
+    );
+    expect(mainStoryboard, isNot(contains('systemColor="systemBackgroundColor"')));
     expect(launchStoryboard, isNot(contains('LaunchImage')));
     expect(FileSystemEntity.typeSync('ios/Runner/Assets.xcassets/LaunchImage.imageset'), FileSystemEntityType.notFound);
-    expect(iosInfo, contains('<key>UIUserInterfaceStyle</key>\n\t<string>Light</string>'));
+    expect(iosInfo, isNot(contains('<key>UIUserInterfaceStyle</key>')));
     expect(androidLaunch, contains('@android:color/white'));
     expect(androidModernLaunch, contains('@android:color/white'));
     expect(RegExp(r'parent="@android:style/Theme.Light.NoTitleBar"').allMatches(androidNightStyles), hasLength(2));

@@ -138,7 +138,7 @@ void main() {
     expect(appStoreConnect['api_key'], r'$APP_STORE_CONNECT_PRIVATE_KEY');
     expect(appStoreConnect['key_id'], r'$APP_STORE_CONNECT_KEY_IDENTIFIER');
     expect(appStoreConnect['issuer_id'], r'$APP_STORE_CONNECT_ISSUER_ID');
-    expect(appStoreConnect['submit_to_testflight'], isFalse);
+    expect(appStoreConnect['submit_to_testflight'], isTrue);
     expect(_asYamlList(appStoreConnect['beta_groups']), <String>['Tester']);
 
     final List<Object?> releaseNotes = (jsonDecode(File('release_notes.json').readAsStringSync()) as List<Object?>);

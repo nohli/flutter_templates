@@ -281,18 +281,20 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderSt
   void _showDateDialog(BuildContext context) {
     showDialog<dynamic>(
       context: context,
-      builder: (BuildContext context) => CalendarPopupView(
-        minimumDate: DateTime.now(),
-        initialEndDate: endDate,
-        initialStartDate: startDate,
-        onApplyClick: (DateTime startData, DateTime endData) {
-          if (mounted) {
-            setState(() {
-              startDate = startData;
-              endDate = endData;
-            });
-          }
-        },
+      builder: (BuildContext context) => MediaQuery.withNoTextScaling(
+        child: CalendarPopupView(
+          minimumDate: DateTime.now(),
+          initialEndDate: endDate,
+          initialStartDate: startDate,
+          onApplyClick: (DateTime startData, DateTime endData) {
+            if (mounted) {
+              setState(() {
+                startDate = startData;
+                endDate = endData;
+              });
+            }
+          },
+        ),
       ),
     );
   }
@@ -379,7 +381,8 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderSt
     final settings = await Navigator.push<HotelFilterSettings>(
       context,
       MaterialPageRoute<HotelFilterSettings>(
-        builder: (BuildContext context) => FiltersScreen(initialSettings: _filterSettings),
+        builder: (BuildContext context) =>
+            MediaQuery.withNoTextScaling(child: FiltersScreen(initialSettings: _filterSettings)),
         fullscreenDialog: true,
       ),
     );

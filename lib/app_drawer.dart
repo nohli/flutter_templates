@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'app_identity.dart';
 import 'app_theme.dart';
 
 enum AppSection { home, help, feedback, invite, about }
@@ -54,13 +53,16 @@ class AppDrawer extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: const Icon(Icons.dashboard_customize_rounded, color: Colors.blue, size: 58),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(60)),
+                          child: Image.asset('assets/images/userImage.png', fit: BoxFit.cover),
+                        ),
                       ),
                     ),
                     const Padding(
                       padding: EdgeInsets.only(top: 8, left: 4),
                       child: Text(
-                        AppIdentity.name,
+                        'Shaquille Oatmeal',
                         style: TextStyle(fontWeight: FontWeight.w600, color: AppTheme.grey, fontSize: 18),
                       ),
                     ),

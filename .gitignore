@@ -71,6 +71,8 @@ android/app/release/app-release.aab
 *.p8
 *.pem
 *service-account*.json
+*service_account*.json
+*serviceAccount*.json
 
 # Other
 ios/Flutter/flutter_export_environment.sh

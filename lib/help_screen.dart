@@ -1,82 +1,114 @@
 import 'package:flutter/material.dart';
 
+import 'app_identity.dart';
+import 'app_theme.dart';
+import 'external_actions.dart';
+
 class HelpScreen extends StatefulWidget {
-  const HelpScreen({super.key});
+  const HelpScreen({super.key, this.launcher = launchExternalUri});
+
+  final ExternalUriLauncher launcher;
 
   @override
   State<HelpScreen> createState() => _HelpScreenState();
 }
 
 class _HelpScreenState extends State<HelpScreen> {
+  bool _isOpeningEmail = false;
+  String? _errorMessage;
+
+  Future<void> _openSupport() async {
+    setState(() {
+      _isOpeningEmail = true;
+      _errorMessage = null;
+    });
+    bool launched = false;
+    try {
+      launched = await widget.launcher(supportEmailUri());
+    } catch (_) {
+      launched = false;
+    }
+    if (!mounted) return;
+    setState(() {
+      _isOpeningEmail = false;
+      _errorMessage = launched ? null : 'No email app is available. Contact ${AppIdentity.supportEmail}.';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top, left: 16, right: 16),
-          child: Image.asset('assets/images/helpImage.png'),
-        ),
-        Container(
-          padding: const EdgeInsets.only(top: 8),
-          child: const Text(
-            'How can we help you?',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.only(top: 16),
-          child: const Text(
-            'It looks like you are experiencing problems\nwith our sign up process. We are here to\nhelp so please get in touch with us',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Container(
-                width: 140,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.6),
-                        offset: const Offset(4, 4),
-                        blurRadius: 8.0),
-                  ],
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {},
-                    child: const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: Text(
-                          'Chat with Us',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
+    return ColoredBox(
+      color: const Color(0xFFFEFEFE),
+      child: SafeArea(
+        bottom: false,
+        child: DefaultTextStyle.merge(
+          style: const TextStyle(color: Color(0xFF253840)),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(24, 16, 24, MediaQuery.paddingOf(context).bottom + 24),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight - 40),
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: <Widget>[
+                      Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 600),
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: Image.asset(
+                              'assets/images/helpImage.png',
+                              fit: BoxFit.contain,
+                              excludeFromSemantics: true,
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'How can we help you?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Questions or problems with a template? Email us and we will help.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      if (_errorMessage != null) ...<Widget>[
+                        const SizedBox(height: 8),
+                        Semantics(
+                          liveRegion: true,
+                          child: Text(
+                            _errorMessage!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Theme.of(context).colorScheme.error),
+                          ),
+                        ),
+                      ],
+                      const Spacer(),
+                      const SizedBox(height: 24),
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                          minimumSize: const Size(140, 48),
+                          backgroundColor: AppTheme.actionBlue,
+                          foregroundColor: Colors.white,
+                          elevation: 8,
+                          shadowColor: Colors.grey.withValues(alpha: 0.6),
+                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                        ),
+                        onPressed: _isOpeningEmail ? null : _openSupport,
+                        child: Text(_isOpeningEmail ? 'Opening…' : 'Email Us'),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 }

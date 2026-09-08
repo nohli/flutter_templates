@@ -106,6 +106,8 @@ void main() {
           .map(_asYamlMap)
           .singleWhere((YamlMap step) => step['name'] == workflowCase.buildStep);
       final List<Object?> scriptNames = scripts.map(_asYamlMap).map((YamlMap step) => step['name']).toList();
+      final String getPackagesScript =
+          scripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Get Packages')['script'] as String;
       final YamlMap email = _asYamlMap(_asYamlMap(workflow['publishing'])['email']);
       final YamlMap notifications = _asYamlMap(email['notify']);
       final String buildScript = buildStep['script'] as String;
@@ -113,12 +115,15 @@ void main() {
       expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
       expect(environment['flutter'], '3.44.9');
       expect(variables['CM_CLONE_UNSHALLOW'], 'true');
+      expect(_asYamlList(environment['groups']), contains('deployment'));
       expect(scriptNames, isNot(contains('Analyze')));
       expect(scriptNames, isNot(contains('Test')));
+      expect(getPackagesScript, contains(r'${CODEMAGIC_NOTIFICATION_EMAIL:?'));
       expect(buildScript, contains(r'git rev-parse --is-shallow-repository'));
       expect(buildScript, contains(r'build_number="$(git rev-list --count HEAD)"'));
       expect(buildScript, contains(r'--build-number="$build_number"'));
       expect(buildScript, isNot(contains('--build-name')));
+      expect(_asYamlList(email['recipients']), <String>[r'$CODEMAGIC_NOTIFICATION_EMAIL']);
       expect(notifications['success'], isFalse);
       expect(notifications['failure'], isTrue);
     }
@@ -128,9 +133,13 @@ void main() {
     final String fetchSigningScript =
         iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Fetch Signing Files')['script']
             as String;
-    expect(_asYamlList(iosEnvironment['groups']), <String>['appstore_credentials']);
+    expect(_asYamlList(iosEnvironment['groups']), <String>['appstore_credentials', 'deployment']);
     final YamlMap iosVariables = _asYamlMap(iosEnvironment['vars']);
+    expect(iosVariables.containsKey('APP_STORE_CONNECT_KEY_IDENTIFIER'), isFalse);
+    expect(iosVariables.containsKey('APP_STORE_CONNECT_ISSUER_ID'), isFalse);
     expect(iosVariables['BUNDLE_ID'], 'com.achimsapps.templates');
+    expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_KEY_IDENTIFIER:?'));
+    expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_ISSUER_ID:?'));
     expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_PRIVATE_KEY:?'));
     expect(fetchSigningScript, contains(r'${CERTIFICATE_PRIVATE_KEY:?'));
     final YamlMap iosPublishing = _asYamlMap(_asYamlMap(workflows['templates-ios'])['publishing']);

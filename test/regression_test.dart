@@ -10,14 +10,17 @@ import 'package:templates/app_drawer.dart';
 import 'package:templates/app_shell.dart';
 import 'package:templates/app_identity.dart';
 import 'package:templates/design_course/course_info_screen.dart';
+import 'package:templates/design_course/design_course_app_theme.dart';
 import 'package:templates/design_course/home_design_course.dart';
 import 'package:templates/design_course/models/category.dart';
 import 'package:templates/feedback_screen.dart';
 import 'package:templates/fitness_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:templates/fitness_app/fitness_app_home_screen.dart';
+import 'package:templates/fitness_app/fitness_app_theme.dart';
 import 'package:templates/fitness_app/training/training_screen.dart';
 import 'package:templates/fitness_app/ui_view/area_list_view.dart';
 import 'package:templates/fitness_app/ui_view/glass_view.dart';
+import 'package:templates/fitness_app/ui_view/workout_view.dart';
 import 'package:templates/help_screen.dart';
 import 'package:templates/home_screen.dart';
 import 'package:templates/hotel_booking/calendar_popup_view.dart';
@@ -460,7 +463,7 @@ void main() {
       'assets/design_course/interFace4.png',
       'assets/design_course/userImage.png',
     ]);
-    await _pumpScreen(tester, const DesignCourseHomeScreen(), disableAnimations: true);
+    await _pumpScreen(tester, const DesignCourseHomeScreen(), size: const Size(402, 874), disableAnimations: true);
 
     final Finder firstCourseImage = find
         .byWidgetPredicate(
@@ -484,6 +487,62 @@ void main() {
     expect(imageBounds.size, const Size(86, 86));
     expect(titleBounds.left, greaterThanOrEqualTo(imageBounds.right + 8));
     expect(popularCardBounds.width / popularCardBounds.height, closeTo(0.8, 0.01));
+    expect(
+      find.descendant(
+        of: find.bySemanticsLabel(RegExp(r'^Open User Interface Design sample course,')).first,
+        matching: find.byWidgetPredicate(
+          (Widget widget) =>
+              widget is DecoratedBox &&
+              widget.decoration is BoxDecoration &&
+              (widget.decoration as BoxDecoration).color == DesignCourseAppTheme.cardBackground,
+        ),
+      ),
+      findsOneWidget,
+    );
+    expect(find.byIcon(Icons.add), findsAtLeastNWidgets(1));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('fitness templates preserve the original normal-size composition', (WidgetTester tester) async {
+    _evictAssets(<String>[
+      'assets/fitness_app/eaten.png',
+      'assets/fitness_app/burned.png',
+      'assets/fitness_app/breakfast.png',
+      'assets/fitness_app/runner.png',
+      'assets/fitness_app/back.png',
+      'assets/fitness_app/area1.png',
+      'assets/fitness_app/area2.png',
+      'assets/fitness_app/area3.png',
+      'assets/fitness_app/tab_1.png',
+      'assets/fitness_app/tab_1s.png',
+      'assets/fitness_app/tab_2.png',
+      'assets/fitness_app/tab_2s.png',
+      'assets/fitness_app/tab_3.png',
+      'assets/fitness_app/tab_3s.png',
+      'assets/fitness_app/tab_4.png',
+      'assets/fitness_app/tab_4s.png',
+    ]);
+    await _pumpScreen(tester, const FitnessAppHomeScreen(), size: const Size(402, 874), disableAnimations: true);
+
+    final diaryTitleSurface = find.ancestor(
+      of: find.text('Mediterranean diet'),
+      matching: find.byWidgetPredicate(
+        (Widget widget) => widget is Material && widget.color == FitnessAppTheme.background,
+      ),
+    );
+    expect(diaryTitleSurface, findsWidgets);
+    expect(find.text('15 May'), findsOneWidget);
+    expect(find.byIcon(Icons.keyboard_arrow_left), findsOneWidget);
+    expect(find.byIcon(Icons.keyboard_arrow_right), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.bySemanticsLabel('Training').first);
+    await tester.pump();
+
+    final workout = find.byType(WorkoutView);
+    final playIcon = find.descendant(of: workout, matching: find.byIcon(Icons.arrow_right));
+    expect(tester.getCenter(playIcon).dx, greaterThan(300));
+    expect(find.byIcon(Icons.arrow_forward), findsAtLeastNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 
@@ -785,8 +844,8 @@ void main() {
 
     await _pumpScreen(tester, hotelCard);
 
-    final Finder location = find.text('Wembley, London · 2.0 km to city');
-    expect(tester.widget<Text>(location).maxLines, 2);
+    final Finder location = find.text('Wembley, London');
+    expect(find.text('2.0 km to city'), findsOneWidget);
     expect(tester.widget<Flex>(find.ancestor(of: location, matching: find.byType(Flex))).direction, Axis.horizontal);
     expect(tester.takeException(), isNull);
 

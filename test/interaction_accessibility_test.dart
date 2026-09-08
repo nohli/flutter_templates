@@ -454,7 +454,10 @@ void main() {
     final diarySemantics = find.descendant(of: navigation, matching: find.bySemanticsLabel('Diary')).first;
     expect(tester.getSemantics(diarySemantics).flagsCollection.isSelected, Tristate.isTrue);
     expect(find.ancestor(of: find.text('Details'), matching: find.byType(InkWell)), findsNothing);
-    expect(find.text('Sample day · 15 May'), findsOneWidget);
+    expect(find.text('15 May'), findsOneWidget);
+    expect(find.bySemanticsLabel('Sample day, 15 May'), findsOneWidget);
+    expect(find.byIcon(Icons.keyboard_arrow_left), findsOneWidget);
+    expect(find.byIcon(Icons.keyboard_arrow_right), findsOneWidget);
 
     final trainingButtons = find.descendant(of: navigation, matching: find.bySemanticsLabel('Training'));
     final firstTrainingControl = find.descendant(of: trainingButtons.first, matching: find.byType(InkWell));
@@ -510,8 +513,8 @@ void main() {
       findsOneWidget,
     );
     expect(tester.getSemantics(trainingButtons.at(1)).flagsCollection.isSelected, Tristate.isTrue);
-    expect(find.byIcon(Icons.keyboard_arrow_left), findsNothing);
-    expect(find.byIcon(Icons.keyboard_arrow_right), findsNothing);
+    expect(find.byIcon(Icons.keyboard_arrow_left), findsOneWidget);
+    expect(find.byIcon(Icons.keyboard_arrow_right), findsOneWidget);
     semantics.dispose();
   });
 

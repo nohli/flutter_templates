@@ -84,8 +84,6 @@ class MealsView extends StatelessWidget {
   final AnimationController animationController;
   final Animation<double> animation;
 
-  static const Color _contentScrim = Color(0xFF263238);
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -101,11 +99,6 @@ class MealsView extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         child: Padding(padding: const EdgeInsets.all(8), child: content),
-      );
-    } else {
-      content = DecoratedBox(
-        decoration: const BoxDecoration(color: _contentScrim, borderRadius: BorderRadius.all(Radius.circular(8))),
-        child: Padding(padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8), child: content),
       );
     }
 
@@ -145,7 +138,15 @@ class MealsView extends StatelessWidget {
                           topRight: Radius.circular(54.0),
                         ),
                       ),
-                      child: Padding(padding: EdgeInsets.only(top: 54, left: 8, right: 8, bottom: 8), child: content),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: 54,
+                          left: useExpandedCard ? 8 : 16,
+                          right: useExpandedCard ? 8 : 16,
+                          bottom: 8,
+                        ),
+                        child: content,
+                      ),
                     ),
                   ),
                   Positioned(

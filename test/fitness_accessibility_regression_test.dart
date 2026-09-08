@@ -8,9 +8,57 @@ import 'package:templates/fitness_app/my_diary/meals_list_view.dart';
 import 'package:templates/fitness_app/training/training_screen.dart';
 import 'package:templates/fitness_app/ui_view/area_list_view.dart';
 import 'package:templates/fitness_app/ui_view/body_measurement.dart';
+import 'package:templates/fitness_app/ui_view/mediterranean_diet_view.dart';
+import 'package:templates/fitness_app/ui_view/sample_date_header.dart';
 import 'package:templates/fitness_app/ui_view/wave_view.dart';
 
 void main() {
+  testWidgets('sample date header fits the original phone composition', (WidgetTester tester) async {
+    await _pumpFitnessScreen(
+      tester,
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                'My Diary',
+                style: TextStyle(
+                  fontFamily: FitnessAppTheme.fontName,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 28,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+            SampleDateHeader(),
+          ],
+        ),
+      ),
+      size: const Size(402, 874),
+      disableAnimations: true,
+    );
+
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('diet summary fits the original phone composition', (WidgetTester tester) async {
+    final AnimationController controller = AnimationController(vsync: tester, value: 1);
+    addTearDown(controller.dispose);
+    _evictAssets(<String>['assets/fitness_app/eaten.png', 'assets/fitness_app/burned.png']);
+
+    await _pumpFitnessScreen(
+      tester,
+      SingleChildScrollView(
+        child: MediterraneanDietView(animationController: controller, animation: controller),
+      ),
+      size: const Size(402, 874),
+      disableAnimations: true,
+    );
+
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('body measurements honor every enlarged text scale without shrinking it', (WidgetTester tester) async {
     final AnimationController controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
@@ -35,7 +83,7 @@ void main() {
     }
   });
 
-  testWidgets('meal cards keep readable contrast at the default text size', (WidgetTester tester) async {
+  testWidgets('meal cards preserve the original open gradients at the default text size', (WidgetTester tester) async {
     final roboto = FontLoader('Roboto')..addFont(rootBundle.load('assets/fonts/Roboto-Bold.ttf'));
     await roboto.load();
     final AnimationController controller = AnimationController(vsync: tester, value: 1);
@@ -55,12 +103,46 @@ void main() {
       ),
     );
 
-    await expectLater(tester, meetsGuideline(textContrastGuideline));
+    final darkScrim = find.byWidgetPredicate(
+      (Widget widget) =>
+          widget is DecoratedBox &&
+          widget.decoration is BoxDecoration &&
+          (widget.decoration as BoxDecoration).color == const Color(0xFF263238),
+    );
+    expect(darkScrim, findsNothing);
+    expect(tester.widget<Text>(find.text('Breakfast')).style?.color, FitnessAppTheme.white);
     final breakfastTitle = tester.renderObject<RenderParagraph>(find.text('Breakfast'));
     expect(
       breakfastTitle.getBoxesForSelection(const TextSelection(baseOffset: 0, extentOffset: 'Breakfast'.length)),
       hasLength(1),
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('large-text meal cards retain the accessible contrast surface', (WidgetTester tester) async {
+    final roboto = FontLoader('Roboto')..addFont(rootBundle.load('assets/fonts/Roboto-Bold.ttf'));
+    await roboto.load();
+    final AnimationController controller = AnimationController(vsync: tester, value: 1);
+    addTearDown(controller.dispose);
+    _evictAssets(<String>['assets/fitness_app/breakfast.png']);
+
+    await _pumpFitnessScreen(
+      tester,
+      SizedBox(
+        width: 320,
+        height: 600,
+        child: MealsView(
+          mealsListData: MealsListData.samples.first,
+          animationController: controller,
+          animation: controller,
+        ),
+      ),
+      size: const Size(320, 700),
+      textScale: 3.2,
+      disableAnimations: true,
+    );
+
+    await expectLater(tester, meetsGuideline(textContrastGuideline));
     expect(tester.takeException(), isNull);
   });
 

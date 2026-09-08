@@ -39,7 +39,11 @@ class HotelListView extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                   boxShadow: <BoxShadow>[
-                    BoxShadow(color: colors.shadow.withValues(alpha: 0.3), offset: const Offset(4, 4), blurRadius: 16),
+                    BoxShadow(
+                      color: showFullText ? colors.shadow.withValues(alpha: 0.3) : Colors.grey.withValues(alpha: 0.6),
+                      offset: const Offset(4, 4),
+                      blurRadius: 16,
+                    ),
                   ],
                 ),
                 child: ClipRRect(
@@ -50,7 +54,7 @@ class HotelListView extends StatelessWidget {
                         children: <Widget>[
                           AspectRatio(aspectRatio: 2, child: Image.asset(hotelData.imagePath, fit: BoxFit.cover)),
                           Container(
-                            color: colors.surfaceContainerLow,
+                            color: colors.surface,
                             child: Flex(
                               direction: stackDetails ? Axis.vertical : Axis.horizontal,
                               crossAxisAlignment: stackDetails ? CrossAxisAlignment.stretch : CrossAxisAlignment.start,
@@ -75,7 +79,7 @@ class HotelListView extends StatelessWidget {
                         top: 8,
                         right: 8,
                         child: Material(
-                          color: colors.surfaceContainerHigh.withValues(alpha: 0.9),
+                          color: showFullText ? colors.surfaceContainerHigh.withValues(alpha: 0.9) : Colors.transparent,
                           shape: const CircleBorder(),
                           child: Semantics(
                             button: true,
@@ -91,8 +95,8 @@ class HotelListView extends StatelessWidget {
                                     : 'Favorite ${hotelData.title}',
                                 constraints: const BoxConstraints.tightFor(width: 48, height: 48),
                                 isSelected: isFavorite,
-                                selectedIcon: Icon(Icons.favorite, color: colors.secondary),
-                                icon: Icon(Icons.favorite_border, color: colors.secondary),
+                                selectedIcon: Icon(Icons.favorite, color: colors.primary),
+                                icon: Icon(Icons.favorite_border, color: colors.primary),
                                 onPressed: onFavoriteChanged,
                               ),
                             ),
@@ -121,7 +125,9 @@ class _HotelDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      padding: showFullText
+          ? const EdgeInsets.fromLTRB(16, 8, 16, 8)
+          : const EdgeInsets.only(left: 16, top: 8, bottom: 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,20 +137,38 @@ class _HotelDetails extends StatelessWidget {
             textAlign: TextAlign.left,
             style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
           ),
-          Row(
-            children: <Widget>[
-              FaIcon(FontAwesomeIcons.locationDot, size: 12, color: colors.secondary),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  '${hotelData.location} · ${hotelData.distanceKm.toStringAsFixed(1)} km to city',
-                  maxLines: showFullText ? null : 2,
-                  overflow: showFullText ? TextOverflow.visible : TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
+          if (showFullText)
+            Row(
+              children: <Widget>[
+                FaIcon(FontAwesomeIcons.locationDot, size: 12, color: colors.primary),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    '${hotelData.location} · ${hotelData.distanceKm.toStringAsFixed(1)} km to city',
+                    maxLines: null,
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
+                  ),
                 ),
+              ],
+            )
+          else
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(hotelData.location, style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant)),
+                  const SizedBox(width: 4),
+                  FaIcon(FontAwesomeIcons.locationDot, size: 12, color: colors.primary),
+                  Text(
+                    '${hotelData.distanceKm.toStringAsFixed(1)} km to city',
+                    style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Row(
@@ -152,17 +176,29 @@ class _HotelDetails extends StatelessWidget {
                 SmoothStarRating(
                   rating: hotelData.rating,
                   size: 20,
-                  color: colors.secondary,
-                  borderColor: colors.secondary,
+                  color: colors.primary,
+                  borderColor: colors.primary,
                 ),
-                Expanded(
-                  child: Text(
-                    ' ${hotelData.reviews} Reviews',
-                    maxLines: showFullText ? null : 1,
-                    overflow: showFullText ? TextOverflow.visible : TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
+                if (showFullText)
+                  Expanded(
+                    child: Text(
+                      ' ${hotelData.reviews} Reviews',
+                      maxLines: null,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        ' ${hotelData.reviews} Reviews',
+                        style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
+                      ),
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -182,7 +218,7 @@ class _HotelPrice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      padding: alignEnd ? const EdgeInsets.only(right: 16, top: 8) : const EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start,

@@ -371,16 +371,19 @@ void main() {
 
     await _pumpHotelWidget(tester, SingleChildScrollView(child: card));
 
-    Finder location() => find.text('${hotel.location} · ${hotel.distanceKm.toStringAsFixed(1)} km to city');
-    Finder detailsLayout() => find.ancestor(of: location(), matching: find.byType(Flex));
-    expect(tester.widget<Flex>(detailsLayout()).direction, Axis.horizontal);
+    final normalDetailsLayout = find.ancestor(of: find.text(hotel.title), matching: find.byType(Flex));
+    expect(find.text(hotel.location), findsOneWidget);
+    expect(find.text('${hotel.distanceKm.toStringAsFixed(1)} km to city'), findsOneWidget);
+    expect(tester.widget<Flex>(normalDetailsLayout).direction, Axis.horizontal);
 
     await _pumpHotelWidget(tester, SingleChildScrollView(child: card), size: const Size(320, 568), textScale: 3.2);
 
+    final location = find.text('${hotel.location} · ${hotel.distanceKm.toStringAsFixed(1)} km to city');
+    final detailsLayout = find.ancestor(of: location, matching: find.byType(Flex));
     final reviews = find.text(' ${hotel.reviews} Reviews');
-    expect(tester.widget<Flex>(detailsLayout()).direction, Axis.vertical);
-    expect(tester.widget<Text>(location()).maxLines, isNull);
-    expect(tester.widget<Text>(location()).overflow, TextOverflow.visible);
+    expect(tester.widget<Flex>(detailsLayout).direction, Axis.vertical);
+    expect(tester.widget<Text>(location).maxLines, isNull);
+    expect(tester.widget<Text>(location).overflow, TextOverflow.visible);
     expect(tester.widget<Text>(reviews).maxLines, isNull);
     expect(tester.widget<Text>(reviews).overflow, TextOverflow.visible);
     expect(tester.takeException(), isNull);

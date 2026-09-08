@@ -177,7 +177,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                     letterSpacing: 0.27,
-                    color: isSelected ? colors.onPrimary : colors.primary,
+                    color: isSelected ? DesignCourseAppTheme.nearlyWhite : colors.primary,
                   ),
                 ),
               ),
@@ -204,7 +204,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: Container(
                 decoration: BoxDecoration(
-                  color: colors.surfaceContainerHigh,
+                  color: DesignCourseAppTheme.cardBackground,
                   borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(13.0),
                     bottomLeft: Radius.circular(13.0),

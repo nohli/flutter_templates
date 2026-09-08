@@ -12,6 +12,50 @@ class WorkoutView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final stackFooter = MediaQuery.textScalerOf(context).scale(1) >= 2;
+    final timer = Flex(
+      direction: stackFooter ? Axis.vertical : Axis.horizontal,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: stackFooter ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+      children: const <Widget>[
+        Padding(
+          padding: EdgeInsets.only(left: 4),
+          child: Icon(Icons.timer, color: Colors.white, size: 16),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 4.0),
+          child: Text(
+            '68 min',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: FitnessAppTheme.fontName,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+              letterSpacing: 0.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+    final playButton = Container(
+      decoration: BoxDecoration(
+        color: stackFooter ? colors.surfaceContainerHighest : FitnessAppTheme.nearlyWhite,
+        shape: BoxShape.circle,
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: stackFooter
+                ? colors.shadow.withValues(alpha: 0.4)
+                : FitnessAppTheme.nearlyBlack.withValues(alpha: 0.4),
+            offset: const Offset(8.0, 8.0),
+            blurRadius: 8.0,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.zero,
+        child: Icon(Icons.arrow_right, color: stackFooter ? colors.onSurface : const Color(0xFF6F56E8), size: 44),
+      ),
+    );
     return AnimatedBuilder(
       animation: animationController,
       builder: (_, _) {
@@ -36,7 +80,7 @@ class WorkoutView extends StatelessWidget {
                   ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: colors.shadow.withValues(alpha: 0.4),
+                      color: FitnessAppTheme.grey.withValues(alpha: 0.6),
                       offset: const Offset(1.1, 1.1),
                       blurRadius: 10.0,
                     ),
@@ -76,56 +120,22 @@ class WorkoutView extends StatelessWidget {
                       const SizedBox(height: 32),
                       Padding(
                         padding: const EdgeInsets.only(right: 4),
-                        child: Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          crossAxisAlignment: WrapCrossAlignment.end,
-                          spacing: 16,
-                          runSpacing: 16,
-                          children: <Widget>[
-                            Flex(
-                              direction: stackFooter ? Axis.vertical : Axis.horizontal,
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: stackFooter ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-                              children: <Widget>[
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 4),
-                                  child: Icon(Icons.timer, color: Colors.white, size: 16),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 4.0),
-                                  child: Text(
-                                    '68 min',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: FitnessAppTheme.fontName,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      letterSpacing: 0.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: colors.surfaceContainerHighest,
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: colors.shadow.withValues(alpha: 0.4),
-                                    offset: const Offset(8.0, 8.0),
-                                    blurRadius: 8.0,
-                                  ),
+                        child: stackFooter
+                            ? Wrap(
+                                alignment: WrapAlignment.spaceBetween,
+                                crossAxisAlignment: WrapCrossAlignment.end,
+                                spacing: 16,
+                                runSpacing: 16,
+                                children: <Widget>[timer, playButton],
+                              )
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: <Widget>[
+                                  timer,
+                                  const Expanded(child: SizedBox()),
+                                  playButton,
                                 ],
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: Icon(Icons.arrow_right, color: colors.onSurface, size: 44),
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),

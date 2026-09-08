@@ -5,6 +5,7 @@ import '../fitness_app_theme.dart';
 import '../ui_view/body_measurement.dart';
 import '../ui_view/glass_view.dart';
 import '../ui_view/mediterranean_diet_view.dart';
+import '../ui_view/sample_date_header.dart';
 import '../ui_view/title_view.dart';
 import 'meals_list_view.dart';
 import 'water_view.dart';
@@ -305,28 +306,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
                               ),
                             Padding(
                               padding: EdgeInsets.only(left: 8, right: 8, top: stackHeader ? 8 : 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: Icon(Icons.calendar_today, color: colors.onSurfaceVariant, size: 18),
-                                  ),
-                                  Flexible(
-                                    child: Text(
-                                      'Sample day · 15 May',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        fontFamily: FitnessAppTheme.fontName,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 18,
-                                        letterSpacing: -0.2,
-                                        color: colors.onSurface,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              child: const SampleDateHeader(),
                             ),
                           ],
                         ),

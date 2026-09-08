@@ -23,7 +23,7 @@ typedef RatingChangeCallback = void Function(double rating);
 
 class SmoothStarRating extends StatelessWidget {
   const SmoothStarRating({
-    required this.onRatingChanged,
+    this.onRatingChanged,
     this.starCount = 5,
     this.spacing = 0.0,
     this.rating = 0.0,
@@ -39,66 +39,87 @@ class SmoothStarRating extends StatelessWidget {
 
   final int starCount;
   final double rating;
-  final RatingChangeCallback onRatingChanged;
+  final RatingChangeCallback? onRatingChanged;
   final Color? color;
   final Color? borderColor;
   final double size;
   final bool allowHalfRating;
   final IconData filledIconData;
   final IconData halfFilledIconData;
-  final IconData
-      defaultIconData; // this is needed only when having fullRatedIconData && halfRatedIconData
+  final IconData defaultIconData;
   final double spacing;
 
-  Widget buildStar(BuildContext context, int index) {
+  Widget _buildStar(BuildContext context, int index) {
+    final remainingRating = rating - index;
     Icon icon;
-    if (index >= rating) {
-      icon = Icon(
-        defaultIconData,
-        color: borderColor ?? Theme.of(context).primaryColor,
-        size: size,
-      );
-    } else if (index > rating - (allowHalfRating ? 0.5 : 1.0)) {
-      icon = Icon(
-        halfFilledIconData,
-        color: color ?? Theme.of(context).primaryColor,
-        size: size,
-      );
+    if (remainingRating >= 1) {
+      icon = Icon(filledIconData, color: color ?? Theme.of(context).colorScheme.secondary, size: size);
+    } else if (allowHalfRating && remainingRating >= 0.5) {
+      icon = Icon(halfFilledIconData, color: color ?? Theme.of(context).colorScheme.secondary, size: size);
     } else {
-      icon = Icon(
-        filledIconData,
-        color: color ?? Theme.of(context).primaryColor,
-        size: size,
-      );
+      icon = Icon(defaultIconData, color: borderColor ?? Theme.of(context).colorScheme.secondary, size: size);
     }
 
-    return GestureDetector(
-      onTap: () => onRatingChanged(index + 1.0),
-      onHorizontalDragUpdate: (DragUpdateDetails dragDetails) {
-        final RenderBox? box = context.findRenderObject() as RenderBox?;
-        final Offset? pos = box?.globalToLocal(dragDetails.globalPosition);
-        final double i = pos?.dx ?? 0 / size;
-        double rating = allowHalfRating ? i : i.round().toDouble();
-        if (rating > starCount) {
-          rating = starCount.toDouble();
-        }
-        if (rating < 0) {
-          rating = 0.0;
-        }
-        onRatingChanged(rating);
-      },
-      child: icon,
-    );
+    return icon;
+  }
+
+  double _ratingForPosition(double position) {
+    final itemWidth = size + spacing;
+    final rawRating = position / itemWidth;
+    final selectedRating = allowHalfRating ? (rawRating * 2).ceil() / 2 : rawRating.ceilToDouble();
+
+    return selectedRating.clamp(0, starCount).toDouble();
+  }
+
+  double _steppedRating(double direction) {
+    final increment = allowHalfRating ? 0.5 : 1.0;
+
+    return (rating + increment * direction).clamp(0, starCount).toDouble();
+  }
+
+  String _formattedRating(double value) {
+    final hasWholeRating = value == value.roundToDouble();
+
+    return hasWholeRating ? value.round().toString() : value.toStringAsFixed(1);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Wrap(
-          spacing: spacing,
-          children: List<Widget>.generate(
-              starCount, (int index) => buildStar(context, index))),
+    final stars = Wrap(
+      spacing: spacing,
+      children: List<Widget>.generate(starCount, (int index) => _buildStar(context, index)),
+    );
+    final callback = onRatingChanged;
+    final isInteractive = callback != null;
+    final ratingValue = '${_formattedRating(rating)} out of $starCount';
+    final interactiveStars = ConstrainedBox(
+      constraints: BoxConstraints(minHeight: isInteractive ? 48 : size),
+      child: Align(alignment: Alignment.centerLeft, widthFactor: 1, heightFactor: 1, child: stars),
+    );
+
+    return Semantics(
+      label: 'Rating',
+      value: ratingValue,
+      slider: isInteractive,
+      readOnly: !isInteractive,
+      increasedValue: isInteractive ? _formattedRating(_steppedRating(1)) : null,
+      decreasedValue: isInteractive ? _formattedRating(_steppedRating(-1)) : null,
+      onIncrease: isInteractive ? () => callback(_steppedRating(1)) : null,
+      onDecrease: isInteractive ? () => callback(_steppedRating(-1)) : null,
+      child: ExcludeSemantics(
+        child: Material(
+          color: Colors.transparent,
+          child: callback == null
+              ? interactiveStars
+              : GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTapUp: (TapUpDetails details) => callback(_ratingForPosition(details.localPosition.dx)),
+                  onHorizontalDragUpdate: (DragUpdateDetails details) =>
+                      callback(_ratingForPosition(details.localPosition.dx)),
+                  child: interactiveStars,
+                ),
+        ),
+      ),
     );
   }
 }

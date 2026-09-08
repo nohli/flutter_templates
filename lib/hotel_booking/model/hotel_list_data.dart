@@ -1,63 +1,77 @@
 class HotelListData {
-  HotelListData({
+  const HotelListData({
     this.imagePath = '',
-    this.titleTxt = '',
-    this.subTxt = '',
-    this.dist = 1.8,
+    this.title = '',
+    this.location = '',
+    this.distanceKm = 1.8,
     this.reviews = 80,
     this.rating = 4.5,
-    this.perNight = 180,
+    this.nightlyPrice = 180,
+    this.amenities = const <String>[],
+    this.accommodationType = 'Hotel',
   });
 
-  String imagePath;
-  String titleTxt;
-  String subTxt;
-  double dist;
-  double rating;
-  int reviews;
-  int perNight;
+  final String imagePath;
+  final String title;
+  final String location;
+  final double distanceKm;
+  final double rating;
+  final int reviews;
+  final int nightlyPrice;
+  final List<String> amenities;
+  final String accommodationType;
 
-  static List<HotelListData> hotelList = <HotelListData>[
+  static const List<HotelListData> samples = <HotelListData>[
     HotelListData(
       imagePath: 'assets/hotel/hotel_1.png',
-      titleTxt: 'Grand Royal Hotel',
-      subTxt: 'Wembley, London',
-      dist: 2.0,
+      title: 'Grand Royal Hotel',
+      location: 'Wembley, London',
+      distanceKm: 2.0,
       rating: 4.4,
+      amenities: <String>['Free Breakfast', 'Free wifi', 'Pool'],
+      accommodationType: 'Hotel',
     ),
     HotelListData(
       imagePath: 'assets/hotel/hotel_2.png',
-      titleTxt: 'Queen Hotel',
-      subTxt: 'Wembley, London',
-      dist: 4.0,
+      title: 'Queen Hotel',
+      location: 'Wembley, London',
+      distanceKm: 4.0,
       reviews: 74,
-      perNight: 200,
+      nightlyPrice: 200,
+      amenities: <String>['Free Parking', 'Pet Friendly'],
+      accommodationType: 'Apartment',
     ),
     HotelListData(
       imagePath: 'assets/hotel/hotel_3.png',
-      titleTxt: 'Grand Royal Hotel',
-      subTxt: 'Wembley, London',
-      dist: 3.0,
+      title: 'Grand Royal Hotel',
+      location: 'Wembley, London',
+      distanceKm: 3.0,
       reviews: 62,
       rating: 4.0,
-      perNight: 60,
+      nightlyPrice: 60,
+      amenities: <String>['Free Breakfast', 'Free Parking'],
+      accommodationType: 'Home',
     ),
     HotelListData(
       imagePath: 'assets/hotel/hotel_4.png',
-      titleTxt: 'Queen Hotel',
-      subTxt: 'Wembley, London',
-      dist: 7.0,
+      title: 'Queen Hotel',
+      location: 'Wembley, London',
+      distanceKm: 7.0,
       reviews: 90,
       rating: 4.4,
-      perNight: 170,
+      nightlyPrice: 170,
+      amenities: <String>['Pool', 'Pet Friendly', 'Free wifi'],
+      accommodationType: 'Villa',
     ),
     HotelListData(
       imagePath: 'assets/hotel/hotel_5.png',
-      titleTxt: 'Grand Royal Hotel',
-      subTxt: 'Wembley, London',
-      dist: 2.0,
+      title: 'Grand Royal Hotel',
+      location: 'Wembley, London',
+      distanceKm: 2.0,
       reviews: 240,
-      perNight: 200,
+      nightlyPrice: 200,
+      amenities: <String>['Free Breakfast', 'Pool', 'Free wifi'],
+      accommodationType: 'Resort',
     ),
   ];
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class HotelAppTheme {
+  static const Color seedColor = Color(0xFF54D3C2);
+  static const Color actionColor = Color(0xFF006A60);
+  static const Color rangeColor = Color(0xFFBBEDE7);
+
   static TextTheme _buildTextTheme(TextTheme base) {
     const String fontName = 'WorkSans';
     return base.copyWith(
@@ -20,31 +24,32 @@ class HotelAppTheme {
     );
   }
 
-  static ThemeData buildLightTheme() {
-    const Color primaryColor = Color(0xFF54D3C2);
-    const Color secondaryColor = Color(0xFF54D3C2);
-    final ColorScheme colorScheme = const ColorScheme.light().copyWith(
-      primary: primaryColor,
-      secondary: secondaryColor,
+  static ThemeData build() {
+    const colorScheme = ColorScheme.light(
+      primary: seedColor,
+      onPrimary: Color(0xFF17262A),
+      primaryContainer: rangeColor,
+      onPrimaryContainer: Color(0xFF17262A),
+      secondary: actionColor,
+      onSecondary: Colors.white,
+      surface: Colors.white,
+      onSurface: Color(0xFF17262A),
+      onSurfaceVariant: Color(0xFF4A6572),
+      outline: Color(0xFF3A5160),
+      outlineVariant: Color(0xFFE0E0E0),
+      error: Color(0xFFB00020),
+      onError: Colors.white,
     );
-    final ThemeData base = ThemeData.light();
+    final base = ThemeData(colorScheme: colorScheme, fontFamily: 'WorkSans', useMaterial3: false);
+
     return base.copyWith(
-      primaryColor: primaryColor,
-      indicatorColor: Colors.white,
-      splashColor: Colors.white24,
+      primaryColor: seedColor,
       splashFactory: InkRipple.splashFactory,
-      canvasColor: Colors.white,
       scaffoldBackgroundColor: const Color(0xFFF6F6F6),
-      buttonTheme: ButtonThemeData(
-        colorScheme: colorScheme,
-        textTheme: ButtonTextTheme.primary,
-      ),
       textTheme: _buildTextTheme(base.textTheme),
       primaryTextTheme: _buildTextTheme(base.primaryTextTheme),
-      platform: TargetPlatform.iOS,
-      colorScheme: colorScheme
-          .copyWith(background: const Color(0xFFFFFFFF))
-          .copyWith(error: const Color(0xFFB00020)),
+      tabBarTheme: const TabBarThemeData(indicatorColor: Colors.white),
+      textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: actionColor)),
     );
   }
 }

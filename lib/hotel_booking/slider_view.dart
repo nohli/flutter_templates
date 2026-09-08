@@ -1,73 +1,65 @@
 import 'package:flutter/material.dart';
 
-import 'hotel_app_theme.dart';
-
 class SliderView extends StatefulWidget {
-  const SliderView({
-    required this.onChangedistValue,
-    required this.distValue,
-    super.key,
-  });
+  const SliderView({required this.onDistanceChanged, required this.distanceValue, super.key});
 
-  final Function(double) onChangedistValue;
-  final double distValue;
+  final ValueChanged<double> onDistanceChanged;
+  final double distanceValue;
 
   @override
   State<SliderView> createState() => _SliderViewState();
 }
 
 class _SliderViewState extends State<SliderView> {
-  double distValue = 50.0;
+  late double _distanceValue;
 
   @override
   void initState() {
     super.initState();
-    distValue = widget.distValue;
+    _distanceValue = widget.distanceValue;
+  }
+
+  @override
+  void didUpdateWidget(SliderView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.distanceValue != oldWidget.distanceValue) {
+      _distanceValue = widget.distanceValue;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final position = _distanceValue.round().clamp(1, 99);
+
     return Column(
       children: <Widget>[
         Row(
           children: <Widget>[
-            Expanded(
-              flex: distValue.round(),
-              child: const SizedBox(),
-            ),
+            Expanded(flex: position, child: const SizedBox()),
             SizedBox(
               width: 170,
-              child: Text(
-                'Less than ${(distValue / 10).toStringAsFixed(1)} Km',
-                textAlign: TextAlign.center,
-              ),
+              child: Text('Less than ${(_distanceValue / 10).toStringAsFixed(1)} Km', textAlign: TextAlign.center),
             ),
-            Expanded(
-              flex: 100 - distValue.round(),
-              child: const SizedBox(),
-            ),
+            Expanded(flex: 100 - position, child: const SizedBox()),
           ],
         ),
         SliderTheme(
           data: SliderThemeData(
-            thumbShape: CustomThumbShape(),
+            thumbShape: _CustomThumbShape(shadowColor: colors.shadow, surfaceColor: colors.surface),
           ),
           child: Slider(
             onChanged: (double value) {
-              if (mounted) {
-                setState(() {
-                  distValue = value;
-                });
-              }
-              try {
-                widget.onChangedistValue(distValue);
-              } catch (_) {}
+              setState(() {
+                _distanceValue = value;
+              });
+              widget.onDistanceChanged(_distanceValue);
             },
             max: 100,
-            activeColor: HotelAppTheme.buildLightTheme().primaryColor,
-            inactiveColor: Colors.grey.withOpacity(0.4),
+            activeColor: colors.secondary,
+            inactiveColor: colors.outlineVariant,
             divisions: 100,
-            value: distValue,
+            value: _distanceValue,
           ),
         ),
       ],
@@ -75,21 +67,18 @@ class _SliderViewState extends State<SliderView> {
   }
 }
 
-class CustomThumbShape extends SliderComponentShape {
-  static const double _thumbSize = 3.0;
-  static const double _disabledThumbSize = 3.0;
+class _CustomThumbShape extends SliderComponentShape {
+  const _CustomThumbShape({required this.shadowColor, required this.surfaceColor});
+
+  final Color shadowColor;
+  final Color surfaceColor;
+
+  static const double _thumbRadius = 3.0;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return isEnabled
-        ? const Size.fromRadius(_thumbSize)
-        : const Size.fromRadius(_disabledThumbSize);
+    return const Size.fromRadius(_thumbRadius);
   }
-
-  static final Animatable<double> sizeTween = Tween<double>(
-    begin: _disabledThumbSize,
-    end: _thumbSize,
-  );
 
   @override
   void paint(
@@ -107,25 +96,21 @@ class CustomThumbShape extends SliderComponentShape {
     required double value,
   }) {
     final Canvas canvas = context.canvas;
-    final ColorTween colorTween = ColorTween(
-      begin: sliderTheme.disabledThumbColor,
-      end: sliderTheme.thumbColor,
-    );
+    final ColorTween colorTween = ColorTween(begin: sliderTheme.disabledThumbColor, end: sliderTheme.thumbColor);
     canvas.drawPath(
-        Path()
-          ..addOval(Rect.fromPoints(Offset(center.dx + 12, center.dy + 12),
-              Offset(center.dx - 12, center.dy - 12)))
-          ..fillType = PathFillType.evenOdd,
-        Paint()
-          ..color = Colors.black.withOpacity(0.5)
-          ..maskFilter =
-              MaskFilter.blur(BlurStyle.normal, convertRadiusToSigma(8)));
+      Path()
+        ..addOval(Rect.fromPoints(Offset(center.dx + 12, center.dy + 12), Offset(center.dx - 12, center.dy - 12)))
+        ..fillType = PathFillType.evenOdd,
+      Paint()
+        ..color = shadowColor.withValues(alpha: 0.5)
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, convertRadiusToSigma(8)),
+    );
 
     final Paint cPaint = Paint();
-    cPaint.color = Colors.white;
+    cPaint.color = surfaceColor;
     cPaint.strokeWidth = 14 / 2;
     canvas.drawCircle(Offset(center.dx, center.dy), 12, cPaint);
-    cPaint.color = colorTween.evaluate(enableAnimation) ?? Colors.white;
+    cPaint.color = colorTween.evaluate(enableAnimation) ?? surfaceColor;
     canvas.drawCircle(Offset(center.dx, center.dy), 10, cPaint);
   }
 

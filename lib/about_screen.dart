@@ -15,30 +15,28 @@ class AboutScreen extends StatefulWidget {
 
 class _AboutScreenState extends State<AboutScreen> {
   bool _isOpeningLink = false;
-  String? _errorMessage;
 
   Future<void> _open(Uri uri) async {
     if (_isOpeningLink) return;
 
     setState(() {
       _isOpeningLink = true;
-      _errorMessage = null;
     });
-    bool launched = false;
     try {
-      launched = await widget.launcher(uri);
-    } catch (_) {
-      launched = false;
+      final bool launched = await widget.launcher(uri);
+      if (!launched) debugPrint('Could not open $uri.');
+    } catch (error) {
+      debugPrint('Could not open $uri: $error');
     }
     if (!mounted) return;
     setState(() {
       _isOpeningLink = false;
-      _errorMessage = launched ? null : 'The link could not be opened.';
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool showUpstreamSource = Theme.of(context).platform != TargetPlatform.android;
     final ButtonStyle linkStyle = TextButton.styleFrom(
       minimumSize: const Size(0, 48),
       foregroundColor: AppTheme.actionBlue,
@@ -90,12 +88,13 @@ class _AboutScreenState extends State<AboutScreen> {
                       icon: const Icon(Icons.code),
                       label: const Text('UI Templates source code'),
                     ),
-                    TextButton.icon(
-                      style: linkStyle,
-                      onPressed: _isOpeningLink ? null : () => _open(AppIdentity.upstreamSourceUri),
-                      icon: const Icon(Icons.history),
-                      label: const Text('Original open-source project'),
-                    ),
+                    if (showUpstreamSource)
+                      TextButton.icon(
+                        style: linkStyle,
+                        onPressed: _isOpeningLink ? null : () => _open(AppIdentity.upstreamSourceUri),
+                        icon: const Icon(Icons.history),
+                        label: const Text('Original open-source project'),
+                      ),
                     TextButton.icon(
                       style: linkStyle,
                       onPressed: () => showLicensePage(context: context, applicationName: AppIdentity.name),
@@ -126,17 +125,6 @@ class _AboutScreenState extends State<AboutScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 14),
                     ),
-                    if (_errorMessage != null) ...<Widget>[
-                      const SizedBox(height: 12),
-                      Semantics(
-                        liveRegion: true,
-                        child: Text(
-                          _errorMessage!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Theme.of(context).colorScheme.error),
-                        ),
-                      ),
-                    ],
                   ],
                 ),
               ),

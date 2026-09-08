@@ -154,7 +154,9 @@ void main() {
     expect(find.text('Share'), findsOneWidget);
   });
 
-  testWidgets('about exposes source and portfolio links without overflow', (WidgetTester tester) async {
+  testWidgets('about exposes iOS source and portfolio links without persistent launch errors', (
+    WidgetTester tester,
+  ) async {
     final List<Uri> launchedUris = <Uri>[];
     await _pumpScreen(
       tester,
@@ -165,6 +167,7 @@ void main() {
         },
       ),
       size: const Size(320, 568),
+      platform: TargetPlatform.iOS,
     );
 
     await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -900));
@@ -185,8 +188,15 @@ void main() {
       developerPortfolioUri,
     ]);
     expect(find.text(AppIdentity.trademarkDisclaimer), findsOneWidget);
-    expect(find.text('The link could not be opened.'), findsOneWidget);
+    expect(find.text('The link could not be opened.'), findsNothing);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('about hides the upstream source link on Android', (WidgetTester tester) async {
+    await _pumpScreen(tester, const AboutScreen(), platform: TargetPlatform.android);
+
+    expect(find.text('UI Templates source code'), findsOneWidget);
+    expect(find.text('Original open-source project'), findsNothing);
   });
 
   testWidgets('about recovers cleanly when a native link launcher throws', (WidgetTester tester) async {
@@ -196,7 +206,7 @@ void main() {
     await tester.tap(sourceLink);
     await tester.pumpAndSettle();
 
-    expect(find.text('The link could not be opened.'), findsOneWidget);
+    expect(find.text('The link could not be opened.'), findsNothing);
     expect(tester.widget<TextButton>(sourceLink).onPressed, isNotNull);
     expect(tester.takeException(), isNull);
   });
@@ -307,12 +317,22 @@ void main() {
   });
 }
 
-Future<void> _pumpScreen(WidgetTester tester, Widget screen, {Size size = const Size(430, 932)}) async {
+Future<void> _pumpScreen(
+  WidgetTester tester,
+  Widget screen, {
+  Size size = const Size(430, 932),
+  TargetPlatform? platform,
+}) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
 
-  await tester.pumpWidget(MaterialApp(home: Scaffold(body: screen)));
+  await tester.pumpWidget(
+    MaterialApp(
+      theme: platform == null ? null : ThemeData(platform: platform),
+      home: Scaffold(body: screen),
+    ),
+  );
   await tester.pump();
 }
 

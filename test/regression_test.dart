@@ -275,15 +275,24 @@ void main() {
     expect(tester.widget<CheckboxListTile>(freeBreakfastControl()).value, isFalse);
   });
 
-  testWidgets('drawer presents app identity without fake account actions', (WidgetTester tester) async {
+  testWidgets('drawer restores the original avatar without fake account actions', (WidgetTester tester) async {
     await _pumpScreen(tester, const AppShell());
 
     await tester.tap(find.byTooltip('Open navigation menu'));
     await tester.pumpAndSettle();
 
-    expect(find.descendant(of: find.byType(AppDrawer), matching: find.text(AppIdentity.name)), findsOneWidget);
+    final Finder avatar = find.descendant(
+      of: find.byType(AppDrawer),
+      matching: find.byWidgetPredicate(
+        (Widget widget) =>
+            widget is Image &&
+            widget.image is AssetImage &&
+            (widget.image as AssetImage).assetName == 'assets/images/userImage.png',
+      ),
+    );
+    expect(avatar, findsOneWidget);
+    expect(find.descendant(of: find.byType(AppDrawer), matching: find.text('Shaquille Oatmeal')), findsOneWidget);
     expect(find.byTooltip('Close navigation menu'), findsOneWidget);
-    expect(find.text('Shaquille Oatmeal'), findsNothing);
     expect(find.text('Sign Out'), findsNothing);
 
     await tester.tap(find.text('Feedback'));
@@ -359,13 +368,13 @@ void main() {
     );
   });
 
-  testWidgets('every gallery card opens its declared template', (WidgetTester tester) async {
+  testWidgets('every gallery card opens its declared template at the original text scale', (WidgetTester tester) async {
     _evictAssets(<String>[
       'assets/hotel/hotel_booking.png',
       'assets/fitness_app/fitness_app.png',
       'assets/design_course/design_course.png',
     ]);
-    await _pumpScreen(tester, const MyHomePage(), disableAnimations: true);
+    await _pumpScreen(tester, const MyHomePage(), textScale: 2, disableAnimations: true);
 
     for (final scenario in <({Type destination, String title})>[
       (title: 'Hotel Booking', destination: HotelHomeScreen),
@@ -377,11 +386,46 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
 
       expect(find.byType(scenario.destination), findsOneWidget, reason: scenario.title);
+      expect(
+        MediaQuery.textScalerOf(tester.element(find.byType(scenario.destination))).scale(1),
+        1,
+        reason: scenario.title,
+      );
       Navigator.of(tester.element(find.byType(scenario.destination))).pop();
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
     }
 
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('template detail routes keep the original text scale', (WidgetTester tester) async {
+    await _pumpScreen(tester, const MyHomePage(), textScale: 2, disableAnimations: true);
+
+    await tester.tap(find.bySemanticsLabel('Design Course'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel(RegExp(r'^Open User Interface Design sample course,')).first);
+    await tester.pumpAndSettle();
+
+    expect(MediaQuery.textScalerOf(tester.element(find.byType(CourseInfoScreen))).scale(1), 1);
+
+    Navigator.of(tester.element(find.byType(CourseInfoScreen))).pop();
+    await tester.pumpAndSettle();
+    Navigator.of(tester.element(find.byType(DesignCourseHomeScreen))).pop();
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Hotel Booking'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Filter'));
+    await tester.pumpAndSettle();
+
+    expect(MediaQuery.textScalerOf(tester.element(find.byType(FiltersScreen))).scale(1), 1);
+
+    Navigator.of(tester.element(find.byType(FiltersScreen))).pop();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choose date'));
+    await tester.pumpAndSettle();
+
+    expect(MediaQuery.textScalerOf(tester.element(find.byType(CalendarPopupView))).scale(1), 1);
     expect(tester.takeException(), isNull);
   });
 

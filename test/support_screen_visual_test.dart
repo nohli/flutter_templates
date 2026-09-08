@@ -80,7 +80,7 @@ void main() {
   });
 
   testWidgets('about keeps readable line length and accessible blue links', (WidgetTester tester) async {
-    await _pumpScreen(tester, const AboutScreen(), size: const Size(1024, 1366));
+    await _pumpScreen(tester, const AboutScreen(), size: const Size(1024, 1366), platform: TargetPlatform.iOS);
 
     final Finder content = find.byWidgetPredicate(
       (Widget widget) => widget is ConstrainedBox && widget.constraints.maxWidth == 640,
@@ -121,14 +121,6 @@ void main() {
     await tester.tap(find.text('Share'));
     await tester.pumpAndSettle();
     _expectLiveRegion(tester, 'Sharing is temporarily unavailable.');
-
-    await _pumpScreen(tester, AboutScreen(launcher: (_) async => false));
-    await tester.ensureVisible(find.text('UI Templates source code'));
-    await tester.tap(find.text('UI Templates source code'));
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('The link could not be opened.'));
-    await tester.pump();
-    _expectLiveRegion(tester, 'The link could not be opened.');
 
     expect(tester.takeException(), isNull);
     semantics.dispose();
@@ -202,11 +194,21 @@ void _expectLiveRegion(WidgetTester tester, String message) {
   expect(tester.getSemantics(error).flagsCollection.isLiveRegion, isTrue);
 }
 
-Future<void> _pumpScreen(WidgetTester tester, Widget screen, {Size size = const Size(430, 932)}) async {
+Future<void> _pumpScreen(
+  WidgetTester tester,
+  Widget screen, {
+  Size size = const Size(430, 932),
+  TargetPlatform? platform,
+}) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
 
-  await tester.pumpWidget(MaterialApp(home: Scaffold(body: screen)));
+  await tester.pumpWidget(
+    MaterialApp(
+      theme: platform == null ? null : ThemeData(platform: platform),
+      home: Scaffold(body: screen),
+    ),
+  );
   await tester.pumpAndSettle();
 }

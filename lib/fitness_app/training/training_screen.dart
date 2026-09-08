@@ -18,8 +18,8 @@ class TrainingScreen extends StatefulWidget {
 }
 
 class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStateMixin {
-  final List<Widget> _sections = <Widget>[];
-  double _topBarOpacity = 0.0;
+  final _sections = <Widget>[];
+  var _topBarOpacity = 0.0;
 
   late final ScrollController _scrollController;
   late final Animation<double> _topBarAnimation;
@@ -70,7 +70,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
   }
 
   void _addSections() {
-    const int count = 5;
+    const count = 5;
 
     _sections.add(
       TitleView(

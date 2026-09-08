@@ -259,8 +259,8 @@ Future<void> _expectAccessible(WidgetTester tester) async {
 void _expectContrast(String name, Color foreground, Color background, double minimum) {
   final double foregroundLuminance = foreground.computeLuminance();
   final double backgroundLuminance = background.computeLuminance();
-  final double lighter = foregroundLuminance > backgroundLuminance ? foregroundLuminance : backgroundLuminance;
-  final double darker = foregroundLuminance > backgroundLuminance ? backgroundLuminance : foregroundLuminance;
+  final lighter = foregroundLuminance > backgroundLuminance ? foregroundLuminance : backgroundLuminance;
+  final darker = foregroundLuminance > backgroundLuminance ? backgroundLuminance : foregroundLuminance;
   final double ratio = (lighter + 0.05) / (darker + 0.05);
 
   expect(ratio, greaterThanOrEqualTo(minimum), reason: '$name measured ${ratio.toStringAsFixed(2)}:1');
@@ -271,18 +271,18 @@ void _expectNoLayoutException(WidgetTester tester) {
 }
 
 void _evictAssets(Iterable<String> assets) {
-  for (final String asset in assets) {
+  for (final asset in assets) {
     rootBundle.evict(asset);
   }
 }
 
-const List<String> _galleryAssets = <String>[
+const _galleryAssets = <String>[
   'assets/hotel/hotel_booking.png',
   'assets/fitness_app/fitness_app.png',
   'assets/design_course/design_course.png',
 ];
 
-const List<String> _designAssets = <String>[
+const _designAssets = <String>[
   'assets/design_course/interFace1.png',
   'assets/design_course/interFace2.png',
   'assets/design_course/interFace3.png',
@@ -290,7 +290,7 @@ const List<String> _designAssets = <String>[
   'assets/design_course/userImage.png',
 ];
 
-const List<String> _hotelAssets = <String>[
+const _hotelAssets = <String>[
   'assets/hotel/hotel_1.png',
   'assets/hotel/hotel_2.png',
   'assets/hotel/hotel_3.png',
@@ -298,7 +298,7 @@ const List<String> _hotelAssets = <String>[
   'assets/hotel/hotel_5.png',
 ];
 
-const List<String> _fitnessAssets = <String>[
+const _fitnessAssets = <String>[
   'assets/fitness_app/eaten.png',
   'assets/fitness_app/burned.png',
   'assets/fitness_app/breakfast.png',

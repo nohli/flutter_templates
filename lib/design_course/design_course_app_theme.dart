@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 class DesignCourseAppTheme {
   DesignCourseAppTheme._();
 
-  static const Color nearlyWhite = Color(0xFFFFFFFF);
-  static const Color nearlyBlue = Color(0xFF00B6F0);
-  static const Color nearlyBlack = Color(0xFF213333);
-  static const Color grey = Color(0xFF3A5160);
-  static const Color darkText = Color(0xFF253840);
-  static const Color darkerText = Color(0xFF17262A);
-  static const Color lightText = Color(0xFF4A6572);
-  static const Color cardBackground = Color(0xFFF8FAFB);
-  static const Color spacer = Color(0xFFF2F2F2);
+  static const nearlyWhite = Color(0xFFFFFFFF);
+  static const nearlyBlue = Color(0xFF00B6F0);
+  static const nearlyBlack = Color(0xFF213333);
+  static const grey = Color(0xFF3A5160);
+  static const darkText = Color(0xFF253840);
+  static const darkerText = Color(0xFF17262A);
+  static const lightText = Color(0xFF4A6572);
+  static const cardBackground = Color(0xFFF8FAFB);
+  static const spacer = Color(0xFFF2F2F2);
   static const fontName = 'WorkSans';
 
   static ThemeData build() {
@@ -31,7 +31,7 @@ class DesignCourseAppTheme {
     return base.copyWith(scaffoldBackgroundColor: nearlyWhite, textTheme: base.textTheme.merge(textTheme));
   }
 
-  static const TextTheme textTheme = TextTheme(
+  static const textTheme = TextTheme(
     headlineMedium: display1,
     headlineSmall: headline,
     titleLarge: title,
@@ -41,7 +41,7 @@ class DesignCourseAppTheme {
     bodySmall: caption,
   );
 
-  static const TextStyle display1 = TextStyle(
+  static const display1 = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.bold,
     fontSize: 36,
@@ -50,7 +50,7 @@ class DesignCourseAppTheme {
     color: darkerText,
   );
 
-  static const TextStyle headline = TextStyle(
+  static const headline = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.bold,
     fontSize: 24,
@@ -58,7 +58,7 @@ class DesignCourseAppTheme {
     color: darkerText,
   );
 
-  static const TextStyle title = TextStyle(
+  static const title = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.bold,
     fontSize: 16,
@@ -66,7 +66,7 @@ class DesignCourseAppTheme {
     color: darkerText,
   );
 
-  static const TextStyle subtitle = TextStyle(
+  static const subtitle = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 14,
@@ -74,7 +74,7 @@ class DesignCourseAppTheme {
     color: darkText,
   );
 
-  static const TextStyle body2 = TextStyle(
+  static const body2 = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 14,
@@ -82,7 +82,7 @@ class DesignCourseAppTheme {
     color: darkText,
   );
 
-  static const TextStyle body1 = TextStyle(
+  static const body1 = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 16,
@@ -90,7 +90,7 @@ class DesignCourseAppTheme {
     color: darkText,
   );
 
-  static const TextStyle caption = TextStyle(
+  static const caption = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 12,

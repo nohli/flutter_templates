@@ -12,11 +12,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
-  static const String _layoutPreferenceKey = 'home-gallery-multiple-columns';
+  static const _layoutPreferenceKey = 'home-gallery-multiple-columns';
 
   final List<HomeList> _homeList = HomeList.homeList;
-  bool _multiple = true;
-  bool _restoredLayoutPreference = false;
+  var _multiple = true;
+  var _restoredLayoutPreference = false;
 
   late final AnimationController _animationController;
 
@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           Expanded(
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-                final int columnCount = _multiple && constraints.maxWidth >= 720 ? 3 : (_multiple ? 2 : 1);
+                final columnCount = _multiple && constraints.maxWidth >= 720 ? 3 : (_multiple ? 2 : 1);
                 return GridView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   physics: const BouncingScrollPhysics(),
@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 class _GalleryHeader extends StatelessWidget {
   const _GalleryHeader({required this.multiple, required this.onToggleLayout});
 
-  static const TextStyle _titleStyle = TextStyle(fontSize: 22, color: AppTheme.darkText, fontWeight: FontWeight.w700);
+  static const _titleStyle = TextStyle(fontSize: 22, color: AppTheme.darkText, fontWeight: FontWeight.w700);
 
   final bool multiple;
   final VoidCallback onToggleLayout;
@@ -119,7 +119,7 @@ class _GalleryHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final TextPainter titlePainter = TextPainter(
+        final titlePainter = TextPainter(
           text: const TextSpan(text: AppIdentity.name, style: _titleStyle),
           textDirection: Directionality.of(context),
           textScaler: MediaQuery.textScalerOf(context),

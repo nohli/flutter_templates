@@ -264,10 +264,10 @@ class WaveClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    final Path path = Path();
+    final path = Path();
 
     final int horizontalShift = horizontalOffset.toInt();
-    final List<Offset> wavePoints = <Offset>[
+    final wavePoints = <Offset>[
       for (int i = -2 - horizontalShift; i <= 62; i++) Offset(i.toDouble() + horizontalShift, verticalOffset),
     ];
     path.addPolygon(wavePoints, false);

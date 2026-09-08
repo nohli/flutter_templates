@@ -25,7 +25,7 @@ class CustomCalendarView extends StatefulWidget {
 }
 
 class _CustomCalendarViewState extends State<CustomCalendarView> {
-  final List<DateTime> _visibleDates = <DateTime>[];
+  final _visibleDates = <DateTime>[];
   late DateTime _visibleMonth;
   DateTime? _startDate;
   DateTime? _endDate;
@@ -41,15 +41,15 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
 
   void _populateVisibleDates(DateTime monthDate) {
     _visibleDates.clear();
-    final DateTime newDate = DateTime(monthDate.year, monthDate.month, 0);
-    int leadingDays = 0;
+    final newDate = DateTime(monthDate.year, monthDate.month, 0);
+    var leadingDays = 0;
     if (newDate.weekday < 7) {
       leadingDays = newDate.weekday;
-      for (int i = 1; i <= leadingDays; i++) {
+      for (var i = 1; i <= leadingDays; i++) {
         _visibleDates.add(newDate.subtract(Duration(days: leadingDays - i)));
       }
     }
-    for (int i = 0; i < (42 - leadingDays); i++) {
+    for (var i = 0; i < (42 - leadingDays); i++) {
       _visibleDates.add(newDate.add(Duration(days: i + 1)));
     }
   }

@@ -17,7 +17,7 @@ class MealsListData {
   final List<String> meals;
   final int kcal;
 
-  static const List<MealsListData> samples = <MealsListData>[
+  static const samples = <MealsListData>[
     MealsListData(
       imagePath: 'assets/fitness_app/breakfast.png',
       title: 'Breakfast',

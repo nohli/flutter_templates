@@ -12,7 +12,7 @@ class AreaListView extends StatefulWidget {
 }
 
 class _AreaListViewState extends State<AreaListView> with TickerProviderStateMixin {
-  static const List<String> _imagePaths = <String>[
+  static const _imagePaths = <String>[
     'assets/fitness_app/area1.png',
     'assets/fitness_app/area2.png',
     'assets/fitness_app/area3.png',

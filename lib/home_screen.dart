@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_identity.dart';
 import 'app_theme.dart';
 import 'model/homelist.dart';
 
@@ -10,145 +11,92 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  List<HomeList> homeList = HomeList.homeList;
-  bool multiple = true;
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+  static const String _layoutPreferenceKey = 'home-gallery-multiple-columns';
 
-  late final AnimationController animationController;
+  final List<HomeList> _homeList = HomeList.homeList;
+  bool _multiple = true;
+  bool _restoredLayoutPreference = false;
+
+  late final AnimationController _animationController;
+
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
-        duration: const Duration(milliseconds: 2000), vsync: this);
+    _animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
   }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration());
-    return true;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_restoredLayoutPreference) {
+      _multiple =
+          PageStorage.maybeOf(context)?.readState(context, identifier: _layoutPreferenceKey) as bool? ?? _multiple;
+      _restoredLayoutPreference = true;
+    }
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _animationController.value = 1;
+    } else if (_animationController.value == 0 && !_animationController.isAnimating) {
+      _animationController.forward();
+    }
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
-          return const SizedBox();
-        } else {
-          return Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                appBar(),
-                Expanded(
-                  child: GridView(
-                    padding: const EdgeInsets.only(left: 12, right: 12),
-                    physics: const BouncingScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: multiple ? 2 : 1,
-                      mainAxisSpacing: 12.0,
-                      crossAxisSpacing: 12.0,
-                      childAspectRatio: 1.5,
-                    ),
-                    children: List<Widget>.generate(
-                      homeList.length,
-                      (int index) {
-                        final int count = homeList.length;
-                        final Animation<double> animation =
-                            Tween<double>(begin: 0.0, end: 1.0).animate(
-                          CurvedAnimation(
-                            parent: animationController,
-                            curve: Interval((1 / count) * index, 1.0,
-                                curve: Curves.fastOutSlowIn),
-                          ),
-                        );
-                        animationController.forward();
-                        return HomeListView(
-                          animation: animation,
-                          animationController: animationController,
-                          listData: homeList[index],
-                          callBack: () {
-                            Navigator.push<dynamic>(
-                              context,
-                              MaterialPageRoute<dynamic>(
-                                builder: (BuildContext context) =>
-                                    homeList[index].navigateScreen,
-                              ),
-                            );
-                          },
+    return SafeArea(
+      bottom: false,
+      child: Column(
+        children: <Widget>[
+          _GalleryHeader(
+            multiple: _multiple,
+            onToggleLayout: () {
+              setState(() {
+                _multiple = !_multiple;
+              });
+              PageStorage.maybeOf(context)?.writeState(context, _multiple, identifier: _layoutPreferenceKey);
+            },
+          ),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final int columnCount = _multiple && constraints.maxWidth >= 720 ? 3 : (_multiple ? 2 : 1);
+                return GridView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  physics: const BouncingScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: columnCount,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    childAspectRatio: 1.5,
+                  ),
+                  itemCount: _homeList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final Animation<double> animation = Tween<double>(begin: 0, end: 1).animate(
+                      CurvedAnimation(
+                        parent: _animationController,
+                        curve: Interval((1 / _homeList.length) * index, 1, curve: Curves.fastOutSlowIn),
+                      ),
+                    );
+                    final HomeList item = _homeList[index];
+                    return _HomeListCard(
+                      animation: animation,
+                      listData: item,
+                      onTap: () {
+                        Navigator.push<dynamic>(
+                          context,
+                          MaterialPageRoute<dynamic>(builder: (BuildContext context) => item.navigateScreen),
                         );
                       },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Widget appBar() {
-    return SizedBox(
-      height: AppBar().preferredSize.height,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(top: 8, left: 8),
-            child: SizedBox(
-              width: AppBar().preferredSize.height - 8,
-              height: AppBar().preferredSize.height - 8,
-            ),
-          ),
-          const Expanded(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: Text(
-                  'Flutter UI',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: AppTheme.darkText,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8, right: 8),
-            child: Container(
-              width: AppBar().preferredSize.height - 8,
-              height: AppBar().preferredSize.height - 8,
-              color: Colors.white,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius:
-                      BorderRadius.circular(AppBar().preferredSize.height),
-                  onTap: () {
-                    if (mounted) {
-                      setState(() {
-                        multiple = !multiple;
-                      });
-                    }
+                    );
                   },
-                  child: Icon(
-                    multiple ? Icons.dashboard : Icons.view_agenda,
-                    color: AppTheme.darkGrey,
-                  ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ],
@@ -157,57 +105,122 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 }
 
-class HomeListView extends StatelessWidget {
-  const HomeListView({
-    required this.listData,
-    required this.callBack,
-    required this.animationController,
-    required this.animation,
-    super.key,
-  });
+class _GalleryHeader extends StatelessWidget {
+  const _GalleryHeader({required this.multiple, required this.onToggleLayout});
+
+  static const TextStyle _titleStyle = TextStyle(fontSize: 22, color: AppTheme.darkText, fontWeight: FontWeight.w700);
+
+  final bool multiple;
+  final VoidCallback onToggleLayout;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final TextPainter titlePainter = TextPainter(
+          text: const TextSpan(text: AppIdentity.name, style: _titleStyle),
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+          maxLines: 1,
+        )..layout();
+        final bool stackTitle = titlePainter.width > constraints.maxWidth - 112;
+        final Widget toggle = Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: SizedBox.square(
+            dimension: 48,
+            child: IconButton(
+              tooltip: multiple ? 'Show one column' : 'Show multiple columns',
+              onPressed: onToggleLayout,
+              icon: Icon(multiple ? Icons.dashboard : Icons.view_agenda, color: AppTheme.darkGrey),
+            ),
+          ),
+        );
+        if (stackTitle) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                height: kToolbarHeight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[const SizedBox.square(dimension: 56), toggle],
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(12, 4, 12, 8),
+                child: Text(AppIdentity.name, textAlign: TextAlign.center, style: _titleStyle),
+              ),
+            ],
+          );
+        }
+        return ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: kToolbarHeight),
+          child: Row(
+            children: <Widget>[
+              const SizedBox.square(dimension: 56),
+              const Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Text(AppIdentity.name, textAlign: TextAlign.center, style: _titleStyle),
+                  ),
+                ),
+              ),
+              toggle,
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _HomeListCard extends StatelessWidget {
+  const _HomeListCard({required this.listData, required this.onTap, required this.animation});
 
   final HomeList listData;
-  final VoidCallback callBack;
-  final AnimationController animationController;
+  final VoidCallback onTap;
   final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animationController,
-      builder: (BuildContext context, _) {
-        return FadeTransition(
-          opacity: animation,
-          child: Transform(
-            transform: Matrix4.translationValues(
-                0.0, 50 * (1.0 - animation.value), 0.0),
-            child: AspectRatio(
-              aspectRatio: 1.5,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-                child: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: <Widget>[
-                    Image.asset(
-                      listData.imagePath,
-                      fit: BoxFit.cover,
+    return Semantics(
+      label: listData.title,
+      button: true,
+      onTap: onTap,
+      child: ExcludeSemantics(
+        child: AnimatedBuilder(
+          animation: animation,
+          builder: (BuildContext context, _) {
+            return FadeTransition(
+              opacity: animation,
+              child: Transform(
+                transform: Matrix4.translationValues(0.0, 50 * (1.0 - animation.value), 0.0),
+                child: AspectRatio(
+                  aspectRatio: 1.5,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                    child: Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: <Widget>[
+                        Image.asset(listData.imagePath, fit: BoxFit.cover),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            splashColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                            onTap: onTap,
+                          ),
+                        ),
+                      ],
                     ),
-                    Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        splashColor: Colors.grey.withOpacity(0.2),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(4.0)),
-                        onTap: () => callBack(),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }

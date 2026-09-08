@@ -5,22 +5,22 @@ import '../fitness_app/fitness_app_home_screen.dart';
 import '../hotel_booking/hotel_home_screen.dart';
 
 class HomeList {
-  HomeList({required this.navigateScreen, required this.imagePath});
+  const HomeList({required this.title, required this.navigateScreen, required this.imagePath});
 
-  Widget navigateScreen;
-  String imagePath;
+  final String title;
+  final Widget navigateScreen;
+  final String imagePath;
 
-  static List<HomeList> homeList = <HomeList>[
+  static const List<HomeList> homeList = <HomeList>[
+    HomeList(title: 'Hotel Booking', navigateScreen: HotelHomeScreen(), imagePath: 'assets/hotel/hotel_booking.png'),
     HomeList(
-      navigateScreen: const HotelHomeScreen(),
-      imagePath: 'assets/hotel/hotel_booking.png',
-    ),
-    HomeList(
-      navigateScreen: const FitnessAppHomeScreen(),
+      title: 'Fitness App',
+      navigateScreen: FitnessAppHomeScreen(),
       imagePath: 'assets/fitness_app/fitness_app.png',
     ),
     HomeList(
-      navigateScreen: const DesignCourseHomeScreen(),
+      title: 'Design Course',
+      navigateScreen: DesignCourseHomeScreen(),
       imagePath: 'assets/design_course/design_course.png',
     ),
   ];

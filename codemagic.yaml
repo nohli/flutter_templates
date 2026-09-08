@@ -13,6 +13,7 @@ workflows:
     environment:
       groups:
         - appstore_credentials
+        - deployment
       vars:
         BUNDLE_ID: com.achimsapps.templates
         CM_CLONE_UNSHALLOW: 'true'
@@ -20,12 +21,17 @@ workflows:
       xcode: 26.6
     scripts:
       - name: Get Packages
-        script: flutter pub get
+        script: |
+          set -eu
+          : "${CODEMAGIC_NOTIFICATION_EMAIL:?CODEMAGIC_NOTIFICATION_EMAIL must be configured in deployment}"
+          flutter pub get
       - name: Initialize Signing Keychain
         script: keychain initialize
       - name: Fetch Signing Files
         script: |
           set -eu
+          : "${APP_STORE_CONNECT_KEY_IDENTIFIER:?APP_STORE_CONNECT_KEY_IDENTIFIER must be configured in deployment}"
+          : "${APP_STORE_CONNECT_ISSUER_ID:?APP_STORE_CONNECT_ISSUER_ID must be configured in deployment}"
           : "${APP_STORE_CONNECT_PRIVATE_KEY:?APP_STORE_CONNECT_PRIVATE_KEY must be configured in appstore_credentials}"
           : "${CERTIFICATE_PRIVATE_KEY:?CERTIFICATE_PRIVATE_KEY must be configured in appstore_credentials}"
           app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
@@ -71,6 +77,7 @@ workflows:
     environment:
       groups:
         - google_play_credentials
+        - deployment
       android_signing:
         - templates_keystore
       vars:
@@ -78,7 +85,10 @@ workflows:
       flutter: 3.44.9
     scripts:
       - name: Get Packages
-        script: flutter pub get
+        script: |
+          set -eu
+          : "${CODEMAGIC_NOTIFICATION_EMAIL:?CODEMAGIC_NOTIFICATION_EMAIL must be configured in deployment}"
+          flutter pub get
       - name: Build App Bundle
         script: |
           set -eu

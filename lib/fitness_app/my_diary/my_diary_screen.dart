@@ -20,8 +20,8 @@ class MyDiaryScreen extends StatefulWidget {
 }
 
 class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateMixin {
-  final List<Widget> _sections = <Widget>[];
-  double _topBarOpacity = 0.0;
+  final _sections = <Widget>[];
+  var _topBarOpacity = 0.0;
 
   late final ScrollController _scrollController;
   late final Animation<double> _topBarAnimation;
@@ -72,7 +72,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
   }
 
   void _addSections() {
-    const int count = 9;
+    const count = 9;
 
     _sections.add(
       TitleView(

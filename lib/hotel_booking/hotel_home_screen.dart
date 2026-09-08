@@ -18,13 +18,13 @@ class HotelHomeScreen extends StatefulWidget {
 }
 
 class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderStateMixin {
-  final ScrollController _scrollController = ScrollController();
-  final Set<String> _favoriteHotelImages = <String>{};
+  final _scrollController = ScrollController();
+  final _favoriteHotelImages = <String>{};
 
-  HotelFilterSettings _filterSettings = const HotelFilterSettings();
-  String _query = '';
+  var _filterSettings = const HotelFilterSettings();
+  var _query = '';
 
-  DateTime startDate = DateTime.now();
+  var startDate = DateTime.now();
   DateTime endDate = DateTime.now().add(const Duration(days: 5));
 
   late final AnimationController animationController;

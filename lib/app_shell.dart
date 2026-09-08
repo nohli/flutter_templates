@@ -109,7 +109,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
         return AnimatedBuilder(
           animation: _drawerController,
           builder: (BuildContext context, Widget? child) {
-            final bool drawerIsClosed = _drawerController.value == 0;
+            final drawerIsClosed = _drawerController.value == 0;
             return PopScope(
               canPop: drawerIsClosed,
               onPopInvokedWithResult: (bool didPop, Object? result) {

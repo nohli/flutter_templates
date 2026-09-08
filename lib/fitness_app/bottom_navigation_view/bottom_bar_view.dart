@@ -318,7 +318,7 @@ class _TabDestination {
   final String accessibilityLabel;
 }
 
-const List<_TabDestination> _destinations = <_TabDestination>[
+const _destinations = <_TabDestination>[
   _TabDestination(
     asset: 'assets/fitness_app/tab_1.png',
     selectedAsset: 'assets/fitness_app/tab_1s.png',
@@ -348,7 +348,7 @@ class TabClipper extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-    final Path path = Path();
+    final path = Path();
     final double diameter = radius * 2;
 
     path

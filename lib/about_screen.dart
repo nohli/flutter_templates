@@ -14,7 +14,7 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-  bool _isOpeningLink = false;
+  var _isOpeningLink = false;
 
   Future<void> _open(Uri uri) async {
     if (_isOpeningLink) return;
@@ -36,7 +36,7 @@ class _AboutScreenState extends State<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool showUpstreamSource = Theme.of(context).platform != TargetPlatform.android;
+    final showUpstreamSource = Theme.of(context).platform != TargetPlatform.android;
     final ButtonStyle linkStyle = TextButton.styleFrom(
       minimumSize: const Size(0, 48),
       foregroundColor: AppTheme.actionBlue,

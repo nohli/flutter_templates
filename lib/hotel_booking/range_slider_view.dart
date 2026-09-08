@@ -78,7 +78,7 @@ class _CustomRangeThumbShape extends RangeSliderThumbShape {
   final Color shadowColor;
   final Color surfaceColor;
 
-  static const double _thumbRadius = 3.0;
+  static const _thumbRadius = 3.0;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -100,7 +100,7 @@ class _CustomRangeThumbShape extends RangeSliderThumbShape {
     Thumb thumb = Thumb.start,
   }) {
     final Canvas canvas = context.canvas;
-    final ColorTween colorTween = ColorTween(begin: sliderTheme.disabledThumbColor, end: sliderTheme.thumbColor);
+    final colorTween = ColorTween(begin: sliderTheme.disabledThumbColor, end: sliderTheme.thumbColor);
 
     Path thumbPath;
     switch (textDirection) {
@@ -135,7 +135,7 @@ class _CustomRangeThumbShape extends RangeSliderThumbShape {
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, convertRadiusToSigma(8)),
     );
 
-    final Paint cPaint = Paint();
+    final cPaint = Paint();
     cPaint.color = surfaceColor;
     cPaint.strokeWidth = 14 / 2;
     canvas.drawCircle(Offset(center.dx, center.dy), 12, cPaint);
@@ -149,8 +149,8 @@ class _CustomRangeThumbShape extends RangeSliderThumbShape {
   }
 
   Path _rightTriangle(Offset thumbCenter, {bool invert = false}) {
-    final Path thumbPath = Path();
-    final double sign = invert ? -1.0 : 1.0;
+    final thumbPath = Path();
+    final sign = invert ? -1.0 : 1.0;
     thumbPath.moveTo(thumbCenter.dx + 5 * sign, thumbCenter.dy);
     thumbPath.lineTo(thumbCenter.dx - 3 * sign, thumbCenter.dy - 5);
     thumbPath.lineTo(thumbCenter.dx - 3 * sign, thumbCenter.dy + 5);

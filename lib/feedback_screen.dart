@@ -16,8 +16,8 @@ class FeedbackScreen extends StatefulWidget {
 }
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
-  final TextEditingController _controller = TextEditingController();
-  bool _isOpeningEmail = false;
+  final _controller = TextEditingController();
+  var _isOpeningEmail = false;
   String? _errorMessage;
 
   @override
@@ -38,7 +38,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       _isOpeningEmail = true;
       _errorMessage = null;
     });
-    bool launched = false;
+    var launched = false;
     try {
       launched = await widget.launcher(feedbackEmailUri(message));
     } catch (_) {

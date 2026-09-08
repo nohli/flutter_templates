@@ -19,7 +19,7 @@ class Category {
 
   String get accessibilityLabel => 'Open $title sample course, $lessonLabel, rating $rating, price $money dollars';
 
-  static const List<Category> categoryList = <Category>[
+  static const categoryList = <Category>[
     Category(
       id: 'user-interface-design',
       imagePath: 'assets/design_course/interFace1.png',
@@ -54,7 +54,7 @@ class Category {
     ),
   ];
 
-  static const List<Category> popularCourseList = <Category>[
+  static const popularCourseList = <Category>[
     Category(
       id: 'app-design',
       imagePath: 'assets/design_course/interFace3.png',

@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 class AppTheme {
   AppTheme._();
 
-  static const Color notWhite = Color(0xFFEDF0F2);
-  static const Color nearlyWhite = Color(0xFFFEFEFE);
-  static const Color white = Color(0xFFFFFFFF);
-  static const Color nearlyBlack = Color(0xFF213333);
-  static const Color grey = Color(0xFF3A5160);
-  static const Color darkGrey = Color(0xFF313A44);
-  static const Color darkText = Color(0xFF253840);
-  static const Color darkerText = Color(0xFF17262A);
-  static const Color lightText = Color(0xFF4A6572);
-  static const Color actionBlue = Color(0xFF0D47A1);
+  static const notWhite = Color(0xFFEDF0F2);
+  static const nearlyWhite = Color(0xFFFEFEFE);
+  static const white = Color(0xFFFFFFFF);
+  static const nearlyBlack = Color(0xFF213333);
+  static const grey = Color(0xFF3A5160);
+  static const darkGrey = Color(0xFF313A44);
+  static const darkText = Color(0xFF253840);
+  static const darkerText = Color(0xFF17262A);
+  static const lightText = Color(0xFF4A6572);
+  static const actionBlue = Color(0xFF0D47A1);
   static const fontName = 'WorkSans';
 
   static ThemeData build() {
@@ -29,7 +29,7 @@ class AppTheme {
     return base.copyWith(scaffoldBackgroundColor: nearlyWhite, textTheme: base.textTheme.merge(textTheme));
   }
 
-  static const TextTheme textTheme = TextTheme(
+  static const textTheme = TextTheme(
     headlineMedium: display1,
     headlineSmall: headline,
     titleLarge: title,
@@ -39,7 +39,7 @@ class AppTheme {
     bodySmall: caption,
   );
 
-  static const TextStyle display1 = TextStyle(
+  static const display1 = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.bold,
     fontSize: 36,
@@ -48,7 +48,7 @@ class AppTheme {
     color: darkerText,
   );
 
-  static const TextStyle headline = TextStyle(
+  static const headline = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.bold,
     fontSize: 24,
@@ -56,7 +56,7 @@ class AppTheme {
     color: darkerText,
   );
 
-  static const TextStyle title = TextStyle(
+  static const title = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.bold,
     fontSize: 16,
@@ -64,7 +64,7 @@ class AppTheme {
     color: darkerText,
   );
 
-  static const TextStyle subtitle = TextStyle(
+  static const subtitle = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 14,
@@ -72,7 +72,7 @@ class AppTheme {
     color: darkText,
   );
 
-  static const TextStyle body2 = TextStyle(
+  static const body2 = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 14,
@@ -80,7 +80,7 @@ class AppTheme {
     color: darkText,
   );
 
-  static const TextStyle body1 = TextStyle(
+  static const body1 = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 16,
@@ -88,7 +88,7 @@ class AppTheme {
     color: darkText,
   );
 
-  static const TextStyle caption = TextStyle(
+  static const caption = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.w400,
     fontSize: 12,

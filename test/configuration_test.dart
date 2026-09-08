@@ -28,7 +28,7 @@ void main() {
     final String windowsMetadata = File('windows/runner/Runner.rc').readAsStringSync();
     final String windowsRunner = File('windows/runner/main.cpp').readAsStringSync();
     final String codemagic = File('codemagic.yaml').readAsStringSync();
-    final Map<String, dynamic> fvmConfig = jsonDecode(File('.fvmrc').readAsStringSync()) as Map<String, dynamic>;
+    final fvmConfig = jsonDecode(File('.fvmrc').readAsStringSync()) as Map<String, dynamic>;
 
     final RegExpMatch? version = RegExp(r'^version: ([^+\s]+)\+(\d+)$', multiLine: true).firstMatch(pubspec);
     expect(version, isNotNull);
@@ -106,11 +106,11 @@ void main() {
           .map(_asYamlMap)
           .singleWhere((YamlMap step) => step['name'] == workflowCase.buildStep);
       final List<Object?> scriptNames = scripts.map(_asYamlMap).map((YamlMap step) => step['name']).toList();
-      final String getPackagesScript =
+      final getPackagesScript =
           scripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Get Packages')['script'] as String;
       final YamlMap email = _asYamlMap(_asYamlMap(workflow['publishing'])['email']);
       final YamlMap notifications = _asYamlMap(email['notify']);
-      final String buildScript = buildStep['script'] as String;
+      final buildScript = buildStep['script'] as String;
 
       expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
       expect(environment['flutter'], '3.44.9');
@@ -130,7 +130,7 @@ void main() {
 
     final YamlMap iosEnvironment = _asYamlMap(_asYamlMap(workflows['templates-ios'])['environment']);
     final YamlList iosScripts = _asYamlList(_asYamlMap(workflows['templates-ios'])['scripts']);
-    final String fetchSigningScript =
+    final fetchSigningScript =
         iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Fetch Signing Files')['script']
             as String;
     expect(_asYamlList(iosEnvironment['groups']), <String>['appstore_credentials', 'deployment']);
@@ -150,7 +150,7 @@ void main() {
     expect(appStoreConnect['submit_to_testflight'], isTrue);
     expect(_asYamlList(appStoreConnect['beta_groups']), <String>['Tester']);
 
-    final List<Object?> releaseNotes = (jsonDecode(File('release_notes.json').readAsStringSync()) as List<Object?>);
+    final releaseNotes = (jsonDecode(File('release_notes.json').readAsStringSync()) as List<Object?>);
     expect(releaseNotes, <Object?>[
       <String, String>{
         'language': 'en-US',
@@ -175,7 +175,7 @@ void main() {
     expect(File('android/key.properties').existsSync(), isFalse);
 
     final String gitignore = File('.gitignore').readAsStringSync();
-    for (final String secretPattern in <String>[
+    for (final secretPattern in <String>[
       '.env',
       '*.jks',
       '*.keystore',
@@ -201,7 +201,7 @@ void main() {
       expect(triggers.containsKey('push'), isFalse, reason: workflowFile);
 
       final YamlMap jobs = _asYamlMap(workflow['jobs']);
-      final Set<String> expectedJobs = workflowFile.endsWith('flutter_build.yml')
+      final expectedJobs = workflowFile.endsWith('flutter_build.yml')
           ? <String>{'build_android', 'build_ios'}
           : <String>{'check_formatting', 'analyze', 'test'};
       expect(jobs.keys.cast<String>().toSet(), expectedJobs, reason: workflowFile);
@@ -346,8 +346,7 @@ void main() {
     ).readAsStringSync();
     final String androidNightStyles = File('android/app/src/main/res/values-night/styles.xml').readAsStringSync();
     final String webIndex = File('web/index.html').readAsStringSync();
-    final Map<String, dynamic> webManifest =
-        jsonDecode(File('web/manifest.json').readAsStringSync()) as Map<String, dynamic>;
+    final webManifest = jsonDecode(File('web/manifest.json').readAsStringSync()) as Map<String, dynamic>;
 
     expect(launchStoryboard, contains('<color key="backgroundColor" systemColor="systemBackgroundColor"'));
     expect(launchStoryboard, isNot(contains('<color key="backgroundColor" white="1"')));
@@ -391,7 +390,7 @@ YamlList _asYamlList(Object? value) {
   final Uint8List bytes = File(fileName).readAsBytesSync();
   expect(bytes.take(8), orderedEquals(<int>[137, 80, 78, 71, 13, 10, 26, 10]));
   expect(String.fromCharCodes(bytes.sublist(12, 16)), 'IHDR');
-  final ByteData data = ByteData.sublistView(bytes);
+  final data = ByteData.sublistView(bytes);
 
   return (width: data.getUint32(16), height: data.getUint32(20), bitDepth: bytes[24], colorType: bytes[25]);
 }
@@ -405,7 +404,7 @@ Future<void> _expectFullyOpaqueAlpha(String fileName) async {
   final Uint8List bytes = pixels!.buffer.asUint8List();
   int? firstNonOpaquePixel;
   for (var alphaIndex = 3; alphaIndex < bytes.length; alphaIndex += 4) {
-    final bool isOpaque = bytes[alphaIndex] == 255;
+    final isOpaque = bytes[alphaIndex] == 255;
 
     if (!isOpaque) {
       firstNonOpaquePixel = (alphaIndex - 3) ~/ 4;

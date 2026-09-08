@@ -4,7 +4,7 @@ class PopularFilterListData {
   final String label;
   bool isSelected;
 
-  static final List<PopularFilterListData> popularFilters = <PopularFilterListData>[
+  static final popularFilters = <PopularFilterListData>[
     PopularFilterListData(label: 'Free Breakfast'),
     PopularFilterListData(label: 'Free Parking'),
     PopularFilterListData(label: 'Pool', isSelected: true),
@@ -12,7 +12,7 @@ class PopularFilterListData {
     PopularFilterListData(label: 'Free wifi'),
   ];
 
-  static final List<PopularFilterListData> accommodationTypes = <PopularFilterListData>[
+  static final accommodationTypes = <PopularFilterListData>[
     PopularFilterListData(label: 'All'),
     PopularFilterListData(label: 'Apartment'),
     PopularFilterListData(label: 'Home', isSelected: true),

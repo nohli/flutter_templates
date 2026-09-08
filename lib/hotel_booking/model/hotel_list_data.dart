@@ -21,7 +21,7 @@ class HotelListData {
   final List<String> amenities;
   final String accommodationType;
 
-  static const List<HotelListData> samples = <HotelListData>[
+  static const samples = <HotelListData>[
     HotelListData(
       imagePath: 'assets/hotel/hotel_1.png',
       title: 'Grand Royal Hotel',

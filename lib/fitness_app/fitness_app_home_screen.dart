@@ -14,7 +14,7 @@ class FitnessAppHomeScreen extends StatefulWidget {
 }
 
 class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen> with TickerProviderStateMixin {
-  int selectedIndex = 0;
+  var selectedIndex = 0;
 
   late final AnimationController animationController;
   @override

@@ -37,7 +37,7 @@ void main() {
 
   testWidgets('feedback validates text and opens one truthful email draft', (WidgetTester tester) async {
     _evictAssets(<String>['assets/images/feedbackImage.png']);
-    final Completer<bool> launchResult = Completer<bool>();
+    final launchResult = Completer<bool>();
     Uri? launchedUri;
     var launchCount = 0;
     await _pumpScreen(
@@ -84,7 +84,7 @@ void main() {
 
   testWidgets('help opens support once and reports launcher failure', (WidgetTester tester) async {
     _evictAssets(<String>['assets/images/helpImage.png']);
-    final Completer<bool> launchResult = Completer<bool>();
+    final launchResult = Completer<bool>();
     Uri? launchedUri;
     var launchCount = 0;
     await _pumpScreen(
@@ -113,7 +113,7 @@ void main() {
 
   testWidgets('invite sends one native share request with a nonempty origin', (WidgetTester tester) async {
     _evictAssets(<String>['assets/images/inviteImage.png']);
-    final Completer<void> shareResult = Completer<void>();
+    final shareResult = Completer<void>();
     String? sharedText;
     Rect? sharedOrigin;
     var shareCount = 0;
@@ -157,7 +157,7 @@ void main() {
   testWidgets('about exposes iOS source and portfolio links without persistent launch errors', (
     WidgetTester tester,
   ) async {
-    final List<Uri> launchedUris = <Uri>[];
+    final launchedUris = <Uri>[];
     await _pumpScreen(
       tester,
       AboutScreen(
@@ -337,7 +337,7 @@ Future<void> _pumpScreen(
 }
 
 void _evictAssets(Iterable<String> assets) {
-  for (final String asset in assets) {
+  for (final asset in assets) {
     rootBundle.evict(asset);
   }
 }

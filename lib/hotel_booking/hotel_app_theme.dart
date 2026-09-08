@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HotelAppTheme {
-  static const Color seedColor = Color(0xFF54D3C2);
-  static const Color actionColor = Color(0xFF006A60);
-  static const Color rangeColor = Color(0xFFBBEDE7);
+  static const seedColor = Color(0xFF54D3C2);
+  static const actionColor = Color(0xFF006A60);
+  static const rangeColor = Color(0xFFBBEDE7);
 
   static TextTheme _buildTextTheme(TextTheme base) {
     const fontName = 'WorkSans';

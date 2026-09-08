@@ -73,7 +73,7 @@ class _CustomThumbShape extends SliderComponentShape {
   final Color shadowColor;
   final Color surfaceColor;
 
-  static const double _thumbRadius = 3.0;
+  static const _thumbRadius = 3.0;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
@@ -96,7 +96,7 @@ class _CustomThumbShape extends SliderComponentShape {
     required double value,
   }) {
     final Canvas canvas = context.canvas;
-    final ColorTween colorTween = ColorTween(begin: sliderTheme.disabledThumbColor, end: sliderTheme.thumbColor);
+    final colorTween = ColorTween(begin: sliderTheme.disabledThumbColor, end: sliderTheme.thumbColor);
     canvas.drawPath(
       Path()
         ..addOval(Rect.fromPoints(Offset(center.dx + 12, center.dy + 12), Offset(center.dx - 12, center.dy - 12)))
@@ -106,7 +106,7 @@ class _CustomThumbShape extends SliderComponentShape {
         ..maskFilter = MaskFilter.blur(BlurStyle.normal, convertRadiusToSigma(8)),
     );
 
-    final Paint cPaint = Paint();
+    final cPaint = Paint();
     cPaint.color = surfaceColor;
     cPaint.strokeWidth = 14 / 2;
     canvas.drawCircle(Offset(center.dx, center.dy), 12, cPaint);

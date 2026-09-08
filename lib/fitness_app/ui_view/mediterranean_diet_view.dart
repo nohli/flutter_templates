@@ -719,12 +719,12 @@ class CurvePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint shadowPaint = Paint()
+    final shadowPaint = Paint()
       ..color = shadowColor.withValues(alpha: 0.4)
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..strokeWidth = 14;
-    final Offset shadowPaintCenter = Offset(size.width / 2, size.height / 2);
+    final shadowPaintCenter = Offset(size.width / 2, size.height / 2);
     final double shadowPaintRadius = math.min(size.width / 2, size.height / 2) - (14 / 2);
     canvas.drawArc(
       Rect.fromCircle(center: shadowPaintCenter, radius: shadowPaintRadius),
@@ -764,19 +764,19 @@ class CurvePainter extends CustomPainter {
       shadowPaint,
     );
 
-    final Rect rect = Rect.fromLTWH(0.0, 0.0, size.width, size.width);
-    final SweepGradient gradient = SweepGradient(
+    final rect = Rect.fromLTWH(0.0, 0.0, size.width, size.width);
+    final gradient = SweepGradient(
       startAngle: degreeToRadians(268),
       endAngle: degreeToRadians(270.0 + 360),
       tileMode: TileMode.repeated,
       colors: colors,
     );
-    final Paint paint = Paint()
+    final paint = Paint()
       ..shader = gradient.createShader(rect)
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
       ..strokeWidth = 14;
-    final Offset center = Offset(size.width / 2, size.height / 2);
+    final center = Offset(size.width / 2, size.height / 2);
     final double radius = math.min(size.width / 2, size.height / 2) - (14 / 2);
 
     canvas.drawArc(
@@ -787,12 +787,9 @@ class CurvePainter extends CustomPainter {
       paint,
     );
 
-    final SweepGradient gradient1 = SweepGradient(
-      tileMode: TileMode.repeated,
-      colors: <Color>[markerColor, markerColor],
-    );
+    final gradient1 = SweepGradient(tileMode: TileMode.repeated, colors: <Color>[markerColor, markerColor]);
 
-    final Paint cPaint = Paint();
+    final cPaint = Paint();
     cPaint.shader = gradient1.createShader(rect);
     cPaint.color = markerColor;
     cPaint.strokeWidth = 14 / 2;

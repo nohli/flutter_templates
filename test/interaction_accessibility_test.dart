@@ -17,7 +17,7 @@ import 'package:templates/hotel_booking/smooth_star_rating.dart';
 
 void main() {
   test('course lesson labels use correct singular and plural grammar', () {
-    const Category singleLesson = Category(
+    const singleLesson = Category(
       id: 'single-lesson',
       title: 'Single Lesson',
       imagePath: '',

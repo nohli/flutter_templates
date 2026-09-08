@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-bool _areFontLicensesRegistered = false;
+var _areFontLicensesRegistered = false;
 
 void registerBundledFontLicenses() {
   if (_areFontLicensesRegistered) return;

@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'hotel_app_theme.dart';
-
 class RangeSliderView extends StatefulWidget {
-  const RangeSliderView({
-    required this.values,
-    required this.onChangeRangeValues,
-    super.key,
-  });
+  const RangeSliderView({required this.values, required this.onChangeRangeValues, super.key});
 
-  final Function(RangeValues) onChangeRangeValues;
+  final ValueChanged<RangeValues> onChangeRangeValues;
   final RangeValues values;
 
   @override
@@ -26,69 +20,49 @@ class _RangeSliderViewState extends State<RangeSliderView> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final startPosition = _values.start.round().clamp(1, 999);
+    final endPosition = _values.end.round().clamp(1, 999);
+
     return Column(
       children: <Widget>[
         Stack(
           children: <Widget>[
             Row(
               children: <Widget>[
-                Expanded(
-                  flex: _values.start.round(),
-                  child: const SizedBox(),
-                ),
-                SizedBox(
-                  width: 54,
-                  child: Text(
-                    '\$${_values.start.round()}',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Expanded(
-                  flex: 1000 - _values.start.round(),
-                  child: const SizedBox(),
-                ),
+                Expanded(flex: startPosition, child: const SizedBox()),
+                SizedBox(width: 54, child: Text('\$${_values.start.round()}', textAlign: TextAlign.center)),
+                Expanded(flex: 1000 - startPosition, child: const SizedBox()),
               ],
             ),
             Row(
               children: <Widget>[
-                Expanded(
-                  flex: _values.end.round(),
-                  child: const SizedBox(),
-                ),
-                SizedBox(
-                  width: 54,
-                  child: Text(
-                    '\$${_values.end.round()}',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Expanded(
-                  flex: 1000 - _values.end.round(),
-                  child: const SizedBox(),
-                ),
+                Expanded(flex: endPosition, child: const SizedBox()),
+                SizedBox(width: 54, child: Text('\$${_values.end.round()}', textAlign: TextAlign.center)),
+                Expanded(flex: 1000 - endPosition, child: const SizedBox()),
               ],
             ),
           ],
         ),
         SliderTheme(
           data: SliderThemeData(
-            rangeThumbShape: CustomRangeThumbShape(),
+            rangeThumbShape: _CustomRangeThumbShape(
+              shadowColor: colors.shadow,
+              surfaceColor: colors.surface,
+              foregroundColor: colors.onPrimary,
+            ),
           ),
           child: RangeSlider(
             values: _values,
             max: 1000.0,
-            activeColor: HotelAppTheme.buildLightTheme().primaryColor,
-            inactiveColor: Colors.grey.withOpacity(0.4),
+            activeColor: colors.secondary,
+            inactiveColor: colors.outlineVariant,
             divisions: 1000,
             onChanged: (RangeValues values) {
-              try {
-                if (mounted) {
-                  setState(() {
-                    _values = values;
-                  });
-                }
-                widget.onChangeRangeValues(_values);
-              } catch (_) {}
+              setState(() {
+                _values = values;
+              });
+              widget.onChangeRangeValues(_values);
             },
           ),
         ),
@@ -97,21 +71,19 @@ class _RangeSliderViewState extends State<RangeSliderView> {
   }
 }
 
-class CustomRangeThumbShape extends RangeSliderThumbShape {
-  static const double _thumbSize = 3.0;
-  static const double _disabledThumbSize = 3.0;
+class _CustomRangeThumbShape extends RangeSliderThumbShape {
+  const _CustomRangeThumbShape({required this.shadowColor, required this.surfaceColor, required this.foregroundColor});
+
+  final Color foregroundColor;
+  final Color shadowColor;
+  final Color surfaceColor;
+
+  static const double _thumbRadius = 3.0;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return isEnabled
-        ? const Size.fromRadius(_thumbSize)
-        : const Size.fromRadius(_disabledThumbSize);
+    return const Size.fromRadius(_thumbRadius);
   }
-
-  static final Animatable<double> sizeTween = Tween<double>(
-    begin: _disabledThumbSize,
-    end: _thumbSize,
-  );
 
   @override
   void paint(
@@ -128,60 +100,55 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
     Thumb thumb = Thumb.start,
   }) {
     final Canvas canvas = context.canvas;
-    final ColorTween colorTween = ColorTween(
-      begin: sliderTheme.disabledThumbColor,
-      end: sliderTheme.thumbColor,
-    );
+    final ColorTween colorTween = ColorTween(begin: sliderTheme.disabledThumbColor, end: sliderTheme.thumbColor);
 
-    final double size = _thumbSize * sizeTween.evaluate(enableAnimation);
     Path thumbPath;
     switch (textDirection) {
       case TextDirection.rtl:
         switch (thumb) {
           case Thumb.start:
-            thumbPath = _rightTriangle(size, center);
+            thumbPath = _rightTriangle(center);
             break;
           case Thumb.end:
-            thumbPath = _leftTriangle(size, center);
+            thumbPath = _leftTriangle(center);
             break;
         }
         break;
       case TextDirection.ltr:
         switch (thumb) {
           case Thumb.start:
-            thumbPath = _leftTriangle(size, center);
+            thumbPath = _leftTriangle(center);
             break;
           case Thumb.end:
-            thumbPath = _rightTriangle(size, center);
+            thumbPath = _rightTriangle(center);
             break;
         }
         break;
     }
 
     canvas.drawPath(
-        Path()
-          ..addOval(Rect.fromPoints(Offset(center.dx + 12, center.dy + 12),
-              Offset(center.dx - 12, center.dy - 12)))
-          ..fillType = PathFillType.evenOdd,
-        Paint()
-          ..color = Colors.black.withOpacity(0.5)
-          ..maskFilter =
-              MaskFilter.blur(BlurStyle.normal, convertRadiusToSigma(8)));
+      Path()
+        ..addOval(Rect.fromPoints(Offset(center.dx + 12, center.dy + 12), Offset(center.dx - 12, center.dy - 12)))
+        ..fillType = PathFillType.evenOdd,
+      Paint()
+        ..color = shadowColor.withValues(alpha: 0.5)
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, convertRadiusToSigma(8)),
+    );
 
     final Paint cPaint = Paint();
-    cPaint.color = Colors.white;
+    cPaint.color = surfaceColor;
     cPaint.strokeWidth = 14 / 2;
     canvas.drawCircle(Offset(center.dx, center.dy), 12, cPaint);
-    cPaint.color = colorTween.evaluate(enableAnimation) ?? Colors.white;
+    cPaint.color = colorTween.evaluate(enableAnimation) ?? surfaceColor;
     canvas.drawCircle(Offset(center.dx, center.dy), 10, cPaint);
-    canvas.drawPath(thumbPath, Paint()..color = Colors.white);
+    canvas.drawPath(thumbPath, Paint()..color = foregroundColor);
   }
 
   double convertRadiusToSigma(double radius) {
     return radius * 0.57735 + 0.5;
   }
 
-  Path _rightTriangle(double size, Offset thumbCenter, {bool invert = false}) {
+  Path _rightTriangle(Offset thumbCenter, {bool invert = false}) {
     final Path thumbPath = Path();
     final double sign = invert ? -1.0 : 1.0;
     thumbPath.moveTo(thumbCenter.dx + 5 * sign, thumbCenter.dy);
@@ -191,6 +158,5 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
     return thumbPath;
   }
 
-  Path _leftTriangle(double size, Offset thumbCenter) =>
-      _rightTriangle(size, thumbCenter, invert: true);
+  Path _leftTriangle(Offset thumbCenter) => _rightTriangle(thumbCenter, invert: true);
 }

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'hotel_app_theme.dart';
-
 class CustomCalendarView extends StatefulWidget {
   const CustomCalendarView({
     required this.initialStartDate,
     required this.initialEndDate,
-    required this.startEndDateChange,
+    this.startEndDateChange,
+    this.draftDateChange,
     this.minimumDate,
     this.maximumDate,
     super.key,
@@ -18,364 +17,358 @@ class CustomCalendarView extends StatefulWidget {
   final DateTime initialStartDate;
   final DateTime initialEndDate;
 
-  final Function(DateTime, DateTime) startEndDateChange;
+  final void Function(DateTime, DateTime)? startEndDateChange;
+  final void Function(DateTime? startDate, DateTime? endDate)? draftDateChange;
 
   @override
   State<CustomCalendarView> createState() => _CustomCalendarViewState();
 }
 
 class _CustomCalendarViewState extends State<CustomCalendarView> {
-  List<DateTime> dateList = <DateTime>[];
-  DateTime currentMonthDate = DateTime.now();
-  DateTime? startDate;
-  DateTime? endDate;
+  final List<DateTime> _visibleDates = <DateTime>[];
+  late DateTime _visibleMonth;
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   @override
   void initState() {
     super.initState();
-    setListOfDate(currentMonthDate);
-    startDate = widget.initialStartDate;
-    endDate = widget.initialEndDate;
+    _startDate = widget.initialStartDate;
+    _endDate = widget.initialEndDate;
+    _visibleMonth = _initialVisibleMonth();
+    _populateVisibleDates(_visibleMonth);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  void setListOfDate(DateTime monthDate) {
-    dateList.clear();
+  void _populateVisibleDates(DateTime monthDate) {
+    _visibleDates.clear();
     final DateTime newDate = DateTime(monthDate.year, monthDate.month, 0);
-    int previousMothDay = 0;
+    int leadingDays = 0;
     if (newDate.weekday < 7) {
-      previousMothDay = newDate.weekday;
-      for (int i = 1; i <= previousMothDay; i++) {
-        dateList.add(newDate.subtract(Duration(days: previousMothDay - i)));
+      leadingDays = newDate.weekday;
+      for (int i = 1; i <= leadingDays; i++) {
+        _visibleDates.add(newDate.subtract(Duration(days: leadingDays - i)));
       }
     }
-    for (int i = 0; i < (42 - previousMothDay); i++) {
-      dateList.add(newDate.add(Duration(days: i + 1)));
+    for (int i = 0; i < (42 - leadingDays); i++) {
+      _visibleDates.add(newDate.add(Duration(days: i + 1)));
     }
-    // if (dateList[dateList.length - 7].month != monthDate.month) {
-    //   dateList.removeRange(dateList.length - 7, dateList.length);
-    // }
+  }
+
+  DateTime _initialVisibleMonth() {
+    var visibleDate = DateUtils.dateOnly(widget.initialStartDate);
+    final minimumDate = widget.minimumDate == null ? null : DateUtils.dateOnly(widget.minimumDate!);
+    final maximumDate = widget.maximumDate == null ? null : DateUtils.dateOnly(widget.maximumDate!);
+
+    if (minimumDate != null && visibleDate.isBefore(minimumDate)) {
+      visibleDate = minimumDate;
+    }
+    if (maximumDate != null && visibleDate.isAfter(maximumDate)) {
+      visibleDate = maximumDate;
+    }
+
+    return DateTime(visibleDate.year, visibleDate.month);
+  }
+
+  bool _monthHasSelectableDate(DateTime month) {
+    final firstDay = DateTime(month.year, month.month);
+    final lastDay = DateTime(month.year, month.month + 1, 0);
+    final minimumDate = widget.minimumDate == null ? null : DateUtils.dateOnly(widget.minimumDate!);
+    final maximumDate = widget.maximumDate == null ? null : DateUtils.dateOnly(widget.maximumDate!);
+
+    return (minimumDate == null || !lastDay.isBefore(minimumDate)) &&
+        (maximumDate == null || !firstDay.isAfter(maximumDate));
+  }
+
+  void _showMonth(DateTime month) {
+    setState(() {
+      _visibleMonth = DateTime(month.year, month.month);
+      _populateVisibleDates(_visibleMonth);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final useAccessibleList = MediaQuery.sizeOf(context).width < 372 || MediaQuery.textScalerOf(context).scale(1) >= 2;
     return Material(
+      color: colors.surface,
       child: Column(
         children: <Widget>[
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 8.0, right: 8.0, top: 4, bottom: 4),
-            child: Row(
+          _buildMonthHeader(colors),
+          if (useAccessibleList)
+            _buildAccessibleDaysList(colors)
+          else ...<Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 8, left: 8, bottom: 8),
+              child: Row(children: _buildWeekdayHeaders()),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 8, left: 8),
+              child: Column(children: _buildCalendarRows()),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMonthHeader(ColorScheme colors) {
+    final previousMonth = DateTime(_visibleMonth.year, _visibleMonth.month - 1);
+    final nextMonth = DateTime(_visibleMonth.year, _visibleMonth.month + 1);
+    final canShowPreviousMonth = _monthHasSelectableDate(previousMonth);
+    final canShowNextMonth = _monthHasSelectableDate(nextMonth);
+    final useStackedHeader = MediaQuery.textScalerOf(context).scale(1) >= 2;
+    final previousButton = IconButton.outlined(
+      tooltip: 'Previous month',
+      constraints: const BoxConstraints.tightFor(width: 48, height: 48),
+      style: IconButton.styleFrom(foregroundColor: colors.onSurfaceVariant),
+      onPressed: canShowPreviousMonth ? () => _showMonth(previousMonth) : null,
+      icon: const Icon(Icons.keyboard_arrow_left),
+    );
+    final nextButton = IconButton.outlined(
+      tooltip: 'Next month',
+      constraints: const BoxConstraints.tightFor(width: 48, height: 48),
+      style: IconButton.styleFrom(foregroundColor: colors.onSurfaceVariant),
+      onPressed: canShowNextMonth ? () => _showMonth(nextMonth) : null,
+      icon: const Icon(Icons.keyboard_arrow_right),
+    );
+    final monthLabel = Semantics(
+      label: DateFormat('MMMM yyyy').format(_visibleMonth),
+      header: true,
+      child: ExcludeSemantics(
+        child: Text(
+          DateFormat(useStackedHeader ? 'MMM yyyy' : 'MMMM, yyyy').format(_visibleMonth),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: colors.onSurface),
+        ),
+      ),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+      child: useStackedHeader
+          ? Column(
+              children: <Widget>[
+                monthLabel,
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[previousButton, nextButton]),
+              ],
+            )
+          : Row(
+              children: <Widget>[
+                previousButton,
+                Expanded(child: Center(child: monthLabel)),
+                nextButton,
+              ],
+            ),
+    );
+  }
+
+  Widget _buildAccessibleDaysList(ColorScheme colors) {
+    final monthDates = _visibleDates.where((DateTime date) {
+      return date.year == _visibleMonth.year && date.month == _visibleMonth.month;
+    });
+
+    return Column(
+      key: const ValueKey<String>('calendar-accessible-day-list'),
+      children: monthDates
+          .map((DateTime date) {
+            final isSelectable = _isDateSelectable(date);
+            final isSelected = _isRangeBoundary(date);
+            final isInRange = _isInSelectedRange(date);
+            final backgroundColor = isSelected
+                ? colors.primary
+                : isInRange
+                ? colors.primaryContainer
+                : Colors.transparent;
+            final foregroundColor = isSelected
+                ? colors.onPrimary
+                : isInRange
+                ? colors.onPrimaryContainer
+                : isSelectable
+                ? colors.onSurface
+                : colors.onSurfaceVariant.withValues(alpha: 0.6);
+            final semanticsLabel = DateFormat('EEEE, d MMMM yyyy').format(date);
+
+            return Semantics(
+              key: ValueKey<String>('calendar-day-${DateFormat('yyyy-MM-dd').format(date)}'),
+              button: true,
+              enabled: isSelectable,
+              selected: isSelected,
+              label: semanticsLabel,
+              onTap: isSelectable ? () => _selectDate(date) : null,
+              child: ExcludeSemantics(
+                child: Material(
+                  color: backgroundColor,
+                  child: InkWell(
+                    onTap: isSelectable ? () => _selectDate(date) : null,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 48),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                DateFormat('EEEE, d MMMM').format(date),
+                                style: TextStyle(color: foregroundColor, fontSize: 16),
+                              ),
+                            ),
+                            if (isSelected) Icon(Icons.check, color: foregroundColor),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          })
+          .toList(growable: false),
+    );
+  }
+
+  List<Widget> _buildWeekdayHeaders() {
+    final colors = Theme.of(context).colorScheme;
+    return List<Widget>.generate(7, (int weekdayIndex) {
+      return Expanded(
+        child: Center(
+          child: Text(
+            DateFormat('EEE').format(_visibleDates[weekdayIndex]),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: colors.secondary),
+          ),
+        ),
+      );
+    });
+  }
+
+  List<Widget> _buildCalendarRows() {
+    final colors = Theme.of(context).colorScheme;
+    final today = DateUtils.dateOnly(DateTime.now());
+    final weekCount = _visibleDates.length ~/ 7;
+
+    return List<Widget>.generate(weekCount, (int weekIndex) {
+      final cells = List<Widget>.generate(7, (int weekdayIndex) {
+        final date = _visibleDates[weekIndex * 7 + weekdayIndex];
+        final isSelectable = _isDateSelectable(date);
+        final isSelected = _isRangeBoundary(date);
+        final isInRange = _isInSelectedRange(date);
+        final startsRange = _startsRangeSegment(date);
+        final endsRange = _endsRangeSegment(date);
+        final isToday = DateUtils.isSameDay(today, date);
+
+        return Expanded(
+          child: AspectRatio(
+            aspectRatio: 1.0,
+            child: Stack(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 38,
-                    width: 38,
+                  padding: EdgeInsets.fromLTRB(startsRange ? 4 : 0, 5, endsRange ? 4 : 0, 5),
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(24.0)),
-                      border: Border.all(
-                        color: HotelAppTheme.buildLightTheme().dividerColor,
-                      ),
-                    ),
-                    child: InkWell(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(24.0)),
-                      onTap: () {
-                        if (mounted) {
-                          setState(() {
-                            currentMonthDate = DateTime(currentMonthDate.year,
-                                currentMonthDate.month, 0);
-                            setListOfDate(currentMonthDate);
-                          });
-                        }
-                      },
-                      child: const Icon(
-                        Icons.keyboard_arrow_left,
-                        color: Colors.grey,
+                      color: _startDate != null && _endDate != null && (isSelected || isInRange)
+                          ? colors.primaryContainer
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.horizontal(
+                        left: startsRange ? const Radius.circular(24) : Radius.zero,
+                        right: endsRange ? const Radius.circular(24) : Radius.zero,
                       ),
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      DateFormat('MMMM, yyyy').format(currentMonthDate),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                          color: Colors.black),
+                Semantics(
+                  button: true,
+                  enabled: isSelectable,
+                  selected: isSelected,
+                  label: DateFormat('EEEE, d MMMM yyyy').format(date),
+                  onTap: isSelectable ? () => _selectDate(date) : null,
+                  child: ExcludeSemantics(
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(Radius.circular(32.0)),
+                      onTap: isSelectable ? () => _selectDate(date) : null,
+                      child: Padding(
+                        padding: const EdgeInsets.all(2),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: isSelected ? colors.primary : Colors.transparent,
+                            borderRadius: const BorderRadius.all(Radius.circular(32.0)),
+                            border: Border.all(color: isSelected ? colors.onPrimary : Colors.transparent, width: 2),
+                            boxShadow: isSelected
+                                ? <BoxShadow>[BoxShadow(color: colors.shadow.withValues(alpha: 0.4), blurRadius: 4)]
+                                : null,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${date.day}',
+                              style: TextStyle(
+                                color: isSelected
+                                    ? colors.onPrimary
+                                    : _visibleMonth.month == date.month
+                                    ? colors.onSurface
+                                    : colors.onSurfaceVariant,
+                                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                Positioned(
+                  bottom: 9,
+                  right: 0,
+                  left: 0,
                   child: Container(
-                    height: 38,
-                    width: 38,
+                    height: 6,
+                    width: 6,
                     decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(24.0)),
-                      border: Border.all(
-                        color: HotelAppTheme.buildLightTheme().dividerColor,
-                      ),
-                    ),
-                    child: InkWell(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(24.0)),
-                      onTap: () {
-                        if (mounted) {
-                          setState(() {
-                            currentMonthDate = DateTime(currentMonthDate.year,
-                                currentMonthDate.month + 2, 0);
-                            setListOfDate(currentMonthDate);
-                          });
-                        }
-                      },
-                      child: const Icon(
-                        Icons.keyboard_arrow_right,
-                        color: Colors.grey,
-                      ),
+                      color: isToday
+                          ? isSelected
+                                ? colors.onPrimary
+                                : isInRange
+                                ? colors.onPrimaryContainer
+                                : colors.secondary
+                          : Colors.transparent,
+                      shape: BoxShape.circle,
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 8, left: 8, bottom: 8),
-            child: Row(
-              children: getDaysNameUI(),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 8, left: 8),
-            child: Column(
-              children: getDaysNoUI(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> getDaysNameUI() {
-    final List<Widget> listUI = <Widget>[];
-    for (int i = 0; i < 7; i++) {
-      listUI.add(
-        Expanded(
-          child: Center(
-            child: Text(
-              DateFormat('EEE').format(dateList[i]),
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: HotelAppTheme.buildLightTheme().primaryColor),
-            ),
-          ),
-        ),
-      );
-    }
-    return listUI;
-  }
-
-  List<Widget> getDaysNoUI() {
-    final List<Widget> noList = <Widget>[];
-    int count = 0;
-    for (int i = 0; i < dateList.length / 7; i++) {
-      final List<Widget> listUI = <Widget>[];
-      for (int i = 0; i < 7; i++) {
-        final DateTime date = dateList[count];
-        listUI.add(
-          Expanded(
-            child: AspectRatio(
-              aspectRatio: 1.0,
-              child: Stack(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3, bottom: 3),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          top: 2,
-                          bottom: 2,
-                          left: isStartDateRadius(date) ? 4 : 0,
-                          right: isEndDateRadius(date) ? 4 : 0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: startDate != null && endDate != null
-                              ? getIsItStartAndEndDate(date) ||
-                                      getIsInRange(date)
-                                  ? HotelAppTheme.buildLightTheme()
-                                      .primaryColor
-                                      .withOpacity(0.4)
-                                  : Colors.transparent
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: isStartDateRadius(date)
-                                ? const Radius.circular(24.0)
-                                : const Radius.circular(0.0),
-                            topLeft: isStartDateRadius(date)
-                                ? const Radius.circular(24.0)
-                                : const Radius.circular(0.0),
-                            topRight: isEndDateRadius(date)
-                                ? const Radius.circular(24.0)
-                                : const Radius.circular(0.0),
-                            bottomRight: isEndDateRadius(date)
-                                ? const Radius.circular(24.0)
-                                : const Radius.circular(0.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(32.0)),
-                    onTap: () {
-                      if (currentMonthDate.month == date.month) {
-                        final DateTime? minimumDate = widget.minimumDate;
-                        final DateTime? maximumDate = widget.maximumDate;
-                        if (minimumDate != null && maximumDate != null) {
-                          final DateTime newminimumDate = DateTime(
-                              minimumDate.year,
-                              minimumDate.month,
-                              minimumDate.day - 1);
-                          final DateTime newmaximumDate = DateTime(
-                              maximumDate.year,
-                              maximumDate.month,
-                              maximumDate.day + 1);
-                          if (date.isAfter(newminimumDate) &&
-                              date.isBefore(newmaximumDate)) {
-                            onDateClick(date);
-                          }
-                        } else if (minimumDate != null) {
-                          final DateTime newminimumDate = DateTime(
-                              minimumDate.year,
-                              minimumDate.month,
-                              minimumDate.day - 1);
-                          if (date.isAfter(newminimumDate)) {
-                            onDateClick(date);
-                          }
-                        } else if (maximumDate != null) {
-                          final DateTime newmaximumDate = DateTime(
-                              maximumDate.year,
-                              maximumDate.month,
-                              maximumDate.day + 1);
-                          if (date.isBefore(newmaximumDate)) {
-                            onDateClick(date);
-                          }
-                        } else {
-                          onDateClick(date);
-                        }
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: getIsItStartAndEndDate(date)
-                              ? HotelAppTheme.buildLightTheme().primaryColor
-                              : Colors.transparent,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(32.0)),
-                          border: Border.all(
-                            color: getIsItStartAndEndDate(date)
-                                ? Colors.white
-                                : Colors.transparent,
-                            width: 2,
-                          ),
-                          boxShadow: getIsItStartAndEndDate(date)
-                              ? <BoxShadow>[
-                                  BoxShadow(
-                                      color: Colors.grey.withOpacity(0.6),
-                                      blurRadius: 4),
-                                ]
-                              : null,
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${date.day}',
-                            style: TextStyle(
-                                color: getIsItStartAndEndDate(date)
-                                    ? Colors.white
-                                    : currentMonthDate.month == date.month
-                                        ? Colors.black
-                                        : Colors.grey.withOpacity(0.6),
-                                fontSize:
-                                    MediaQuery.of(context).size.width > 360
-                                        ? 18
-                                        : 16,
-                                fontWeight: getIsItStartAndEndDate(date)
-                                    ? FontWeight.bold
-                                    : FontWeight.normal),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 9,
-                    right: 0,
-                    left: 0,
-                    child: Container(
-                      height: 6,
-                      width: 6,
-                      decoration: BoxDecoration(
-                          color: DateTime.now().day == date.day &&
-                                  DateTime.now().month == date.month &&
-                                  DateTime.now().year == date.year
-                              ? getIsInRange(date)
-                                  ? Colors.white
-                                  : HotelAppTheme.buildLightTheme().primaryColor
-                              : Colors.transparent,
-                          shape: BoxShape.circle),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         );
-        count += 1;
-      }
-      noList.add(Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: listUI,
-      ));
-    }
-    return noList;
+      });
+
+      return Row(mainAxisAlignment: MainAxisAlignment.center, mainAxisSize: MainAxisSize.min, children: cells);
+    });
   }
 
-  bool getIsInRange(DateTime date) {
-    if (startDate != null && endDate != null) {
-      if (date.isAfter(startDate!) && date.isBefore(endDate!)) {
+  bool _isDateSelectable(DateTime date) {
+    final isCurrentMonth = _visibleMonth.month == date.month && _visibleMonth.year == date.year;
+    if (!isCurrentMonth) return false;
+
+    final minimumDate = widget.minimumDate;
+    final maximumDate = widget.maximumDate;
+    final isAfterMinimum = minimumDate == null || !date.isBefore(DateUtils.dateOnly(minimumDate));
+    final isBeforeMaximum = maximumDate == null || !date.isAfter(DateUtils.dateOnly(maximumDate));
+
+    return isAfterMinimum && isBeforeMaximum;
+  }
+
+  bool _isInSelectedRange(DateTime date) {
+    if (_startDate != null && _endDate != null) {
+      if (date.isAfter(_startDate!) && date.isBefore(_endDate!)) {
         return true;
       }
     }
     return false;
   }
 
-  bool getIsItStartAndEndDate(DateTime date) {
-    if ((startDate != null &&
-            startDate!.day == date.day &&
-            startDate!.month == date.month &&
-            startDate!.year == date.year) ||
-        (endDate != null &&
-            endDate!.day == date.day &&
-            endDate!.month == date.month &&
-            endDate!.year == date.year)) return true;
-    return false;
-  }
+  bool _isRangeBoundary(DateTime date) => DateUtils.isSameDay(_startDate, date) || DateUtils.isSameDay(_endDate, date);
 
-  bool isStartDateRadius(DateTime date) {
-    if (startDate != null &&
-        startDate!.day == date.day &&
-        startDate!.month == date.month) {
+  bool _startsRangeSegment(DateTime date) {
+    if (DateUtils.isSameDay(_startDate, date)) {
       return true;
     } else if (date.weekday == 1) {
       return true;
@@ -384,10 +377,8 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
     }
   }
 
-  bool isEndDateRadius(DateTime date) {
-    if (endDate != null &&
-        endDate!.day == date.day &&
-        endDate!.month == date.month) {
+  bool _endsRangeSegment(DateTime date) {
+    if (DateUtils.isSameDay(_endDate, date)) {
       return true;
     } else if (date.weekday == 7) {
       return true;
@@ -396,48 +387,46 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
     }
   }
 
-  void onDateClick(DateTime date) {
-    if (startDate == null) {
-      startDate = date;
-    } else if (startDate != date && endDate == null) {
-      endDate = date;
-    } else if (startDate!.day == date.day && startDate!.month == date.month) {
-      startDate = null;
-    } else if (endDate != null &&
-        endDate!.day == date.day &&
-        endDate!.month == date.month) {
-      endDate = null;
-    }
-    if (startDate == null && endDate != null) {
-      startDate = endDate;
-      endDate = null;
-    }
-    if (startDate != null && endDate != null) {
-      if (!endDate!.isAfter(startDate!)) {
-        final DateTime d = startDate!;
-        startDate = endDate;
-        endDate = d;
-      }
-      if (date.isBefore(startDate!)) {
-        startDate = date;
-      } else if (date.isAfter(endDate!)) {
-        endDate = date;
+  void _selectDate(DateTime date) {
+    setState(() {
+      if (DateUtils.isSameDay(_startDate, date)) {
+        _startDate = null;
+      } else if (DateUtils.isSameDay(_endDate, date)) {
+        _endDate = null;
+      } else if (_startDate == null) {
+        _startDate = date;
       } else {
-        final int daysToStartDate = startDate!.difference(date).inDays.abs();
-        final int daysToEndDate = endDate!.difference(date).inDays.abs();
-        daysToStartDate > daysToEndDate ? endDate = date : startDate = date;
+        _endDate ??= date;
       }
-    }
-    if (mounted) {
-      setState(
-        () {
-          if (startDate != null && endDate != null) {
-            try {
-              widget.startEndDateChange(startDate!, endDate!);
-            } catch (_) {}
-          }
-        },
-      );
+      final hasOnlyEndDate = _startDate == null && _endDate != null;
+
+      if (hasOnlyEndDate) {
+        _startDate = _endDate;
+        _endDate = null;
+      }
+      if (_startDate != null && _endDate != null) {
+        if (!_endDate!.isAfter(_startDate!)) {
+          final DateTime previousStartDate = _startDate!;
+          _startDate = _endDate;
+          _endDate = previousStartDate;
+        }
+        if (date.isBefore(_startDate!)) {
+          _startDate = date;
+        } else if (date.isAfter(_endDate!)) {
+          _endDate = date;
+        } else {
+          final int daysToStartDate = _startDate!.difference(date).inDays.abs();
+          final int daysToEndDate = _endDate!.difference(date).inDays.abs();
+          daysToStartDate > daysToEndDate ? _endDate = date : _startDate = date;
+        }
+      }
+    });
+
+    final selectedStartDate = _startDate;
+    final selectedEndDate = _endDate;
+    widget.draftDateChange?.call(selectedStartDate, selectedEndDate);
+    if (selectedStartDate != null && selectedEndDate != null) {
+      widget.startEndDateChange?.call(selectedStartDate, selectedEndDate);
     }
   }
 }

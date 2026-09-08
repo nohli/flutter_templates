@@ -90,7 +90,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       onTap: () {
                         Navigator.push<dynamic>(
                           context,
-                          MaterialPageRoute<dynamic>(builder: (BuildContext context) => item.navigateScreen),
+                          MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) => MediaQuery.withNoTextScaling(child: item.navigateScreen),
+                          ),
                         );
                       },
                     );

@@ -102,7 +102,9 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => CourseInfoScreen(course: course, savedCourses: widget.savedCourses),
+        builder: (BuildContext context) => MediaQuery.withNoTextScaling(
+          child: CourseInfoScreen(course: course, savedCourses: widget.savedCourses),
+        ),
       ),
     );
   }

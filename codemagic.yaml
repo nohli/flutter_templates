@@ -1,0 +1,90 @@
+workflows:
+  templates-ios:
+    name: UI Templates iOS
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    environment:
+      groups:
+        - appstore_credentials
+      vars:
+        BUNDLE_ID: com.achimsapps.templates
+        CM_CLONE_UNSHALLOW: 'true'
+      flutter: 3.44.9
+      xcode: 26.6
+    scripts:
+      - name: Get Packages
+        script: flutter pub get
+      - name: Analyze And Test
+        script: |
+          set -eu
+          dart format --output=none --set-exit-if-changed --line-length 120 lib test
+          flutter analyze --fatal-infos
+          flutter test --coverage
+      - name: Initialize Signing Keychain
+        script: keychain initialize
+      - name: Fetch Signing Files
+        script: app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+      - name: Add Signing Certificates
+        script: keychain add-certificates
+      - name: Apply Signing Profiles
+        script: xcode-project use-profiles --project ios/Runner.xcodeproj
+      - name: Build IPA
+        script: |
+          set -eu
+          build_number="$(git rev-list --count HEAD)"
+          flutter build ipa --release --build-number="$build_number"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/archive/*.xcarchive
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
+      email:
+        recipients:
+          - $CODEMAGIC_NOTIFICATION_EMAIL
+        notify:
+          success: false
+          failure: true
+
+  templates-android:
+    name: UI Templates Android
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    environment:
+      groups:
+        - google_play_credentials
+      android_signing:
+        - templates_keystore
+      vars:
+        CM_CLONE_UNSHALLOW: 'true'
+      flutter: 3.44.9
+    scripts:
+      - name: Get Packages
+        script: flutter pub get
+      - name: Analyze And Test
+        script: |
+          set -eu
+          dart format --output=none --set-exit-if-changed --line-length 120 lib test
+          flutter analyze --fatal-infos
+          flutter test --coverage
+      - name: Build App Bundle
+        script: |
+          set -eu
+          build_number="$(git rev-list --count HEAD)"
+          flutter build appbundle --release --build-number="$build_number"
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+      - build/app/outputs/mapping/release/mapping.txt
+    publishing:
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+      email:
+        recipients:
+          - $CODEMAGIC_NOTIFICATION_EMAIL
+        notify:
+          success: false
+          failure: true

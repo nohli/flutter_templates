@@ -12,7 +12,7 @@ class DesignCourseAppTheme {
   static const Color lightText = Color(0xFF4A6572);
   static const Color cardBackground = Color(0xFFF8FAFB);
   static const Color spacer = Color(0xFFF2F2F2);
-  static const String fontName = 'WorkSans';
+  static const fontName = 'WorkSans';
 
   static ThemeData build() {
     const colors = ColorScheme.light(

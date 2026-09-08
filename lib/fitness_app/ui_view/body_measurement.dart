@@ -23,7 +23,7 @@ class BodyMeasurementView extends StatelessWidget {
               padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
-                  color: colors.surfaceContainerLow,
+                  color: FitnessAppTheme.white,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8.0),
                     bottomLeft: Radius.circular(8.0),
@@ -32,7 +32,7 @@ class BodyMeasurementView extends StatelessWidget {
                   ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: colors.shadow.withValues(alpha: 0.2),
+                      color: FitnessAppTheme.grey.withValues(alpha: 0.2),
                       offset: const Offset(1.1, 1.1),
                       blurRadius: 10.0,
                     ),
@@ -58,7 +58,7 @@ class BodyMeasurementView extends StatelessWidget {
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16,
                                       letterSpacing: -0.1,
-                                      color: colors.onSurface,
+                                      color: FitnessAppTheme.darkText,
                                     ),
                                   ),
                                 ),
@@ -82,7 +82,7 @@ class BodyMeasurementView extends StatelessWidget {
                                                   fontFamily: FitnessAppTheme.fontName,
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 32,
-                                                  color: colors.primary,
+                                                  color: FitnessAppTheme.nearlyDarkBlue,
                                                 ),
                                               ),
                                             ),
@@ -96,7 +96,7 @@ class BodyMeasurementView extends StatelessWidget {
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                   letterSpacing: -0.2,
-                                                  color: colors.primary,
+                                                  color: FitnessAppTheme.nearlyDarkBlue,
                                                 ),
                                               ),
                                             ),
@@ -116,7 +116,11 @@ class BodyMeasurementView extends StatelessWidget {
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: <Widget>[
-                                                Icon(Icons.access_time, color: colors.onSurfaceVariant, size: 16),
+                                                Icon(
+                                                  Icons.access_time,
+                                                  color: FitnessAppTheme.grey.withValues(alpha: 0.5),
+                                                  size: 16,
+                                                ),
                                                 Padding(
                                                   padding: const EdgeInsets.only(left: 4.0),
                                                   child: Text(
@@ -127,7 +131,7 @@ class BodyMeasurementView extends StatelessWidget {
                                                       fontWeight: FontWeight.w500,
                                                       fontSize: 14,
                                                       letterSpacing: 0.0,
-                                                      color: colors.onSurfaceVariant,
+                                                      color: FitnessAppTheme.grey.withValues(alpha: 0.5),
                                                     ),
                                                   ),
                                                 ),
@@ -147,7 +151,7 @@ class BodyMeasurementView extends StatelessWidget {
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 12,
                                                   letterSpacing: 0.0,
-                                                  color: colors.primary,
+                                                  color: FitnessAppTheme.nearlyDarkBlue,
                                                 ),
                                               ),
                                             ),
@@ -165,7 +169,7 @@ class BodyMeasurementView extends StatelessWidget {
                             child: Container(
                               height: 2,
                               decoration: BoxDecoration(
-                                color: colors.outlineVariant,
+                                color: FitnessAppTheme.background,
                                 borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                               ),
                             ),
@@ -190,7 +194,7 @@ class BodyMeasurementView extends StatelessWidget {
                                             fontWeight: FontWeight.w500,
                                             fontSize: 16,
                                             letterSpacing: -0.2,
-                                            color: colors.onSurface,
+                                            color: FitnessAppTheme.darkText,
                                           ),
                                         ),
                                         Padding(
@@ -202,7 +206,7 @@ class BodyMeasurementView extends StatelessWidget {
                                               fontFamily: FitnessAppTheme.fontName,
                                               fontWeight: FontWeight.w600,
                                               fontSize: 12,
-                                              color: colors.onSurfaceVariant,
+                                              color: FitnessAppTheme.grey.withValues(alpha: 0.5),
                                             ),
                                           ),
                                         ),
@@ -228,7 +232,7 @@ class BodyMeasurementView extends StatelessWidget {
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 16,
                                                 letterSpacing: -0.2,
-                                                color: colors.onSurface,
+                                                color: FitnessAppTheme.darkText,
                                               ),
                                             ),
                                             Padding(
@@ -240,7 +244,7 @@ class BodyMeasurementView extends StatelessWidget {
                                                   fontFamily: FitnessAppTheme.fontName,
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 12,
-                                                  color: colors.onSurfaceVariant,
+                                                  color: FitnessAppTheme.grey.withValues(alpha: 0.5),
                                                 ),
                                               ),
                                             ),
@@ -269,7 +273,7 @@ class BodyMeasurementView extends StatelessWidget {
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 16,
                                                 letterSpacing: -0.2,
-                                                color: colors.onSurface,
+                                                color: FitnessAppTheme.darkText,
                                               ),
                                             ),
                                             Padding(
@@ -281,7 +285,7 @@ class BodyMeasurementView extends StatelessWidget {
                                                   fontFamily: FitnessAppTheme.fontName,
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 12,
-                                                  color: colors.onSurfaceVariant,
+                                                  color: FitnessAppTheme.grey.withValues(alpha: 0.5),
                                                 ),
                                               ),
                                             ),

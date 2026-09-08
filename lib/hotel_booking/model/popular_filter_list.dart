@@ -1,50 +1,23 @@
 class PopularFilterListData {
-  PopularFilterListData({
-    this.titleTxt = '',
-    this.isSelected = false,
-  });
+  PopularFilterListData({this.label = '', this.isSelected = false});
 
-  String titleTxt;
+  final String label;
   bool isSelected;
 
-  static List<PopularFilterListData> popularFList = <PopularFilterListData>[
-    PopularFilterListData(
-      titleTxt: 'Free Breakfast',
-    ),
-    PopularFilterListData(
-      titleTxt: 'Free Parking',
-    ),
-    PopularFilterListData(
-      titleTxt: 'Pool',
-      isSelected: true,
-    ),
-    PopularFilterListData(
-      titleTxt: 'Pet Friendly',
-    ),
-    PopularFilterListData(
-      titleTxt: 'Free wifi',
-    ),
+  static final List<PopularFilterListData> popularFilters = <PopularFilterListData>[
+    PopularFilterListData(label: 'Free Breakfast'),
+    PopularFilterListData(label: 'Free Parking'),
+    PopularFilterListData(label: 'Pool', isSelected: true),
+    PopularFilterListData(label: 'Pet Friendly'),
+    PopularFilterListData(label: 'Free wifi'),
   ];
 
-  static List<PopularFilterListData> accomodationList = <PopularFilterListData>[
-    PopularFilterListData(
-      titleTxt: 'All',
-    ),
-    PopularFilterListData(
-      titleTxt: 'Apartment',
-    ),
-    PopularFilterListData(
-      titleTxt: 'Home',
-      isSelected: true,
-    ),
-    PopularFilterListData(
-      titleTxt: 'Villa',
-    ),
-    PopularFilterListData(
-      titleTxt: 'Hotel',
-    ),
-    PopularFilterListData(
-      titleTxt: 'Resort',
-    ),
+  static final List<PopularFilterListData> accommodationTypes = <PopularFilterListData>[
+    PopularFilterListData(label: 'All'),
+    PopularFilterListData(label: 'Apartment'),
+    PopularFilterListData(label: 'Home', isSelected: true),
+    PopularFilterListData(label: 'Villa'),
+    PopularFilterListData(label: 'Hotel'),
+    PopularFilterListData(label: 'Resort'),
   ];
 }

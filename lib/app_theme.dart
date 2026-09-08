@@ -13,7 +13,7 @@ class AppTheme {
   static const Color darkerText = Color(0xFF17262A);
   static const Color lightText = Color(0xFF4A6572);
   static const Color actionBlue = Color(0xFF0D47A1);
-  static const String fontName = 'WorkSans';
+  static const fontName = 'WorkSans';
 
   static ThemeData build() {
     const colors = ColorScheme.light(

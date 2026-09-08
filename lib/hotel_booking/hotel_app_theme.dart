@@ -6,7 +6,7 @@ class HotelAppTheme {
   static const Color rangeColor = Color(0xFFBBEDE7);
 
   static TextTheme _buildTextTheme(TextTheme base) {
-    const String fontName = 'WorkSans';
+    const fontName = 'WorkSans';
     return base.copyWith(
       displayLarge: base.displayLarge?.copyWith(fontFamily: fontName),
       displayMedium: base.displayMedium?.copyWith(fontFamily: fontName),

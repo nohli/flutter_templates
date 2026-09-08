@@ -30,9 +30,10 @@
 .pub-cache/
 .pub/
 /build/
+/android/build/
+/coverage/
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
@@ -58,8 +59,22 @@ ios/Runner.ipa
 ios/Runner.app.dSYM.zip
 android/app/release/app-release.aab
 
+# Local credentials and signing material
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.key
+*.mobileprovision
+*.p12
+*.p8
+*.pem
+*service-account*.json
+
 # Other
 ios/Flutter/flutter_export_environment.sh
 local.properties
+android/key.properties
 **/dgph
 **/dgph~

@@ -2,31 +2,48 @@ name: templates
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.15.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.12.0 <4.0.0'
+  flutter: '>=3.44.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  font_awesome_flutter: ^10.0.0
-  intl: ^0.19.0
-  url_launcher: ^6.0.0
-  vector_math: ^2.0.0
+  font_awesome_flutter: ^11.0.0
+  intl: ^0.20.0
+  share_plus: ^13.3.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
   flutter_test:
     sdk: flutter
+  yaml: ^3.1.3
 
-flutter_icons:
-  ios: true
+flutter_launcher_icons:
   android: true
-  image_path_ios: 'icon/ios.png'
-  image_path_android: 'icon/android.png'
-  adaptive_icon_background: '#ffffff'
-  adaptive_icon_foreground: 'icon/adaptive.png'
+  ios: true
+  image_path: icon/app_icon.png
+  adaptive_icon_background: '#F8F2E8'
+  adaptive_icon_foreground: icon/adaptive_foreground.png
+  adaptive_icon_foreground_inset: 20
+  remove_alpha_ios: true
+  background_color_ios: '#F8F2E8'
+  web:
+    generate: true
+    image_path: icon/app_icon.png
+    background_color: '#F8F2E8'
+    theme_color: '#232844'
+  windows:
+    generate: true
+    image_path: icon/app_icon.png
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: icon/app_icon.png
 
 flutter:
   uses-material-design: true
@@ -36,6 +53,9 @@ flutter:
     - assets/design_course/
     - assets/fitness_app/
     - assets/hotel/
+    - assets/fonts/WorkSans-LICENSE.txt
+    - assets/fonts/Roboto-LICENSE.txt
+    - assets/licenses/smooth_star_rating-LICENSE.txt
 
   fonts:
     - family: WorkSans
@@ -50,6 +70,7 @@ flutter:
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
         - asset: assets/fonts/Roboto-Regular.ttf
         - asset: assets/fonts/Roboto-Medium.ttf
-          weight: 400
+          weight: 500

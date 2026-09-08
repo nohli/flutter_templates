@@ -134,8 +134,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
   }
 
   List<Widget> _buildAccommodationFilterRows() {
-    final List<Widget> rows = <Widget>[];
-    for (int i = 0; i < _accommodationFilters.length; i++) {
+    final rows = <Widget>[];
+    for (var i = 0; i < _accommodationFilters.length; i++) {
       final PopularFilterListData filter = _accommodationFilters[i];
       void toggleAccommodation() {
         if (mounted) {
@@ -237,8 +237,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   List<Widget> _buildPopularFilterRows() {
     final rows = <Widget>[];
-    const int columnCount = 2;
-    for (int index = 0; index < _popularFilters.length; index += columnCount) {
+    const columnCount = 2;
+    for (var index = 0; index < _popularFilters.length; index += columnCount) {
       final items = <Widget>[_buildPopularFilter(_popularFilters[index])];
       final hasSecondItem = index + 1 < _popularFilters.length;
 

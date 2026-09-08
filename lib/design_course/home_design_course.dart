@@ -18,7 +18,7 @@ class DesignCourseHomeScreen extends StatefulWidget {
 
 class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
   CategoryType _categoryType = CategoryType.ui;
-  String _query = '';
+  var _query = '';
 
   @override
   Widget build(BuildContext context) {

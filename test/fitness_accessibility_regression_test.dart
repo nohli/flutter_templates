@@ -43,7 +43,7 @@ void main() {
   });
 
   testWidgets('diet summary fits the original phone composition', (WidgetTester tester) async {
-    final AnimationController controller = AnimationController(vsync: tester, value: 1);
+    final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     _evictAssets(<String>['assets/fitness_app/eaten.png', 'assets/fitness_app/burned.png']);
 
@@ -60,10 +60,10 @@ void main() {
   });
 
   testWidgets('body measurements honor every enlarged text scale without shrinking it', (WidgetTester tester) async {
-    final AnimationController controller = AnimationController(vsync: tester, value: 1);
+    final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
 
-    for (final double textScale in <double>[1.3, 1.9, 3.2]) {
+    for (final textScale in <double>[1.3, 1.9, 3.2]) {
       await _pumpFitnessScreen(
         tester,
         SingleChildScrollView(
@@ -86,7 +86,7 @@ void main() {
   testWidgets('meal cards preserve the original open gradients at the default text size', (WidgetTester tester) async {
     final roboto = FontLoader('Roboto')..addFont(rootBundle.load('assets/fonts/Roboto-Bold.ttf'));
     await roboto.load();
-    final AnimationController controller = AnimationController(vsync: tester, value: 1);
+    final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     _evictAssets(<String>['assets/fitness_app/breakfast.png']);
 
@@ -122,7 +122,7 @@ void main() {
   testWidgets('large-text meal cards retain the accessible contrast surface', (WidgetTester tester) async {
     final roboto = FontLoader('Roboto')..addFont(rootBundle.load('assets/fonts/Roboto-Bold.ttf'));
     await roboto.load();
-    final AnimationController controller = AnimationController(vsync: tester, value: 1);
+    final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     _evictAssets(<String>['assets/fitness_app/breakfast.png']);
 
@@ -149,7 +149,7 @@ void main() {
   testWidgets('meal list renders every declared sample through its real horizontal catalog', (
     WidgetTester tester,
   ) async {
-    final AnimationController controller = AnimationController(vsync: tester, value: 1);
+    final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     _evictAssets(MealsListData.samples.map((MealsListData meal) => meal.imagePath));
 
@@ -181,7 +181,7 @@ void main() {
     final recommendations = MealsListData.samples.where((MealsListData meal) => meal.kcal == 0);
     _evictAssets(recommendations.map((MealsListData meal) => meal.imagePath));
 
-    for (final MealsListData meal in recommendations) {
+    for (final meal in recommendations) {
       await _pumpFitnessScreen(
         tester,
         SizedBox(
@@ -219,7 +219,7 @@ void main() {
       'assets/fitness_app/area2.png',
       'assets/fitness_app/area3.png',
     ]);
-    final AnimationController controller = AnimationController(vsync: tester)..value = 0.9;
+    final controller = AnimationController(vsync: tester)..value = 0.9;
     addTearDown(controller.dispose);
 
     await _pumpFitnessScreen(tester, TrainingScreen(animationController: controller), size: const Size(430, 1800));
@@ -313,7 +313,7 @@ void main() {
 
 double _firstWaveY(WidgetTester tester) {
   final ClipPath clipPath = tester.widget<ClipPath>(find.byType(ClipPath).first);
-  final WaveClipper clipper = clipPath.clipper! as WaveClipper;
+  final clipper = clipPath.clipper! as WaveClipper;
 
   return clipper.verticalOffset;
 }
@@ -345,7 +345,7 @@ Future<void> _pumpFitnessScreen(
 }
 
 void _evictAssets(Iterable<String> assets) {
-  for (final String asset in assets) {
+  for (final asset in assets) {
     rootBundle.evict(asset);
   }
 }

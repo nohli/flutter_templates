@@ -15,14 +15,14 @@ class CourseInfoScreen extends StatefulWidget {
 }
 
 class _CourseInfoScreenState extends State<CourseInfoScreen> {
-  double opacity1 = 0.0;
-  double opacity2 = 0.0;
-  double opacity3 = 0.0;
+  var opacity1 = 0.0;
+  var opacity2 = 0.0;
+  var opacity3 = 0.0;
   late final SavedCourses _savedCourses;
   late bool isFavorite;
-  bool _animationsAreDisabled = false;
-  bool _entranceStarted = false;
-  int _entranceSequence = 0;
+  var _animationsAreDisabled = false;
+  var _entranceStarted = false;
+  var _entranceSequence = 0;
 
   @override
   void initState() {

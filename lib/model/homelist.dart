@@ -11,7 +11,7 @@ class HomeList {
   final Widget navigateScreen;
   final String imagePath;
 
-  static const List<HomeList> homeList = <HomeList>[
+  static const homeList = <HomeList>[
     HomeList(title: 'Hotel Booking', navigateScreen: HotelHomeScreen(), imagePath: 'assets/hotel/hotel_booking.png'),
     HomeList(
       title: 'Fitness App',

@@ -47,7 +47,7 @@ void main() {
 
       final FilledButton button = tester.widget<FilledButton>(find.byType(FilledButton));
       final ButtonStyle style = button.style!;
-      final Set<WidgetState> enabled = <WidgetState>{};
+      final enabled = <WidgetState>{};
       final OutlinedBorder shape = style.shape!.resolve(enabled)!;
 
       expect(style.backgroundColor!.resolve(enabled), AppTheme.actionBlue);
@@ -90,10 +90,10 @@ void main() {
     expect(find.text(AppIdentity.sampleContentNotice), findsOneWidget);
     expect(find.text(AppIdentity.trademarkDisclaimer), findsOneWidget);
 
-    final Set<WidgetState> enabled = <WidgetState>{};
+    final enabled = <WidgetState>{};
     final Iterable<TextButton> links = tester.widgetList<TextButton>(find.byType(TextButton));
     expect(links, hasLength(5));
-    for (final TextButton link in links) {
+    for (final link in links) {
       expect(link.style?.foregroundColor?.resolve(enabled), AppTheme.actionBlue);
       expect(link.style?.minimumSize?.resolve(enabled)?.height, 48);
     }

@@ -15,7 +15,7 @@ class InviteFriend extends StatefulWidget {
 
 class _InviteFriendState extends State<InviteFriend> {
   final GlobalKey _shareButtonKey = GlobalKey();
-  bool _isSharing = false;
+  var _isSharing = false;
   String? _errorMessage;
 
   Future<void> _share() async {

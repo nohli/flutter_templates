@@ -6,3 +6,8 @@ formatter:
 analyzer:
   errors:
     todo: info
+
+linter:
+  rules:
+    omit_obvious_local_variable_types: true
+    omit_obvious_property_types: true

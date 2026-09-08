@@ -14,7 +14,7 @@ class HelpScreen extends StatefulWidget {
 }
 
 class _HelpScreenState extends State<HelpScreen> {
-  bool _isOpeningEmail = false;
+  var _isOpeningEmail = false;
   String? _errorMessage;
 
   Future<void> _openSupport() async {
@@ -22,7 +22,7 @@ class _HelpScreenState extends State<HelpScreen> {
       _isOpeningEmail = true;
       _errorMessage = null;
     });
-    bool launched = false;
+    var launched = false;
     try {
       launched = await widget.launcher(supportEmailUri());
     } catch (_) {

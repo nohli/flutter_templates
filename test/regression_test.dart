@@ -160,10 +160,7 @@ void main() {
 
   testWidgets('water reminder card follows its supplied animation', (WidgetTester tester) async {
     _evictAssets(<String>['assets/fitness_app/glass.png']);
-    final AnimationController controller = AnimationController(
-      duration: const Duration(milliseconds: 100),
-      vsync: tester,
-    );
+    final controller = AnimationController(duration: const Duration(milliseconds: 100), vsync: tester);
     addTearDown(controller.dispose);
 
     await _pumpScreen(tester, GlassView(animationController: controller, animation: controller));
@@ -175,10 +172,10 @@ void main() {
   });
 
   testWidgets('calendar updates and applies a newly selected end date', (WidgetTester tester) async {
-    final DateTime now = DateTime.now();
-    final DateTime initialStart = DateTime(now.year, now.month, 5);
-    final DateTime initialEnd = DateTime(now.year, now.month, 10);
-    final DateTime selectedEnd = DateTime(now.year, now.month, 20);
+    final now = DateTime.now();
+    final initialStart = DateTime(now.year, now.month, 5);
+    final initialEnd = DateTime(now.year, now.month, 10);
+    final selectedEnd = DateTime(now.year, now.month, 20);
     DateTime? appliedStart;
     DateTime? appliedEnd;
 
@@ -208,9 +205,9 @@ void main() {
   });
 
   testWidgets('calendar distinguishes matching days from different years', (WidgetTester tester) async {
-    final DateTime now = DateTime.now();
-    final DateTime previousStart = DateTime(now.year - 1, now.month, 5);
-    final DateTime previousEnd = DateTime(now.year - 1, now.month, 10);
+    final now = DateTime.now();
+    final previousStart = DateTime(now.year - 1, now.month, 5);
+    final previousEnd = DateTime(now.year - 1, now.month, 10);
     DateTime? selectedStart;
     DateTime? selectedEnd;
 
@@ -241,9 +238,9 @@ void main() {
   });
 
   testWidgets('calendar compares selected days independently of their time', (WidgetTester tester) async {
-    final DateTime now = DateTime.now();
-    final DateTime initialStart = DateTime(now.year, now.month, 5, 9);
-    final DateTime initialEnd = DateTime(now.year, now.month, 10, 18);
+    final now = DateTime.now();
+    final initialStart = DateTime(now.year, now.month, 5, 9);
+    final initialEnd = DateTime(now.year, now.month, 10, 18);
     var completedRanges = 0;
 
     await _pumpScreen(
@@ -686,7 +683,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byTooltip('Close navigation menu'), findsOneWidget);
 
-    final Offset openDragStart = Offset(drawerWidth + 40, dragStart.dy);
+    final openDragStart = Offset(drawerWidth + 40, dragStart.dy);
     await tester.flingFrom(openDragStart, const Offset(-60, 0), 1000);
     await tester.pumpAndSettle();
     expect(find.byTooltip('Open navigation menu'), findsOneWidget);
@@ -832,7 +829,7 @@ void main() {
 
   testWidgets('hotel details preserve the accepted ordinary-phone composition', (WidgetTester tester) async {
     _evictAssets(<String>['assets/hotel/hotel_1.png']);
-    final AnimationController controller = AnimationController(vsync: tester, value: 1);
+    final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     final Widget hotelCard = HotelListView(
       hotelData: HotelListData.samples.first,
@@ -898,8 +895,8 @@ void main() {
   });
 
   testWidgets('hotel date selection updates the visible stay summary', (WidgetTester tester) async {
-    final DateTime now = DateTime.now();
-    final DateTime replacementEnd = DateTime(now.year, now.month + 1, 20);
+    final now = DateTime.now();
+    final replacementEnd = DateTime(now.year, now.month + 1, 20);
     _evictAssets(HotelListData.samples.map((HotelListData hotel) => hotel.imagePath));
     await _pumpScreen(tester, const HotelHomeScreen(), disableAnimations: true);
 
@@ -982,7 +979,7 @@ Future<void> _pumpScreen(
 }
 
 void _evictAssets(Iterable<String> assets) {
-  for (final String asset in assets) {
+  for (final asset in assets) {
     rootBundle.evict(asset);
   }
 }

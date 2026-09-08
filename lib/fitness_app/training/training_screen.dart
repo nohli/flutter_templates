@@ -4,6 +4,7 @@ import '../bottom_navigation_view/bottom_bar_view.dart';
 import '../fitness_app_theme.dart';
 import '../ui_view/area_list_view.dart';
 import '../ui_view/running_view.dart';
+import '../ui_view/sample_date_header.dart';
 import '../ui_view/title_view.dart';
 import '../ui_view/workout_view.dart';
 
@@ -251,28 +252,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
                               ),
                             Padding(
                               padding: EdgeInsets.only(left: 8, right: 8, top: stackHeader ? 8 : 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: Icon(Icons.calendar_today, color: colors.onSurfaceVariant, size: 18),
-                                  ),
-                                  Flexible(
-                                    child: Text(
-                                      'Sample day · 15 May',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        fontFamily: FitnessAppTheme.fontName,
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 18,
-                                        letterSpacing: -0.2,
-                                        color: colors.onSurface,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              child: const SampleDateHeader(),
                             ),
                           ],
                         ),

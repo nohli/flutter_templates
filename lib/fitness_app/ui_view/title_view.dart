@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../fitness_app_theme.dart';
+
 class TitleView extends StatelessWidget {
   const TitleView({
     required this.animationController,
@@ -18,11 +20,47 @@ class TitleView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final stackLabels = MediaQuery.textScalerOf(context).scale(1) >= 2;
+    final action = Row(
+      mainAxisSize: stackLabels ? MainAxisSize.max : MainAxisSize.min,
+      children: <Widget>[
+        if (stackLabels)
+          Flexible(
+            child: Text(
+              actionLabel,
+              textAlign: TextAlign.left,
+              style: const TextStyle(
+                fontFamily: FitnessAppTheme.fontName,
+                fontWeight: FontWeight.normal,
+                fontSize: 16,
+                letterSpacing: 0.5,
+                color: FitnessAppTheme.nearlyDarkBlue,
+              ),
+            ),
+          )
+        else
+          Text(
+            actionLabel,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              fontFamily: FitnessAppTheme.fontName,
+              fontWeight: FontWeight.normal,
+              fontSize: 16,
+              letterSpacing: 0.5,
+              color: FitnessAppTheme.nearlyDarkBlue,
+            ),
+          ),
+        const SizedBox(
+          height: 38,
+          width: 26,
+          child: Icon(Icons.arrow_forward, color: FitnessAppTheme.darkText, size: 18),
+        ),
+      ],
+    );
     return AnimatedBuilder(
       animation: animationController,
       builder: (BuildContext context, _) {
         return Material(
-          color: colors.surface,
+          color: FitnessAppTheme.background,
           child: FadeTransition(
             opacity: animation,
             child: Transform(
@@ -59,16 +97,7 @@ class TitleView extends StatelessWidget {
                       ),
                     Padding(
                       padding: EdgeInsets.only(left: stackLabels ? 0 : 8, top: stackLabels ? 8 : 0),
-                      child: Text(
-                        actionLabel,
-                        textAlign: stackLabels ? TextAlign.left : TextAlign.right,
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 16,
-                          letterSpacing: 0.5,
-                          color: colors.primary,
-                        ),
-                      ),
+                      child: action,
                     ),
                   ],
                 ),

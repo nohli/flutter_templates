@@ -185,6 +185,8 @@ void main() {
       '*.p8',
       '*.pem',
       '*service-account*.json',
+      '*service_account*.json',
+      '*serviceAccount*.json',
     ]) {
       expect(gitignore, contains(secretPattern));
     }

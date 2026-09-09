@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'app_identity.dart';
 import 'app_theme.dart';
-import 'model/homelist.dart';
+import 'design_course/home_design_course.dart';
+import 'fitness_app/fitness_app_home_screen.dart';
+import 'hotel_booking/hotel_home_screen.dart';
+import 'model/template_gallery_item.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -14,7 +17,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
   static const _layoutPreferenceKey = 'home-gallery-multiple-columns';
 
-  final _homeList = HomeList.homeList;
+  final _items = TemplateGalleryItem.items;
   var _multiple = true;
   var _restoredLayoutPreference = false;
 
@@ -75,22 +78,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     crossAxisSpacing: 12,
                     childAspectRatio: 1.5,
                   ),
-                  itemCount: _homeList.length,
+                  itemCount: _items.length,
                   itemBuilder: (BuildContext context, int index) {
                     final animation = Tween<double>(begin: 0, end: 1).animate(
                       CurvedAnimation(
                         parent: _animationController,
-                        curve: Interval((1 / _homeList.length) * index, 1, curve: Curves.fastOutSlowIn),
+                        curve: Interval((1 / _items.length) * index, 1, curve: Curves.fastOutSlowIn),
                       ),
                     );
-                    final item = _homeList[index];
-                    return _HomeListCard(
+                    final item = _items[index];
+                    return _TemplateGalleryCard(
                       animation: animation,
-                      listData: item,
+                      item: item,
                       onTap: () {
                         Navigator.of(context).push<void>(
                           MaterialPageRoute<void>(
-                            builder: (BuildContext context) => MediaQuery.withNoTextScaling(child: item.navigateScreen),
+                            builder: (BuildContext context) =>
+                                MediaQuery.withNoTextScaling(child: _screenFor(item.destination)),
                           ),
                         );
                       },
@@ -104,6 +108,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       ),
     );
   }
+
+  Widget _screenFor(TemplateGalleryDestination destination) => switch (destination) {
+    TemplateGalleryDestination.hotelBooking => const HotelHomeScreen(),
+    TemplateGalleryDestination.fitness => const FitnessAppHomeScreen(),
+    TemplateGalleryDestination.designCourse => const DesignCourseHomeScreen(),
+  };
 }
 
 class _GalleryHeader extends StatelessWidget {
@@ -176,17 +186,17 @@ class _GalleryHeader extends StatelessWidget {
   }
 }
 
-class _HomeListCard extends StatelessWidget {
-  const _HomeListCard({required this.listData, required this.onTap, required this.animation});
+class _TemplateGalleryCard extends StatelessWidget {
+  const _TemplateGalleryCard({required this.item, required this.onTap, required this.animation});
 
-  final HomeList listData;
+  final TemplateGalleryItem item;
   final VoidCallback onTap;
   final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: listData.title,
+      label: item.title,
       button: true,
       onTap: onTap,
       child: ExcludeSemantics(
@@ -204,7 +214,7 @@ class _HomeListCard extends StatelessWidget {
                     child: Stack(
                       alignment: AlignmentDirectional.center,
                       children: <Widget>[
-                        Image.asset(listData.imagePath, fit: BoxFit.cover),
+                        Image.asset(item.imagePath, fit: BoxFit.cover),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(

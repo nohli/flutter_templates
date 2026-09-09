@@ -24,6 +24,6 @@ Uri appEmailUri({required String subject, String? body}) {
 
 Uri supportEmailUri() => appEmailUri(subject: '${AppIdentity.name} support');
 
-final Uri developerPortfolioUri = AppIdentity.supportUri;
+final developerPortfolioUri = AppIdentity.supportUri;
 
 const inviteText = 'Explore ${AppIdentity.name} and more apps at ${AppIdentity.supportUrl}';

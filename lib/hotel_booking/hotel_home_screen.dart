@@ -27,23 +27,23 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderSt
   var _startDate = DateTime.now();
   DateTime _endDate = DateTime.now().add(const Duration(days: 5));
 
-  late final AnimationController animationController;
+  late final AnimationController _animationController;
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: const Duration(milliseconds: 1000), vsync: this);
+    _animationController = AnimationController(duration: const Duration(milliseconds: 1000), vsync: this);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    startEntranceAnimation(context, animationController);
+    startEntranceAnimation(context, _animationController);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-    animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -101,7 +101,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderSt
                             final int count = hotels.length > 10 ? 10 : hotels.length;
                             final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0).animate(
                               CurvedAnimation(
-                                parent: animationController,
+                                parent: _animationController,
                                 curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
                               ),
                             );
@@ -121,7 +121,6 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderSt
                                 });
                               },
                               animation: animation,
-                              animationController: animationController,
                             );
                           },
                         ),

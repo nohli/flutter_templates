@@ -27,11 +27,11 @@ class CalendarPopupView extends StatefulWidget {
 class _CalendarPopupViewState extends State<CalendarPopupView> with TickerProviderStateMixin {
   DateTime? _startDate;
   DateTime? _endDate;
-  late final AnimationController animationController;
+  late final AnimationController _animationController;
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
+    _animationController = AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
     _startDate = widget.initialStartDate;
     _endDate = widget.initialEndDate;
   }
@@ -39,12 +39,12 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with TickerProvid
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    startEntranceAnimation(context, animationController);
+    startEntranceAnimation(context, _animationController);
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -62,11 +62,11 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with TickerProvid
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.all(dialogInset),
         child: AnimatedBuilder(
-          animation: animationController,
+          animation: _animationController,
           builder: (BuildContext context, _) {
             return AnimatedOpacity(
               duration: opacityDuration,
-              opacity: animationController.value,
+              opacity: _animationController.value,
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   final availableHeight = constraints.maxHeight.isFinite

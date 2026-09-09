@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import '../fitness_app_theme.dart';
 
 class WorkoutView extends StatelessWidget {
-  const WorkoutView({required this.animationController, required this.animation, super.key});
+  const WorkoutView({required this.animation, super.key});
 
-  final AnimationController animationController;
   final Animation<double> animation;
 
   @override
@@ -57,7 +56,7 @@ class WorkoutView extends StatelessWidget {
       ),
     );
     return AnimatedBuilder(
-      animation: animationController,
+      animation: animation,
       builder: (_, _) {
         return FadeTransition(
           opacity: animation,

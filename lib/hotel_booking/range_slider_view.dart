@@ -108,22 +108,16 @@ class _CustomRangeThumbShape extends RangeSliderThumbShape {
         switch (thumb) {
           case Thumb.start:
             thumbPath = _rightTriangle(center);
-            break;
           case Thumb.end:
             thumbPath = _leftTriangle(center);
-            break;
         }
-        break;
       case TextDirection.ltr:
         switch (thumb) {
           case Thumb.start:
             thumbPath = _leftTriangle(center);
-            break;
           case Thumb.end:
             thumbPath = _rightTriangle(center);
-            break;
         }
-        break;
     }
 
     canvas.drawPath(

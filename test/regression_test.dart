@@ -3,7 +3,7 @@ import 'dart:ui' show Tristate;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:templates/about_screen.dart';
 import 'package:templates/app_drawer.dart';
 import 'package:templates/app_shell.dart';
@@ -875,6 +875,15 @@ void main() {
 
     expect(rangeValues, const RangeValues(200, 700));
     expect(distance, 75);
+
+    await _pumpScreen(
+      tester,
+      Directionality(
+        textDirection: TextDirection.rtl,
+        child: RangeSliderView(values: const RangeValues(100, 600), onChangeRangeValues: (_) {}),
+      ),
+    );
+    expect(tester.takeException(), isNull);
 
     await _pumpScreen(tester, const HotelHomeScreen());
     await tester.tap(find.text('Choose date'));

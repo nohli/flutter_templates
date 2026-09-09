@@ -111,6 +111,45 @@ void main() {
     await _pumpScreen(tester, const SizedBox());
   });
 
+  testWidgets('course details follow updated course and saved-state inputs', (WidgetTester tester) async {
+    final firstCourse = Category.popularCourseList.first;
+    final secondCourse = Category.popularCourseList.last;
+    final firstSavedCourses = SavedCourses()..toggle(firstCourse);
+    final secondSavedCourses = SavedCourses();
+    var course = firstCourse;
+    var savedCourses = firstSavedCourses;
+    late StateSetter updateCourse;
+    _evictAssets(<String>[firstCourse.imagePath, secondCourse.imagePath]);
+
+    await _pumpScreen(
+      tester,
+      StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          updateCourse = setState;
+          return CourseInfoScreen(course: course, savedCourses: savedCourses);
+        },
+      ),
+      disableAnimations: true,
+    );
+
+    expect(find.text(firstCourse.title), findsOneWidget);
+    expect(find.bySemanticsLabel('Remove saved sample course'), findsOneWidget);
+
+    updateCourse(() {
+      course = secondCourse;
+      savedCourses = secondSavedCourses;
+    });
+    await tester.pump();
+
+    expect(find.text(secondCourse.title), findsOneWidget);
+    expect(find.bySemanticsLabel('Save sample course'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Save sample course'));
+    await tester.pump();
+
+    expect(secondSavedCourses.contains(secondCourse), isTrue);
+    expect(firstSavedCourses.contains(secondCourse), isFalse);
+  });
+
   testWidgets('course selection opens the matching sample details', (WidgetTester tester) async {
     _evictAssets(<String>[
       'assets/design_course/interFace1.png',

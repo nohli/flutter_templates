@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/fitness_app/fitness_app_theme.dart';
 import 'package:templates/fitness_app/models/meals_list_data.dart';
 import 'package:templates/fitness_app/my_diary/meals_list_view.dart';
+import 'package:templates/fitness_app/my_diary/water_view.dart';
 import 'package:templates/fitness_app/training/training_screen.dart';
 import 'package:templates/fitness_app/ui_view/area_list_view.dart';
 import 'package:templates/fitness_app/ui_view/body_measurement.dart';
@@ -42,21 +43,26 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('diet summary fits the original phone composition', (WidgetTester tester) async {
+  testWidgets('diet summary preserves its compact and large-text layouts', (WidgetTester tester) async {
     final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     _evictAssets(<String>['assets/fitness_app/eaten.png', 'assets/fitness_app/burned.png']);
 
-    await _pumpFitnessScreen(
-      tester,
-      SingleChildScrollView(
-        child: MediterraneanDietView(animationController: controller, animation: controller),
-      ),
-      size: const Size(402, 874),
-      disableAnimations: true,
-    );
+    for (final textScale in <double>[1, 3.2]) {
+      await _pumpFitnessScreen(
+        tester,
+        SingleChildScrollView(
+          child: MediterraneanDietView(animationController: controller, animation: controller),
+        ),
+        size: textScale == 1 ? const Size(402, 874) : const Size(320, 1200),
+        textScale: textScale,
+        disableAnimations: true,
+      );
 
-    expect(tester.takeException(), isNull);
+      expect(find.text('1503'), findsOneWidget);
+      expect(find.text('30g left'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    }
   });
 
   testWidgets('body measurements honor every enlarged text scale without shrinking it', (WidgetTester tester) async {
@@ -66,9 +72,7 @@ void main() {
     for (final textScale in <double>[1.3, 1.9, 3.2]) {
       await _pumpFitnessScreen(
         tester,
-        SingleChildScrollView(
-          child: BodyMeasurementView(animationController: controller, animation: controller),
-        ),
+        SingleChildScrollView(child: BodyMeasurementView(animation: controller)),
         size: const Size(320, 900),
         textScale: textScale,
         disableAnimations: true,
@@ -79,6 +83,26 @@ void main() {
       expect(find.text('27.3 BMI'), findsOneWidget);
       expect(find.text('Connected smart scale'), findsOneWidget);
       expect(find.byType(FittedBox), findsNothing);
+      expect(tester.takeException(), isNull);
+    }
+  });
+
+  testWidgets('water summary preserves its compact and large-text layouts', (WidgetTester tester) async {
+    final controller = AnimationController(vsync: tester, value: 1);
+    addTearDown(controller.dispose);
+    _evictAssets(<String>['assets/fitness_app/bell.png']);
+
+    for (final textScale in <double>[1, 3.2]) {
+      await _pumpFitnessScreen(
+        tester,
+        SingleChildScrollView(child: WaterView(animation: controller)),
+        size: textScale == 1 ? const Size(402, 874) : const Size(320, 900),
+        textScale: textScale,
+        disableAnimations: true,
+      );
+
+      expect(find.text('2100'), findsOneWidget);
+      expect(find.text('Your bottle is empty, refill it!'), findsOneWidget);
       expect(tester.takeException(), isNull);
     }
   });

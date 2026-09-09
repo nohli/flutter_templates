@@ -902,6 +902,43 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('hotel sliders resynchronize when their parent supplies new values', (WidgetTester tester) async {
+    var range = const RangeValues(100, 600);
+    var distance = 50.0;
+    late StateSetter updateControls;
+
+    await _pumpScreen(
+      tester,
+      StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          updateControls = setState;
+          return Column(
+            children: <Widget>[
+              RangeSliderView(values: range, onChangeRangeValues: (_) {}),
+              SliderView(distanceValue: distance, onDistanceChanged: (_) {}),
+            ],
+          );
+        },
+      ),
+    );
+
+    tester.widget<RangeSlider>(find.byType(RangeSlider)).onChanged!(const RangeValues(200, 700));
+    await tester.pump();
+    updateControls(() {});
+    await tester.pump();
+
+    expect(tester.widget<RangeSlider>(find.byType(RangeSlider)).values, const RangeValues(200, 700));
+
+    updateControls(() {
+      range = const RangeValues(250, 800);
+      distance = 70;
+    });
+    await tester.pump();
+
+    expect(tester.widget<RangeSlider>(find.byType(RangeSlider)).values, range);
+    expect(tester.widget<Slider>(find.byType(Slider)).value, distance);
+  });
+
   testWidgets('hotel date selection updates the visible stay summary', (WidgetTester tester) async {
     final now = DateTime.now();
     final replacementEnd = DateTime(now.year, now.month + 1, 20);

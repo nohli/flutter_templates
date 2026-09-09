@@ -19,6 +19,14 @@ class _RangeSliderViewState extends State<RangeSliderView> {
   }
 
   @override
+  void didUpdateWidget(RangeSliderView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.values != oldWidget.values) {
+      _values = widget.values;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final startPosition = _values.start.round().clamp(1, 999);

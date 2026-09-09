@@ -12,6 +12,7 @@ import 'package:templates/design_course/course_info_screen.dart';
 import 'package:templates/design_course/design_course_app_theme.dart';
 import 'package:templates/design_course/home_design_course.dart';
 import 'package:templates/design_course/models/category.dart';
+import 'package:templates/design_course/models/saved_courses.dart';
 import 'package:templates/feedback_screen.dart';
 import 'package:templates/fitness_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:templates/fitness_app/fitness_app_home_screen.dart';
@@ -93,7 +94,7 @@ void main() {
 
   testWidgets('course details and staged actions render without layout errors', (WidgetTester tester) async {
     _evictAssets(<String>['assets/design_course/interFace4.png']);
-    await _pumpScreen(tester, CourseInfoScreen(course: Category.popularCourseList[1]));
+    await _pumpScreen(tester, CourseInfoScreen(course: Category.popularCourseList[1], savedCourses: SavedCourses()));
 
     expect(find.text('Web Design Course'), findsOneWidget);
     expect(find.text('Preview only — enrollment is not available.'), findsOneWidget);
@@ -787,7 +788,7 @@ void main() {
     _evictAssets(<String>['assets/design_course/interFace4.png']);
     await _pumpScreen(
       tester,
-      CourseInfoScreen(course: Category.popularCourseList[1]),
+      CourseInfoScreen(course: Category.popularCourseList[1], savedCourses: SavedCourses()),
       size: const Size(932, 430),
       disableAnimations: true,
       padding: const EdgeInsets.only(left: 44, right: 36),

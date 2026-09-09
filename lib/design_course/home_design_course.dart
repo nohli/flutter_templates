@@ -17,8 +17,11 @@ class DesignCourseHomeScreen extends StatefulWidget {
 }
 
 class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
+  final _ownedSavedCourses = SavedCourses();
   CategoryType _categoryType = CategoryType.ui;
   var _query = '';
+
+  SavedCourses get _savedCourses => widget.savedCourses ?? _ownedSavedCourses;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +105,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (BuildContext context) => MediaQuery.withNoTextScaling(
-          child: CourseInfoScreen(course: course, savedCourses: widget.savedCourses),
+          child: CourseInfoScreen(course: course, savedCourses: _savedCourses),
         ),
       ),
     );

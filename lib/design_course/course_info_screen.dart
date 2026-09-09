@@ -5,10 +5,10 @@ import 'models/category.dart';
 import 'models/saved_courses.dart';
 
 class CourseInfoScreen extends StatefulWidget {
-  const CourseInfoScreen({required this.course, this.savedCourses, super.key});
+  const CourseInfoScreen({required this.course, required this.savedCourses, super.key});
 
   final Category course;
-  final SavedCourses? savedCourses;
+  final SavedCourses savedCourses;
 
   @override
   State<CourseInfoScreen> createState() => _CourseInfoScreenState();
@@ -27,7 +27,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
   @override
   void initState() {
     super.initState();
-    _savedCourses = widget.savedCourses ?? SavedCourses.shared;
+    _savedCourses = widget.savedCourses;
     _isFavorite = _savedCourses.contains(widget.course);
   }
 

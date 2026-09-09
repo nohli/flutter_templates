@@ -1,22 +1,22 @@
 class HotelListData {
   const HotelListData({
-    this.imagePath = '',
-    this.title = '',
-    this.location = '',
-    this.distanceKm = 1.8,
-    this.reviews = 80,
-    this.rating = 4.5,
-    this.nightlyPrice = 180,
-    this.amenities = const <String>[],
-    this.accommodationType = 'Hotel',
+    required this.imagePath,
+    required this.title,
+    required this.location,
+    required this.distanceKm,
+    required this.reviews,
+    required this.rating,
+    required this.nightlyPrice,
+    required this.amenities,
+    required this.accommodationType,
   });
 
   final String imagePath;
   final String title;
   final String location;
   final double distanceKm;
-  final double rating;
   final int reviews;
+  final double rating;
   final int nightlyPrice;
   final List<String> amenities;
   final String accommodationType;
@@ -27,7 +27,9 @@ class HotelListData {
       title: 'Grand Royal Hotel',
       location: 'Wembley, London',
       distanceKm: 2.0,
+      reviews: 80,
       rating: 4.4,
+      nightlyPrice: 180,
       amenities: <String>['Free Breakfast', 'Free wifi', 'Pool'],
       accommodationType: 'Hotel',
     ),
@@ -37,6 +39,7 @@ class HotelListData {
       location: 'Wembley, London',
       distanceKm: 4.0,
       reviews: 74,
+      rating: 4.5,
       nightlyPrice: 200,
       amenities: <String>['Free Parking', 'Pet Friendly'],
       accommodationType: 'Apartment',
@@ -69,6 +72,7 @@ class HotelListData {
       location: 'Wembley, London',
       distanceKm: 2.0,
       reviews: 240,
+      rating: 4.5,
       nightlyPrice: 200,
       amenities: <String>['Free Breakfast', 'Pool', 'Free wifi'],
       accommodationType: 'Resort',

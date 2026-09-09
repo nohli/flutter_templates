@@ -10,10 +10,10 @@ class Category {
 
   final String id;
   final String title;
+  final String imagePath;
   final int lessonCount;
   final int money;
   final double rating;
-  final String imagePath;
 
   String get lessonLabel => '$lessonCount ${lessonCount == 1 ? 'lesson' : 'lessons'}';
 

@@ -200,17 +200,17 @@ class MealsView extends StatelessWidget {
             ),
           ),
         ),
-        if (mealsListData.kcal != 0)
-          _buildEnergyLabel(contentColor, useExpandedCard)
+        if (mealsListData.kcal case final kcal?)
+          _buildEnergyLabel(kcal, contentColor, useExpandedCard)
         else
           _buildAddIcon(colors, useExpandedCard),
       ],
     );
   }
 
-  Widget _buildEnergyLabel(Color contentColor, bool useExpandedCard) {
+  Widget _buildEnergyLabel(int kcal, Color contentColor, bool useExpandedCard) {
     final value = Text(
-      mealsListData.kcal.toString(),
+      '$kcal',
       textAlign: TextAlign.center,
       style: _contentStyle(contentColor, 24),
     );

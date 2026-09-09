@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class MealsListData {
   const MealsListData({
+    required this.imagePath,
+    required this.title,
+    required this.startColor,
+    required this.endColor,
     required this.meals,
-    this.imagePath = '',
-    this.title = '',
-    this.startColor = Colors.grey,
-    this.endColor = Colors.grey,
-    this.kcal = 0,
+    this.kcal,
   });
 
   final String imagePath;
@@ -15,7 +15,7 @@ class MealsListData {
   final Color startColor;
   final Color endColor;
   final List<String> meals;
-  final int kcal;
+  final int? kcal;
 
   static const samples = <MealsListData>[
     MealsListData(

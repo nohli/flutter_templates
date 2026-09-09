@@ -19,6 +19,7 @@ import 'package:templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/fitness_app/fitness_app_theme.dart';
 import 'package:templates/fitness_app/training/training_screen.dart';
 import 'package:templates/fitness_app/ui_view/area_list_view.dart';
+import 'package:templates/fitness_app/ui_view/fitness_section_scaffold.dart';
 import 'package:templates/fitness_app/ui_view/glass_view.dart';
 import 'package:templates/fitness_app/ui_view/workout_view.dart';
 import 'package:templates/help_screen.dart';
@@ -580,6 +581,36 @@ void main() {
     expect(tester.getCenter(playIcon).dx, greaterThan(300));
     expect(find.byIcon(Icons.arrow_forward), findsAtLeastNWidgets(2));
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('fitness section headers follow a replacement parent animation', (WidgetTester tester) async {
+    final firstAnimation = AnimationController(vsync: tester);
+    final secondAnimation = AnimationController(vsync: tester, value: 1);
+    addTearDown(firstAnimation.dispose);
+    addTearDown(secondAnimation.dispose);
+    Animation<double> animation = firstAnimation;
+    late StateSetter updateAnimation;
+
+    await _pumpScreen(
+      tester,
+      StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          updateAnimation = setState;
+          return FitnessSectionScaffold(
+            title: 'Sample section',
+            animation: animation,
+            sections: const <Widget>[Text('Sample content')],
+          );
+        },
+      ),
+    );
+
+    final headerFade = find.descendant(of: find.byType(FitnessSectionScaffold), matching: find.byType(FadeTransition));
+    expect(tester.widget<FadeTransition>(headerFade).opacity.value, 0);
+    updateAnimation(() => animation = secondAnimation);
+    await tester.pump();
+
+    expect(tester.widget<FadeTransition>(headerFade).opacity.value, 1);
   });
 
   testWidgets('fitness content scrolls fully clear of its navigation bar', (WidgetTester tester) async {

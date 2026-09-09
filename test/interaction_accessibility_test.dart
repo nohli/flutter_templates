@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:templates/design_course/home_design_course.dart';
 import 'package:templates/design_course/models/category.dart';
-import 'package:templates/design_course/models/saved_courses.dart';
 import 'package:templates/fitness_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/fitness_app/fitness_app_theme.dart';
@@ -14,6 +13,7 @@ import 'package:templates/fitness_app/ui_view/area_list_view.dart';
 import 'package:templates/hotel_booking/custom_calendar.dart';
 import 'package:templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/hotel_booking/smooth_star_rating.dart';
+import 'package:templates/home_screen.dart';
 
 void main() {
   test('course lesson labels use correct singular and plural grammar', () {
@@ -82,29 +82,27 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('course selection preserves saved state through the real gallery navigation', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('gallery preserves saved courses when the template is reopened', (WidgetTester tester) async {
     final semantics = tester.ensureSemantics();
-    final savedCourses = SavedCourses();
-    final selectedCourse = Category.popularCourseList.singleWhere(
-      (Category course) => course.title == 'Web Design Course',
-    );
     _evictAssets(<String>[
+      'assets/hotel/hotel_booking.png',
+      'assets/fitness_app/fitness_app.png',
+      'assets/design_course/design_course.png',
       'assets/design_course/interFace1.png',
       'assets/design_course/interFace2.png',
       'assets/design_course/interFace3.png',
       'assets/design_course/interFace4.png',
       'assets/design_course/userImage.png',
     ]);
-    await _pumpScreen(tester, DesignCourseHomeScreen(savedCourses: savedCourses));
+    await _pumpScreen(tester, const MyHomePage());
     await tester.pump(const Duration(seconds: 2));
+    await tester.tap(find.bySemanticsLabel('Design Course'));
+    await tester.pumpAndSettle();
 
     final courseCard = find.bySemanticsLabel(RegExp(r'^Open Web Design Course sample course,'));
     await tester.tap(courseCard.first);
     await tester.pumpAndSettle();
 
-    expect(savedCourses.contains(selectedCourse), isFalse);
     expect(find.text('Preview only — enrollment is not available.'), findsOneWidget);
     expect(find.text('Join Course'), findsNothing);
     expect(find.byIcon(Icons.add), findsNothing);
@@ -116,24 +114,29 @@ void main() {
     await tester.tap(saveCourse);
     await tester.pump();
 
-    expect(savedCourses.contains(selectedCourse), isTrue);
     final removeCourse = find.bySemanticsLabel('Remove saved sample course');
     expect(removeCourse, findsOneWidget);
     expect(tester.getSemantics(removeCourse).flagsCollection.isToggled, Tristate.isTrue);
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
-    expect(courseCard, findsWidgets);
+    Navigator.of(tester.element(find.byType(DesignCourseHomeScreen))).pop();
+    await tester.pumpAndSettle();
 
+    await tester.tap(find.bySemanticsLabel('Design Course'));
+    await tester.pumpAndSettle();
     await tester.tap(courseCard.first);
     await tester.pumpAndSettle();
     expect(find.bySemanticsLabel('Remove saved sample course'), findsOneWidget);
 
     await tester.tap(find.bySemanticsLabel('Remove saved sample course'));
     await tester.pump();
-    expect(savedCourses.contains(selectedCourse), isFalse);
 
     await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    Navigator.of(tester.element(find.byType(DesignCourseHomeScreen))).pop();
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Design Course'));
     await tester.pumpAndSettle();
     await tester.tap(courseCard.first);
     await tester.pumpAndSettle();

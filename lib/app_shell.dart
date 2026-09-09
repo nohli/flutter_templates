@@ -108,6 +108,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
         final drawerWidth = constraints.maxWidth * 0.75;
         return AnimatedBuilder(
           animation: _drawerController,
+          child: _screen,
           builder: (BuildContext context, Widget? child) {
             final drawerIsClosed = _drawerController.value == 0;
             return PopScope(
@@ -164,7 +165,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                                   excluding: !drawerIsClosed,
                                   child: ExcludeFocus(
                                     excluding: !drawerIsClosed,
-                                    child: IgnorePointer(ignoring: !drawerIsClosed, child: _screen),
+                                    child: IgnorePointer(ignoring: !drawerIsClosed, child: child),
                                   ),
                                 ),
                               ),

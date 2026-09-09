@@ -727,6 +727,25 @@ void main() {
     semantics.dispose();
   });
 
+  testWidgets('drawer animation retains the active screen instance', (WidgetTester tester) async {
+    _evictAssets(<String>[
+      'assets/hotel/hotel_booking.png',
+      'assets/fitness_app/fitness_app.png',
+      'assets/design_course/design_course.png',
+    ]);
+    await _pumpScreen(tester, const AppShell());
+    final shellAnimation = find.byWidgetPredicate(
+      (Widget widget) => widget is AnimatedBuilder && widget.child is TemplateGalleryScreen,
+    );
+    final activeScreen = tester.widget<AnimatedBuilder>(shellAnimation).child;
+
+    await tester.tap(find.byTooltip('Open navigation menu'));
+    await tester.pump(const Duration(milliseconds: 100));
+
+    expect(tester.widget<AnimatedBuilder>(shellAnimation).child, same(activeScreen));
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('drawer releases settle by position and deliberate fling direction', (WidgetTester tester) async {
     _evictAssets(<String>[
       'assets/hotel/hotel_booking.png',

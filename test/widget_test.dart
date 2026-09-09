@@ -119,7 +119,7 @@ void main() {
     var shareCount = 0;
     await _pumpScreen(
       tester,
-      InviteFriend(
+      InviteFriendScreen(
         sharer: (String text, Rect origin) {
           sharedText = text;
           sharedOrigin = origin;
@@ -145,7 +145,7 @@ void main() {
 
   testWidgets('invite remains usable when native sharing fails', (WidgetTester tester) async {
     _evictAssets(<String>['assets/images/inviteImage.png']);
-    await _pumpScreen(tester, InviteFriend(sharer: (_, _) => Future<void>.error(StateError('Unavailable'))));
+    await _pumpScreen(tester, InviteFriendScreen(sharer: (_, _) => Future<void>.error(StateError('Unavailable'))));
 
     await tester.tap(find.text('Share'));
     await tester.pumpAndSettle();
@@ -264,7 +264,7 @@ void main() {
     await tester.pump();
 
     final shareResult = Completer<void>();
-    await _pumpScreen(tester, InviteFriend(sharer: (_, _) => shareResult.future));
+    await _pumpScreen(tester, InviteFriendScreen(sharer: (_, _) => shareResult.future));
     await tester.tap(find.text('Share'));
     await tester.pump();
     await _pumpScreen(tester, const SizedBox());

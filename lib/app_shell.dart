@@ -212,10 +212,10 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
   }
 
   Widget get _screen => switch (_section) {
-    AppSection.home => const MyHomePage(),
+    AppSection.home => const TemplateGalleryScreen(),
     AppSection.help => const HelpScreen(),
     AppSection.feedback => const FeedbackScreen(),
-    AppSection.invite => const InviteFriend(),
+    AppSection.invite => const InviteFriendScreen(),
     AppSection.about => const AboutScreen(),
   };
 }

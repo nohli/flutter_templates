@@ -56,8 +56,10 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
 
   DateTime _initialVisibleMonth() {
     var visibleDate = DateUtils.dateOnly(widget.initialStartDate);
-    final minimumDate = widget.minimumDate == null ? null : DateUtils.dateOnly(widget.minimumDate!);
-    final maximumDate = widget.maximumDate == null ? null : DateUtils.dateOnly(widget.maximumDate!);
+    final configuredMinimum = widget.minimumDate;
+    final configuredMaximum = widget.maximumDate;
+    final minimumDate = configuredMinimum == null ? null : DateUtils.dateOnly(configuredMinimum);
+    final maximumDate = configuredMaximum == null ? null : DateUtils.dateOnly(configuredMaximum);
 
     if (minimumDate != null && visibleDate.isBefore(minimumDate)) {
       visibleDate = minimumDate;
@@ -72,8 +74,10 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
   bool _monthHasSelectableDate(DateTime month) {
     final firstDay = DateTime(month.year, month.month);
     final lastDay = DateTime(month.year, month.month + 1, 0);
-    final minimumDate = widget.minimumDate == null ? null : DateUtils.dateOnly(widget.minimumDate!);
-    final maximumDate = widget.maximumDate == null ? null : DateUtils.dateOnly(widget.maximumDate!);
+    final configuredMinimum = widget.minimumDate;
+    final configuredMaximum = widget.maximumDate;
+    final minimumDate = configuredMinimum == null ? null : DateUtils.dateOnly(configuredMinimum);
+    final maximumDate = configuredMaximum == null ? null : DateUtils.dateOnly(configuredMaximum);
 
     return (minimumDate == null || !lastDay.isBefore(minimumDate)) &&
         (maximumDate == null || !firstDay.isAfter(maximumDate));
@@ -357,12 +361,10 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
   }
 
   bool _isInSelectedRange(DateTime date) {
-    if (_startDate != null && _endDate != null) {
-      if (date.isAfter(_startDate!) && date.isBefore(_endDate!)) {
-        return true;
-      }
-    }
-    return false;
+    final startDate = _startDate;
+    final endDate = _endDate;
+
+    return startDate != null && endDate != null && date.isAfter(startDate) && date.isBefore(endDate);
   }
 
   bool _isRangeBoundary(DateTime date) => DateUtils.isSameDay(_startDate, date) || DateUtils.isSameDay(_endDate, date);
@@ -404,21 +406,31 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
         _startDate = _endDate;
         _endDate = null;
       }
-      if (_startDate != null && _endDate != null) {
-        if (!_endDate!.isAfter(_startDate!)) {
-          final previousStartDate = _startDate!;
-          _startDate = _endDate;
-          _endDate = previousStartDate;
+      final selectedStartDate = _startDate;
+      final selectedEndDate = _endDate;
+      if (selectedStartDate != null && selectedEndDate != null) {
+        var startDate = selectedStartDate;
+        var endDate = selectedEndDate;
+        if (!endDate.isAfter(startDate)) {
+          final previousStartDate = startDate;
+          startDate = endDate;
+          endDate = previousStartDate;
         }
-        if (date.isBefore(_startDate!)) {
-          _startDate = date;
-        } else if (date.isAfter(_endDate!)) {
-          _endDate = date;
+        if (date.isBefore(startDate)) {
+          startDate = date;
+        } else if (date.isAfter(endDate)) {
+          endDate = date;
         } else {
-          final daysToStartDate = _startDate!.difference(date).inDays.abs();
-          final daysToEndDate = _endDate!.difference(date).inDays.abs();
-          daysToStartDate > daysToEndDate ? _endDate = date : _startDate = date;
+          final daysToStartDate = startDate.difference(date).inDays.abs();
+          final daysToEndDate = endDate.difference(date).inDays.abs();
+          if (daysToStartDate > daysToEndDate) {
+            endDate = date;
+          } else {
+            startDate = date;
+          }
         }
+        _startDate = startDate;
+        _endDate = endDate;
       }
     });
 

@@ -93,9 +93,12 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
       child: Material(
         color: colors.surface,
         child: Stack(
+          fit: StackFit.expand,
           children: <Widget>[
-            SizedBox(
-              width: double.infinity,
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
               height: headerHeight,
               child: Image.asset(widget.course.imagePath, fit: BoxFit.cover),
             ),
@@ -119,7 +122,11 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
               right: mediaQuery.padding.right + 35,
               child: _FavoriteButton(colors: colors, isFavorite: _isFavorite, onPressed: _toggleFavorite),
             ),
-            _BackButton(colors: colors, topInset: mediaQuery.padding.top, leftInset: mediaQuery.padding.left),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: _BackButton(colors: colors, topInset: mediaQuery.padding.top, leftInset: mediaQuery.padding.left),
+            ),
           ],
         ),
       ),

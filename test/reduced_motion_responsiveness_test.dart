@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/design_course/course_info_screen.dart';
 import 'package:templates/design_course/home_design_course.dart';
 import 'package:templates/design_course/models/category.dart' as course_model;
+import 'package:templates/design_course/models/saved_courses.dart';
 import 'package:templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/fitness_app/my_diary/meals_list_view.dart';
 import 'package:templates/fitness_app/ui_view/area_list_view.dart';
@@ -157,7 +158,7 @@ void main() {
     _evictAssets(<String>['assets/design_course/interFace4.png']);
     await _pumpScreen(
       tester,
-      CourseInfoScreen(course: course_model.Category.popularCourseList[1]),
+      CourseInfoScreen(course: course_model.Category.popularCourseList[1], savedCourses: SavedCourses()),
       size: const Size(320, 568),
       textScale: 3.2,
       disableAnimations: true,

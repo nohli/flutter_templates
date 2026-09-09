@@ -3,8 +3,6 @@ import 'category.dart';
 class SavedCourses {
   SavedCourses();
 
-  static final shared = SavedCourses();
-
   final _courseIds = <String>{};
 
   bool contains(Category course) => _courseIds.contains(course.id);

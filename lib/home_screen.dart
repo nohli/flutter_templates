@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'app_identity.dart';
 import 'app_theme.dart';
 import 'design_course/home_design_course.dart';
+import 'design_course/models/saved_courses.dart';
 import 'fitness_app/fitness_app_home_screen.dart';
 import 'hotel_booking/hotel_home_screen.dart';
 import 'model/template_gallery_item.dart';
@@ -18,6 +19,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   static const _layoutPreferenceKey = 'home-gallery-multiple-columns';
 
   final _items = TemplateGalleryItem.items;
+  final _savedCourses = SavedCourses();
   var _multiple = true;
   var _restoredLayoutPreference = false;
 
@@ -112,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   Widget _screenFor(TemplateGalleryDestination destination) => switch (destination) {
     TemplateGalleryDestination.hotelBooking => const HotelHomeScreen(),
     TemplateGalleryDestination.fitness => const FitnessAppHomeScreen(),
-    TemplateGalleryDestination.designCourse => const DesignCourseHomeScreen(),
+    TemplateGalleryDestination.designCourse => DesignCourseHomeScreen(savedCourses: _savedCourses),
   };
 }
 

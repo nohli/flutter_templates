@@ -83,12 +83,12 @@ class _InviteFriendState extends State<InviteFriend> {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),
-                      if (_errorMessage != null) ...<Widget>[
+                      if (_errorMessage case final errorMessage?) ...<Widget>[
                         const SizedBox(height: 8),
                         Semantics(
                           liveRegion: true,
                           child: Text(
-                            _errorMessage!,
+                            errorMessage,
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Theme.of(context).colorScheme.error),
                           ),

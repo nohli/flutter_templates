@@ -17,7 +17,7 @@ class HotelHomeScreen extends StatefulWidget {
   State<HotelHomeScreen> createState() => _HotelHomeScreenState();
 }
 
-class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderStateMixin {
+class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProviderStateMixin {
   final _scrollController = ScrollController();
   final _favoriteHotelImages = <String>{};
 
@@ -310,7 +310,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderSt
   }
 
   void _showDateDialog(BuildContext context) {
-    showDialog<dynamic>(
+    showDialog<void>(
       context: context,
       builder: (BuildContext context) => MediaQuery.withNoTextScaling(
         child: CalendarPopupView(

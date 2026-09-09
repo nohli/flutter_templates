@@ -99,9 +99,8 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
   }
 
   void _openCourse(Category course) {
-    Navigator.push<dynamic>(
-      context,
-      MaterialPageRoute<dynamic>(
+    Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
         builder: (BuildContext context) => MediaQuery.withNoTextScaling(
           child: CourseInfoScreen(course: course, savedCourses: widget.savedCourses),
         ),

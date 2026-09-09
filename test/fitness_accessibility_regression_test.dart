@@ -9,6 +9,7 @@ import 'package:templates/fitness_app/my_diary/water_view.dart';
 import 'package:templates/fitness_app/training/training_screen.dart';
 import 'package:templates/fitness_app/ui_view/area_list_view.dart';
 import 'package:templates/fitness_app/ui_view/body_measurement.dart';
+import 'package:templates/fitness_app/ui_view/fitness_section_scaffold.dart';
 import 'package:templates/fitness_app/ui_view/mediterranean_diet_view.dart';
 import 'package:templates/fitness_app/ui_view/sample_date_header.dart';
 import 'package:templates/fitness_app/ui_view/wave_view.dart';
@@ -40,6 +41,37 @@ void main() {
       disableAnimations: true,
     );
 
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('fitness section header follows the shared scroll states', (WidgetTester tester) async {
+    final controller = AnimationController(vsync: tester, value: 1);
+    addTearDown(controller.dispose);
+
+    await _pumpFitnessScreen(
+      tester,
+      FitnessSectionScaffold(
+        title: 'Test section',
+        animation: controller,
+        sections: const <Widget>[SizedBox(height: 1200)],
+      ),
+    );
+
+    final scrollable = find.descendant(of: find.byType(FitnessSectionScaffold), matching: find.byType(Scrollable));
+    final scrollState = tester.state<ScrollableState>(scrollable);
+    expect(_headerOpacity(tester), 0);
+
+    scrollState.position.jumpTo(12);
+    await tester.pump();
+    expect(_headerOpacity(tester), closeTo(0.5, 0.001));
+
+    scrollState.position.jumpTo(30);
+    await tester.pump();
+    expect(_headerOpacity(tester), 1);
+
+    scrollState.position.jumpTo(0);
+    await tester.pump();
+    expect(_headerOpacity(tester), 0);
     expect(tester.takeException(), isNull);
   });
 
@@ -324,6 +356,21 @@ double _firstWaveY(WidgetTester tester) {
   final clipper = clipPath.clipper! as WaveClipper;
 
   return clipper.verticalOffset;
+}
+
+double _headerOpacity(WidgetTester tester) {
+  final header = find.ancestor(
+    of: find.text('Test section'),
+    matching: find.byWidgetPredicate((Widget widget) {
+      if (widget is! Container || widget.decoration is! BoxDecoration) return false;
+
+      final decoration = widget.decoration! as BoxDecoration;
+      return decoration.borderRadius == const BorderRadius.only(bottomLeft: Radius.circular(32));
+    }),
+  );
+  final decoration = tester.widget<Container>(header).decoration! as BoxDecoration;
+
+  return decoration.color!.a;
 }
 
 Future<void> _pumpFitnessScreen(

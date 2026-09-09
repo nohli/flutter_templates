@@ -157,6 +157,25 @@ void main() {
     expect(tester.widget<IconButton>(find.widgetWithIcon(IconButton, Icons.keyboard_arrow_right)).onPressed, isNull);
   });
 
+  testWidgets('calendar renders a visible connected selected range', (WidgetTester tester) async {
+    final initialStart = DateTime(2026, 9, 9);
+    final initialEnd = DateTime(2026, 9, 14);
+
+    await _pumpHotelWidget(tester, CustomCalendarView(initialStartDate: initialStart, initialEndDate: initialEnd));
+
+    final rangeSegments = find.byWidgetPredicate((Widget widget) {
+      return widget is DecoratedBox &&
+          widget.decoration is BoxDecoration &&
+          (widget.decoration as BoxDecoration).color == HotelAppTheme.rangeColor;
+    });
+    expect(rangeSegments, findsNWidgets(6));
+    for (final segment in tester.widgetList<DecoratedBox>(rangeSegments)) {
+      final segmentFinder = find.byWidget(segment);
+      expect(tester.getSize(segmentFinder).width, greaterThan(0));
+      expect(tester.getSize(segmentFinder).height, greaterThan(0));
+    }
+  });
+
   testWidgets('calendar navigates to both bounded months and keeps boundary dates selectable', (
     WidgetTester tester,
   ) async {

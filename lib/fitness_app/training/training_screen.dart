@@ -9,15 +9,15 @@ import '../ui_view/title_view.dart';
 import '../ui_view/workout_view.dart';
 
 class TrainingScreen extends StatefulWidget {
-  const TrainingScreen({required this.animationController, super.key});
+  const TrainingScreen({required this.animation, super.key});
 
-  final AnimationController animationController;
+  final Animation<double> animation;
 
   @override
   State<TrainingScreen> createState() => _TrainingScreenState();
 }
 
-class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStateMixin {
+class _TrainingScreenState extends State<TrainingScreen> {
   final _sections = <Widget>[];
   var _topBarOpacity = 0.0;
 
@@ -29,7 +29,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
     _scrollController = ScrollController();
     _topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: widget.animationController,
+        parent: widget.animation,
         curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn),
       ),
     );
@@ -78,7 +78,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
         actionLabel: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -89,7 +89,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
       WorkoutView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -100,7 +100,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
       RunningView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -113,7 +113,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
         actionLabel: 'More',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -124,7 +124,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
       AreaListView(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -181,7 +181,7 @@ class _TrainingScreenState extends State<TrainingScreen> with TickerProviderStat
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         AnimatedBuilder(
-          animation: widget.animationController,
+          animation: widget.animation,
           builder: (BuildContext context, _) {
             return FadeTransition(
               opacity: _topBarAnimation,

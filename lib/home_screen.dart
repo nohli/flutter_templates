@@ -88,9 +88,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       animation: animation,
                       listData: item,
                       onTap: () {
-                        Navigator.push<dynamic>(
-                          context,
-                          MaterialPageRoute<dynamic>(
+                        Navigator.of(context).push<void>(
+                          MaterialPageRoute<void>(
                             builder: (BuildContext context) => MediaQuery.withNoTextScaling(child: item.navigateScreen),
                           ),
                         );

@@ -52,7 +52,7 @@ void main() {
       await _pumpFitnessScreen(
         tester,
         SingleChildScrollView(
-          child: MediterraneanDietView(animationController: controller, animation: controller),
+          child: MediterraneanDietView(animation: controller, macroAnimation: controller),
         ),
         size: textScale == 1 ? const Size(402, 874) : const Size(320, 1200),
         textScale: textScale,
@@ -230,7 +230,7 @@ void main() {
     final controller = AnimationController(vsync: tester)..value = 0.9;
     addTearDown(controller.dispose);
 
-    await _pumpFitnessScreen(tester, TrainingScreen(animationController: controller), size: const Size(430, 1800));
+    await _pumpFitnessScreen(tester, TrainingScreen(animation: controller), size: const Size(430, 1800));
 
     final Finder area = find.byType(AreaListView);
     expect(area, findsOneWidget);

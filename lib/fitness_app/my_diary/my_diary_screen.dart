@@ -11,15 +11,15 @@ import 'meals_list_view.dart';
 import 'water_view.dart';
 
 class MyDiaryScreen extends StatefulWidget {
-  const MyDiaryScreen({required this.animationController, super.key});
+  const MyDiaryScreen({required this.animation, super.key});
 
-  final AnimationController animationController;
+  final Animation<double> animation;
 
   @override
   State<MyDiaryScreen> createState() => _MyDiaryScreenState();
 }
 
-class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateMixin {
+class _MyDiaryScreenState extends State<MyDiaryScreen> {
   final _sections = <Widget>[];
   var _topBarOpacity = 0.0;
 
@@ -31,7 +31,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
     _scrollController = ScrollController();
     _topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
-        parent: widget.animationController,
+        parent: widget.animation,
         curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn),
       ),
     );
@@ -80,7 +80,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
         actionLabel: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -91,11 +91,11 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
       MediterraneanDietView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
-        animationController: widget.animationController,
+        macroAnimation: widget.animation,
       ),
     );
 
@@ -105,7 +105,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
         actionLabel: 'Customize',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -116,7 +116,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
       MealsListView(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -129,7 +129,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
         actionLabel: 'Today',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -140,7 +140,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
       BodyMeasurementView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -153,7 +153,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
         actionLabel: 'Aqua SmartBottle',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -164,7 +164,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
       WaterView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 7, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -175,7 +175,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
       GlassView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
-            parent: widget.animationController,
+            parent: widget.animation,
             curve: const Interval((1 / count) * 8, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
@@ -232,7 +232,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         AnimatedBuilder(
-          animation: widget.animationController,
+          animation: widget.animation,
           builder: (BuildContext context, _) {
             return FadeTransition(
               opacity: _topBarAnimation,

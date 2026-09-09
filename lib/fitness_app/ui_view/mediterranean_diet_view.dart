@@ -7,10 +7,10 @@ import '../fitness_app_theme.dart';
 import 'animated_fitness_card.dart';
 
 class MediterraneanDietView extends StatelessWidget {
-  const MediterraneanDietView({required this.animationController, required this.animation, super.key});
+  const MediterraneanDietView({required this.animation, required this.macroAnimation, super.key});
 
-  final AnimationController animationController;
   final Animation<double> animation;
+  final Animation<double> macroAnimation;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class MediterraneanDietView extends StatelessWidget {
       shadowColor: FitnessAppTheme.grey,
       builder: (_) => useLargeTextLayout
           ? _LargeDietSummary(colors: colors, progress: animation.value)
-          : _CompactDietSummary(colors: colors, progress: animation.value, macroProgress: animationController.value),
+          : _CompactDietSummary(colors: colors, progress: animation.value, macroProgress: macroAnimation.value),
     );
   }
 }

@@ -13,7 +13,7 @@ class FitnessAppHomeScreen extends StatefulWidget {
   State<FitnessAppHomeScreen> createState() => _FitnessAppHomeScreenState();
 }
 
-class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen> with TickerProviderStateMixin {
+class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen> with SingleTickerProviderStateMixin {
   var _selectedIndex = 0;
 
   late final AnimationController _animationController;
@@ -39,8 +39,8 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen> with Ticker
   Widget build(BuildContext context) {
     final theme = FitnessAppTheme.build();
     final tabBody = _selectedIndex.isEven
-        ? MyDiaryScreen(animationController: _animationController)
-        : TrainingScreen(animationController: _animationController);
+        ? MyDiaryScreen(animation: _animationController)
+        : TrainingScreen(animation: _animationController);
 
     return Theme(
       data: theme,

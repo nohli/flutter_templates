@@ -26,7 +26,7 @@ class CategoryListView extends StatefulWidget {
   State<CategoryListView> createState() => _CategoryListViewState();
 }
 
-class _CategoryListViewState extends State<CategoryListView> with TickerProviderStateMixin {
+class _CategoryListViewState extends State<CategoryListView> with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   @override
   void initState() {

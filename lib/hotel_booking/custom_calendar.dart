@@ -265,16 +265,18 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
             aspectRatio: 1.0,
             child: Stack(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(startsRange ? 4 : 0, 5, endsRange ? 4 : 0, 5),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: _startDate != null && _endDate != null && (isSelected || isInRange)
-                          ? colors.primaryContainer
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.horizontal(
-                        left: startsRange ? const Radius.circular(24) : Radius.zero,
-                        right: endsRange ? const Radius.circular(24) : Radius.zero,
+                Positioned.fill(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(startsRange ? 4 : 0, 5, endsRange ? 4 : 0, 5),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: _startDate != null && _endDate != null && (isSelected || isInRange)
+                            ? colors.primaryContainer
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.horizontal(
+                          left: startsRange ? const Radius.circular(24) : Radius.zero,
+                          right: endsRange ? const Radius.circular(24) : Radius.zero,
+                        ),
                       ),
                     ),
                   ),

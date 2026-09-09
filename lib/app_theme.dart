@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppTheme {
-  AppTheme._();
-
+abstract final class AppTheme {
   static const notWhite = Color(0xFFEDF0F2);
   static const nearlyWhite = Color(0xFFFEFEFE);
   static const white = Color(0xFFFFFFFF);

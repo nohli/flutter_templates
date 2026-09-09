@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class HotelAppTheme {
+abstract final class HotelAppTheme {
   static const seedColor = Color(0xFF54D3C2);
   static const actionColor = Color(0xFF006A60);
   static const rangeColor = Color(0xFFBBEDE7);

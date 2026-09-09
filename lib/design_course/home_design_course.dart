@@ -202,9 +202,9 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: DesignCourseAppTheme.cardBackground,
-                  borderRadius: const BorderRadius.only(
+                  borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(13.0),
                     bottomLeft: Radius.circular(13.0),
                     topLeft: Radius.circular(13.0),

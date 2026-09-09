@@ -116,9 +116,9 @@ class _PopularCourseCard extends StatelessWidget {
                           children: <Widget>[
                             Expanded(
                               child: Ink(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: DesignCourseAppTheme.cardBackground,
-                                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
                                 ),
                                 child: Column(
                                   children: <Widget>[

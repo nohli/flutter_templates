@@ -3,7 +3,7 @@
     "short_name": "UI Templates",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#FEFEFE",
+    "background_color": "#F8F2E8",
     "theme_color": "#232844",
     "description": "An interactive gallery of mobile interface patterns built with the Flutter SDK.",
     "prefer_related_applications": false,

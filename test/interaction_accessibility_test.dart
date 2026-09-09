@@ -244,7 +244,7 @@ void main() {
     expect(tester.getSemantics(find.bySemanticsLabel('Home')).flagsCollection.isToggled, Tristate.isTrue);
     expect(tester.widget<RangeSlider>(find.byType(RangeSlider)).values, const RangeValues(1, 100));
     expect(tester.widget<Slider>(find.byType(Slider)).value, 40);
-    expect(find.text('Less than 4.0 Km'), findsOneWidget);
+    expect(find.text('Less than 4.0 km'), findsOneWidget);
     await tester.tap(find.byTooltip('Close filters'));
     await tester.pumpAndSettle();
     expect(find.byType(HotelHomeScreen), findsOneWidget);

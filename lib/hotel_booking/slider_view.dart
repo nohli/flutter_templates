@@ -39,7 +39,7 @@ class _SliderViewState extends State<SliderView> {
             Expanded(flex: position, child: const SizedBox()),
             SizedBox(
               width: 170,
-              child: Text('Less than ${(_distanceValue / 10).toStringAsFixed(1)} Km', textAlign: TextAlign.center),
+              child: Text('Less than ${(_distanceValue / 10).toStringAsFixed(1)} km', textAlign: TextAlign.center),
             ),
             Expanded(flex: 100 - position, child: const SizedBox()),
           ],

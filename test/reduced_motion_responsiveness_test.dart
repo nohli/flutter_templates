@@ -108,21 +108,13 @@ void main() {
 
     final parentController = AnimationController(vsync: tester)..value = 1;
     addTearDown(parentController.dispose);
-    await _pumpScreen(
-      tester,
-      MealsListView(mainScreenAnimationController: parentController, mainScreenAnimation: parentController),
-      disableAnimations: true,
-    );
+    await _pumpScreen(tester, MealsListView(mainScreenAnimation: parentController), disableAnimations: true);
     _expectStableEndState(tester);
     _expectCompleteFadeTransitions(tester);
     await tester.pump(const Duration(seconds: 5));
     _expectStableEndState(tester);
 
-    await _pumpScreen(
-      tester,
-      AreaListView(mainScreenAnimationController: parentController, mainScreenAnimation: parentController),
-      disableAnimations: true,
-    );
+    await _pumpScreen(tester, AreaListView(mainScreenAnimation: parentController), disableAnimations: true);
     _expectStableEndState(tester);
     _expectCompleteFadeTransitions(tester);
     await tester.pump(const Duration(seconds: 5));

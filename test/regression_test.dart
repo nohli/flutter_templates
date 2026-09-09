@@ -163,7 +163,7 @@ void main() {
     final controller = AnimationController(duration: const Duration(milliseconds: 100), vsync: tester);
     addTearDown(controller.dispose);
 
-    await _pumpScreen(tester, GlassView(animationController: controller, animation: controller));
+    await _pumpScreen(tester, GlassView(animation: controller));
     controller.value = 1;
     await tester.pump();
 
@@ -835,7 +835,6 @@ void main() {
       hotelData: HotelListData.samples.first,
       isFavorite: false,
       onFavoriteChanged: () {},
-      animationController: controller,
       animation: controller,
     );
 

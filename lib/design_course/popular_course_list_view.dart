@@ -15,22 +15,22 @@ class PopularCourseListView extends StatefulWidget {
 }
 
 class _PopularCourseListViewState extends State<PopularCourseListView> with TickerProviderStateMixin {
-  late final AnimationController animationController;
+  late final AnimationController _animationController;
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
+    _animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    startEntranceAnimation(context, animationController);
+    startEntranceAnimation(context, _animationController);
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -65,7 +65,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView> with Tick
           final count = widget.courses.length;
           final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
-              parent: animationController,
+              parent: _animationController,
               curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
             ),
           );
@@ -73,7 +73,6 @@ class _PopularCourseListViewState extends State<PopularCourseListView> with Tick
             callback: () => widget.onSelected(widget.courses[index]),
             category: widget.courses[index],
             animation: animation,
-            animationController: animationController,
           );
         }),
       ),
@@ -82,23 +81,17 @@ class _PopularCourseListViewState extends State<PopularCourseListView> with Tick
 }
 
 class _PopularCourseCard extends StatelessWidget {
-  const _PopularCourseCard({
-    required this.category,
-    required this.animationController,
-    required this.animation,
-    required this.callback,
-  });
+  const _PopularCourseCard({required this.category, required this.animation, required this.callback});
 
   final VoidCallback callback;
   final Category category;
-  final AnimationController animationController;
   final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return AnimatedBuilder(
-      animation: animationController,
+      animation: animation,
       builder: (BuildContext context, _) {
         return FadeTransition(
           opacity: animation,

@@ -5,9 +5,8 @@ import '../fitness_app_theme.dart';
 import '../models/meals_list_data.dart';
 
 class MealsListView extends StatefulWidget {
-  const MealsListView({required this.mainScreenAnimationController, required this.mainScreenAnimation, super.key});
+  const MealsListView({required this.mainScreenAnimation, super.key});
 
-  final AnimationController mainScreenAnimationController;
   final Animation<double> mainScreenAnimation;
 
   @override
@@ -15,24 +14,24 @@ class MealsListView extends StatefulWidget {
 }
 
 class _MealsListViewState extends State<MealsListView> with TickerProviderStateMixin {
-  final List<MealsListData> meals = MealsListData.samples;
+  final List<MealsListData> _meals = MealsListData.samples;
 
-  late final AnimationController animationController;
+  late final AnimationController _animationController;
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
+    _animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    startEntranceAnimation(context, animationController);
+    startEntranceAnimation(context, _animationController);
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -41,7 +40,7 @@ class _MealsListViewState extends State<MealsListView> with TickerProviderStateM
     final textScale = MediaQuery.textScalerOf(context).scale(1);
     final listHeight = 216 + (textScale - 1).clamp(0.0, 2.2).toDouble() * 260;
     return AnimatedBuilder(
-      animation: widget.mainScreenAnimationController,
+      animation: widget.mainScreenAnimation,
       builder: (BuildContext context, _) {
         return FadeTransition(
           opacity: widget.mainScreenAnimation,
@@ -52,21 +51,17 @@ class _MealsListViewState extends State<MealsListView> with TickerProviderStateM
               width: double.infinity,
               child: ListView.builder(
                 padding: const EdgeInsets.only(right: 16, left: 16),
-                itemCount: meals.length,
+                itemCount: _meals.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  final int count = meals.length > 10 ? 10 : meals.length;
-                  final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+                  final count = _meals.length > 10 ? 10 : _meals.length;
+                  final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
                     CurvedAnimation(
-                      parent: animationController,
+                      parent: _animationController,
                       curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
                     ),
                   );
-                  return MealsView(
-                    mealsListData: meals[index],
-                    animation: animation,
-                    animationController: animationController,
-                  );
+                  return MealsView(mealsListData: _meals[index], animation: animation);
                 },
               ),
             ),
@@ -78,10 +73,9 @@ class _MealsListViewState extends State<MealsListView> with TickerProviderStateM
 }
 
 class MealsView extends StatelessWidget {
-  const MealsView({required this.mealsListData, required this.animationController, required this.animation, super.key});
+  const MealsView({required this.mealsListData, required this.animation, super.key});
 
   final MealsListData mealsListData;
-  final AnimationController animationController;
   final Animation<double> animation;
 
   @override
@@ -103,7 +97,7 @@ class MealsView extends StatelessWidget {
     }
 
     return AnimatedBuilder(
-      animation: animationController,
+      animation: animation,
       builder: (_, _) {
         return FadeTransition(
           opacity: animation,

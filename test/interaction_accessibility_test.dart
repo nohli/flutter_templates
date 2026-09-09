@@ -526,7 +526,7 @@ void main() {
       'assets/fitness_app/area2.png',
       'assets/fitness_app/area3.png',
     ]);
-    await _pumpScreen(tester, AreaListView(mainScreenAnimationController: controller, mainScreenAnimation: controller));
+    await _pumpScreen(tester, AreaListView(mainScreenAnimation: controller));
     controller.value = 1;
     await tester.pump(const Duration(seconds: 2));
 

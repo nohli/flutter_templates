@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import '../../motion_preferences.dart';
 
 class AreaListView extends StatefulWidget {
-  const AreaListView({required this.mainScreenAnimationController, required this.mainScreenAnimation, super.key});
+  const AreaListView({required this.mainScreenAnimation, super.key});
 
-  final AnimationController mainScreenAnimationController;
   final Animation<double> mainScreenAnimation;
   @override
   State<AreaListView> createState() => _AreaListViewState();
@@ -19,29 +18,29 @@ class _AreaListViewState extends State<AreaListView> with TickerProviderStateMix
     'assets/fitness_app/area1.png',
   ];
 
-  late final AnimationController animationController;
+  late final AnimationController _animationController;
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
+    _animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    startEntranceAnimation(context, animationController);
+    startEntranceAnimation(context, _animationController);
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: widget.mainScreenAnimationController,
+      animation: widget.mainScreenAnimation,
       builder: (BuildContext context, _) {
         return FadeTransition(
           opacity: widget.mainScreenAnimation,
@@ -59,18 +58,14 @@ class _AreaListViewState extends State<AreaListView> with TickerProviderStateMix
                     crossAxisSpacing: 24.0,
                   ),
                   children: List<Widget>.generate(_imagePaths.length, (int index) {
-                    final int count = _imagePaths.length;
-                    final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+                    final count = _imagePaths.length;
+                    final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
                       CurvedAnimation(
-                        parent: animationController,
+                        parent: _animationController,
                         curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
                       ),
                     );
-                    return _AreaCard(
-                      imagePath: _imagePaths[index],
-                      animation: animation,
-                      animationController: animationController,
-                    );
+                    return _AreaCard(imagePath: _imagePaths[index], animation: animation);
                   }),
                 ),
               ),
@@ -83,17 +78,16 @@ class _AreaListViewState extends State<AreaListView> with TickerProviderStateMix
 }
 
 class _AreaCard extends StatelessWidget {
-  const _AreaCard({required this.imagePath, required this.animationController, required this.animation});
+  const _AreaCard({required this.imagePath, required this.animation});
 
   final String imagePath;
-  final AnimationController animationController;
   final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return AnimatedBuilder(
-      animation: animationController,
+      animation: animation,
       builder: (BuildContext context, _) {
         return FadeTransition(
           opacity: animation,

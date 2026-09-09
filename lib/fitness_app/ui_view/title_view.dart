@@ -3,17 +3,10 @@ import 'package:flutter/material.dart';
 import '../fitness_app_theme.dart';
 
 class TitleView extends StatelessWidget {
-  const TitleView({
-    required this.animationController,
-    required this.animation,
-    this.title = '',
-    this.actionLabel = '',
-    super.key,
-  });
+  const TitleView({required this.animation, this.title = '', this.actionLabel = '', super.key});
 
   final String title;
   final String actionLabel;
-  final AnimationController animationController;
   final Animation<double> animation;
 
   @override
@@ -57,7 +50,7 @@ class TitleView extends StatelessWidget {
       ],
     );
     return AnimatedBuilder(
-      animation: animationController,
+      animation: animation,
       builder: (BuildContext context, _) {
         return Material(
           color: FitnessAppTheme.background,

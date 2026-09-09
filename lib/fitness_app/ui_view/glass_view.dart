@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 class GlassView extends StatelessWidget {
-  const GlassView({required this.animationController, required this.animation, super.key});
+  const GlassView({required this.animation, super.key});
 
-  final AnimationController animationController;
   final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return AnimatedBuilder(
-      animation: animationController,
+      animation: animation,
       builder: (BuildContext context, _) {
         return FadeTransition(
           opacity: animation,

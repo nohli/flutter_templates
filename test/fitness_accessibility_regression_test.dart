@@ -119,11 +119,7 @@ void main() {
       SizedBox(
         width: 160,
         height: 240,
-        child: MealsView(
-          mealsListData: MealsListData.samples.first,
-          animationController: controller,
-          animation: controller,
-        ),
+        child: MealsView(mealsListData: MealsListData.samples.first, animation: controller),
       ),
     );
 
@@ -155,11 +151,7 @@ void main() {
       SizedBox(
         width: 320,
         height: 600,
-        child: MealsView(
-          mealsListData: MealsListData.samples.first,
-          animationController: controller,
-          animation: controller,
-        ),
+        child: MealsView(mealsListData: MealsListData.samples.first, animation: controller),
       ),
       size: const Size(320, 700),
       textScale: 3.2,
@@ -179,10 +171,7 @@ void main() {
 
     await _pumpFitnessScreen(
       tester,
-      SizedBox(
-        width: 320,
-        child: MealsListView(mainScreenAnimationController: controller, mainScreenAnimation: controller),
-      ),
+      SizedBox(width: 320, child: MealsListView(mainScreenAnimation: controller)),
       disableAnimations: true,
     );
 
@@ -211,12 +200,7 @@ void main() {
         SizedBox(
           width: 320,
           height: 700,
-          child: MealsView(
-            key: ValueKey<String>(meal.title),
-            mealsListData: meal,
-            animationController: controller,
-            animation: controller,
-          ),
+          child: MealsView(key: ValueKey<String>(meal.title), mealsListData: meal, animation: controller),
         ),
         textScale: 3.2,
         disableAnimations: true,

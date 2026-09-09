@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'hotel_app_theme.dart';
 import 'model/hotel_filter_settings.dart';
-import 'model/popular_filter_list.dart';
 import 'range_slider_view.dart';
 import 'slider_view.dart';
+
+const _amenityOptions = <String>['Free Breakfast', 'Free Parking', 'Pool', 'Pet Friendly', 'Free wifi'];
+const _accommodationOptions = <String>['All', 'Apartment', 'Home', 'Villa', 'Hotel', 'Resort'];
 
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({this.initialSettings = const HotelFilterSettings(), super.key});
@@ -16,9 +18,6 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  final _popularFilters = PopularFilterListData.popularFilters;
-  final _accommodationFilters = PopularFilterListData.accommodationTypes;
-
   late RangeValues _values;
   late double _distanceValue;
   late final Set<String> _selectedAmenities;
@@ -94,11 +93,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   List<Widget> _buildAccommodationFilterRows() {
     final rows = <Widget>[];
-    for (var i = 0; i < _accommodationFilters.length; i++) {
-      final filter = _accommodationFilters[i];
-      final isSelected = i == 0
-          ? _selectedAccommodationTypes.isEmpty
-          : _selectedAccommodationTypes.contains(filter.label);
+    for (var i = 0; i < _accommodationOptions.length; i++) {
+      final label = _accommodationOptions[i];
+      final isSelected = i == 0 ? _selectedAccommodationTypes.isEmpty : _selectedAccommodationTypes.contains(label);
 
       void toggleAccommodation() {
         setState(() {
@@ -108,13 +105,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
       rows.add(
         Semantics(
-          label: filter.label,
+          label: label,
           toggled: isSelected,
           onTap: toggleAccommodation,
           child: ExcludeSemantics(
             child: SwitchListTile.adaptive(
               contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-              title: Text(filter.label),
+              title: Text(label),
               onChanged: (_) => toggleAccommodation(),
               value: isSelected,
             ),
@@ -134,7 +131,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       return;
     }
 
-    final label = _accommodationFilters[index].label;
+    final label = _accommodationOptions[index];
     _toggleSelection(_selectedAccommodationTypes, label);
   }
 
@@ -173,12 +170,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
   List<Widget> _buildPopularFilterRows() {
     final rows = <Widget>[];
     const columnCount = 2;
-    for (var index = 0; index < _popularFilters.length; index += columnCount) {
-      final items = <Widget>[_buildPopularFilter(_popularFilters[index])];
-      final hasSecondItem = index + 1 < _popularFilters.length;
+    for (var index = 0; index < _amenityOptions.length; index += columnCount) {
+      final items = <Widget>[_buildPopularFilter(_amenityOptions[index])];
+      final hasSecondItem = index + 1 < _amenityOptions.length;
 
       if (hasSecondItem) {
-        items.add(_buildPopularFilter(_popularFilters[index + 1]));
+        items.add(_buildPopularFilter(_amenityOptions[index + 1]));
       } else {
         items.add(const Expanded(child: SizedBox()));
       }
@@ -189,18 +186,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return rows;
   }
 
-  Widget _buildPopularFilter(PopularFilterListData filter) {
-    final isSelected = _selectedAmenities.contains(filter.label);
+  Widget _buildPopularFilter(String label) {
+    final isSelected = _selectedAmenities.contains(label);
 
     void toggleFilter() {
       setState(() {
-        _toggleSelection(_selectedAmenities, filter.label);
+        _toggleSelection(_selectedAmenities, label);
       });
     }
 
     return Expanded(
       child: Semantics(
-        label: filter.label,
+        label: label,
         checked: isSelected,
         onTap: toggleFilter,
         child: ExcludeSemantics(
@@ -208,7 +205,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             controlAffinity: ListTileControlAffinity.leading,
             contentPadding: EdgeInsets.zero,
             visualDensity: VisualDensity.compact,
-            title: Text(filter.label),
+            title: Text(label),
             value: isSelected,
             onChanged: (_) => toggleFilter(),
           ),
@@ -269,16 +266,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
   }
 
   void _applyFilters() {
-    final amenities = _popularFilters
-        .where((PopularFilterListData filter) => _selectedAmenities.contains(filter.label))
-        .map((PopularFilterListData filter) => filter.label)
-        .toList(growable: false);
-    final types = _accommodationFilters
-        .skip(1)
-        .where((PopularFilterListData filter) => _selectedAccommodationTypes.contains(filter.label))
-        .map((PopularFilterListData filter) => filter.label)
-        .toList(growable: false);
-    final hasEveryType = types.length == _accommodationFilters.length - 1;
+    final amenities = _amenityOptions.where(_selectedAmenities.contains).toList(growable: false);
+    final types = _accommodationOptions.skip(1).where(_selectedAccommodationTypes.contains).toList(growable: false);
+    final hasEveryType = types.length == _accommodationOptions.length - 1;
     final settings = HotelFilterSettings(
       minimumPrice: _values.start,
       maximumPrice: _values.end,

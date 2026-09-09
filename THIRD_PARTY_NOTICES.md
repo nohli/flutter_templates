@@ -20,4 +20,4 @@ The Hotel sample contains a rating control distributed under the MIT License wit
 
 ## Current product artwork
 
-The current UI Templates launcher icon and Google Play feature graphic are project-owned assets. They do not use the Flutter logo or another Google product mark.
+The current UI Templates launcher icon and Google Play feature graphic are project-owned compositions depicting representative iOS, Android, web, and desktop interfaces. The miniature `flutter.dev` page includes the Flutter and Dart logos. Flutter, Dart, and the related logos are trademarks of Google LLC; UI Templates is not affiliated with or sponsored by Google LLC.

@@ -152,7 +152,9 @@ void main() {
     expect(releaseNotes, <Object?>[
       <String, String>{
         'language': 'en-US',
-        'text': "Please explore the app's main flows and report anything confusing, incorrect, or unstable.",
+        'text':
+            "Please explore the app's main flows and new cross-platform icon, then report anything confusing, "
+            'incorrect, or unstable.',
       },
     ]);
     expect(File('release_notes_en-US.txt').existsSync(), isFalse);
@@ -314,9 +316,15 @@ void main() {
 
   test('one canonical icon source owns every generated launcher family', () async {
     final launcherConfig = _asYamlMap(_loadYamlMap('pubspec.yaml')['flutter_launcher_icons']);
+    final webIconConfig = _asYamlMap(launcherConfig['web']);
+    final androidColors = File('android/app/src/main/res/values/colors.xml').readAsStringSync();
+    final webManifest = jsonDecode(File('web/manifest.json').readAsStringSync()) as Map<String, dynamic>;
+
     expect(launcherConfig['image_path'], 'icon/app_icon.png');
     expect(launcherConfig['adaptive_icon_foreground'], 'icon/adaptive_foreground.png');
-    expect(_asYamlMap(launcherConfig['web'])['image_path'], 'icon/app_icon.png');
+    expect(androidColors, contains(launcherConfig['adaptive_icon_background']));
+    expect(webIconConfig['image_path'], 'icon/app_icon.png');
+    expect(webManifest['background_color'], webIconConfig['background_color']);
     expect(_asYamlMap(launcherConfig['windows'])['image_path'], 'icon/app_icon.png');
     expect(_asYamlMap(launcherConfig['macos'])['image_path'], 'icon/app_icon.png');
     expect(File('icon/app_icon.png').existsSync(), isTrue);
@@ -365,7 +373,7 @@ void main() {
     expect(webIndex, contains('name="color-scheme" content="light"'));
     expect(webIndex, contains('name="theme-color" content="#FEFEFE"'));
     expect(webIndex, isNot(contains('prefers-color-scheme')));
-    expect(webManifest['background_color'], '#FEFEFE');
+    expect(webManifest['background_color'], '#F8F2E8');
     expect(webManifest.containsKey('orientation'), isFalse);
   });
 }

@@ -101,13 +101,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         ),
                       ),
                       _buildComposer(),
-                      if (_errorMessage != null)
+                      if (_errorMessage case final errorMessage?)
                         Padding(
                           padding: const EdgeInsets.fromLTRB(32, 8, 32, 0),
                           child: Semantics(
                             liveRegion: true,
                             child: Text(
-                              _errorMessage!,
+                              errorMessage,
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Theme.of(context).colorScheme.error),
                             ),

@@ -4,10 +4,28 @@ formatter:
   page_width: 120
 
 analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
   errors:
     todo: info
 
 linter:
   rules:
+    always_put_required_named_parameters_first: true
+    avoid_print: true
+    depend_on_referenced_packages: true
     omit_obvious_local_variable_types: true
     omit_obvious_property_types: true
+    prefer_const_constructors: true
+    prefer_final_locals: true
+    prefer_relative_imports: true
+    prefer_single_quotes: true
+    sort_child_properties_last: true
+    sort_constructors_first: true
+    sort_pub_dependencies: true
+    unnecessary_breaks: true
+    unawaited_futures: true
+    use_build_context_synchronously: true
+    use_key_in_widget_constructors: true

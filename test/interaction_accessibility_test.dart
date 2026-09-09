@@ -12,6 +12,7 @@ import 'package:templates/fitness_app/fitness_app_theme.dart';
 import 'package:templates/fitness_app/ui_view/area_list_view.dart';
 import 'package:templates/hotel_booking/custom_calendar.dart';
 import 'package:templates/hotel_booking/hotel_home_screen.dart';
+import 'package:templates/hotel_booking/model/hotel_list_data.dart';
 import 'package:templates/hotel_booking/smooth_star_rating.dart';
 import 'package:templates/home_screen.dart';
 
@@ -28,6 +29,15 @@ void main() {
 
     expect(singleLesson.lessonLabel, '1 lesson');
     expect(Category.categoryList.first.lessonLabel, '24 lessons');
+  });
+
+  test('hotel samples use stable unique identities', () {
+    final hotels = HotelListData.samples;
+    final ids = hotels.map((HotelListData hotel) => hotel.id).toSet();
+
+    expect(ids, hasLength(hotels.length));
+    expect(ids, everyElement(isNotEmpty));
+    expect(hotels, everyElement(predicate<HotelListData>((HotelListData hotel) => hotel.id != hotel.imagePath)));
   });
 
   testWidgets('design course category choices and search remain accessible and truthful', (WidgetTester tester) async {

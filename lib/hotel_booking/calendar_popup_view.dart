@@ -25,15 +25,15 @@ class CalendarPopupView extends StatefulWidget {
 }
 
 class _CalendarPopupViewState extends State<CalendarPopupView> with TickerProviderStateMixin {
-  DateTime? startDate;
-  DateTime? endDate;
+  DateTime? _startDate;
+  DateTime? _endDate;
   late final AnimationController animationController;
   @override
   void initState() {
     super.initState();
     animationController = AnimationController(duration: const Duration(milliseconds: 400), vsync: this);
-    startDate = widget.initialStartDate;
-    endDate = widget.initialEndDate;
+    _startDate = widget.initialStartDate;
+    _endDate = widget.initialEndDate;
   }
 
   @override
@@ -109,8 +109,8 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with TickerProvid
                                       initialStartDate: widget.initialStartDate,
                                       draftDateChange: (DateTime? start, DateTime? end) {
                                         setState(() {
-                                          startDate = start;
-                                          endDate = end;
+                                          _startDate = start;
+                                          _endDate = end;
                                         });
                                       },
                                     ),
@@ -140,16 +140,16 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with TickerProvid
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            _buildStackedDateSummaryValue(colors, label: 'From', date: startDate),
+            _buildStackedDateSummaryValue(colors, label: 'From', date: _startDate),
             const SizedBox(height: 12),
-            _buildStackedDateSummaryValue(colors, label: 'To', date: endDate),
+            _buildStackedDateSummaryValue(colors, label: 'To', date: _endDate),
           ],
         ),
       );
     }
 
-    final from = _buildDateSummaryValue(colors, label: 'From', date: startDate);
-    final to = _buildDateSummaryValue(colors, label: 'To', date: endDate);
+    final from = _buildDateSummaryValue(colors, label: 'From', date: _startDate);
+    final to = _buildDateSummaryValue(colors, label: 'To', date: _endDate);
 
     return Row(
       children: <Widget>[
@@ -209,8 +209,8 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with TickerProvid
   }
 
   Widget _buildApplyButton() {
-    final selectedStartDate = startDate;
-    final selectedEndDate = endDate;
+    final selectedStartDate = _startDate;
+    final selectedEndDate = _endDate;
     final selectionIsValid = _selectionIsValid(selectedStartDate, selectedEndDate);
 
     return Padding(

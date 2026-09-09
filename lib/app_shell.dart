@@ -84,8 +84,8 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
   }
 
   void _endDrawerDrag(DragEndDetails details) {
-    final double velocity = details.primaryVelocity ?? 0;
-    final bool shouldOpen = velocity > 300 || (velocity >= -300 && _drawerController.value >= 0.5);
+    final velocity = details.primaryVelocity ?? 0;
+    final shouldOpen = velocity > 300 || (velocity >= -300 && _drawerController.value >= 0.5);
     _settleDrawer(shouldOpen: shouldOpen);
   }
 
@@ -105,7 +105,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final double drawerWidth = constraints.maxWidth * 0.75;
+        final drawerWidth = constraints.maxWidth * 0.75;
         return AnimatedBuilder(
           animation: _drawerController,
           builder: (BuildContext context, Widget? child) {

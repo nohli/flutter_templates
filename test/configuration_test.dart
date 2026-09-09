@@ -9,35 +9,35 @@ import 'package:yaml/yaml.dart';
 
 void main() {
   test('platform targets share the canonical identity and Flutter version source', () {
-    final String pubspec = File('pubspec.yaml').readAsStringSync();
-    final String appEntryPoint = File('lib/main.dart').readAsStringSync();
-    final String iosInfo = File('ios/Runner/Info.plist').readAsStringSync();
-    final String iosFrameworkInfo = File('ios/Flutter/AppFrameworkInfo.plist').readAsStringSync();
-    final String iosPodfile = File('ios/Podfile').readAsStringSync();
-    final String iosProject = File('ios/Runner.xcodeproj/project.pbxproj').readAsStringSync();
-    final String macOSConfig = File('macos/Runner/Configs/AppInfo.xcconfig').readAsStringSync();
-    final String androidBuild = File('android/app/build.gradle').readAsStringSync();
-    final String androidManifest = File('android/app/src/main/AndroidManifest.xml').readAsStringSync();
-    final String androidDebugManifest = File('android/app/src/debug/AndroidManifest.xml').readAsStringSync();
-    final String androidProfileManifest = File('android/app/src/profile/AndroidManifest.xml').readAsStringSync();
-    final String androidActivity = File(
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    final appEntryPoint = File('lib/main.dart').readAsStringSync();
+    final iosInfo = File('ios/Runner/Info.plist').readAsStringSync();
+    final iosFrameworkInfo = File('ios/Flutter/AppFrameworkInfo.plist').readAsStringSync();
+    final iosPodfile = File('ios/Podfile').readAsStringSync();
+    final iosProject = File('ios/Runner.xcodeproj/project.pbxproj').readAsStringSync();
+    final macOSConfig = File('macos/Runner/Configs/AppInfo.xcconfig').readAsStringSync();
+    final androidBuild = File('android/app/build.gradle').readAsStringSync();
+    final androidManifest = File('android/app/src/main/AndroidManifest.xml').readAsStringSync();
+    final androidDebugManifest = File('android/app/src/debug/AndroidManifest.xml').readAsStringSync();
+    final androidProfileManifest = File('android/app/src/profile/AndroidManifest.xml').readAsStringSync();
+    final androidActivity = File(
       'android/app/src/main/kotlin/com/achimsapps/templates/MainActivity.kt',
     ).readAsStringSync();
-    final String linuxProject = File('linux/CMakeLists.txt').readAsStringSync();
-    final String windowsCMake = File('windows/runner/CMakeLists.txt').readAsStringSync();
-    final String windowsMetadata = File('windows/runner/Runner.rc').readAsStringSync();
-    final String windowsRunner = File('windows/runner/main.cpp').readAsStringSync();
-    final String codemagic = File('codemagic.yaml').readAsStringSync();
+    final linuxProject = File('linux/CMakeLists.txt').readAsStringSync();
+    final windowsCMake = File('windows/runner/CMakeLists.txt').readAsStringSync();
+    final windowsMetadata = File('windows/runner/Runner.rc').readAsStringSync();
+    final windowsRunner = File('windows/runner/main.cpp').readAsStringSync();
+    final codemagic = File('codemagic.yaml').readAsStringSync();
     final fvmConfig = jsonDecode(File('.fvmrc').readAsStringSync()) as Map<String, dynamic>;
 
-    final RegExpMatch? version = RegExp(r'^version: ([^+\s]+)\+(\d+)$', multiLine: true).firstMatch(pubspec);
+    final version = RegExp(r'^version: ([^+\s]+)\+(\d+)$', multiLine: true).firstMatch(pubspec);
     expect(version, isNotNull);
     expect(version!.group(1), isNotEmpty);
     expect(int.parse(version.group(2)!), greaterThan(0));
 
     expect(iosInfo, contains(r'<string>$(FLUTTER_BUILD_NAME)</string>'));
     expect(iosInfo, contains(r'<string>$(FLUTTER_BUILD_NUMBER)</string>'));
-    final String? iPadOrientations = RegExp(
+    final iPadOrientations = RegExp(
       r'<key>UISupportedInterfaceOrientations~ipad</key>\s*<array>(.*?)</array>',
       dotAll: true,
     ).firstMatch(iosInfo)?.group(1);
@@ -89,8 +89,8 @@ void main() {
   });
 
   test('release workflows are deterministic and keep secrets external', () {
-    final YamlMap codemagic = _loadYamlMap('codemagic.yaml');
-    final YamlMap workflows = _asYamlMap(codemagic['workflows']);
+    final codemagic = _loadYamlMap('codemagic.yaml');
+    final workflows = _asYamlMap(codemagic['workflows']);
     expect(workflows.keys, containsAll(<String>['templates-ios', 'templates-android']));
     expect(workflows, hasLength(2));
 
@@ -98,18 +98,16 @@ void main() {
       (id: 'templates-ios', platform: 'iOS', buildStep: 'Build IPA'),
       (id: 'templates-android', platform: 'Android', buildStep: 'Build App Bundle'),
     ]) {
-      final YamlMap workflow = _asYamlMap(workflows[workflowCase.id]);
-      final YamlMap environment = _asYamlMap(workflow['environment']);
-      final YamlMap variables = _asYamlMap(environment['vars']);
-      final YamlList scripts = _asYamlList(workflow['scripts']);
-      final YamlMap buildStep = scripts
-          .map(_asYamlMap)
-          .singleWhere((YamlMap step) => step['name'] == workflowCase.buildStep);
-      final List<Object?> scriptNames = scripts.map(_asYamlMap).map((YamlMap step) => step['name']).toList();
+      final workflow = _asYamlMap(workflows[workflowCase.id]);
+      final environment = _asYamlMap(workflow['environment']);
+      final variables = _asYamlMap(environment['vars']);
+      final scripts = _asYamlList(workflow['scripts']);
+      final buildStep = scripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == workflowCase.buildStep);
+      final scriptNames = scripts.map(_asYamlMap).map((YamlMap step) => step['name']).toList();
       final getPackagesScript =
           scripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Get Packages')['script'] as String;
-      final YamlMap email = _asYamlMap(_asYamlMap(workflow['publishing'])['email']);
-      final YamlMap notifications = _asYamlMap(email['notify']);
+      final email = _asYamlMap(_asYamlMap(workflow['publishing'])['email']);
+      final notifications = _asYamlMap(email['notify']);
       final buildScript = buildStep['script'] as String;
 
       expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
@@ -128,13 +126,13 @@ void main() {
       expect(notifications['failure'], isTrue);
     }
 
-    final YamlMap iosEnvironment = _asYamlMap(_asYamlMap(workflows['templates-ios'])['environment']);
-    final YamlList iosScripts = _asYamlList(_asYamlMap(workflows['templates-ios'])['scripts']);
+    final iosEnvironment = _asYamlMap(_asYamlMap(workflows['templates-ios'])['environment']);
+    final iosScripts = _asYamlList(_asYamlMap(workflows['templates-ios'])['scripts']);
     final fetchSigningScript =
         iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Fetch Signing Files')['script']
             as String;
     expect(_asYamlList(iosEnvironment['groups']), <String>['appstore_credentials', 'deployment']);
-    final YamlMap iosVariables = _asYamlMap(iosEnvironment['vars']);
+    final iosVariables = _asYamlMap(iosEnvironment['vars']);
     expect(iosVariables.containsKey('APP_STORE_CONNECT_KEY_IDENTIFIER'), isFalse);
     expect(iosVariables.containsKey('APP_STORE_CONNECT_ISSUER_ID'), isFalse);
     expect(iosVariables['BUNDLE_ID'], 'com.achimsapps.templates');
@@ -142,8 +140,8 @@ void main() {
     expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_ISSUER_ID:?'));
     expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_PRIVATE_KEY:?'));
     expect(fetchSigningScript, contains(r'${CERTIFICATE_PRIVATE_KEY:?'));
-    final YamlMap iosPublishing = _asYamlMap(_asYamlMap(workflows['templates-ios'])['publishing']);
-    final YamlMap appStoreConnect = _asYamlMap(iosPublishing['app_store_connect']);
+    final iosPublishing = _asYamlMap(_asYamlMap(workflows['templates-ios'])['publishing']);
+    final appStoreConnect = _asYamlMap(iosPublishing['app_store_connect']);
     expect(appStoreConnect['api_key'], r'$APP_STORE_CONNECT_PRIVATE_KEY');
     expect(appStoreConnect['key_id'], r'$APP_STORE_CONNECT_KEY_IDENTIFIER');
     expect(appStoreConnect['issuer_id'], r'$APP_STORE_CONNECT_ISSUER_ID');
@@ -159,22 +157,22 @@ void main() {
     ]);
     expect(File('release_notes_en-US.txt').existsSync(), isFalse);
 
-    final YamlMap androidWorkflow = _asYamlMap(workflows['templates-android']);
-    final YamlMap androidEnvironment = _asYamlMap(androidWorkflow['environment']);
+    final androidWorkflow = _asYamlMap(workflows['templates-android']);
+    final androidEnvironment = _asYamlMap(androidWorkflow['environment']);
     expect(_asYamlList(androidEnvironment['groups']), contains('google_play_credentials'));
-    final YamlMap androidPublishing = _asYamlMap(androidWorkflow['publishing']);
-    final YamlMap googlePlay = _asYamlMap(androidPublishing['google_play']);
+    final androidPublishing = _asYamlMap(androidWorkflow['publishing']);
+    final googlePlay = _asYamlMap(androidPublishing['google_play']);
     expect(googlePlay['credentials'], r'$GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS');
     expect(googlePlay['track'], 'internal');
 
-    final String codemagicSource = File('codemagic.yaml').readAsStringSync();
+    final codemagicSource = File('codemagic.yaml').readAsStringSync();
     expect(codemagicSource, isNot(contains('FCI_CLONE_UNSHALLOW')));
     expect(codemagicSource, isNot(contains('storePassword:')));
     expect(codemagicSource, isNot(contains('keyPassword:')));
     expect(codemagicSource, isNot(contains('BEGIN PRIVATE KEY')));
     expect(File('android/key.properties').existsSync(), isFalse);
 
-    final String gitignore = File('.gitignore').readAsStringSync();
+    final gitignore = File('.gitignore').readAsStringSync();
     for (final secretPattern in <String>[
       '.env',
       '*.jks',
@@ -195,25 +193,25 @@ void main() {
       '.github/workflows/flutter_build.yml',
       '.github/workflows/flutter_checks.yml',
     ]) {
-      final YamlMap workflow = _loadYamlMap(workflowFile);
-      final YamlMap triggers = _asYamlMap(workflow['on']);
+      final workflow = _loadYamlMap(workflowFile);
+      final triggers = _asYamlMap(workflow['on']);
       expect(triggers.keys, containsAll(<String>['workflow_dispatch', 'pull_request']), reason: workflowFile);
       expect(triggers.containsKey('push'), isFalse, reason: workflowFile);
 
-      final YamlMap jobs = _asYamlMap(workflow['jobs']);
+      final jobs = _asYamlMap(workflow['jobs']);
       final expectedJobs = workflowFile.endsWith('flutter_build.yml')
           ? <String>{'build_android', 'build_ios'}
           : <String>{'check_formatting', 'analyze', 'test'};
       expect(jobs.keys.cast<String>().toSet(), expectedJobs, reason: workflowFile);
       for (final Object? jobValue in jobs.values) {
-        final YamlList steps = _asYamlList(_asYamlMap(jobValue)['steps']);
-        final YamlMap installFlutter = steps
+        final steps = _asYamlList(_asYamlMap(jobValue)['steps']);
+        final installFlutter = steps
             .map(_asYamlMap)
             .singleWhere((YamlMap step) => step['uses'] == 'subosito/flutter-action@v2');
         expect(_asYamlMap(installFlutter['with'])['flutter-version'], '3.44.9', reason: workflowFile);
       }
       if (workflowFile.endsWith('flutter_checks.yml')) {
-        final Iterable<String> commands = jobs.values
+        final commands = jobs.values
             .expand((Object? jobValue) => _asYamlList(_asYamlMap(jobValue)['steps']))
             .map(_asYamlMap)
             .map((YamlMap step) => step['run'])
@@ -226,17 +224,17 @@ void main() {
   });
 
   test('store metadata is factual, bounded, and carries the required trademark notice', () {
-    final String appleName = File('store/app-store/en-US/name.txt').readAsStringSync().trim();
-    final String appleSubtitle = File('store/app-store/en-US/subtitle.txt').readAsStringSync().trim();
-    final String appleDescription = File('store/app-store/en-US/description.txt').readAsStringSync();
-    final String playTitle = File('store/google-play/en-US/title.txt').readAsStringSync().trim();
-    final String playShortDescription = File('store/google-play/en-US/short_description.txt').readAsStringSync().trim();
-    final String playDescription = File('store/google-play/en-US/full_description.txt').readAsStringSync();
-    final String applePrivacyPolicyUrl = File('store/app-store/en-US/privacy_policy_url.txt').readAsStringSync().trim();
-    final String appleSupportUrl = File('store/app-store/en-US/support_url.txt').readAsStringSync().trim();
-    final String playPrivacyPolicyUrl = File('store/google-play/privacy_policy_url.txt').readAsStringSync().trim();
-    final String playSupportEmail = File('store/google-play/support_email.txt').readAsStringSync().trim();
-    final String playWebsiteUrl = File('store/google-play/website_url.txt').readAsStringSync().trim();
+    final appleName = File('store/app-store/en-US/name.txt').readAsStringSync().trim();
+    final appleSubtitle = File('store/app-store/en-US/subtitle.txt').readAsStringSync().trim();
+    final appleDescription = File('store/app-store/en-US/description.txt').readAsStringSync();
+    final playTitle = File('store/google-play/en-US/title.txt').readAsStringSync().trim();
+    final playShortDescription = File('store/google-play/en-US/short_description.txt').readAsStringSync().trim();
+    final playDescription = File('store/google-play/en-US/full_description.txt').readAsStringSync();
+    final applePrivacyPolicyUrl = File('store/app-store/en-US/privacy_policy_url.txt').readAsStringSync().trim();
+    final appleSupportUrl = File('store/app-store/en-US/support_url.txt').readAsStringSync().trim();
+    final playPrivacyPolicyUrl = File('store/google-play/privacy_policy_url.txt').readAsStringSync().trim();
+    final playSupportEmail = File('store/google-play/support_email.txt').readAsStringSync().trim();
+    final playWebsiteUrl = File('store/google-play/website_url.txt').readAsStringSync().trim();
 
     expect(appleName, AppIdentity.storeName);
     expect(playTitle, AppIdentity.storeName);
@@ -258,10 +256,10 @@ void main() {
   });
 
   test('bundled font licenses preserve their exact upstream notices', () {
-    final String pubspec = File('pubspec.yaml').readAsStringSync();
-    final String workSansLicense = File('assets/fonts/WorkSans-LICENSE.txt').readAsStringSync();
-    final String robotoLicense = File('assets/fonts/Roboto-LICENSE.txt').readAsStringSync();
-    final String smoothStarRatingLicense = File('assets/licenses/smooth_star_rating-LICENSE.txt').readAsStringSync();
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    final workSansLicense = File('assets/fonts/WorkSans-LICENSE.txt').readAsStringSync();
+    final robotoLicense = File('assets/fonts/Roboto-LICENSE.txt').readAsStringSync();
+    final smoothStarRatingLicense = File('assets/licenses/smooth_star_rating-LICENSE.txt').readAsStringSync();
 
     expect(pubspec, contains('- assets/fonts/WorkSans-LICENSE.txt'));
     expect(pubspec, contains('- assets/fonts/Roboto-LICENSE.txt'));
@@ -315,7 +313,7 @@ void main() {
   });
 
   test('one canonical icon source owns every generated launcher family', () async {
-    final YamlMap launcherConfig = _asYamlMap(_loadYamlMap('pubspec.yaml')['flutter_launcher_icons']);
+    final launcherConfig = _asYamlMap(_loadYamlMap('pubspec.yaml')['flutter_launcher_icons']);
     expect(launcherConfig['image_path'], 'icon/app_icon.png');
     expect(launcherConfig['adaptive_icon_foreground'], 'icon/adaptive_foreground.png');
     expect(_asYamlMap(launcherConfig['web'])['image_path'], 'icon/app_icon.png');
@@ -337,15 +335,13 @@ void main() {
   });
 
   test('startup surfaces keep the adaptive iOS launch and fixed-light platform shells', () {
-    final String launchStoryboard = File('ios/Runner/Base.lproj/LaunchScreen.storyboard').readAsStringSync();
-    final String mainStoryboard = File('ios/Runner/Base.lproj/Main.storyboard').readAsStringSync();
-    final String iosInfo = File('ios/Runner/Info.plist').readAsStringSync();
-    final String androidLaunch = File('android/app/src/main/res/drawable/launch_background.xml').readAsStringSync();
-    final String androidModernLaunch = File(
-      'android/app/src/main/res/drawable-v21/launch_background.xml',
-    ).readAsStringSync();
-    final String androidNightStyles = File('android/app/src/main/res/values-night/styles.xml').readAsStringSync();
-    final String webIndex = File('web/index.html').readAsStringSync();
+    final launchStoryboard = File('ios/Runner/Base.lproj/LaunchScreen.storyboard').readAsStringSync();
+    final mainStoryboard = File('ios/Runner/Base.lproj/Main.storyboard').readAsStringSync();
+    final iosInfo = File('ios/Runner/Info.plist').readAsStringSync();
+    final androidLaunch = File('android/app/src/main/res/drawable/launch_background.xml').readAsStringSync();
+    final androidModernLaunch = File('android/app/src/main/res/drawable-v21/launch_background.xml').readAsStringSync();
+    final androidNightStyles = File('android/app/src/main/res/values-night/styles.xml').readAsStringSync();
+    final webIndex = File('web/index.html').readAsStringSync();
     final webManifest = jsonDecode(File('web/manifest.json').readAsStringSync()) as Map<String, dynamic>;
 
     expect(launchStoryboard, contains('<color key="backgroundColor" systemColor="systemBackgroundColor"'));

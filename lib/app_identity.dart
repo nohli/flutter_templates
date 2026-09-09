@@ -11,8 +11,8 @@ class AppIdentity {
   static const privacyPolicyUrl = 'https://achim.io/privacy';
   static const supportUrl = 'https://achim.io';
   static const supportEmail = 'templates-app@achim.io';
-  static final Uri privacyPolicyUri = Uri.parse(privacyPolicyUrl);
-  static final Uri supportUri = Uri.parse(supportUrl);
-  static final Uri sourceUri = Uri.parse('https://github.com/nohli/flutter_templates');
-  static final Uri upstreamSourceUri = Uri.parse('https://github.com/mitesh77/Best-Flutter-UI-Templates');
+  static final privacyPolicyUri = Uri.parse(privacyPolicyUrl);
+  static final supportUri = Uri.parse(supportUrl);
+  static final sourceUri = Uri.parse('https://github.com/nohli/flutter_templates');
+  static final upstreamSourceUri = Uri.parse('https://github.com/mitesh77/Best-Flutter-UI-Templates');
 }

@@ -8,11 +8,9 @@ void registerBundledFontLicenses() {
   _areFontLicensesRegistered = true;
 
   LicenseRegistry.addLicense(() async* {
-    final String workSansLicense = await rootBundle.loadString('assets/fonts/WorkSans-LICENSE.txt');
-    final String robotoLicense = await rootBundle.loadString('assets/fonts/Roboto-LICENSE.txt');
-    final String smoothStarRatingLicense = await rootBundle.loadString(
-      'assets/licenses/smooth_star_rating-LICENSE.txt',
-    );
+    final workSansLicense = await rootBundle.loadString('assets/fonts/WorkSans-LICENSE.txt');
+    final robotoLicense = await rootBundle.loadString('assets/fonts/Roboto-LICENSE.txt');
+    final smoothStarRatingLicense = await rootBundle.loadString('assets/licenses/smooth_star_rating-LICENSE.txt');
 
     yield LicenseEntryWithLineBreaks(<String>['Work Sans'], workSansLicense);
     yield LicenseEntryWithLineBreaks(<String>['Roboto'], robotoLicense);

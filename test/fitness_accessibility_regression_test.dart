@@ -264,26 +264,24 @@ void main() {
 
     await _pumpFitnessScreen(tester, TrainingScreen(animation: controller), size: const Size(430, 1800));
 
-    final Finder area = find.byType(AreaListView);
+    final area = find.byType(AreaListView);
     expect(area, findsOneWidget);
-    final FadeTransition entrance = tester.widget<FadeTransition>(
+    final entrance = tester.widget<FadeTransition>(
       find.descendant(of: area, matching: find.byType(FadeTransition)).first,
     );
     expect(entrance.opacity.value, greaterThan(0));
     expect(entrance.opacity.value, lessThan(1));
 
-    final Transform translation = tester.widget<Transform>(
-      find.descendant(of: area, matching: find.byType(Transform)).first,
-    );
+    final translation = tester.widget<Transform>(find.descendant(of: area, matching: find.byType(Transform)).first);
     expect(translation.transform.getTranslation().y, greaterThan(0));
 
     controller.value = 1;
     await tester.pump();
 
-    final FadeTransition settledEntrance = tester.widget<FadeTransition>(
+    final settledEntrance = tester.widget<FadeTransition>(
       find.descendant(of: area, matching: find.byType(FadeTransition)).first,
     );
-    final Transform settledTranslation = tester.widget<Transform>(
+    final settledTranslation = tester.widget<Transform>(
       find.descendant(of: area, matching: find.byType(Transform)).first,
     );
     expect(settledEntrance.opacity.value, 1);
@@ -295,15 +293,15 @@ void main() {
     _evictAssets(<String>['assets/fitness_app/bottle.png']);
     await _pumpFitnessScreen(tester, const SizedBox(width: 60, height: 160, child: WaveView(percentageValue: 60)));
 
-    final double initialY = _firstWaveY(tester);
+    final initialY = _firstWaveY(tester);
     await tester.pump(const Duration(milliseconds: 500));
-    final double quarterCycleY = _firstWaveY(tester);
+    final quarterCycleY = _firstWaveY(tester);
     await tester.pump(const Duration(milliseconds: 500));
-    final double halfCycleY = _firstWaveY(tester);
+    final halfCycleY = _firstWaveY(tester);
     await tester.pump(const Duration(milliseconds: 500));
-    final double threeQuarterCycleY = _firstWaveY(tester);
+    final threeQuarterCycleY = _firstWaveY(tester);
     await tester.pump(const Duration(milliseconds: 500));
-    final double fullCycleY = _firstWaveY(tester);
+    final fullCycleY = _firstWaveY(tester);
 
     expect(quarterCycleY - initialY, closeTo(4, 0.3));
     expect(halfCycleY, closeTo(initialY, 0.3));
@@ -352,7 +350,7 @@ void main() {
 }
 
 double _firstWaveY(WidgetTester tester) {
-  final ClipPath clipPath = tester.widget<ClipPath>(find.byType(ClipPath).first);
+  final clipPath = tester.widget<ClipPath>(find.byType(ClipPath).first);
   final clipper = clipPath.clipper! as WaveClipper;
 
   return clipper.verticalOffset;
@@ -383,7 +381,7 @@ Future<void> _pumpFitnessScreen(
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
-  final MediaQueryData mediaQuery = MediaQueryData.fromView(
+  final mediaQuery = MediaQueryData.fromView(
     tester.view,
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
 

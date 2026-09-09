@@ -14,7 +14,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
   static const _layoutPreferenceKey = 'home-gallery-multiple-columns';
 
-  final List<HomeList> _homeList = HomeList.homeList;
+  final _homeList = HomeList.homeList;
   var _multiple = true;
   var _restoredLayoutPreference = false;
 
@@ -77,13 +77,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   ),
                   itemCount: _homeList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final Animation<double> animation = Tween<double>(begin: 0, end: 1).animate(
+                    final animation = Tween<double>(begin: 0, end: 1).animate(
                       CurvedAnimation(
                         parent: _animationController,
                         curve: Interval((1 / _homeList.length) * index, 1, curve: Curves.fastOutSlowIn),
                       ),
                     );
-                    final HomeList item = _homeList[index];
+                    final item = _homeList[index];
                     return _HomeListCard(
                       animation: animation,
                       listData: item,
@@ -124,8 +124,8 @@ class _GalleryHeader extends StatelessWidget {
           textScaler: MediaQuery.textScalerOf(context),
           maxLines: 1,
         )..layout();
-        final bool stackTitle = titlePainter.width > constraints.maxWidth - 112;
-        final Widget toggle = Padding(
+        final stackTitle = titlePainter.width > constraints.maxWidth - 112;
+        final toggle = Padding(
           padding: const EdgeInsets.only(right: 8),
           child: SizedBox.square(
             dimension: 48,

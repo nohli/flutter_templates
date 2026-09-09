@@ -14,7 +14,7 @@ import 'package:templates/invite_friend_screen.dart';
 
 void main() {
   test('feedback email preserves spaces and reserved characters', () {
-    final Uri uri = feedbackEmailUri('Hotel & fitness + course? Yes.');
+    final uri = feedbackEmailUri('Hotel & fitness + course? Yes.');
 
     expect(uri.scheme, 'mailto');
     expect(uri.path, AppIdentity.supportEmail);

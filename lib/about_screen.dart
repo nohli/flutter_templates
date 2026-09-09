@@ -23,7 +23,7 @@ class _AboutScreenState extends State<AboutScreen> {
       _isOpeningLink = true;
     });
     try {
-      final bool launched = await widget.launcher(uri);
+      final launched = await widget.launcher(uri);
       if (!launched) debugPrint('Could not open $uri.');
     } catch (error) {
       debugPrint('Could not open $uri: $error');
@@ -37,10 +37,7 @@ class _AboutScreenState extends State<AboutScreen> {
   @override
   Widget build(BuildContext context) {
     final showUpstreamSource = Theme.of(context).platform != TargetPlatform.android;
-    final ButtonStyle linkStyle = TextButton.styleFrom(
-      minimumSize: const Size(0, 48),
-      foregroundColor: AppTheme.actionBlue,
-    );
+    final linkStyle = TextButton.styleFrom(minimumSize: const Size(0, 48), foregroundColor: AppTheme.actionBlue);
 
     return ColoredBox(
       color: const Color(0xFFFEFEFE),

@@ -266,7 +266,7 @@ class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
-    final int horizontalShift = horizontalOffset.toInt();
+    final horizontalShift = horizontalOffset.toInt();
     final wavePoints = <Offset>[
       for (int i = -2 - horizontalShift; i <= 62; i++) Offset(i.toDouble() + horizontalShift, verticalOffset),
     ];

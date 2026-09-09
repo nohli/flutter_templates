@@ -14,7 +14,7 @@ class MealsListView extends StatefulWidget {
 }
 
 class _MealsListViewState extends State<MealsListView> with SingleTickerProviderStateMixin {
-  final List<MealsListData> _meals = MealsListData.samples;
+  final _meals = MealsListData.samples;
 
   late final AnimationController _animationController;
   @override

@@ -47,8 +47,8 @@ void main() {
     ];
 
     for (final themeCase in cases) {
-      final ThemeData theme = themeCase.build();
-      final ColorScheme colors = theme.colorScheme;
+      final theme = themeCase.build();
+      final colors = theme.colorScheme;
 
       expect(theme.brightness, Brightness.light, reason: themeCase.name);
       expect(theme.useMaterial3, isFalse, reason: themeCase.name);
@@ -64,7 +64,7 @@ void main() {
   });
 
   test('template themes follow the runtime platform', () {
-    final TargetPlatform? originalPlatform = debugDefaultTargetPlatformOverride;
+    final originalPlatform = debugDefaultTargetPlatformOverride;
     addTearDown(() => debugDefaultTargetPlatformOverride = originalPlatform);
 
     for (final TargetPlatform platform in TargetPlatform.values) {
@@ -95,7 +95,7 @@ void main() {
     await tester.pumpWidget(const MyApp());
     await tester.pump();
 
-    final MaterialApp app = tester.widget<MaterialApp>(find.byType(MaterialApp));
+    final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
     expect(app.theme?.useMaterial3, isFalse);
     expect(app.darkTheme, isNull);
     expect(Theme.of(tester.element(find.byType(AppShell))).brightness, Brightness.light);
@@ -103,7 +103,7 @@ void main() {
   });
 
   testWidgets('template surfaces inherit accessible fixed-light semantic themes', (WidgetTester tester) async {
-    final SemanticsHandle semantics = tester.ensureSemantics();
+    final semantics = tester.ensureSemantics();
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
     addTearDown(tester.view.reset);
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
@@ -144,9 +144,7 @@ void main() {
     await _pumpThemedScreen(tester, const HotelHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     await tester.pump(const Duration(seconds: 2));
     _expectNoLayoutException(tester);
-    final Finder hotelScroll = find
-        .descendant(of: find.byType(HotelHomeScreen), matching: find.byType(Scrollable))
-        .first;
+    final hotelScroll = find.descendant(of: find.byType(HotelHomeScreen), matching: find.byType(Scrollable)).first;
     await tester.dragUntilVisible(find.text('Filter'), hotelScroll, const Offset(0, -180));
     await tester.pump();
     _expectNoLayoutException(tester);
@@ -156,9 +154,7 @@ void main() {
     await _pumpThemedScreen(tester, const FitnessAppHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     await tester.pump(const Duration(seconds: 2));
     _expectNoLayoutException(tester);
-    final Finder diaryList = find
-        .descendant(of: find.byType(FitnessAppHomeScreen), matching: find.byType(Scrollable))
-        .first;
+    final diaryList = find.descendant(of: find.byType(FitnessAppHomeScreen), matching: find.byType(Scrollable)).first;
     await tester.dragUntilVisible(find.text('Water'), diaryList, const Offset(0, -180));
     await tester.pump();
     _expectNoLayoutException(tester);
@@ -166,7 +162,7 @@ void main() {
 
     await tester.tap(find.bySemanticsLabel('Training').first);
     await tester.pump();
-    final Finder trainingList = find
+    final trainingList = find
         .descendant(of: find.byType(FitnessAppHomeScreen), matching: find.byType(Scrollable))
         .first;
     await tester.dragUntilVisible(find.text('Area of focus'), trainingList, const Offset(0, -180));
@@ -176,7 +172,7 @@ void main() {
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {
-    final SemanticsHandle semantics = tester.ensureSemantics();
+    final semantics = tester.ensureSemantics();
     addTearDown(tester.view.reset);
     _evictAssets(_hotelAssets);
     await _pumpThemedScreen(tester, const HotelHomeScreen(), size: const Size(320, 568), textScale: 3.2);
@@ -224,7 +220,7 @@ Future<void> _pumpThemedScreen(
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
-  final MediaQueryData mediaQuery = MediaQueryData.fromView(
+  final mediaQuery = MediaQueryData.fromView(
     tester.view,
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
 
@@ -241,7 +237,7 @@ Future<void> _pumpThemedScreen(
 }
 
 void _expectTemplateTheme(WidgetTester tester, Finder finder, ThemeData expected) {
-  final ThemeData actual = Theme.of(tester.element(finder));
+  final actual = Theme.of(tester.element(finder));
   expect(actual.brightness, Brightness.light);
   expect(actual.useMaterial3, isFalse);
   expect(actual.platform, defaultTargetPlatform);
@@ -257,11 +253,11 @@ Future<void> _expectAccessible(WidgetTester tester) async {
 }
 
 void _expectContrast(String name, Color foreground, Color background, double minimum) {
-  final double foregroundLuminance = foreground.computeLuminance();
-  final double backgroundLuminance = background.computeLuminance();
+  final foregroundLuminance = foreground.computeLuminance();
+  final backgroundLuminance = background.computeLuminance();
   final lighter = foregroundLuminance > backgroundLuminance ? foregroundLuminance : backgroundLuminance;
   final darker = foregroundLuminance > backgroundLuminance ? backgroundLuminance : foregroundLuminance;
-  final double ratio = (lighter + 0.05) / (darker + 0.05);
+  final ratio = (lighter + 0.05) / (darker + 0.05);
 
   expect(ratio, greaterThanOrEqualTo(minimum), reason: '$name measured ${ratio.toStringAsFixed(2)}:1');
 }

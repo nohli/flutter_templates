@@ -406,7 +406,7 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
       }
       if (_startDate != null && _endDate != null) {
         if (!_endDate!.isAfter(_startDate!)) {
-          final DateTime previousStartDate = _startDate!;
+          final previousStartDate = _startDate!;
           _startDate = _endDate;
           _endDate = previousStartDate;
         }
@@ -415,8 +415,8 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
         } else if (date.isAfter(_endDate!)) {
           _endDate = date;
         } else {
-          final int daysToStartDate = _startDate!.difference(date).inDays.abs();
-          final int daysToEndDate = _endDate!.difference(date).inDays.abs();
+          final daysToStartDate = _startDate!.difference(date).inDays.abs();
+          final daysToEndDate = _endDate!.difference(date).inDays.abs();
           daysToStartDate > daysToEndDate ? _endDate = date : _startDate = date;
         }
       }

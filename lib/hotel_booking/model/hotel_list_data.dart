@@ -1,5 +1,6 @@
 class HotelListData {
   const HotelListData({
+    required this.id,
     required this.imagePath,
     required this.title,
     required this.location,
@@ -11,6 +12,7 @@ class HotelListData {
     required this.accommodationType,
   });
 
+  final String id;
   final String imagePath;
   final String title;
   final String location;
@@ -23,6 +25,7 @@ class HotelListData {
 
   static const samples = <HotelListData>[
     HotelListData(
+      id: 'grand-royal-hotel-1',
       imagePath: 'assets/hotel/hotel_1.png',
       title: 'Grand Royal Hotel',
       location: 'Wembley, London',
@@ -34,6 +37,7 @@ class HotelListData {
       accommodationType: 'Hotel',
     ),
     HotelListData(
+      id: 'queen-hotel-1',
       imagePath: 'assets/hotel/hotel_2.png',
       title: 'Queen Hotel',
       location: 'Wembley, London',
@@ -45,6 +49,7 @@ class HotelListData {
       accommodationType: 'Apartment',
     ),
     HotelListData(
+      id: 'grand-royal-hotel-2',
       imagePath: 'assets/hotel/hotel_3.png',
       title: 'Grand Royal Hotel',
       location: 'Wembley, London',
@@ -56,6 +61,7 @@ class HotelListData {
       accommodationType: 'Home',
     ),
     HotelListData(
+      id: 'queen-hotel-2',
       imagePath: 'assets/hotel/hotel_4.png',
       title: 'Queen Hotel',
       location: 'Wembley, London',
@@ -67,6 +73,7 @@ class HotelListData {
       accommodationType: 'Villa',
     ),
     HotelListData(
+      id: 'grand-royal-hotel-3',
       imagePath: 'assets/hotel/hotel_5.png',
       title: 'Grand Royal Hotel',
       location: 'Wembley, London',

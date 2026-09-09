@@ -19,7 +19,7 @@ class HotelHomeScreen extends StatefulWidget {
 
 class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProviderStateMixin {
   final _scrollController = ScrollController();
-  final _favoriteHotelImages = <String>{};
+  final _favoriteHotelIds = <String>{};
 
   var _filterSettings = const HotelFilterSettings();
   var _query = '';
@@ -107,16 +107,16 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
                             );
                             return HotelListView(
                               hotelData: hotels[index],
-                              isFavorite: _favoriteHotelImages.contains(hotels[index].imagePath),
+                              isFavorite: _favoriteHotelIds.contains(hotels[index].id),
                               onFavoriteChanged: () {
                                 setState(() {
-                                  final imagePath = hotels[index].imagePath;
-                                  final isFavorite = _favoriteHotelImages.contains(imagePath);
+                                  final hotelId = hotels[index].id;
+                                  final isFavorite = _favoriteHotelIds.contains(hotelId);
 
                                   if (isFavorite) {
-                                    _favoriteHotelImages.remove(imagePath);
+                                    _favoriteHotelIds.remove(hotelId);
                                   } else {
-                                    _favoriteHotelImages.add(imagePath);
+                                    _favoriteHotelIds.add(hotelId);
                                   }
                                 });
                               },

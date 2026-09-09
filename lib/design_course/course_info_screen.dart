@@ -18,7 +18,6 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
   var _factsOpacity = 0.0;
   var _descriptionOpacity = 0.0;
   var _noticeOpacity = 0.0;
-  late final SavedCourses _savedCourses;
   late bool _isFavorite;
   var _animationsAreDisabled = false;
   var _entranceStarted = false;
@@ -27,8 +26,13 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
   @override
   void initState() {
     super.initState();
-    _savedCourses = widget.savedCourses;
-    _isFavorite = _savedCourses.contains(widget.course);
+    _isFavorite = widget.savedCourses.contains(widget.course);
+  }
+
+  @override
+  void didUpdateWidget(CourseInfoScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _isFavorite = widget.savedCourses.contains(widget.course);
   }
 
   @override
@@ -124,7 +128,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
 
   void _toggleFavorite() {
     setState(() {
-      _isFavorite = _savedCourses.toggle(widget.course);
+      _isFavorite = widget.savedCourses.toggle(widget.course);
     });
   }
 }

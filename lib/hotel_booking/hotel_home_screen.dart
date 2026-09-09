@@ -24,8 +24,8 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderSt
   var _filterSettings = const HotelFilterSettings();
   var _query = '';
 
-  var startDate = DateTime.now();
-  DateTime endDate = DateTime.now().add(const Duration(days: 5));
+  var _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now().add(const Duration(days: 5));
 
   late final AnimationController animationController;
   @override
@@ -165,7 +165,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderSt
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '${DateFormat('dd, MMM').format(startDate)} - ${DateFormat('dd, MMM').format(endDate)}',
+                      '${DateFormat('dd, MMM').format(_startDate)} - ${DateFormat('dd, MMM').format(_endDate)}',
                       style: const TextStyle(fontWeight: FontWeight.w100, fontSize: 16),
                     ),
                   ],
@@ -316,13 +316,13 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with TickerProviderSt
       builder: (BuildContext context) => MediaQuery.withNoTextScaling(
         child: CalendarPopupView(
           minimumDate: DateTime.now(),
-          initialEndDate: endDate,
-          initialStartDate: startDate,
+          initialEndDate: _endDate,
+          initialStartDate: _startDate,
           onApplyClick: (DateTime startData, DateTime endData) {
             if (mounted) {
               setState(() {
-                startDate = startData;
-                endDate = endData;
+                _startDate = startData;
+                _endDate = endData;
               });
             }
           },

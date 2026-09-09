@@ -19,11 +19,11 @@ void main() {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  runApp(const MyApp());
+  runApp(const UiTemplatesApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class UiTemplatesApp extends StatelessWidget {
+  const UiTemplatesApp({super.key});
 
   @override
   Widget build(BuildContext context) {

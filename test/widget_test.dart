@@ -51,6 +51,7 @@ void main() {
       ),
     );
 
+    expect(find.text('Tell us what you liked or what we could improve.'), findsOneWidget);
     await tester.tap(find.text('Send'));
     await tester.pump();
     expect(find.text('Enter your feedback before sending.'), findsOneWidget);

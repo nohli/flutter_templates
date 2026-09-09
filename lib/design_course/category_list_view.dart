@@ -4,11 +4,11 @@ import '../motion_preferences.dart';
 import 'design_course_app_theme.dart';
 import 'models/category.dart';
 
-const double _baseListHeight = 134;
-const double _baseCardWidth = 280;
-const double _baseArtworkSize = 86;
-const double _maximumArtworkSize = 120;
-const double _baseContentInset = 72;
+const _baseListHeight = 134;
+const _baseCardWidth = 280;
+const _baseArtworkSize = 86;
+const _maximumArtworkSize = 120;
+const _baseContentInset = 72;
 
 double _textScaleGrowth(BuildContext context) {
   final textScale = MediaQuery.textScalerOf(context).scale(1);

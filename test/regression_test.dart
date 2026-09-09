@@ -112,6 +112,28 @@ void main() {
     await _pumpScreen(tester, const SizedBox());
   });
 
+  testWidgets('course details keep primary content visible on phone viewports', (WidgetTester tester) async {
+    final course = Category.categoryList.first;
+    _evictAssets(<String>[course.imagePath]);
+    await _pumpScreen(
+      tester,
+      CourseInfoScreen(course: course, savedCourses: SavedCourses()),
+      size: const Size(402, 874),
+      disableAnimations: true,
+    );
+
+    final panelBounds = tester.getRect(find.byType(SingleChildScrollView));
+    final titleBounds = tester.getRect(find.text(course.title));
+    final priceBounds = tester.getRect(find.text('\$${course.money}'));
+    final backButtonBounds = tester.getRect(find.byTooltip('Back'));
+
+    expect(titleBounds.top, greaterThanOrEqualTo(panelBounds.top));
+    expect(titleBounds.bottom, lessThan(panelBounds.bottom));
+    expect(priceBounds.top, greaterThan(titleBounds.bottom));
+    expect(priceBounds.bottom, lessThan(panelBounds.bottom));
+    expect(backButtonBounds.size, const Size.square(kToolbarHeight));
+  });
+
   testWidgets('course details follow updated course and saved-state inputs', (WidgetTester tester) async {
     final firstCourse = Category.popularCourseList.first;
     final secondCourse = Category.popularCourseList.last;

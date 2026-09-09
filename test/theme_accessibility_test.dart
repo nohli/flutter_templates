@@ -78,7 +78,7 @@ void main() {
 
   testWidgets('opened navigation drawer meets text contrast guidelines', (WidgetTester tester) async {
     _evictAssets(_galleryAssets);
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const UiTemplatesApp());
     await tester.pump();
 
     await tester.tap(find.byTooltip('Open navigation menu'));
@@ -92,7 +92,7 @@ void main() {
     _evictAssets(_galleryAssets);
 
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const UiTemplatesApp());
     await tester.pump();
 
     final app = tester.widget<MaterialApp>(find.byType(MaterialApp));

@@ -1,6 +1,4 @@
-class AppIdentity {
-  AppIdentity._();
-
+abstract final class AppIdentity {
   static const name = 'UI Templates';
   static const storeName = 'UI Templates';
   static const summary = 'An interactive gallery of mobile interface patterns built with the Flutter SDK.';

@@ -361,13 +361,7 @@ void main() {
     final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     final hotel = HotelListData.samples.first;
-    final card = HotelListView(
-      hotelData: hotel,
-      isFavorite: false,
-      onFavoriteChanged: () {},
-      animationController: controller,
-      animation: controller,
-    );
+    final card = HotelListView(hotelData: hotel, isFavorite: false, onFavoriteChanged: () {}, animation: controller);
 
     await _pumpHotelWidget(tester, SingleChildScrollView(child: card));
 

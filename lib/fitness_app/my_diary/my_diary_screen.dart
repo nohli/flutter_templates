@@ -84,7 +84,6 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
             curve: const Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
-        animationController: widget.animationController,
       ),
     );
 
@@ -110,7 +109,6 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
             curve: const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
-        animationController: widget.animationController,
       ),
     );
 
@@ -122,7 +120,6 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
             curve: const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
-        mainScreenAnimationController: widget.animationController,
       ),
     );
 
@@ -136,7 +133,6 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
             curve: const Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
-        animationController: widget.animationController,
       ),
     );
 
@@ -161,7 +157,6 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
             curve: const Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
-        animationController: widget.animationController,
       ),
     );
 
@@ -184,7 +179,6 @@ class _MyDiaryScreenState extends State<MyDiaryScreen> with TickerProviderStateM
             curve: const Interval((1 / count) * 8, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
-        animationController: widget.animationController,
       ),
     );
   }

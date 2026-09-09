@@ -27,22 +27,22 @@ class CategoryListView extends StatefulWidget {
 }
 
 class _CategoryListViewState extends State<CategoryListView> with TickerProviderStateMixin {
-  late final AnimationController animationController;
+  late final AnimationController _animationController;
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
+    _animationController = AnimationController(duration: const Duration(milliseconds: 2000), vsync: this);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    startEntranceAnimation(context, animationController);
+    startEntranceAnimation(context, _animationController);
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -64,14 +64,13 @@ class _CategoryListViewState extends State<CategoryListView> with TickerProvider
             final count = widget.categories.length > 10 ? 10 : widget.categories.length;
             final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
               CurvedAnimation(
-                parent: animationController,
+                parent: _animationController,
                 curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
               ),
             );
             return _CategoryCourseCard(
               category: widget.categories[index],
               animation: animation,
-              animationController: animationController,
               callback: () => widget.onSelected(widget.categories[index]),
             );
           },
@@ -82,16 +81,10 @@ class _CategoryListViewState extends State<CategoryListView> with TickerProvider
 }
 
 class _CategoryCourseCard extends StatelessWidget {
-  const _CategoryCourseCard({
-    required this.category,
-    required this.animationController,
-    required this.animation,
-    required this.callback,
-  });
+  const _CategoryCourseCard({required this.category, required this.animation, required this.callback});
 
   final VoidCallback callback;
   final Category category;
-  final AnimationController animationController;
   final Animation<double> animation;
 
   @override
@@ -103,7 +96,7 @@ class _CategoryCourseCard extends StatelessWidget {
     final contentInset = _baseContentInset + artworkSize - _baseArtworkSize;
 
     return AnimatedBuilder(
-      animation: animationController,
+      animation: animation,
       builder: (BuildContext context, _) {
         return FadeTransition(
           opacity: animation,

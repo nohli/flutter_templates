@@ -9,7 +9,6 @@ class HotelListView extends StatelessWidget {
     required this.hotelData,
     required this.isFavorite,
     required this.onFavoriteChanged,
-    required this.animationController,
     required this.animation,
     super.key,
   });
@@ -17,7 +16,6 @@ class HotelListView extends StatelessWidget {
   final HotelListData hotelData;
   final bool isFavorite;
   final VoidCallback onFavoriteChanged;
-  final AnimationController animationController;
   final Animation<double> animation;
 
   @override
@@ -27,7 +25,7 @@ class HotelListView extends StatelessWidget {
     final stackDetails = MediaQuery.sizeOf(context).width < 360 || textScale >= 2;
     final showFullText = textScale >= 2;
     return AnimatedBuilder(
-      animation: animationController,
+      animation: animation,
       builder: (BuildContext context, _) {
         return FadeTransition(
           opacity: animation,

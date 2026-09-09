@@ -16,31 +16,21 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  late final List<PopularFilterListData> _popularFilters;
-  late final List<PopularFilterListData> _accommodationFilters;
+  final _popularFilters = PopularFilterListData.popularFilters;
+  final _accommodationFilters = PopularFilterListData.accommodationTypes;
 
   late RangeValues _values;
   late double _distanceValue;
+  late final Set<String> _selectedAmenities;
+  late final Set<String> _selectedAccommodationTypes;
 
   @override
   void initState() {
     super.initState();
     _values = RangeValues(widget.initialSettings.minimumPrice, widget.initialSettings.maximumPrice);
     _distanceValue = widget.initialSettings.maximumDistanceKm * 10;
-    _popularFilters = PopularFilterListData.popularFilters.map((PopularFilterListData filter) {
-      return PopularFilterListData(
-        label: filter.label,
-        isSelected: widget.initialSettings.amenities.contains(filter.label),
-      );
-    }).toList();
-    _accommodationFilters = PopularFilterListData.accommodationTypes.map((PopularFilterListData filter) {
-      final hasSpecificTypes = widget.initialSettings.accommodationTypes.isNotEmpty;
-      final isSelected = filter.label == 'All'
-          ? !hasSpecificTypes
-          : widget.initialSettings.accommodationTypes.contains(filter.label);
-
-      return PopularFilterListData(label: filter.label, isSelected: isSelected);
-    }).toList();
+    _selectedAmenities = widget.initialSettings.amenities.toSet();
+    _selectedAccommodationTypes = widget.initialSettings.accommodationTypes.toSet();
   }
 
   @override
@@ -76,27 +66,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
                 child: FilledButton(
                   style: FilledButton.styleFrom(minimumSize: const Size(double.infinity, 48)),
-                  onPressed: () {
-                    final amenities = _popularFilters
-                        .where((PopularFilterListData filter) => filter.isSelected)
-                        .map((PopularFilterListData filter) => filter.label)
-                        .toList(growable: false);
-                    final types = _accommodationFilters
-                        .skip(1)
-                        .where((PopularFilterListData filter) => filter.isSelected)
-                        .map((PopularFilterListData filter) => filter.label)
-                        .toList(growable: false);
-                    final hasEveryType = types.length == _accommodationFilters.length - 1;
-                    final settings = HotelFilterSettings(
-                      minimumPrice: _values.start,
-                      maximumPrice: _values.end,
-                      maximumDistanceKm: _distanceValue / 10,
-                      amenities: amenities,
-                      accommodationTypes: hasEveryType ? const <String>[] : types,
-                    );
-
-                    Navigator.pop(context, settings);
-                  },
+                  onPressed: _applyFilters,
                   child: const Text('Apply'),
                 ),
               ),
@@ -112,18 +82,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-          child: Text(
-            'Type of Accommodation',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: colors.onSurfaceVariant,
-              fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
+        _FilterSectionTitle(label: 'Type of Accommodation', colors: colors),
         Padding(
           padding: const EdgeInsets.only(right: 16, left: 16),
           child: Column(children: _buildAccommodationFilterRows()),
@@ -136,26 +95,28 @@ class _FiltersScreenState extends State<FiltersScreen> {
   List<Widget> _buildAccommodationFilterRows() {
     final rows = <Widget>[];
     for (var i = 0; i < _accommodationFilters.length; i++) {
-      final PopularFilterListData filter = _accommodationFilters[i];
+      final filter = _accommodationFilters[i];
+      final isSelected = i == 0
+          ? _selectedAccommodationTypes.isEmpty
+          : _selectedAccommodationTypes.contains(filter.label);
+
       void toggleAccommodation() {
-        if (mounted) {
-          setState(() {
-            _toggleAccommodation(i);
-          });
-        }
+        setState(() {
+          _toggleAccommodation(i);
+        });
       }
 
       rows.add(
         Semantics(
           label: filter.label,
-          toggled: filter.isSelected,
+          toggled: isSelected,
           onTap: toggleAccommodation,
           child: ExcludeSemantics(
             child: SwitchListTile.adaptive(
               contentPadding: const EdgeInsets.symmetric(horizontal: 8),
               title: Text(filter.label),
               onChanged: (_) => toggleAccommodation(),
-              value: filter.isSelected,
+              value: isSelected,
             ),
           ),
         ),
@@ -169,16 +130,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   void _toggleAccommodation(int index) {
     if (index == 0) {
-      for (final PopularFilterListData data in _accommodationFilters) {
-        data.isSelected = false;
-      }
-      _accommodationFilters[0].isSelected = true;
-    } else {
-      _accommodationFilters[index].isSelected = !_accommodationFilters[index].isSelected;
-      final hasSpecificType = _accommodationFilters.skip(1).any((PopularFilterListData data) => data.isSelected);
-
-      _accommodationFilters[0].isSelected = !hasSpecificType;
+      _selectedAccommodationTypes.clear();
+      return;
     }
+
+    final label = _accommodationFilters[index].label;
+    _toggleSelection(_selectedAccommodationTypes, label);
   }
 
   Widget _buildDistanceFilter(ColorScheme colors) {
@@ -186,18 +143,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-          child: Text(
-            'Distance from city center',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: colors.onSurfaceVariant,
-              fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
+        _FilterSectionTitle(label: 'Distance from city center', colors: colors),
         SliderView(
           distanceValue: _distanceValue,
           onDistanceChanged: (double value) {
@@ -214,18 +160,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-          child: Text(
-            'Popular filters',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: colors.onSurfaceVariant,
-              fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
+        _FilterSectionTitle(label: 'Popular filters', colors: colors),
         Padding(
           padding: const EdgeInsets.only(right: 16, left: 16),
           child: Column(children: _buildPopularFilterRows()),
@@ -255,16 +190,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
   }
 
   Widget _buildPopularFilter(PopularFilterListData filter) {
+    final isSelected = _selectedAmenities.contains(filter.label);
+
     void toggleFilter() {
       setState(() {
-        filter.isSelected = !filter.isSelected;
+        _toggleSelection(_selectedAmenities, filter.label);
       });
     }
 
     return Expanded(
       child: Semantics(
         label: filter.label,
-        checked: filter.isSelected,
+        checked: isSelected,
         onTap: toggleFilter,
         child: ExcludeSemantics(
           child: CheckboxListTile(
@@ -272,7 +209,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             contentPadding: EdgeInsets.zero,
             visualDensity: VisualDensity.compact,
             title: Text(filter.label),
-            value: filter.isSelected,
+            value: isSelected,
             onChanged: (_) => toggleFilter(),
           ),
         ),
@@ -285,18 +222,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            'Price (for 1 night)',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: colors.onSurfaceVariant,
-              fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
+        _FilterSectionTitle(label: 'Price (for 1 night)', colors: colors, bottomPadding: 16),
         RangeSliderView(
           values: _values,
           onChangeRangeValues: (RangeValues values) {
@@ -337,6 +263,60 @@ class _FiltersScreenState extends State<FiltersScreen> {
             ),
             SizedBox(width: AppBar().preferredSize.height + 40, height: AppBar().preferredSize.height),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _applyFilters() {
+    final amenities = _popularFilters
+        .where((PopularFilterListData filter) => _selectedAmenities.contains(filter.label))
+        .map((PopularFilterListData filter) => filter.label)
+        .toList(growable: false);
+    final types = _accommodationFilters
+        .skip(1)
+        .where((PopularFilterListData filter) => _selectedAccommodationTypes.contains(filter.label))
+        .map((PopularFilterListData filter) => filter.label)
+        .toList(growable: false);
+    final hasEveryType = types.length == _accommodationFilters.length - 1;
+    final settings = HotelFilterSettings(
+      minimumPrice: _values.start,
+      maximumPrice: _values.end,
+      maximumDistanceKm: _distanceValue / 10,
+      amenities: amenities,
+      accommodationTypes: hasEveryType ? const <String>[] : types,
+    );
+
+    Navigator.pop(context, settings);
+  }
+
+  void _toggleSelection(Set<String> selection, String label) {
+    final wasSelected = !selection.add(label);
+
+    if (wasSelected) {
+      selection.remove(label);
+    }
+  }
+}
+
+class _FilterSectionTitle extends StatelessWidget {
+  const _FilterSectionTitle({required this.label, required this.colors, this.bottomPadding = 8});
+
+  final String label;
+  final ColorScheme colors;
+  final double bottomPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: bottomPadding),
+      child: Text(
+        label,
+        textAlign: TextAlign.left,
+        style: TextStyle(
+          color: colors.onSurfaceVariant,
+          fontSize: MediaQuery.sizeOf(context).width > 360 ? 18 : 16,
+          fontWeight: FontWeight.normal,
         ),
       ),
     );

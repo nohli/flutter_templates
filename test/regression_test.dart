@@ -207,7 +207,7 @@ void main() {
     controller.value = 1;
     await tester.pump();
 
-    expect(find.text('Prepare your stomach for lunch with one or two glass of water'), findsOneWidget);
+    expect(find.text('Prepare your stomach for lunch with one or two glasses of water'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -636,7 +636,7 @@ void main() {
     await tester.drag(verticalScrollable, const Offset(0, -5000));
     await tester.pumpAndSettle();
 
-    final reminder = find.text('Prepare your stomach for lunch with one or two glass of water');
+    final reminder = find.text('Prepare your stomach for lunch with one or two glasses of water');
     expect(reminder, findsOneWidget);
     expect(tester.getRect(reminder).bottom, lessThan(tester.getRect(find.byType(BottomBarView)).top));
 

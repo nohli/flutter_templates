@@ -39,7 +39,7 @@ class GlassView extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(left: 68, bottom: 12, right: 16, top: 12),
                                 child: Text(
-                                  'Prepare your stomach for lunch with one or two glass of water',
+                                  'Prepare your stomach for lunch with one or two glasses of water',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,

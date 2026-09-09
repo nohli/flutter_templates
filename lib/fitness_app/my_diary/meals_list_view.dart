@@ -209,11 +209,7 @@ class MealsView extends StatelessWidget {
   }
 
   Widget _buildEnergyLabel(int kcal, Color contentColor, bool useExpandedCard) {
-    final value = Text(
-      '$kcal',
-      textAlign: TextAlign.center,
-      style: _contentStyle(contentColor, 24),
-    );
+    final value = Text('$kcal', textAlign: TextAlign.center, style: _contentStyle(contentColor, 24));
     final unit = Padding(
       padding: EdgeInsets.only(left: useExpandedCard ? 0 : 4, bottom: 3),
       child: Text('kcal', style: _contentStyle(contentColor, 10)),

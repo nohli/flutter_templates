@@ -14,7 +14,7 @@ class PopularCourseListView extends StatefulWidget {
   State<PopularCourseListView> createState() => _PopularCourseListViewState();
 }
 
-class _PopularCourseListViewState extends State<PopularCourseListView> with TickerProviderStateMixin {
+class _PopularCourseListViewState extends State<PopularCourseListView> with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   @override
   void initState() {

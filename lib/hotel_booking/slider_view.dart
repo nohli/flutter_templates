@@ -95,7 +95,7 @@ class _CustomThumbShape extends SliderComponentShape {
     required double textScaleFactor,
     required double value,
   }) {
-    final Canvas canvas = context.canvas;
+    final canvas = context.canvas;
     final colorTween = ColorTween(begin: sliderTheme.disabledThumbColor, end: sliderTheme.thumbColor);
     canvas.drawPath(
       Path()

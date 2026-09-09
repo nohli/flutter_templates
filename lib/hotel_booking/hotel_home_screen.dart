@@ -25,7 +25,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
   var _query = '';
 
   var _startDate = DateTime.now();
-  DateTime _endDate = DateTime.now().add(const Duration(days: 5));
+  var _endDate = DateTime.now().add(const Duration(days: 5));
 
   late final AnimationController _animationController;
   @override
@@ -98,8 +98,8 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
                           itemCount: hotels.length,
                           padding: const EdgeInsets.only(top: 8),
                           itemBuilder: (BuildContext context, int index) {
-                            final int count = hotels.length > 10 ? 10 : hotels.length;
-                            final Animation<double> animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+                            final count = hotels.length > 10 ? 10 : hotels.length;
+                            final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
                               CurvedAnimation(
                                 parent: _animationController,
                                 curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),

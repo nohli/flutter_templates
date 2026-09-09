@@ -14,17 +14,17 @@ class InviteFriend extends StatefulWidget {
 }
 
 class _InviteFriendState extends State<InviteFriend> {
-  final GlobalKey _shareButtonKey = GlobalKey();
+  final _shareButtonKey = GlobalKey();
   var _isSharing = false;
   String? _errorMessage;
 
   Future<void> _share() async {
-    final RenderObject? renderObject = _shareButtonKey.currentContext?.findRenderObject();
+    final renderObject = _shareButtonKey.currentContext?.findRenderObject();
     if (renderObject is! RenderBox || !renderObject.hasSize) {
       setState(() => _errorMessage = 'Sharing is temporarily unavailable.');
       return;
     }
-    final Rect origin = renderObject.localToGlobal(Offset.zero) & renderObject.size;
+    final origin = renderObject.localToGlobal(Offset.zero) & renderObject.size;
     setState(() {
       _isSharing = true;
       _errorMessage = null;

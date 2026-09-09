@@ -1,7 +1,6 @@
 import 'dart:ui' show Tristate;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
@@ -281,7 +280,7 @@ void main() {
     await tester.tap(find.byTooltip('Open navigation menu'));
     await tester.pumpAndSettle();
 
-    final Finder avatar = find.descendant(
+    final avatar = find.descendant(
       of: find.byType(AppDrawer),
       matching: find.byWidgetPredicate(
         (Widget widget) =>
@@ -341,8 +340,8 @@ void main() {
     expect(find.bySemanticsLabel('Fitness App'), findsOneWidget);
     expect(find.bySemanticsLabel('Design Course'), findsOneWidget);
     expect(find.byTooltip('Show one column'), findsOneWidget);
-    final Finder homeTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
-    final Rect initialTitleBounds = tester.getRect(homeTitle);
+    final homeTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final initialTitleBounds = tester.getRect(homeTitle);
     expect(initialTitleBounds.top, greaterThanOrEqualTo(0));
 
     await tester.tap(find.byTooltip('Show one column'));
@@ -462,7 +461,7 @@ void main() {
     ]);
     await _pumpScreen(tester, const DesignCourseHomeScreen(), size: const Size(402, 874), disableAnimations: true);
 
-    final Finder firstCourseImage = find
+    final firstCourseImage = find
         .byWidgetPredicate(
           (Widget widget) =>
               widget is Image &&
@@ -470,12 +469,12 @@ void main() {
               (widget.image as AssetImage).assetName == 'assets/design_course/interFace1.png',
         )
         .first;
-    final Rect imageBounds = tester.getRect(firstCourseImage);
-    final Rect titleBounds = tester.getRect(find.text('User Interface Design').first);
-    final Rect featuredCardBounds = tester.getRect(
+    final imageBounds = tester.getRect(firstCourseImage);
+    final titleBounds = tester.getRect(find.text('User Interface Design').first);
+    final featuredCardBounds = tester.getRect(
       find.bySemanticsLabel(RegExp(r'^Open User Interface Design sample course,')).first,
     );
-    final Rect popularCardBounds = tester.getRect(
+    final popularCardBounds = tester.getRect(
       find.bySemanticsLabel(RegExp(r'^Open App Design Course sample course,')).first,
     );
 
@@ -560,19 +559,19 @@ void main() {
     ]);
     await _pumpScreen(tester, const FitnessAppHomeScreen(), disableAnimations: true);
 
-    final Finder verticalScrollable = find
+    final verticalScrollable = find
         .byWidgetPredicate((Widget widget) => widget is Scrollable && widget.axisDirection == AxisDirection.down)
         .first;
     await tester.drag(verticalScrollable, const Offset(0, -5000));
     await tester.pumpAndSettle();
 
-    final Finder reminder = find.text('Prepare your stomach for lunch with one or two glass of water');
+    final reminder = find.text('Prepare your stomach for lunch with one or two glass of water');
     expect(reminder, findsOneWidget);
     expect(tester.getRect(reminder).bottom, lessThan(tester.getRect(find.byType(BottomBarView)).top));
 
     await tester.tap(find.bySemanticsLabel('Training').first);
     await tester.pump();
-    final Finder trainingScrollable = find
+    final trainingScrollable = find
         .descendant(
           of: find.byType(TrainingScreen),
           matching: find.byWidgetPredicate(
@@ -580,7 +579,7 @@ void main() {
           ),
         )
         .first;
-    final ScrollableState trainingScrollState = tester.state<ScrollableState>(trainingScrollable);
+    final trainingScrollState = tester.state<ScrollableState>(trainingScrollable);
     trainingScrollState.position.jumpTo(trainingScrollState.position.maxScrollExtent);
     await tester.pump();
 
@@ -590,7 +589,7 @@ void main() {
   });
 
   testWidgets('app navigation remains usable at maximum text size', (WidgetTester tester) async {
-    final SemanticsHandle semantics = tester.ensureSemantics();
+    final semantics = tester.ensureSemantics();
     _evictAssets(<String>[
       'assets/hotel/hotel_booking.png',
       'assets/fitness_app/fitness_app.png',
@@ -598,7 +597,7 @@ void main() {
     ]);
     await _pumpScreen(tester, const AppShell(), size: const Size(320, 568), textScale: 3.2, disableAnimations: true);
 
-    final Finder galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
     expect(galleryTitle, findsOneWidget);
     _expectFullTextHeight(tester, galleryTitle);
     expect(tester.takeException(), isNull);
@@ -606,7 +605,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byTooltip('Close navigation menu'), findsOneWidget);
     expect(tester.takeException(), isNull);
-    final Finder drawerScrollable = find.descendant(of: find.byType(AppDrawer), matching: find.byType(Scrollable));
+    final drawerScrollable = find.descendant(of: find.byType(AppDrawer), matching: find.byType(Scrollable));
     await tester.dragUntilVisible(find.text('Invite friends'), drawerScrollable, const Offset(0, -100));
     await tester.ensureVisible(find.text('Invite friends'));
     await tester.pumpAndSettle();
@@ -615,8 +614,8 @@ void main() {
     expect(find.text('Invite friends'), findsOneWidget);
     expect(tester.getCenter(find.text('Invite friends')).dy, lessThan(568));
     _expectFullTextHeight(tester, find.text('Invite friends'));
-    final Rect inviteLabelBounds = tester.getRect(find.text('Invite friends'));
-    final Rect inviteItemBounds = tester.getRect(find.bySemanticsLabel('Invite friends'));
+    final inviteLabelBounds = tester.getRect(find.text('Invite friends'));
+    final inviteItemBounds = tester.getRect(find.bySemanticsLabel('Invite friends'));
     expect(inviteItemBounds.top, lessThanOrEqualTo(inviteLabelBounds.top));
     expect(inviteItemBounds.bottom, greaterThanOrEqualTo(inviteLabelBounds.bottom));
     await tester.tap(find.text('Invite friends'));
@@ -629,7 +628,7 @@ void main() {
   });
 
   testWidgets('drawer exposes selected semantics and closes on the system back action', (WidgetTester tester) async {
-    final SemanticsHandle semantics = tester.ensureSemantics();
+    final semantics = tester.ensureSemantics();
     _evictAssets(<String>[
       'assets/hotel/hotel_booking.png',
       'assets/fitness_app/fitness_app.png',
@@ -644,7 +643,7 @@ void main() {
     expect(find.semantics.byLabel('Navigation menu'), findsOneWidget);
     expect(find.semantics.byLabel('Close navigation menu'), findsOneWidget);
     expect(find.semantics.byLabel('Hotel Booking'), findsNothing);
-    final SemanticsNode homeNode = tester.getSemantics(find.bySemanticsLabel('Home'));
+    final homeNode = tester.getSemantics(find.bySemanticsLabel('Home'));
     expect(homeNode.flagsCollection.isSelected, Tristate.isTrue);
     expect(homeNode.flagsCollection.isButton, isTrue);
 
@@ -664,10 +663,10 @@ void main() {
       'assets/design_course/design_course.png',
     ]);
     await _pumpScreen(tester, const AppShell());
-    final Offset dragStart = tester.getBottomLeft(find.byType(AppShell)) + const Offset(24, -100);
-    final Finder galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
-    final double closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
-    final double drawerWidth = tester.getSize(find.byType(AppShell)).width * 0.75;
+    final dragStart = tester.getBottomLeft(find.byType(AppShell)) + const Offset(24, -100);
+    final galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
+    final drawerWidth = tester.getSize(find.byType(AppShell)).width * 0.75;
 
     await tester.timedDragFrom(dragStart, const Offset(80, 0), const Duration(seconds: 1));
     await tester.pumpAndSettle();
@@ -698,9 +697,9 @@ void main() {
       'assets/design_course/design_course.png',
     ]);
     await _pumpScreen(tester, const AppShell(), disableAnimations: true);
-    final Finder galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
-    final double closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
-    final double drawerWidth = tester.getSize(find.byType(AppShell)).width * 0.75;
+    final galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
+    final drawerWidth = tester.getSize(find.byType(AppShell)).width * 0.75;
 
     await tester.tap(find.byTooltip('Open navigation menu'));
     await tester.pump();
@@ -744,9 +743,9 @@ void main() {
       ),
     );
 
-    final Finder galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
-    final double closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
-    final double drawerWidth = tester.getSize(find.byType(AppShell)).width * 0.75;
+    final galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
+    final drawerWidth = tester.getSize(find.byType(AppShell)).width * 0.75;
     await tester.tap(find.byTooltip('Open navigation menu'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
@@ -831,7 +830,7 @@ void main() {
     _evictAssets(<String>['assets/hotel/hotel_1.png']);
     final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
-    final Widget hotelCard = HotelListView(
+    final hotelCard = HotelListView(
       hotelData: HotelListData.samples.first,
       isFavorite: false,
       onFavoriteChanged: () {},
@@ -840,7 +839,7 @@ void main() {
 
     await _pumpScreen(tester, hotelCard);
 
-    final Finder location = find.text('Wembley, London');
+    final location = find.text('Wembley, London');
     expect(find.text('2.0 km to city'), findsOneWidget);
     expect(tester.widget<Flex>(find.ancestor(of: location, matching: find.byType(Flex))).direction, Axis.horizontal);
     expect(tester.takeException(), isNull);
@@ -929,7 +928,7 @@ void main() {
 
     for (final scenario in scenarios) {
       await _pumpScreen(tester, scenario.screen, size: const Size(320, 568), textScale: 3.2);
-      final Finder action = scenario.action();
+      final action = scenario.action();
       expect(action, findsOneWidget);
 
       await tester.ensureVisible(action);
@@ -944,7 +943,7 @@ void main() {
 
 void _expectFullTextHeight(WidgetTester tester, Finder finder) {
   final RenderBox textBox = tester.renderObject<RenderBox>(finder);
-  final double fullHeight = textBox.getMaxIntrinsicHeight(textBox.size.width);
+  final fullHeight = textBox.getMaxIntrinsicHeight(textBox.size.width);
   expect(textBox.size.height, greaterThanOrEqualTo(fullHeight - 0.01));
 }
 
@@ -959,7 +958,7 @@ Future<void> _pumpScreen(
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
-  final MediaQueryData mediaQuery = MediaQueryData.fromView(tester.view).copyWith(
+  final mediaQuery = MediaQueryData.fromView(tester.view).copyWith(
     textScaler: TextScaler.linear(textScale),
     disableAnimations: disableAnimations,
     padding: padding,

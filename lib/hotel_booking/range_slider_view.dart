@@ -99,7 +99,7 @@ class _CustomRangeThumbShape extends RangeSliderThumbShape {
     TextDirection textDirection = TextDirection.ltr,
     Thumb thumb = Thumb.start,
   }) {
-    final Canvas canvas = context.canvas;
+    final canvas = context.canvas;
     final colorTween = ColorTween(begin: sliderTheme.disabledThumbColor, end: sliderTheme.thumbColor);
 
     Path thumbPath;

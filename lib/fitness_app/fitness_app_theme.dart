@@ -14,7 +14,7 @@ class FitnessAppTheme {
   static const darkerText = Color(0xFF17262A);
   static const lightText = Color(0xFF4A6572);
   static const spacer = Color(0xFFF2F2F2);
-  static const Color seedColor = nearlyDarkBlue;
+  static const seedColor = nearlyDarkBlue;
   static const fontName = 'Roboto';
 
   static ThemeData build() {

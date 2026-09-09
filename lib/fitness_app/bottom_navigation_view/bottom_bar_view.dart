@@ -10,8 +10,8 @@ class BottomBarView extends StatefulWidget {
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected;
 
-  static const double extent = 100;
-  static const double contentGap = 16;
+  static const extent = 100.0;
+  static const contentGap = 16.0;
 
   static double contentPadding(BuildContext context) {
     return extent + MediaQuery.paddingOf(context).bottom + contentGap;
@@ -94,8 +94,8 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final bool animationsAreDisabled = MediaQuery.disableAnimationsOf(context);
-    final Animation<double> entrance = animationsAreDisabled
+    final animationsAreDisabled = MediaQuery.disableAnimationsOf(context);
+    final entrance = animationsAreDisabled
         ? const AlwaysStoppedAnimation<double>(1)
         : CurvedAnimation(parent: _entranceController, curve: Curves.fastOutSlowIn);
 
@@ -349,7 +349,7 @@ class TabClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = Path();
-    final double diameter = radius * 2;
+    final diameter = radius * 2;
 
     path
       ..lineTo(0, 0)

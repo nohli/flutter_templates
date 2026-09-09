@@ -103,7 +103,7 @@ class _DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color selectedForeground = Theme.of(context).colorScheme.onPrimaryContainer;
+    final selectedForeground = Theme.of(context).colorScheme.onPrimaryContainer;
     return Semantics(
       selected: isSelected,
       button: true,

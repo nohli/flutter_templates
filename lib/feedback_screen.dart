@@ -27,7 +27,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   }
 
   Future<void> _sendFeedback() async {
-    final String message = _controller.text.trim();
+    final message = _controller.text.trim();
     if (message.isEmpty) {
       setState(() => _errorMessage = 'Enter your feedback before sending.');
       return;

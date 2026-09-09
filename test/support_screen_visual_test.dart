@@ -41,14 +41,14 @@ void main() {
         find.byWidgetPredicate((Widget widget) => widget is ColoredBox && widget.color == const Color(0xFFFEFEFE)),
         findsOneWidget,
       );
-      final Finder illustration = find.byType(Image);
+      final illustration = find.byType(Image);
       expect(tester.getSize(illustration).width, greaterThan(260));
       expect(tester.widget<Image>(illustration).excludeFromSemantics, isTrue);
 
-      final FilledButton button = tester.widget<FilledButton>(find.byType(FilledButton));
-      final ButtonStyle style = button.style!;
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      final style = button.style!;
       final enabled = <WidgetState>{};
-      final OutlinedBorder shape = style.shape!.resolve(enabled)!;
+      final shape = style.shape!.resolve(enabled)!;
 
       expect(style.backgroundColor!.resolve(enabled), AppTheme.actionBlue);
       expect(style.foregroundColor!.resolve(enabled), Colors.white);
@@ -68,7 +68,7 @@ void main() {
     rootBundle.evict('assets/images/feedbackImage.png');
     await _pumpScreen(tester, FeedbackScreen(launcher: (_) async => false));
 
-    final TextField composer = tester.widget<TextField>(find.byType(TextField));
+    final composer = tester.widget<TextField>(find.byType(TextField));
 
     expect(composer.style?.color, const Color(0xFF313A44));
     expect(composer.cursorColor, Colors.blue);
@@ -82,7 +82,7 @@ void main() {
   testWidgets('about keeps readable line length and accessible blue links', (WidgetTester tester) async {
     await _pumpScreen(tester, const AboutScreen(), size: const Size(1024, 1366), platform: TargetPlatform.iOS);
 
-    final Finder content = find.byWidgetPredicate(
+    final content = find.byWidgetPredicate(
       (Widget widget) => widget is ConstrainedBox && widget.constraints.maxWidth == 640,
     );
     expect(content, findsOneWidget);
@@ -91,7 +91,7 @@ void main() {
     expect(find.text(AppIdentity.trademarkDisclaimer), findsOneWidget);
 
     final enabled = <WidgetState>{};
-    final Iterable<TextButton> links = tester.widgetList<TextButton>(find.byType(TextButton));
+    final links = tester.widgetList<TextButton>(find.byType(TextButton));
     expect(links, hasLength(5));
     for (final link in links) {
       expect(link.style?.foregroundColor?.resolve(enabled), AppTheme.actionBlue);
@@ -100,7 +100,7 @@ void main() {
   });
 
   testWidgets('support errors are announced as live regions', (WidgetTester tester) async {
-    final SemanticsHandle semantics = tester.ensureSemantics();
+    final semantics = tester.ensureSemantics();
     rootBundle.evict('assets/images/helpImage.png');
     await _pumpScreen(tester, HelpScreen(launcher: (_) async => false));
 
@@ -129,7 +129,7 @@ void main() {
   testWidgets('email launcher exceptions preserve drafts and leave retry controls enabled', (
     WidgetTester tester,
   ) async {
-    final SemanticsHandle semantics = tester.ensureSemantics();
+    final semantics = tester.ensureSemantics();
     Future<bool> throwingLauncher(Uri _) => Future<bool>.error(StateError('Unavailable'));
 
     rootBundle.evict('assets/images/helpImage.png');
@@ -164,8 +164,8 @@ void main() {
         ),
         size: size,
       );
-      final Finder shareButton = find.widgetWithText(FilledButton, 'Share');
-      final Rect shareButtonBounds = tester.getRect(shareButton);
+      final shareButton = find.widgetWithText(FilledButton, 'Share');
+      final shareButtonBounds = tester.getRect(shareButton);
 
       await tester.tap(shareButton);
       await tester.pumpAndSettle();
@@ -189,7 +189,7 @@ double _contrastRatio(Color foreground, Color background) {
 }
 
 void _expectLiveRegion(WidgetTester tester, String message) {
-  final Finder error = find.bySemanticsLabel(message);
+  final error = find.bySemanticsLabel(message);
   expect(error, findsOneWidget);
   expect(tester.getSemantics(error).flagsCollection.isLiveRegion, isTrue);
 }

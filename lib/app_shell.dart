@@ -80,7 +80,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
   }
 
   void _updateDrawerDrag(DragUpdateDetails details, double drawerWidth) {
-    _drawerController.value += details.primaryDelta! / drawerWidth;
+    _drawerController.value += details.delta.dx / drawerWidth;
   }
 
   void _endDrawerDrag(DragEndDetails details) {

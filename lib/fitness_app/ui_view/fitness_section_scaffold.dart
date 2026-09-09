@@ -19,15 +19,9 @@ class _FitnessSectionScaffoldState extends State<FitnessSectionScaffold> {
   final _scrollController = ScrollController();
   var _headerOpacity = 0.0;
 
-  late final Animation<double> _headerAnimation;
-
   @override
   void initState() {
     super.initState();
-    _headerAnimation = CurvedAnimation(
-      parent: widget.animation,
-      curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn),
-    );
     _scrollController.addListener(_updateHeaderOpacity);
   }
 
@@ -89,13 +83,16 @@ class _FitnessSectionScaffoldState extends State<FitnessSectionScaffold> {
   }
 
   Widget _buildHeader(ColorScheme colors, {required bool stackHeader}) {
+    final headerAnimation = widget.animation.drive(
+      CurveTween(curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn)),
+    );
     return AnimatedBuilder(
       animation: widget.animation,
       builder: (BuildContext context, _) {
         return FadeTransition(
-          opacity: _headerAnimation,
+          opacity: headerAnimation,
           child: Transform(
-            transform: Matrix4.translationValues(0, 30 * (1 - _headerAnimation.value), 0),
+            transform: Matrix4.translationValues(0, 30 * (1 - headerAnimation.value), 0),
             child: Container(
               decoration: BoxDecoration(
                 color: colors.surface.withValues(alpha: _headerOpacity),

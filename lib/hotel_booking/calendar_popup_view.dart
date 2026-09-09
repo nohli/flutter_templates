@@ -211,7 +211,13 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with SingleTicker
   Widget _buildApplyButton() {
     final selectedStartDate = _startDate;
     final selectedEndDate = _endDate;
-    final selectionIsValid = _selectionIsValid(selectedStartDate, selectedEndDate);
+    VoidCallback? applySelection;
+    if (selectedStartDate != null && selectedEndDate != null && _selectionIsValid(selectedStartDate, selectedEndDate)) {
+      applySelection = () {
+        widget.onApplyClick(selectedStartDate, selectedEndDate);
+        Navigator.pop(context);
+      };
+    }
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
@@ -219,26 +225,20 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with SingleTicker
         width: double.infinity,
         child: FilledButton(
           style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48), shape: const StadiumBorder()),
-          onPressed: !selectionIsValid
-              ? null
-              : () {
-                  assert(selectedStartDate != null && selectedEndDate != null);
-                  widget.onApplyClick(selectedStartDate!, selectedEndDate!);
-                  Navigator.pop(context);
-                },
+          onPressed: applySelection,
           child: const Text('Apply', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
         ),
       ),
     );
   }
 
-  bool _selectionIsValid(DateTime? selectedStartDate, DateTime? selectedEndDate) {
-    if (selectedStartDate == null || selectedEndDate == null) return false;
-
+  bool _selectionIsValid(DateTime selectedStartDate, DateTime selectedEndDate) {
     final start = DateUtils.dateOnly(selectedStartDate);
     final end = DateUtils.dateOnly(selectedEndDate);
-    final minimum = widget.minimumDate == null ? null : DateUtils.dateOnly(widget.minimumDate!);
-    final maximum = widget.maximumDate == null ? null : DateUtils.dateOnly(widget.maximumDate!);
+    final minimumDate = widget.minimumDate;
+    final maximumDate = widget.maximumDate;
+    final minimum = minimumDate == null ? null : DateUtils.dateOnly(minimumDate);
+    final maximum = maximumDate == null ? null : DateUtils.dateOnly(maximumDate);
 
     return !end.isBefore(start) &&
         (minimum == null || !start.isBefore(minimum)) &&

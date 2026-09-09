@@ -104,7 +104,7 @@ void main() {
       'assets/design_course/interFace4.png',
       'assets/design_course/userImage.png',
     ]);
-    await _pumpScreen(tester, const MyHomePage());
+    await _pumpScreen(tester, const TemplateGalleryScreen());
     await tester.pump(const Duration(seconds: 2));
     await tester.tap(find.bySemanticsLabel('Design Course'));
     await tester.pumpAndSettle();

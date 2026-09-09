@@ -8,14 +8,14 @@ import 'fitness_app/fitness_app_home_screen.dart';
 import 'hotel_booking/hotel_home_screen.dart';
 import 'model/template_gallery_item.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class TemplateGalleryScreen extends StatefulWidget {
+  const TemplateGalleryScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<TemplateGalleryScreen> createState() => _TemplateGalleryScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with SingleTickerProviderStateMixin {
   static const _layoutPreferenceKey = 'home-gallery-multiple-columns';
 
   final _items = TemplateGalleryItem.items;

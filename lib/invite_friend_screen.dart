@@ -4,16 +4,16 @@ import 'app_identity.dart';
 import 'app_theme.dart';
 import 'external_actions.dart';
 
-class InviteFriend extends StatefulWidget {
-  const InviteFriend({super.key, this.sharer = shareText});
+class InviteFriendScreen extends StatefulWidget {
+  const InviteFriendScreen({super.key, this.sharer = shareText});
 
   final TextSharer sharer;
 
   @override
-  State<InviteFriend> createState() => _InviteFriendState();
+  State<InviteFriendScreen> createState() => _InviteFriendScreenState();
 }
 
-class _InviteFriendState extends State<InviteFriend> {
+class _InviteFriendScreenState extends State<InviteFriendScreen> {
   final _shareButtonKey = GlobalKey();
   var _isSharing = false;
   String? _errorMessage;

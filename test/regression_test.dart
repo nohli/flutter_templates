@@ -381,7 +381,7 @@ void main() {
     expect(find.bySemanticsLabel('Fitness App'), findsOneWidget);
     expect(find.bySemanticsLabel('Design Course'), findsOneWidget);
     expect(find.byTooltip('Show one column'), findsOneWidget);
-    final homeTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final homeTitle = find.descendant(of: find.byType(TemplateGalleryScreen), matching: find.text(AppIdentity.name));
     final initialTitleBounds = tester.getRect(homeTitle);
     expect(initialTitleBounds.top, greaterThanOrEqualTo(0));
 
@@ -414,7 +414,7 @@ void main() {
       'assets/fitness_app/fitness_app.png',
       'assets/design_course/design_course.png',
     ]);
-    await _pumpScreen(tester, const MyHomePage(), textScale: 2, disableAnimations: true);
+    await _pumpScreen(tester, const TemplateGalleryScreen(), textScale: 2, disableAnimations: true);
 
     for (final scenario in <({Type destination, String title})>[
       (title: 'Hotel Booking', destination: HotelHomeScreen),
@@ -440,7 +440,7 @@ void main() {
   });
 
   testWidgets('template detail routes keep the original text scale', (WidgetTester tester) async {
-    await _pumpScreen(tester, const MyHomePage(), textScale: 2, disableAnimations: true);
+    await _pumpScreen(tester, const TemplateGalleryScreen(), textScale: 2, disableAnimations: true);
 
     await tester.tap(find.bySemanticsLabel('Design Course'));
     await tester.pumpAndSettle();
@@ -475,7 +475,7 @@ void main() {
       'assets/fitness_app/fitness_app.png',
       'assets/design_course/design_course.png',
     ]);
-    await _pumpScreen(tester, const MyHomePage(), disableAnimations: true);
+    await _pumpScreen(tester, const TemplateGalleryScreen(), disableAnimations: true);
 
     expect(
       (tester.widget<GridView>(find.byType(GridView)).gridDelegate as SliverGridDelegateWithFixedCrossAxisCount)
@@ -483,7 +483,7 @@ void main() {
       2,
     );
 
-    await _pumpScreen(tester, const MyHomePage(), size: const Size(1024, 1366), disableAnimations: true);
+    await _pumpScreen(tester, const TemplateGalleryScreen(), size: const Size(1024, 1366), disableAnimations: true);
 
     expect(
       (tester.widget<GridView>(find.byType(GridView)).gridDelegate as SliverGridDelegateWithFixedCrossAxisCount)
@@ -668,7 +668,7 @@ void main() {
     ]);
     await _pumpScreen(tester, const AppShell(), size: const Size(320, 568), textScale: 3.2, disableAnimations: true);
 
-    final galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final galleryTitle = find.descendant(of: find.byType(TemplateGalleryScreen), matching: find.text(AppIdentity.name));
     expect(galleryTitle, findsOneWidget);
     _expectFullTextHeight(tester, galleryTitle);
     expect(tester.takeException(), isNull);
@@ -735,7 +735,7 @@ void main() {
     ]);
     await _pumpScreen(tester, const AppShell());
     final dragStart = tester.getBottomLeft(find.byType(AppShell)) + const Offset(24, -100);
-    final galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final galleryTitle = find.descendant(of: find.byType(TemplateGalleryScreen), matching: find.text(AppIdentity.name));
     final closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
     final drawerWidth = tester.getSize(find.byType(AppShell)).width * 0.75;
 
@@ -768,7 +768,7 @@ void main() {
       'assets/design_course/design_course.png',
     ]);
     await _pumpScreen(tester, const AppShell(), disableAnimations: true);
-    final galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final galleryTitle = find.descendant(of: find.byType(TemplateGalleryScreen), matching: find.text(AppIdentity.name));
     final closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
     final drawerWidth = tester.getSize(find.byType(AppShell)).width * 0.75;
 
@@ -814,7 +814,7 @@ void main() {
       ),
     );
 
-    final galleryTitle = find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name));
+    final galleryTitle = find.descendant(of: find.byType(TemplateGalleryScreen), matching: find.text(AppIdentity.name));
     final closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
     final drawerWidth = tester.getSize(find.byType(AppShell)).width * 0.75;
     await tester.tap(find.byTooltip('Open navigation menu'));
@@ -847,7 +847,10 @@ void main() {
       padding: const EdgeInsets.symmetric(horizontal: 44),
     );
 
-    expect(find.descendant(of: find.byType(MyHomePage), matching: find.text(AppIdentity.name)), findsOneWidget);
+    expect(
+      find.descendant(of: find.byType(TemplateGalleryScreen), matching: find.text(AppIdentity.name)),
+      findsOneWidget,
+    );
     await tester.tap(find.byTooltip('Open navigation menu'));
     await tester.pumpAndSettle();
     expect(find.byTooltip('Close navigation menu'), findsOneWidget);
@@ -1039,7 +1042,7 @@ void main() {
     final scenarios = <({Widget screen, Finder Function() action})>[
       (screen: HelpScreen(launcher: (_) async => false), action: () => find.widgetWithText(FilledButton, 'Email Us')),
       (screen: FeedbackScreen(launcher: (_) async => false), action: () => find.widgetWithText(FilledButton, 'Send')),
-      (screen: InviteFriend(sharer: (_, _) async {}), action: () => find.widgetWithText(FilledButton, 'Share')),
+      (screen: InviteFriendScreen(sharer: (_, _) async {}), action: () => find.widgetWithText(FilledButton, 'Share')),
       (screen: const AboutScreen(), action: () => find.widgetWithText(TextButton, 'Developer portfolio')),
     ];
 

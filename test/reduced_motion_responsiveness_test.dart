@@ -31,7 +31,7 @@ void main() {
       'assets/hotel/hotel_5.png',
     ]);
 
-    await _pumpScreen(tester, const MyHomePage(), disableAnimations: true);
+    await _pumpScreen(tester, const TemplateGalleryScreen(), disableAnimations: true);
     _expectStableEndState(tester);
     _expectCompleteFadeTransitions(tester);
     final initialGalleryCard = tester.getRect(find.bySemanticsLabel('Hotel Booking'));

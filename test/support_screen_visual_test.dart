@@ -26,7 +26,7 @@ void main() {
         hasIcon: false,
       ),
       (
-        screen: InviteFriend(sharer: (_, _) async {}),
+        screen: InviteFriendScreen(sharer: (_, _) async {}),
         imagePath: 'assets/images/inviteImage.png',
         minimumWidth: 120,
         hasIcon: true,
@@ -116,7 +116,7 @@ void main() {
     _expectLiveRegion(tester, 'Enter your feedback before sending.');
 
     rootBundle.evict('assets/images/inviteImage.png');
-    await _pumpScreen(tester, InviteFriend(sharer: (_, _) => Future<void>.error(StateError('Unavailable'))));
+    await _pumpScreen(tester, InviteFriendScreen(sharer: (_, _) => Future<void>.error(StateError('Unavailable'))));
 
     await tester.tap(find.text('Share'));
     await tester.pumpAndSettle();
@@ -157,7 +157,7 @@ void main() {
       Rect? sharedOrigin;
       await _pumpScreen(
         tester,
-        InviteFriend(
+        InviteFriendScreen(
           sharer: (_, Rect origin) async {
             sharedOrigin = origin;
           },

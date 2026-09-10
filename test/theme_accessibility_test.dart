@@ -14,6 +14,8 @@ import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart'
 import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/main.dart';
+import 'package:templates/features/templates/planner_app/planner_app_theme.dart';
+import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/storefront_app_theme.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
 
@@ -69,6 +71,14 @@ void main() {
             scaffold: StorefrontAppTheme.background,
             useMaterial3: true,
           ),
+          (
+            name: 'Planner',
+            font: PlannerAppTheme.fontName,
+            build: PlannerAppTheme.build,
+            primary: PlannerAppTheme.primary,
+            scaffold: PlannerAppTheme.background,
+            useMaterial3: true,
+          ),
         ];
 
     for (final themeCase in cases) {
@@ -100,6 +110,7 @@ void main() {
       expect(FitnessAppTheme.build().platform, platform);
       expect(FinanceAppTheme.build().platform, platform);
       expect(StorefrontAppTheme.build().platform, platform);
+      expect(PlannerAppTheme.build().platform, platform);
     }
   });
 
@@ -160,6 +171,10 @@ void main() {
     await _pumpThemedScreen(tester, const StorefrontHomeScreen());
     _expectTemplateTheme(tester, find.text('NEST'), StorefrontAppTheme.build());
     await _expectAccessible(tester);
+
+    await _pumpThemedScreen(tester, const PlannerHomeScreen());
+    _expectTemplateTheme(tester, find.text('DAYMARK'), PlannerAppTheme.build());
+    await _expectAccessible(tester);
     semantics.dispose();
   });
 
@@ -212,6 +227,10 @@ void main() {
     await _pumpThemedScreen(tester, const StorefrontHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
     expect(find.text('NEST'), findsOneWidget);
+
+    await _pumpThemedScreen(tester, const PlannerHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    _expectNoLayoutException(tester);
+    expect(find.text('DAYMARK'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {

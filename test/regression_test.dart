@@ -36,6 +36,7 @@ import 'package:templates/features/templates/hotel_booking/slider_view.dart';
 import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
 import 'package:templates/main.dart' as app;
+import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
 
 void main() {
@@ -103,6 +104,7 @@ void main() {
       await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const FinanceHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const StorefrontHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const PlannerHomeScreen());
     },
     variant: TargetPlatformVariant.only(TargetPlatform.iOS),
   );
@@ -458,6 +460,7 @@ void main() {
       (title: 'Design Course', destination: DesignCourseHomeScreen),
       (title: 'Personal Finance', destination: FinanceHomeScreen),
       (title: 'E-commerce Store', destination: StorefrontHomeScreen),
+      (title: 'Project Planner', destination: PlannerHomeScreen),
     ]) {
       await tester.tap(find.bySemanticsLabel(scenario.title));
       await tester.pump();

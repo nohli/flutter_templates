@@ -20,6 +20,8 @@ import 'package:templates/features/templates/messenger_app/messenger_app_theme.d
 import 'package:templates/features/templates/messenger_app/messenger_home_screen.dart';
 import 'package:templates/features/templates/planner_app/planner_app_theme.dart';
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
+import 'package:templates/features/templates/podcast_app/podcast_app_theme.dart';
+import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/storefront_app_theme.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
 
@@ -99,6 +101,14 @@ void main() {
             scaffold: FoodDeliveryAppTheme.background,
             useMaterial3: true,
           ),
+          (
+            name: 'Podcast',
+            font: PodcastAppTheme.fontName,
+            build: PodcastAppTheme.build,
+            primary: PodcastAppTheme.primary,
+            scaffold: PodcastAppTheme.background,
+            useMaterial3: true,
+          ),
         ];
 
     for (final themeCase in cases) {
@@ -133,6 +143,7 @@ void main() {
       expect(PlannerAppTheme.build().platform, platform);
       expect(MessengerAppTheme.build().platform, platform);
       expect(FoodDeliveryAppTheme.build().platform, platform);
+      expect(PodcastAppTheme.build().platform, platform);
     }
   });
 
@@ -205,6 +216,10 @@ void main() {
     await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen());
     _expectTemplateTheme(tester, find.text('SAVOR'), FoodDeliveryAppTheme.build());
     await _expectAccessible(tester);
+
+    await _pumpThemedScreen(tester, const PodcastHomeScreen());
+    _expectTemplateTheme(tester, find.text('WAVE'), PodcastAppTheme.build());
+    await _expectAccessible(tester);
     semantics.dispose();
   });
 
@@ -269,6 +284,10 @@ void main() {
     await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
     expect(find.text('SAVOR'), findsOneWidget);
+
+    await _pumpThemedScreen(tester, const PodcastHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    _expectNoLayoutException(tester);
+    expect(find.text('WAVE'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {

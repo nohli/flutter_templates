@@ -3,6 +3,16 @@ name: Flutter Build
 on:
   workflow_dispatch:
   pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   build_android:
@@ -11,9 +21,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -43,7 +53,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -56,3 +66,87 @@ jobs:
         run: flutter pub get
       - name: Flutter build iOS
         run: flutter build ios --release --no-codesign
+
+  build_web:
+    name: Build Web
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.9'
+          channel: stable
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics
+      - name: Flutter pub get
+        run: flutter pub get
+      - name: Flutter build Web
+        run: flutter build web --release
+
+  build_linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.9'
+          channel: stable
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics
+      - name: Flutter pub get
+        run: flutter pub get
+      - name: Flutter build Linux
+        run: flutter build linux --release
+
+  build_macos:
+    name: Build macOS
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.9'
+          channel: stable
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics
+      - name: Flutter pub get
+        run: flutter pub get
+      - name: Flutter build macOS
+        run: flutter build macos --release
+
+  build_windows:
+    name: Build Windows
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.9'
+          channel: stable
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics
+      - name: Flutter pub get
+        run: flutter pub get
+      - name: Flutter build Windows
+        run: flutter build windows --release

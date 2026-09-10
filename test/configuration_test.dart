@@ -56,6 +56,7 @@ void main() {
     expect(iosFrameworkInfo, contains('<key>MinimumOSVersion</key>\n  <string>15.0</string>'));
     expect(File('ios/Runner/Runner.entitlements').existsSync(), isFalse);
     expect(macOSConfig, contains('PRODUCT_BUNDLE_IDENTIFIER = com.achimsapps.templates'));
+    expect(macOSConfig, contains('PRODUCT_COPYRIGHT = Copyright © UI Templates contributors.'));
     expect(androidBuild, contains('namespace = "com.achimsapps.templates"'));
     expect(androidBuild, contains('applicationId = "com.achimsapps.templates"'));
     expect(androidBuild, contains('compileSdk = flutter.compileSdkVersion'));
@@ -68,7 +69,8 @@ void main() {
     expect(androidDebugManifest, contains('android.permission.INTERNET'));
     expect(androidProfileManifest, contains('android.permission.INTERNET'));
     expect(linuxProject, contains('set(APPLICATION_ID "com.achimsapps.templates")'));
-    expect(windowsMetadata, contains('VALUE "CompanyName", "com.achimsapps"'));
+    expect(windowsMetadata, contains('VALUE "CompanyName", "UI Templates contributors"'));
+    expect(windowsMetadata, contains('VALUE "LegalCopyright", "Copyright (C) UI Templates contributors."'));
     expect(windowsCMake, contains(r'FLUTTER_VERSION=\"${FLUTTER_VERSION}\"'));
     for (final component in <String>['MAJOR', 'MINOR', 'PATCH', 'BUILD']) {
       expect(windowsCMake, contains('FLUTTER_VERSION_$component=\${FLUTTER_VERSION_$component}'));

@@ -79,7 +79,7 @@ void main() {
     await tester.tap(find.text('Send'));
     await tester.pumpAndSettle();
 
-    expect(find.text('No email app is available. Contact templates-app@achim.io.'), findsOneWidget);
+    expect(find.text('No email app is available. Contact flutter-ui-templates@achim.io.'), findsOneWidget);
     expect(find.text('Please keep this draft.'), findsOneWidget);
   });
 
@@ -109,7 +109,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(launchedUri, supportEmailUri());
-    expect(find.text('No email app is available. Contact templates-app@achim.io.'), findsOneWidget);
+    expect(find.text('No email app is available. Contact flutter-ui-templates@achim.io.'), findsOneWidget);
   });
 
   testWidgets('invite sends one native share request with a nonempty origin', (WidgetTester tester) async {

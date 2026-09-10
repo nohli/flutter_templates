@@ -338,6 +338,7 @@ void main() {
       'hotel_booking',
       'messenger_app',
       'planner_app',
+      'podcast_app',
       'storefront_app',
     });
   });

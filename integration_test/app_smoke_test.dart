@@ -19,6 +19,7 @@ void main() {
     await _openTemplate(tester, cardLabel: 'Project Planner', screenText: 'Make space for what matters.');
     await _openTemplate(tester, cardLabel: 'Messaging App', screenText: 'Messages that feel close.');
     await _openTemplate(tester, cardLabel: 'Food Delivery', screenText: 'Good food, right on time.');
+    await _openTemplate(tester, cardLabel: 'Podcast Player', screenText: 'Stories worth your time.');
   });
 }
 

@@ -7,6 +7,7 @@ enum TemplateGalleryDestination {
   planner,
   messenger,
   foodDelivery,
+  podcast,
 }
 
 class TemplateGalleryItem {
@@ -37,5 +38,6 @@ class TemplateGalleryItem {
     TemplateGalleryItem(title: 'Project Planner', destination: TemplateGalleryDestination.planner),
     TemplateGalleryItem(title: 'Messaging App', destination: TemplateGalleryDestination.messenger),
     TemplateGalleryItem(title: 'Food Delivery', destination: TemplateGalleryDestination.foodDelivery),
+    TemplateGalleryItem(title: 'Podcast Player', destination: TemplateGalleryDestination.podcast),
   ];
 }

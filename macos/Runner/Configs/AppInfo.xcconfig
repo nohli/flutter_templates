@@ -11,4 +11,4 @@ PRODUCT_NAME = UI Templates
 PRODUCT_BUNDLE_IDENTIFIER = com.achimsapps.templates
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2020 com.achimsapps. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © UI Templates contributors.

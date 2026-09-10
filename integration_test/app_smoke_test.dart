@@ -17,6 +17,7 @@ void main() {
     await _openTemplate(tester, cardLabel: 'Personal Finance', screenText: 'Your money, at a glance');
     await _openTemplate(tester, cardLabel: 'E-commerce Store', screenText: 'Curated objects for calmer spaces.');
     await _openTemplate(tester, cardLabel: 'Project Planner', screenText: 'Make space for what matters.');
+    await _openTemplate(tester, cardLabel: 'Messaging App', screenText: 'Messages that feel close.');
   });
 }
 

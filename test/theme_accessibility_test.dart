@@ -14,6 +14,8 @@ import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart'
 import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/main.dart';
+import 'package:templates/features/templates/messenger_app/messenger_app_theme.dart';
+import 'package:templates/features/templates/messenger_app/messenger_home_screen.dart';
 import 'package:templates/features/templates/planner_app/planner_app_theme.dart';
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/storefront_app_theme.dart';
@@ -79,6 +81,14 @@ void main() {
             scaffold: PlannerAppTheme.background,
             useMaterial3: true,
           ),
+          (
+            name: 'Messenger',
+            font: MessengerAppTheme.fontName,
+            build: MessengerAppTheme.build,
+            primary: MessengerAppTheme.primary,
+            scaffold: MessengerAppTheme.background,
+            useMaterial3: true,
+          ),
         ];
 
     for (final themeCase in cases) {
@@ -111,6 +121,7 @@ void main() {
       expect(FinanceAppTheme.build().platform, platform);
       expect(StorefrontAppTheme.build().platform, platform);
       expect(PlannerAppTheme.build().platform, platform);
+      expect(MessengerAppTheme.build().platform, platform);
     }
   });
 
@@ -175,6 +186,10 @@ void main() {
     await _pumpThemedScreen(tester, const PlannerHomeScreen());
     _expectTemplateTheme(tester, find.text('DAYMARK'), PlannerAppTheme.build());
     await _expectAccessible(tester);
+
+    await _pumpThemedScreen(tester, const MessengerHomeScreen());
+    _expectTemplateTheme(tester, find.text('LUMA'), MessengerAppTheme.build());
+    await _expectAccessible(tester);
     semantics.dispose();
   });
 
@@ -231,6 +246,10 @@ void main() {
     await _pumpThemedScreen(tester, const PlannerHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
     expect(find.text('DAYMARK'), findsOneWidget);
+
+    await _pumpThemedScreen(tester, const MessengerHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    _expectNoLayoutException(tester);
+    expect(find.text('LUMA'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {

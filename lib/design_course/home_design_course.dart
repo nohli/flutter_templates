@@ -18,10 +18,17 @@ class DesignCourseHomeScreen extends StatefulWidget {
 
 class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
   final _ownedSavedCourses = SavedCourses();
+  final _scrollController = ScrollController();
   CategoryType _categoryType = CategoryType.ui;
   var _query = '';
 
   SavedCourses get _savedCourses => widget.savedCourses ?? _ownedSavedCourses;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +36,21 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     final colors = theme.colorScheme;
     return Theme(
       data: theme,
-      child: Material(
-        color: colors.surface,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).padding.top),
-              _buildAppBar(colors),
-              _buildSearchBar(colors),
-              _buildCategorySection(colors),
-              _buildPopularCourseSection(colors),
-            ],
+      child: PrimaryScrollController(
+        controller: _scrollController,
+        child: Scaffold(
+          backgroundColor: colors.surface,
+          body: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).padding.top),
+                _buildAppBar(colors),
+                _buildSearchBar(colors),
+                _buildCategorySection(colors),
+                _buildPopularCourseSection(colors),
+              ],
+            ),
           ),
         ),
       ),

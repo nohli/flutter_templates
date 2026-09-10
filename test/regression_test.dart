@@ -93,6 +93,16 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets(
+    'iOS status-bar tap scrolls every template home screen to the top',
+    (WidgetTester tester) async {
+      await _expectStatusBarTapScrollsToTop(tester, const HotelHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
+    },
+    variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+  );
+
   testWidgets('course details and staged actions render without layout errors', (WidgetTester tester) async {
     _evictAssets(<String>['assets/design_course/interFace4.png']);
     await _pumpScreen(tester, CourseInfoScreen(course: Category.popularCourseList[1], savedCourses: SavedCourses()));
@@ -1135,6 +1145,34 @@ Future<void> _pumpScreen(
     ),
   );
   await tester.pump();
+}
+
+Future<void> _expectStatusBarTapScrollsToTop(WidgetTester tester, Widget screen) async {
+  await tester.pumpWidget(
+    MaterialApp(
+      home: MediaQuery(
+        data: MediaQueryData.fromView(
+          tester.view,
+        ).copyWith(disableAnimations: true, padding: const EdgeInsets.only(top: 25)),
+        child: screen,
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+
+  final scaffold = find.descendant(of: find.byType(screen.runtimeType), matching: find.byType(Scaffold));
+  expect(scaffold, findsOneWidget);
+
+  final controller = PrimaryScrollController.of(tester.element(scaffold));
+  expect(controller.hasClients, isTrue);
+  controller.jumpTo(controller.position.maxScrollExtent);
+  await tester.pump();
+  expect(controller.offset, greaterThan(0));
+
+  tester.simulateStatusBarTap();
+  await tester.pumpAndSettle();
+
+  expect(controller.offset, 0);
 }
 
 void _evictAssets(Iterable<String> assets) {

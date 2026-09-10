@@ -52,6 +52,7 @@ class _AreaListViewState extends State<AreaListView> with SingleTickerProviderSt
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: GridView(
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                  primary: false,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 24.0,

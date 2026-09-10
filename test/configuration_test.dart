@@ -154,8 +154,7 @@ void main() {
         'language': 'en-US',
         'text':
             '• Thanks for testing UI Templates.\n'
-            '• Please explore the whole app, including every template, navigation flow, and information screen.\n'
-            '• If anything looks wrong or feels confusing, send feedback with screenshots and the steps that caused it.',
+            '• Please explore the whole app and share whatever feedback you have.',
       },
     ]);
     expect(File('release_notes_en-US.txt').existsSync(), isFalse);
@@ -198,16 +197,17 @@ void main() {
     ]) {
       final workflow = _loadYamlMap(workflowFile);
       final triggers = _asYamlMap(workflow['on']);
-      expect(triggers.keys, containsAll(<String>['workflow_dispatch', 'pull_request']), reason: workflowFile);
-      expect(triggers.containsKey('push'), isFalse, reason: workflowFile);
+      expect(triggers.keys, containsAll(<String>['workflow_dispatch', 'pull_request', 'push']), reason: workflowFile);
+      expect(_asYamlList(_asYamlMap(triggers['push'])['branches']), <String>['main'], reason: workflowFile);
 
       final jobs = _asYamlMap(workflow['jobs']);
       final expectedJobs = workflowFile.endsWith('flutter_build.yml')
-          ? <String>{'build_android', 'build_ios'}
-          : <String>{'check_formatting', 'analyze', 'test'};
+          ? <String>{'build_android', 'build_ios', 'build_web', 'build_linux', 'build_macos', 'build_windows'}
+          : <String>{'check_dependencies', 'check_formatting', 'analyze', 'test'};
       expect(jobs.keys.cast<String>().toSet(), expectedJobs, reason: workflowFile);
       for (final Object? jobValue in jobs.values) {
         final steps = _asYamlList(_asYamlMap(jobValue)['steps']);
+        expect(steps.map(_asYamlMap).map((YamlMap step) => step['uses']), contains('actions/checkout@v7'));
         final installFlutter = steps
             .map(_asYamlMap)
             .singleWhere((YamlMap step) => step['uses'] == 'subosito/flutter-action@v2');

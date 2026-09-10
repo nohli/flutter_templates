@@ -58,6 +58,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView> with Sing
       padding: const EdgeInsets.only(top: 8),
       child: GridView(
         padding: const EdgeInsets.all(8),
+        primary: false,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: gridDelegate,

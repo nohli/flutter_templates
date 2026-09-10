@@ -45,17 +45,20 @@ class _FitnessSectionScaffoldState extends State<FitnessSectionScaffold> {
     final colors = Theme.of(context).colorScheme;
     final stackHeader = MediaQuery.textScalerOf(context).scale(1) >= 2;
 
-    return Material(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: stackHeader
-          ? _buildStackedList(colors)
-          : Stack(
-              children: <Widget>[
-                _buildMainList(),
-                _buildHeader(colors, stackHeader: false),
-                SizedBox(height: MediaQuery.paddingOf(context).bottom),
-              ],
-            ),
+    return PrimaryScrollController(
+      controller: _scrollController,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: stackHeader
+            ? _buildStackedList(colors)
+            : Stack(
+                children: <Widget>[
+                  _buildMainList(),
+                  _buildHeader(colors, stackHeader: false),
+                  SizedBox(height: MediaQuery.paddingOf(context).bottom),
+                ],
+              ),
+      ),
     );
   }
 

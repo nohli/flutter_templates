@@ -6,6 +6,7 @@ import '../templates/design_course/home_design_course.dart';
 import '../templates/design_course/models/saved_courses.dart';
 import '../templates/finance_app/finance_home_screen.dart';
 import '../templates/fitness_app/fitness_app_home_screen.dart';
+import '../templates/food_delivery_app/food_delivery_home_screen.dart';
 import '../templates/hotel_booking/hotel_home_screen.dart';
 import '../templates/messenger_app/messenger_home_screen.dart';
 import '../templates/planner_app/planner_home_screen.dart';
@@ -124,6 +125,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.storefront => const StorefrontHomeScreen(),
     TemplateGalleryDestination.planner => const PlannerHomeScreen(),
     TemplateGalleryDestination.messenger => const MessengerHomeScreen(),
+    TemplateGalleryDestination.foodDelivery => const FoodDeliveryHomeScreen(),
   };
 }
 

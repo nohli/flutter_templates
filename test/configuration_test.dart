@@ -271,38 +271,6 @@ void main() {
     }
   });
 
-  test('store metadata is factual, bounded, and carries the required trademark notice', () {
-    final appleName = File('store/app-store/en-US/name.txt').readAsStringSync().trim();
-    final appleSubtitle = File('store/app-store/en-US/subtitle.txt').readAsStringSync().trim();
-    final appleDescription = File('store/app-store/en-US/description.txt').readAsStringSync();
-    final playTitle = File('store/google-play/en-US/title.txt').readAsStringSync().trim();
-    final playShortDescription = File('store/google-play/en-US/short_description.txt').readAsStringSync().trim();
-    final playDescription = File('store/google-play/en-US/full_description.txt').readAsStringSync();
-    final applePrivacyPolicyUrl = File('store/app-store/en-US/privacy_policy_url.txt').readAsStringSync().trim();
-    final appleSupportUrl = File('store/app-store/en-US/support_url.txt').readAsStringSync().trim();
-    final playPrivacyPolicyUrl = File('store/google-play/privacy_policy_url.txt').readAsStringSync().trim();
-    final playSupportEmail = File('store/google-play/support_email.txt').readAsStringSync().trim();
-    final playWebsiteUrl = File('store/google-play/website_url.txt').readAsStringSync().trim();
-
-    expect(appleName, AppIdentity.storeName);
-    expect(playTitle, AppIdentity.storeName);
-    expect(appleName.runes.length, lessThanOrEqualTo(30));
-    expect(appleSubtitle.runes.length, lessThanOrEqualTo(30));
-    expect(playTitle.runes.length, lessThanOrEqualTo(30));
-    expect(playShortDescription.runes.length, lessThanOrEqualTo(80));
-    expect(appleDescription, contains(AppIdentity.sampleContentNotice));
-    expect(playDescription, contains(AppIdentity.sampleContentNotice));
-    expect(appleDescription, contains(AppIdentity.trademarkDisclaimer));
-    expect(playDescription, contains(AppIdentity.trademarkDisclaimer));
-    expect(appleDescription.toLowerCase(), isNot(contains('testimonial')));
-    expect(playDescription.toLowerCase(), isNot(contains('testimonial')));
-    expect(applePrivacyPolicyUrl, AppIdentity.privacyPolicyUrl);
-    expect(appleSupportUrl, AppIdentity.supportUrl);
-    expect(playPrivacyPolicyUrl, AppIdentity.privacyPolicyUrl);
-    expect(playSupportEmail, AppIdentity.supportEmail);
-    expect(playWebsiteUrl, AppIdentity.supportUrl);
-  });
-
   test('bundled font licenses preserve their exact upstream notices', () {
     final pubspec = File('pubspec.yaml').readAsStringSync();
     final workSansLicense = File('assets/fonts/WorkSans-LICENSE.txt').readAsStringSync();
@@ -322,42 +290,12 @@ void main() {
     expect(smoothStarRatingLicense, contains('The MIT License (MIT)'));
   });
 
-  test('Google Play artwork has exact dimensions and PNG color contracts', () async {
+  test('Google Play icon has exact dimensions and PNG color contracts', () async {
     final ({int bitDepth, int colorType, int height, int width}) playIcon = _readPngHeader('icon/googleplay.png');
-    final ({int bitDepth, int colorType, int height, int width}) featureGraphic = _readPngHeader(
-      'store/google-play/feature-graphic.png',
-    );
 
     expect(playIcon, (width: 512, height: 512, bitDepth: 8, colorType: 6));
     expect(File('icon/googleplay.png').lengthSync(), lessThanOrEqualTo(1024 * 1024));
     await _expectFullyOpaqueAlpha('icon/googleplay.png');
-    expect(featureGraphic, (width: 1024, height: 500, bitDepth: 8, colorType: 2));
-  });
-
-  test('store screenshot package contains only current RGB captures at accepted sizes', () {
-    const expectedScreenshots = <String, ({int height, int width})>{
-      'store/screenshots/app-store/iphone/01-gallery.png': (width: 1284, height: 2778),
-      'store/screenshots/app-store/ipad/01-gallery.png': (width: 2064, height: 2752),
-      'store/screenshots/google-play/phone/01-gallery.png': (width: 1080, height: 1920),
-      'store/screenshots/google-play/phone/02-hotel.png': (width: 1080, height: 1920),
-      'store/screenshots/google-play/phone/03-fitness.png': (width: 1080, height: 1920),
-      'store/screenshots/google-play/phone/04-design-courses.png': (width: 1080, height: 1920),
-      'store/screenshots/google-play/phone/05-course-detail.png': (width: 1080, height: 1920),
-    };
-    final actualScreenshots = Directory(
-      'store/screenshots',
-    ).listSync(recursive: true).whereType<File>().map((File file) => file.path).toSet();
-
-    expect(actualScreenshots, expectedScreenshots.keys.toSet());
-    for (final MapEntry<String, ({int height, int width})> screenshot in expectedScreenshots.entries) {
-      final header = _readPngHeader(screenshot.key);
-      expect(header, (
-        width: screenshot.value.width,
-        height: screenshot.value.height,
-        bitDepth: 8,
-        colorType: 2,
-      ), reason: screenshot.key);
-    }
   });
 
   test('one canonical icon source owns every generated launcher family', () async {

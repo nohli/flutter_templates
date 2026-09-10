@@ -1,6 +1,5 @@
 abstract final class AppIdentity {
   static const name = 'UI Templates';
-  static const storeName = 'UI Templates';
   static const summary = 'An interactive gallery of mobile interface patterns built with the Flutter SDK.';
   static const sampleContentNotice =
       'All names, prices, ratings, reviews, activity values, and other content inside the gallery are fictional examples.';

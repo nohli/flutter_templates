@@ -91,11 +91,6 @@ jobs:
           cache: true
       - name: Dependencies
         run: flutter pub get
-      - name: ChromeDriver
-        run: |
-          npx @puppeteer/browsers@3.2.2 install chromedriver@stable --path "$RUNNER_TEMP/chromedriver"
-          driver_path="$(find "$RUNNER_TEMP/chromedriver" -type f -name chromedriver -print -quit)"
-          echo "$(dirname "$driver_path")" >> "$GITHUB_PATH"
       - name: Test
         run: |
           chromedriver --port=4444 &

@@ -257,10 +257,17 @@ void main() {
         expect(commands.any((String command) => command.contains('flutter test integration_test -d windows')), isTrue);
         expect(
           commands.any((String command) {
-            return command.contains('flutter drive --driver=test_driver/integration_test.dart') &&
+            return command.contains('chromedriver --port=4444') &&
+                command.contains('flutter drive --driver=test_driver/integration_test.dart') &&
                 command.contains('-d web-server');
           }),
           isTrue,
+        );
+        final webSteps = _asYamlList(_asYamlMap(jobs['web'])['steps']).map(_asYamlMap);
+        expect(webSteps.map((YamlMap step) => step['name']), isNot(contains('ChromeDriver')));
+        expect(
+          webSteps.map((YamlMap step) => step['run']).whereType<String>().join('\n'),
+          isNot(contains('@puppeteer/browsers')),
         );
         final android = _asYamlMap(jobs['android']);
         final androidMatrix = _asYamlMap(_asYamlMap(android['strategy'])['matrix']);

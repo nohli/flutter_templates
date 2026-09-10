@@ -5,10 +5,11 @@ import '../../app/app_theme.dart';
 import '../templates/design_course/home_design_course.dart';
 import '../templates/design_course/models/saved_courses.dart';
 import '../templates/finance_app/finance_home_screen.dart';
-import '../templates/finance_app/widgets/finance_gallery_preview.dart';
 import '../templates/fitness_app/fitness_app_home_screen.dart';
 import '../templates/hotel_booking/hotel_home_screen.dart';
+import '../templates/storefront_app/storefront_home_screen.dart';
 import 'models/template_gallery_item.dart';
+import 'template_gallery_artwork.dart';
 
 class TemplateGalleryScreen extends StatefulWidget {
   const TemplateGalleryScreen({super.key});
@@ -118,6 +119,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.fitness => const FitnessAppHomeScreen(),
     TemplateGalleryDestination.designCourse => DesignCourseHomeScreen(savedCourses: _savedCourses),
     TemplateGalleryDestination.personalFinance => const FinanceHomeScreen(),
+    TemplateGalleryDestination.storefront => const StorefrontHomeScreen(),
   };
 }
 
@@ -219,10 +221,7 @@ class _TemplateGalleryCard extends StatelessWidget {
                     child: Stack(
                       alignment: AlignmentDirectional.center,
                       children: <Widget>[
-                        if (item.imagePath case final imagePath?)
-                          Image.asset(imagePath, fit: BoxFit.cover)
-                        else
-                          MediaQuery.withNoTextScaling(child: const FinanceGalleryPreview()),
+                        MediaQuery.withNoTextScaling(child: TemplateGalleryArtwork(item: item)),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(

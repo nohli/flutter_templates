@@ -14,6 +14,8 @@ import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart'
 import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/main.dart';
+import 'package:templates/features/templates/storefront_app/storefront_app_theme.dart';
+import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
 
 void main() {
   test('template themes preserve their accepted light palettes and accessible semantic roles', () {
@@ -59,6 +61,14 @@ void main() {
             scaffold: FinanceAppTheme.background,
             useMaterial3: true,
           ),
+          (
+            name: 'Storefront',
+            font: StorefrontAppTheme.fontName,
+            build: StorefrontAppTheme.build,
+            primary: StorefrontAppTheme.primary,
+            scaffold: StorefrontAppTheme.background,
+            useMaterial3: true,
+          ),
         ];
 
     for (final themeCase in cases) {
@@ -89,6 +99,7 @@ void main() {
       expect(HotelAppTheme.build().platform, platform);
       expect(FitnessAppTheme.build().platform, platform);
       expect(FinanceAppTheme.build().platform, platform);
+      expect(StorefrontAppTheme.build().platform, platform);
     }
   });
 
@@ -145,6 +156,10 @@ void main() {
     await _pumpThemedScreen(tester, const FinanceHomeScreen());
     _expectTemplateTheme(tester, find.text('Overview'), FinanceAppTheme.build());
     await _expectAccessible(tester);
+
+    await _pumpThemedScreen(tester, const StorefrontHomeScreen());
+    _expectTemplateTheme(tester, find.text('NEST'), StorefrontAppTheme.build());
+    await _expectAccessible(tester);
     semantics.dispose();
   });
 
@@ -193,6 +208,10 @@ void main() {
     await _pumpThemedScreen(tester, const FinanceHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
     expect(find.text('Overview'), findsOneWidget);
+
+    await _pumpThemedScreen(tester, const StorefrontHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    _expectNoLayoutException(tester);
+    expect(find.text('NEST'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {

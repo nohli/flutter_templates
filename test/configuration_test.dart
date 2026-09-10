@@ -154,7 +154,7 @@ void main() {
         'language': 'en-US',
         'text':
             "Please explore the app's main flows and new cross-platform icon, then report anything confusing, "
-            'incorrect, or unstable.',
+            'incorrect, or unstable. iOS now launches cleanly in Dark Mode.',
       },
     ]);
     expect(File('release_notes_en-US.txt').existsSync(), isFalse);
@@ -342,7 +342,7 @@ void main() {
     expect(File('windows/runner/resources/app_icon.ico').existsSync(), isTrue);
   });
 
-  test('startup surfaces keep the adaptive iOS launch and fixed-light platform shells', () {
+  test('startup surfaces keep adaptive iOS launch surfaces and fixed-light non-iOS shells', () {
     final launchStoryboard = File('ios/Runner/Base.lproj/LaunchScreen.storyboard').readAsStringSync();
     final mainStoryboard = File('ios/Runner/Base.lproj/Main.storyboard').readAsStringSync();
     final iosInfo = File('ios/Runner/Info.plist').readAsStringSync();
@@ -355,14 +355,9 @@ void main() {
     expect(launchStoryboard, contains('<color key="backgroundColor" systemColor="systemBackgroundColor"'));
     expect(launchStoryboard, isNot(contains('<color key="backgroundColor" white="1"')));
     expect(launchStoryboard, isNot(contains('<color key="backgroundColor" red="1" green="1" blue="1"')));
-    expect(
-      mainStoryboard,
-      anyOf(
-        contains('<color key="backgroundColor" white="1"'),
-        contains('<color key="backgroundColor" red="1" green="1" blue="1"'),
-      ),
-    );
-    expect(mainStoryboard, isNot(contains('systemColor="systemBackgroundColor"')));
+    expect(mainStoryboard, contains('<color key="backgroundColor" systemColor="systemBackgroundColor"'));
+    expect(mainStoryboard, isNot(contains('<color key="backgroundColor" white="1"')));
+    expect(mainStoryboard, isNot(contains('<color key="backgroundColor" red="1" green="1" blue="1"')));
     expect(launchStoryboard, isNot(contains('LaunchImage')));
     expect(FileSystemEntity.typeSync('ios/Runner/Assets.xcassets/LaunchImage.imageset'), FileSystemEntityType.notFound);
     expect(iosInfo, isNot(contains('<key>UIUserInterfaceStyle</key>')));

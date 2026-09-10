@@ -8,8 +8,9 @@ abstract final class AppIdentity {
   static const privacyPolicyUrl = 'https://achim.io/privacy';
   static const supportUrl = 'https://achim.io';
   static const supportEmail = 'flutter-ui-templates@achim.io';
+  static const sourceUrl = 'https://github.com/nohli/flutter_templates';
   static final privacyPolicyUri = Uri.parse(privacyPolicyUrl);
   static final supportUri = Uri.parse(supportUrl);
-  static final sourceUri = Uri.parse('https://github.com/nohli/flutter_templates');
+  static final sourceUri = Uri.parse(sourceUrl);
   static final upstreamSourceUri = Uri.parse('https://github.com/mitesh77/Best-Flutter-UI-Templates');
 }

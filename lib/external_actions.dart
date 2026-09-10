@@ -26,4 +26,4 @@ Uri supportEmailUri() => appEmailUri(subject: '${AppIdentity.name} support');
 
 final developerPortfolioUri = AppIdentity.supportUri;
 
-const inviteText = 'Explore ${AppIdentity.name} and more apps at ${AppIdentity.supportUrl}';
+const inviteText = 'Explore ${AppIdentity.name} at ${AppIdentity.sourceUrl}';

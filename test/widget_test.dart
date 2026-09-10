@@ -27,12 +27,12 @@ void main() {
     expect(uri.toString(), isNot(contains('+')));
   });
 
-  test('support and sharing use public contact details', () {
+  test('support and sharing use the project contact details', () {
     expect(supportEmailUri().scheme, 'mailto');
     expect(supportEmailUri().path, AppIdentity.supportEmail);
     expect(supportEmailUri().queryParameters['subject'], '${AppIdentity.name} support');
     expect(developerPortfolioUri, AppIdentity.supportUri);
-    expect(inviteText, contains(AppIdentity.supportUrl));
+    expect(inviteText, contains(AppIdentity.sourceUrl));
   });
 
   testWidgets('feedback validates text and opens one truthful email draft', (WidgetTester tester) async {

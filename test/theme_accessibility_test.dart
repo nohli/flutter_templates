@@ -6,6 +6,8 @@ import 'package:templates/app/app_shell.dart';
 import 'package:templates/app/app_theme.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
+import 'package:templates/features/templates/finance_app/finance_app_theme.dart';
+import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart';
@@ -15,43 +17,56 @@ import 'package:templates/main.dart';
 
 void main() {
   test('template themes preserve their accepted light palettes and accessible semantic roles', () {
-    final cases = <({String name, String font, ThemeData Function() build, Color primary, Color scaffold})>[
-      (
-        name: 'App',
-        font: AppTheme.fontName,
-        build: AppTheme.build,
-        primary: Colors.blue,
-        scaffold: AppTheme.nearlyWhite,
-      ),
-      (
-        name: 'Design Course',
-        font: DesignCourseAppTheme.fontName,
-        build: DesignCourseAppTheme.build,
-        primary: DesignCourseAppTheme.nearlyBlue,
-        scaffold: DesignCourseAppTheme.nearlyWhite,
-      ),
-      (
-        name: 'Hotel',
-        font: 'WorkSans',
-        build: HotelAppTheme.build,
-        primary: HotelAppTheme.seedColor,
-        scaffold: const Color(0xFFF6F6F6),
-      ),
-      (
-        name: 'Fitness',
-        font: FitnessAppTheme.fontName,
-        build: FitnessAppTheme.build,
-        primary: FitnessAppTheme.nearlyDarkBlue,
-        scaffold: FitnessAppTheme.background,
-      ),
-    ];
+    final cases =
+        <({String name, String font, ThemeData Function() build, Color primary, Color scaffold, bool useMaterial3})>[
+          (
+            name: 'App',
+            font: AppTheme.fontName,
+            build: AppTheme.build,
+            primary: Colors.blue,
+            scaffold: AppTheme.nearlyWhite,
+            useMaterial3: false,
+          ),
+          (
+            name: 'Design Course',
+            font: DesignCourseAppTheme.fontName,
+            build: DesignCourseAppTheme.build,
+            primary: DesignCourseAppTheme.nearlyBlue,
+            scaffold: DesignCourseAppTheme.nearlyWhite,
+            useMaterial3: false,
+          ),
+          (
+            name: 'Hotel',
+            font: 'WorkSans',
+            build: HotelAppTheme.build,
+            primary: HotelAppTheme.seedColor,
+            scaffold: const Color(0xFFF6F6F6),
+            useMaterial3: false,
+          ),
+          (
+            name: 'Fitness',
+            font: FitnessAppTheme.fontName,
+            build: FitnessAppTheme.build,
+            primary: FitnessAppTheme.nearlyDarkBlue,
+            scaffold: FitnessAppTheme.background,
+            useMaterial3: false,
+          ),
+          (
+            name: 'Finance',
+            font: FinanceAppTheme.fontName,
+            build: FinanceAppTheme.build,
+            primary: FinanceAppTheme.primary,
+            scaffold: FinanceAppTheme.background,
+            useMaterial3: true,
+          ),
+        ];
 
     for (final themeCase in cases) {
       final theme = themeCase.build();
       final colors = theme.colorScheme;
 
       expect(theme.brightness, Brightness.light, reason: themeCase.name);
-      expect(theme.useMaterial3, isFalse, reason: themeCase.name);
+      expect(theme.useMaterial3, themeCase.useMaterial3, reason: themeCase.name);
       expect(theme.platform, defaultTargetPlatform, reason: themeCase.name);
       expect(theme.scaffoldBackgroundColor, themeCase.scaffold, reason: themeCase.name);
       expect(colors.primary, themeCase.primary, reason: themeCase.name);
@@ -73,6 +88,7 @@ void main() {
       expect(DesignCourseAppTheme.build().platform, platform);
       expect(HotelAppTheme.build().platform, platform);
       expect(FitnessAppTheme.build().platform, platform);
+      expect(FinanceAppTheme.build().platform, platform);
     }
   });
 
@@ -125,6 +141,10 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
     _expectTemplateTheme(tester, find.bySemanticsLabel('Diary').first, FitnessAppTheme.build());
     await _expectAccessible(tester);
+
+    await _pumpThemedScreen(tester, const FinanceHomeScreen());
+    _expectTemplateTheme(tester, find.text('Overview'), FinanceAppTheme.build());
+    await _expectAccessible(tester);
     semantics.dispose();
   });
 
@@ -169,6 +189,10 @@ void main() {
     await tester.pump();
     _expectNoLayoutException(tester);
     expect(find.text('Area of focus').hitTestable(), findsOneWidget);
+
+    await _pumpThemedScreen(tester, const FinanceHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    _expectNoLayoutException(tester);
+    expect(find.text('Overview'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {
@@ -239,7 +263,7 @@ Future<void> _pumpThemedScreen(
 void _expectTemplateTheme(WidgetTester tester, Finder finder, ThemeData expected) {
   final actual = Theme.of(tester.element(finder));
   expect(actual.brightness, Brightness.light);
-  expect(actual.useMaterial3, isFalse);
+  expect(actual.useMaterial3, expected.useMaterial3);
   expect(actual.platform, defaultTargetPlatform);
   expect(actual.colorScheme.primary, expected.colorScheme.primary);
   expect(actual.textTheme.bodyMedium?.fontFamily, expected.textTheme.bodyMedium?.fontFamily);

@@ -1,11 +1,11 @@
-enum TemplateGalleryDestination { hotelBooking, fitness, designCourse }
+enum TemplateGalleryDestination { hotelBooking, fitness, designCourse, personalFinance }
 
 class TemplateGalleryItem {
-  const TemplateGalleryItem({required this.title, required this.destination, required this.imagePath});
+  const TemplateGalleryItem({required this.title, required this.destination, this.imagePath});
 
   final String title;
   final TemplateGalleryDestination destination;
-  final String imagePath;
+  final String? imagePath;
 
   static const items = <TemplateGalleryItem>[
     TemplateGalleryItem(
@@ -23,5 +23,6 @@ class TemplateGalleryItem {
       destination: TemplateGalleryDestination.designCourse,
       imagePath: 'assets/design_course/design_course.png',
     ),
+    TemplateGalleryItem(title: 'Personal Finance', destination: TemplateGalleryDestination.personalFinance),
   ];
 }

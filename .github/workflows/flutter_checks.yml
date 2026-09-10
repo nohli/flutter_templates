@@ -51,7 +51,7 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
       - name: Check Dart formatting
-        run: dart format --page-width 120 --output=none --set-exit-if-changed lib test
+        run: dart format --page-width 120 --output=none --set-exit-if-changed lib test integration_test test_driver
 
   analyze:
     name: Analyze Dart

@@ -335,6 +335,7 @@ void main() {
       'finance_app',
       'fitness_app',
       'hotel_booking',
+      'storefront_app',
     });
   });
 

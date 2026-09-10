@@ -36,6 +36,7 @@ import 'package:templates/features/templates/hotel_booking/slider_view.dart';
 import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
 import 'package:templates/main.dart' as app;
+import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
 
 void main() {
   testWidgets('root app uses the adaptive shell', (WidgetTester tester) async {
@@ -101,6 +102,7 @@ void main() {
       await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const FinanceHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const StorefrontHomeScreen());
     },
     variant: TargetPlatformVariant.only(TargetPlatform.iOS),
   );
@@ -455,6 +457,7 @@ void main() {
       (title: 'Fitness App', destination: FitnessAppHomeScreen),
       (title: 'Design Course', destination: DesignCourseHomeScreen),
       (title: 'Personal Finance', destination: FinanceHomeScreen),
+      (title: 'E-commerce Store', destination: StorefrontHomeScreen),
     ]) {
       await tester.tap(find.bySemanticsLabel(scenario.title));
       await tester.pump();

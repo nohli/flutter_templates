@@ -1,4 +1,4 @@
-enum TemplateGalleryDestination { hotelBooking, fitness, designCourse, personalFinance }
+enum TemplateGalleryDestination { hotelBooking, fitness, designCourse, personalFinance, storefront }
 
 class TemplateGalleryItem {
   const TemplateGalleryItem({required this.title, required this.destination, this.imagePath});
@@ -24,5 +24,6 @@ class TemplateGalleryItem {
       imagePath: 'assets/design_course/design_course.png',
     ),
     TemplateGalleryItem(title: 'Personal Finance', destination: TemplateGalleryDestination.personalFinance),
+    TemplateGalleryItem(title: 'E-commerce Store', destination: TemplateGalleryDestination.storefront),
   ];
 }

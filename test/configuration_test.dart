@@ -191,19 +191,35 @@ void main() {
       expect(gitignore, contains(secretPattern));
     }
 
+    expect(File('integration_test/app_smoke_test.dart').existsSync(), isTrue);
+    expect(File('test_driver/integration_test.dart').existsSync(), isTrue);
+
     for (final workflowFile in <String>[
       '.github/workflows/flutter_build.yml',
       '.github/workflows/flutter_checks.yml',
+      '.github/workflows/integration_tests.yml',
     ]) {
       final workflow = _loadYamlMap(workflowFile);
       final triggers = _asYamlMap(workflow['on']);
+      if (workflowFile.endsWith('integration_tests.yml')) {
+        expect(workflow['name'], 'Integration Tests', reason: workflowFile);
+      }
       expect(triggers.keys, containsAll(<String>['workflow_dispatch', 'pull_request', 'push']), reason: workflowFile);
       expect(_asYamlList(_asYamlMap(triggers['push'])['branches']), <String>['main'], reason: workflowFile);
 
       final jobs = _asYamlMap(workflow['jobs']);
-      final expectedJobs = workflowFile.endsWith('flutter_build.yml')
-          ? <String>{'build_android', 'build_ios', 'build_web', 'build_linux', 'build_macos', 'build_windows'}
-          : <String>{'check_dependencies', 'check_formatting', 'analyze', 'test'};
+      final expectedJobs = switch (workflowFile) {
+        '.github/workflows/flutter_build.yml' => <String>{
+          'build_android',
+          'build_ios',
+          'build_web',
+          'build_linux',
+          'build_macos',
+          'build_windows',
+        },
+        '.github/workflows/flutter_checks.yml' => <String>{'check_dependencies', 'check_formatting', 'analyze', 'test'},
+        _ => <String>{'android', 'ios', 'web', 'linux', 'macos', 'windows'},
+      };
       expect(jobs.keys.cast<String>().toSet(), expectedJobs, reason: workflowFile);
       for (final Object? jobValue in jobs.values) {
         final steps = _asYamlList(_asYamlMap(jobValue)['steps']);
@@ -219,9 +235,38 @@ void main() {
             .map(_asYamlMap)
             .map((YamlMap step) => step['run'])
             .whereType<String>();
-        expect(commands, contains('dart format --page-width 120 --output=none --set-exit-if-changed lib test'));
+        expect(
+          commands,
+          contains(
+            'dart format --page-width 120 --output=none --set-exit-if-changed lib test integration_test test_driver',
+          ),
+        );
         expect(commands.any((String command) => command.contains('--line-length')), isFalse);
         expect(commands, contains('flutter test --coverage'));
+      }
+      if (workflowFile.endsWith('integration_tests.yml')) {
+        final commands = jobs.values
+            .expand((Object? jobValue) => _asYamlList(_asYamlMap(jobValue)['steps']))
+            .map(_asYamlMap)
+            .map((YamlMap step) => step['run'])
+            .whereType<String>();
+        expect(commands.any((String command) => command.contains('flutter test integration_test -d linux')), isTrue);
+        expect(commands.any((String command) => command.contains('flutter test integration_test -d macos')), isTrue);
+        expect(commands.any((String command) => command.contains('flutter test integration_test -d windows')), isTrue);
+        expect(
+          commands.any((String command) {
+            return command.contains('flutter drive --driver=test_driver/integration_test.dart') &&
+                command.contains('-d web-server');
+          }),
+          isTrue,
+        );
+        final android = _asYamlMap(jobs['android']);
+        final androidMatrix = _asYamlMap(_asYamlMap(android['strategy'])['matrix']);
+        expect(_asYamlList(androidMatrix['api-level']), <Object?>[24, 30, 35]);
+        final iosSteps = _asYamlList(_asYamlMap(jobs['ios'])['steps']).map(_asYamlMap);
+        final simulator = iosSteps.singleWhere((YamlMap step) => step['uses'] == 'futureware-tech/simulator-action@v5');
+        expect(_asYamlMap(simulator['with']), containsPair('os_version', '26.2'));
+        expect(_asYamlMap(simulator['with']), containsPair('model', 'iPhone 17'));
       }
     }
   });

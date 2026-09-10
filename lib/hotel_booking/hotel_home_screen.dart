@@ -57,80 +57,83 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
 
     return Theme(
       data: theme,
-      child: Material(
-        color: colors.surface,
-        child: Stack(
-          children: <Widget>[
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              child: Column(
-                children: <Widget>[
-                  _buildAppBar(colors),
-                  Expanded(
-                    child: NestedScrollView(
-                      controller: _scrollController,
-                      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                        return <Widget>[
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                              return Column(children: <Widget>[_buildSearchBar(colors), _buildDateAndGuests(colors)]);
-                            }, childCount: 1),
-                          ),
-                          if (stackFilterBar)
-                            SliverToBoxAdapter(child: _buildFilterBar(colors))
-                          else
-                            SliverPersistentHeader(
-                              pinned: true,
-                              floating: true,
-                              delegate: _PinnedHeaderDelegate(_buildFilterBar(colors), extent: 60),
+      child: PrimaryScrollController(
+        controller: _scrollController,
+        child: Scaffold(
+          backgroundColor: colors.surface,
+          body: Stack(
+            children: <Widget>[
+              InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: Column(
+                  children: <Widget>[
+                    _buildAppBar(colors),
+                    Expanded(
+                      child: NestedScrollView(
+                        controller: _scrollController,
+                        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                          return <Widget>[
+                            SliverList(
+                              delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                                return Column(children: <Widget>[_buildSearchBar(colors), _buildDateAndGuests(colors)]);
+                              }, childCount: 1),
                             ),
-                        ];
-                      },
-                      body: Container(
-                        color: colors.surface,
-                        child: ListView.builder(
-                          itemCount: hotels.length,
-                          padding: const EdgeInsets.only(top: 8),
-                          itemBuilder: (BuildContext context, int index) {
-                            final count = hotels.length > 10 ? 10 : hotels.length;
-                            final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-                              CurvedAnimation(
-                                parent: _animationController,
-                                curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
+                            if (stackFilterBar)
+                              SliverToBoxAdapter(child: _buildFilterBar(colors))
+                            else
+                              SliverPersistentHeader(
+                                pinned: true,
+                                floating: true,
+                                delegate: _PinnedHeaderDelegate(_buildFilterBar(colors), extent: 60),
                               ),
-                            );
-                            return HotelListView(
-                              hotelData: hotels[index],
-                              isFavorite: _favoriteHotelIds.contains(hotels[index].id),
-                              onFavoriteChanged: () {
-                                setState(() {
-                                  final hotelId = hotels[index].id;
-                                  final isFavorite = _favoriteHotelIds.contains(hotelId);
+                          ];
+                        },
+                        body: Container(
+                          color: colors.surface,
+                          child: ListView.builder(
+                            itemCount: hotels.length,
+                            padding: const EdgeInsets.only(top: 8),
+                            itemBuilder: (BuildContext context, int index) {
+                              final count = hotels.length > 10 ? 10 : hotels.length;
+                              final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+                                CurvedAnimation(
+                                  parent: _animationController,
+                                  curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
+                                ),
+                              );
+                              return HotelListView(
+                                hotelData: hotels[index],
+                                isFavorite: _favoriteHotelIds.contains(hotels[index].id),
+                                onFavoriteChanged: () {
+                                  setState(() {
+                                    final hotelId = hotels[index].id;
+                                    final isFavorite = _favoriteHotelIds.contains(hotelId);
 
-                                  if (isFavorite) {
-                                    _favoriteHotelIds.remove(hotelId);
-                                  } else {
-                                    _favoriteHotelIds.add(hotelId);
-                                  }
-                                });
-                              },
-                              animation: animation,
-                            );
-                          },
+                                    if (isFavorite) {
+                                      _favoriteHotelIds.remove(hotelId);
+                                    } else {
+                                      _favoriteHotelIds.add(hotelId);
+                                    }
+                                  });
+                                },
+                                animation: animation,
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

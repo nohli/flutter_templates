@@ -154,7 +154,8 @@ void main() {
         'language': 'en-US',
         'text':
             "Please explore the app's main flows and new cross-platform icon, then report anything confusing, "
-            'incorrect, or unstable. iOS now launches cleanly in Dark Mode.',
+            'incorrect, or unstable. iOS now launches cleanly in Dark Mode, and tapping the status bar returns '
+            'each template to the top.',
       },
     ]);
     expect(File('release_notes_en-US.txt').existsSync(), isFalse);

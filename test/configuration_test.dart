@@ -330,7 +330,12 @@ void main() {
   test('source files follow the feature-based application structure', () {
     expect(_entryNames('lib'), <String>{'app', 'features', 'main.dart'});
     expect(_entryNames('lib/features'), <String>{'gallery', 'support', 'templates'});
-    expect(_entryNames('lib/features/templates'), <String>{'design_course', 'fitness_app', 'hotel_booking'});
+    expect(_entryNames('lib/features/templates'), <String>{
+      'design_course',
+      'finance_app',
+      'fitness_app',
+      'hotel_booking',
+    });
   });
 
   test('bundled font licenses preserve their exact upstream notices', () {

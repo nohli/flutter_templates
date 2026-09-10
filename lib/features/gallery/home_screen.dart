@@ -4,6 +4,8 @@ import '../../app/app_identity.dart';
 import '../../app/app_theme.dart';
 import '../templates/design_course/home_design_course.dart';
 import '../templates/design_course/models/saved_courses.dart';
+import '../templates/finance_app/finance_home_screen.dart';
+import '../templates/finance_app/widgets/finance_gallery_preview.dart';
 import '../templates/fitness_app/fitness_app_home_screen.dart';
 import '../templates/hotel_booking/hotel_home_screen.dart';
 import 'models/template_gallery_item.dart';
@@ -115,6 +117,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.hotelBooking => const HotelHomeScreen(),
     TemplateGalleryDestination.fitness => const FitnessAppHomeScreen(),
     TemplateGalleryDestination.designCourse => DesignCourseHomeScreen(savedCourses: _savedCourses),
+    TemplateGalleryDestination.personalFinance => const FinanceHomeScreen(),
   };
 }
 
@@ -216,7 +219,10 @@ class _TemplateGalleryCard extends StatelessWidget {
                     child: Stack(
                       alignment: AlignmentDirectional.center,
                       children: <Widget>[
-                        Image.asset(item.imagePath, fit: BoxFit.cover),
+                        if (item.imagePath case final imagePath?)
+                          Image.asset(imagePath, fit: BoxFit.cover)
+                        else
+                          MediaQuery.withNoTextScaling(child: const FinanceGalleryPreview()),
                         Material(
                           color: Colors.transparent,
                           child: InkWell(

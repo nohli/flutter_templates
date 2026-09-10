@@ -14,6 +14,7 @@ void main() {
     await _openTemplate(tester, cardLabel: 'Hotel Booking', screenText: 'Explore');
     await _openTemplate(tester, cardLabel: 'Fitness App', screenText: 'My Diary');
     await _openTemplate(tester, cardLabel: 'Design Course', screenText: 'Choose your');
+    await _openTemplate(tester, cardLabel: 'Personal Finance', screenText: 'Your money, at a glance');
   });
 }
 

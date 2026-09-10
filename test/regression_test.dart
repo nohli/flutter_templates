@@ -14,6 +14,7 @@ import 'package:templates/features/templates/design_course/home_design_course.da
 import 'package:templates/features/templates/design_course/models/category.dart';
 import 'package:templates/features/templates/design_course/models/saved_courses.dart';
 import 'package:templates/features/support/feedback_screen.dart';
+import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
@@ -93,11 +94,16 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('iOS status-bar tap scrolls every template home screen to the top', (WidgetTester tester) async {
-    await _expectStatusBarTapScrollsToTop(tester, const HotelHomeScreen());
-    await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
-    await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
-  }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
+  testWidgets(
+    'iOS status-bar tap scrolls every template home screen to the top',
+    (WidgetTester tester) async {
+      await _expectStatusBarTapScrollsToTop(tester, const HotelHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const FinanceHomeScreen());
+    },
+    variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+  );
 
   testWidgets('course details and staged actions render without layout errors', (WidgetTester tester) async {
     _evictAssets(<String>['assets/design_course/interFace4.png']);
@@ -448,6 +454,7 @@ void main() {
       (title: 'Hotel Booking', destination: HotelHomeScreen),
       (title: 'Fitness App', destination: FitnessAppHomeScreen),
       (title: 'Design Course', destination: DesignCourseHomeScreen),
+      (title: 'Personal Finance', destination: FinanceHomeScreen),
     ]) {
       await tester.tap(find.bySemanticsLabel(scenario.title));
       await tester.pump();

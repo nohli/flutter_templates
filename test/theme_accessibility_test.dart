@@ -8,6 +8,8 @@ import 'package:templates/features/templates/design_course/design_course_app_the
 import 'package:templates/features/templates/design_course/home_design_course.dart';
 import 'package:templates/features/templates/finance_app/finance_app_theme.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
+import 'package:templates/features/templates/food_delivery_app/food_delivery_app_theme.dart';
+import 'package:templates/features/templates/food_delivery_app/food_delivery_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart';
@@ -89,6 +91,14 @@ void main() {
             scaffold: MessengerAppTheme.background,
             useMaterial3: true,
           ),
+          (
+            name: 'Food delivery',
+            font: FoodDeliveryAppTheme.fontName,
+            build: FoodDeliveryAppTheme.build,
+            primary: FoodDeliveryAppTheme.primary,
+            scaffold: FoodDeliveryAppTheme.background,
+            useMaterial3: true,
+          ),
         ];
 
     for (final themeCase in cases) {
@@ -122,6 +132,7 @@ void main() {
       expect(StorefrontAppTheme.build().platform, platform);
       expect(PlannerAppTheme.build().platform, platform);
       expect(MessengerAppTheme.build().platform, platform);
+      expect(FoodDeliveryAppTheme.build().platform, platform);
     }
   });
 
@@ -190,6 +201,10 @@ void main() {
     await _pumpThemedScreen(tester, const MessengerHomeScreen());
     _expectTemplateTheme(tester, find.text('LUMA'), MessengerAppTheme.build());
     await _expectAccessible(tester);
+
+    await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen());
+    _expectTemplateTheme(tester, find.text('SAVOR'), FoodDeliveryAppTheme.build());
+    await _expectAccessible(tester);
     semantics.dispose();
   });
 
@@ -250,6 +265,10 @@ void main() {
     await _pumpThemedScreen(tester, const MessengerHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
     expect(find.text('LUMA'), findsOneWidget);
+
+    await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    _expectNoLayoutException(tester);
+    expect(find.text('SAVOR'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {

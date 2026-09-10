@@ -15,6 +15,7 @@ import 'package:templates/features/templates/design_course/models/category.dart'
 import 'package:templates/features/templates/design_course/models/saved_courses.dart';
 import 'package:templates/features/support/feedback_screen.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
+import 'package:templates/features/templates/food_delivery_app/food_delivery_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
@@ -107,6 +108,7 @@ void main() {
       await _expectStatusBarTapScrollsToTop(tester, const StorefrontHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const PlannerHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const MessengerHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const FoodDeliveryHomeScreen());
     },
     variant: TargetPlatformVariant.only(TargetPlatform.iOS),
   );
@@ -464,6 +466,7 @@ void main() {
       (title: 'E-commerce Store', destination: StorefrontHomeScreen),
       (title: 'Project Planner', destination: PlannerHomeScreen),
       (title: 'Messaging App', destination: MessengerHomeScreen),
+      (title: 'Food Delivery', destination: FoodDeliveryHomeScreen),
     ]) {
       await tester.tap(find.bySemanticsLabel(scenario.title));
       await tester.pump();

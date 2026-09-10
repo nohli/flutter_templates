@@ -334,6 +334,7 @@ void main() {
       'design_course',
       'finance_app',
       'fitness_app',
+      'food_delivery_app',
       'hotel_booking',
       'messenger_app',
       'planner_app',

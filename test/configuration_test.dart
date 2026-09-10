@@ -153,9 +153,9 @@ void main() {
       <String, String>{
         'language': 'en-US',
         'text':
-            "Please explore the app's main flows and new cross-platform icon, then report anything confusing, "
-            'incorrect, or unstable. iOS now launches cleanly in Dark Mode, and tapping the status bar returns '
-            'each template to the top.',
+            '• Thanks for testing UI Templates.\n'
+            '• Please explore the whole app, including every template, navigation flow, and information screen.\n'
+            '• If anything looks wrong or feels confusing, send feedback with screenshots and the steps that caused it.',
       },
     ]);
     expect(File('release_notes_en-US.txt').existsSync(), isFalse);

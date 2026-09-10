@@ -106,7 +106,7 @@ void main() {
 
     await tester.tap(find.text('Email Us'));
     await tester.pumpAndSettle();
-    _expectLiveRegion(tester, 'No email app is available. Contact templates-app@achim.io.');
+    _expectLiveRegion(tester, 'No email app is available. Contact flutter-ui-templates@achim.io.');
 
     rootBundle.evict('assets/images/feedbackImage.png');
     await _pumpScreen(tester, FeedbackScreen(launcher: (_) async => false));
@@ -136,7 +136,7 @@ void main() {
     await _pumpScreen(tester, HelpScreen(launcher: throwingLauncher));
     await tester.tap(find.text('Email Us'));
     await tester.pumpAndSettle();
-    _expectLiveRegion(tester, 'No email app is available. Contact templates-app@achim.io.');
+    _expectLiveRegion(tester, 'No email app is available. Contact flutter-ui-templates@achim.io.');
     expect(tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Email Us')).onPressed, isNotNull);
 
     rootBundle.evict('assets/images/feedbackImage.png');
@@ -144,7 +144,7 @@ void main() {
     await tester.enterText(find.byType(TextField), 'Keep this draft');
     await tester.tap(find.text('Send'));
     await tester.pumpAndSettle();
-    _expectLiveRegion(tester, 'No email app is available. Contact templates-app@achim.io.');
+    _expectLiveRegion(tester, 'No email app is available. Contact flutter-ui-templates@achim.io.');
     expect(tester.widget<TextField>(find.byType(TextField)).controller?.text, 'Keep this draft');
     expect(tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Send')).onPressed, isNotNull);
     expect(tester.takeException(), isNull);

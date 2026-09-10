@@ -22,6 +22,8 @@ import 'package:templates/features/templates/planner_app/planner_app_theme.dart'
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/podcast_app/podcast_app_theme.dart';
 import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
+import 'package:templates/features/templates/smart_home_app/smart_home_app_theme.dart';
+import 'package:templates/features/templates/smart_home_app/smart_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/storefront_app_theme.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
 
@@ -109,6 +111,14 @@ void main() {
             scaffold: PodcastAppTheme.background,
             useMaterial3: true,
           ),
+          (
+            name: 'Smart home',
+            font: SmartHomeAppTheme.fontName,
+            build: SmartHomeAppTheme.build,
+            primary: SmartHomeAppTheme.primary,
+            scaffold: SmartHomeAppTheme.background,
+            useMaterial3: true,
+          ),
         ];
 
     for (final themeCase in cases) {
@@ -144,6 +154,7 @@ void main() {
       expect(MessengerAppTheme.build().platform, platform);
       expect(FoodDeliveryAppTheme.build().platform, platform);
       expect(PodcastAppTheme.build().platform, platform);
+      expect(SmartHomeAppTheme.build().platform, platform);
     }
   });
 
@@ -220,6 +231,10 @@ void main() {
     await _pumpThemedScreen(tester, const PodcastHomeScreen());
     _expectTemplateTheme(tester, find.text('WAVE'), PodcastAppTheme.build());
     await _expectAccessible(tester);
+
+    await _pumpThemedScreen(tester, const SmartHomeScreen());
+    _expectTemplateTheme(tester, find.text('HOMELINE'), SmartHomeAppTheme.build());
+    await _expectAccessible(tester);
     semantics.dispose();
   });
 
@@ -288,6 +303,10 @@ void main() {
     await _pumpThemedScreen(tester, const PodcastHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
     expect(find.text('WAVE'), findsOneWidget);
+
+    await _pumpThemedScreen(tester, const SmartHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    _expectNoLayoutException(tester);
+    expect(find.text('HOMELINE'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {

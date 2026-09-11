@@ -16,11 +16,24 @@ class StorefrontProductArt extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: colors),
-        borderRadius: BorderRadius.all(Radius.circular(compact ? 18 : 24)),
+        borderRadius: const BorderRadius.all(Radius.circular(4)),
       ),
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
+          Positioned(
+            left: compact ? 9 : 12,
+            bottom: compact ? 8 : 10,
+            child: Text(
+              _materialFor(kind),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.55),
+                fontSize: compact ? 6 : 7,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.8,
+              ),
+            ),
+          ),
           Positioned(
             right: compact ? -14 : -24,
             top: compact ? -16 : -28,
@@ -48,5 +61,12 @@ class StorefrontProductArt extends StatelessWidget {
     StoreProductKind.headphones => Icons.headphones_rounded,
     StoreProductKind.lamp => Icons.light_rounded,
     StoreProductKind.watch => Icons.watch_rounded,
+  };
+
+  String _materialFor(StoreProductKind kind) => switch (kind) {
+    StoreProductKind.chair => 'BOUCLE / OAK',
+    StoreProductKind.headphones => 'ALUMINUM / FOAM',
+    StoreProductKind.lamp => 'GLASS / BRASS',
+    StoreProductKind.watch => 'STEEL / SILICONE',
   };
 }

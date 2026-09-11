@@ -20,7 +20,10 @@ class StorefrontSectionTabs extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: colors.outlineVariant)),
+        border: Border(
+          top: BorderSide(color: colors.outlineVariant),
+          bottom: BorderSide(color: colors.outlineVariant),
+        ),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -71,17 +74,25 @@ class _SectionTab extends StatelessWidget {
       selected: isSelected,
       button: true,
       child: InkWell(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
+        borderRadius: const BorderRadius.all(Radius.circular(2)),
         onTap: onPressed,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
           child: Column(
             children: <Widget>[
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Icon(_iconFor(section), size: 18, color: isSelected ? colors.primary : colors.onSurfaceVariant),
-                  const SizedBox(width: 7),
+                  Text(
+                    _numberFor(section),
+                    style: TextStyle(
+                      color: isSelected ? colors.primary : colors.onSurfaceVariant,
+                      fontSize: 9,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.7,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   Text(
                     label,
                     style: TextStyle(
@@ -92,14 +103,14 @@ class _SectionTab extends StatelessWidget {
                   if (count > 0) ...<Widget>[const SizedBox(width: 6), Badge(label: Text('$count'))],
                 ],
               ),
-              const SizedBox(height: 11),
+              const SizedBox(height: 10),
               AnimatedContainer(
                 duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 220),
-                width: isSelected ? 42 : 0,
-                height: 3,
+                width: isSelected ? 58 : 0,
+                height: 4,
                 decoration: BoxDecoration(
                   color: colors.primary,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(3)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(1)),
                 ),
               ),
             ],
@@ -109,9 +120,9 @@ class _SectionTab extends StatelessWidget {
     );
   }
 
-  IconData _iconFor(StorefrontSection section) => switch (section) {
-    StorefrontSection.shop => Icons.grid_view_rounded,
-    StorefrontSection.saved => Icons.favorite_border_rounded,
-    StorefrontSection.bag => Icons.shopping_bag_outlined,
+  String _numberFor(StorefrontSection section) => switch (section) {
+    StorefrontSection.shop => '01',
+    StorefrontSection.saved => '02',
+    StorefrontSection.bag => '03',
   };
 }

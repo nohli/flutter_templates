@@ -54,25 +54,57 @@ class _StorefrontHomeScreenState extends State<StorefrontHomeScreen> {
       appearance: widget.appearance,
       themeBuilder: StorefrontAppTheme.build,
       builder: (BuildContext context) {
+        final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+
         return PrimaryScrollController(
           controller: scrollController,
           child: Scaffold(
             appBar: AppBar(
+              toolbarHeight: usesLargeText ? 96 : 76,
               leading: Navigator.of(context).canPop()
                   ? IconButton(
                       tooltip: 'Back to template gallery',
                       onPressed: () => Navigator.of(context).pop(),
+                      style: IconButton.styleFrom(
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6))),
+                        side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+                      ),
                       icon: const Icon(Icons.arrow_back_rounded),
                     )
                   : null,
-              titleSpacing: 8,
-              title: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('Nest', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: -0.4)),
-                  Text('Objects for everyday', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w400)),
-                ],
-              ),
+              titleSpacing: 12,
+              title: usesLargeText
+                  ? const Text(
+                      'Nest',
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                    )
+                  : const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'NEST / OBJECTS',
+                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700, letterSpacing: 1.5),
+                        ),
+                        SizedBox(height: 3),
+                        Text('Nest', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.8)),
+                      ],
+                    ),
+              actions: usesLargeText
+                  ? null
+                  : const <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(right: 16),
+                        child: Center(
+                          child: Text(
+                            'EDIT 04',
+                            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700, letterSpacing: 1.2),
+                          ),
+                        ),
+                      ),
+                    ],
             ),
             body: TemplateEntrance(
               child: Column(

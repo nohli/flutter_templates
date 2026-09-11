@@ -3,29 +3,37 @@ import 'package:flutter/material.dart';
 import '../ai_assistant_app_theme.dart';
 
 class AssistantGalleryPreview extends StatelessWidget {
-  const AssistantGalleryPreview({super.key});
+  const AssistantGalleryPreview({this.brightness = Brightness.dark, super.key});
+
+  final Brightness brightness;
 
   @override
   Widget build(BuildContext context) {
+    final dark = brightness == Brightness.dark;
+
     return Semantics(
       excludeSemantics: true,
       image: true,
       label: 'Nova assistant workspace preview',
-      child: const DecoratedBox(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: <Color>[Color(0xFF0B0E20), Color(0xFF17142F), Color(0xFF0D2630)],
+            colors: dark
+                ? const <Color>[Color(0xFF0B0E20), Color(0xFF17142F), Color(0xFF0D2630)]
+                : const <Color>[Color(0xFFF3EFFB), Color(0xFFE6E0FF), Color(0xFFDDF8F2)],
           ),
         ),
         child: Stack(
           children: <Widget>[
-            Positioned.fill(child: CustomPaint(painter: _AuroraBackdropPainter())),
-            Positioned(left: 13, top: 11, child: _NovaHeader()),
-            Positioned(left: 13, top: 40, right: 68, child: _AssistantAnswer()),
-            Positioned(right: 12, top: 30, child: _PromptStack()),
-            Positioned(left: 13, right: 13, bottom: 11, child: _PreviewComposer()),
+            Positioned.fill(
+              child: CustomPaint(painter: _AuroraBackdropPainter(dark: dark)),
+            ),
+            Positioned(left: 13, top: 11, child: _NovaHeader(dark: dark)),
+            Positioned(left: 13, top: 40, right: 68, child: _AssistantAnswer(dark: dark)),
+            Positioned(right: 12, top: 30, child: _PromptStack(dark: dark)),
+            Positioned(left: 13, right: 13, bottom: 11, child: _PreviewComposer(dark: dark)),
           ],
         ),
       ),
@@ -34,13 +42,15 @@ class AssistantGalleryPreview extends StatelessWidget {
 }
 
 class _NovaHeader extends StatelessWidget {
-  const _NovaHeader();
+  const _NovaHeader({required this.dark});
+
+  final bool dark;
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: <Widget>[
-        DecoratedBox(
+        const DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: <Color>[AiAssistantAppTheme.primary, AiAssistantAppTheme.aqua]),
             borderRadius: BorderRadius.all(Radius.circular(7)),
@@ -50,10 +60,14 @@ class _NovaHeader extends StatelessWidget {
             child: Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.background, size: 12),
           ),
         ),
-        SizedBox(width: 7),
+        const SizedBox(width: 7),
         Text(
           'Nova',
-          style: TextStyle(color: AiAssistantAppTheme.ink, fontSize: 10, fontWeight: FontWeight.w800),
+          style: TextStyle(
+            color: dark ? AiAssistantAppTheme.ink : const Color(0xFF171521),
+            fontSize: 10,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ],
     );
@@ -61,15 +75,17 @@ class _NovaHeader extends StatelessWidget {
 }
 
 class _AssistantAnswer extends StatelessWidget {
-  const _AssistantAnswer();
+  const _AssistantAnswer({required this.dark});
+
+  final bool dark;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(11),
       decoration: BoxDecoration(
-        color: AiAssistantAppTheme.surface.withValues(alpha: 0.9),
-        border: Border.all(color: const Color(0xFF353A5A)),
+        color: dark ? AiAssistantAppTheme.surface.withValues(alpha: 0.9) : Colors.white.withValues(alpha: 0.9),
+        border: Border.all(color: dark ? const Color(0xFF353A5A) : const Color(0xFFCBC4DE)),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(5),
           topRight: Radius.circular(15),
@@ -77,21 +93,25 @@ class _AssistantAnswer extends StatelessWidget {
           bottomRight: Radius.circular(15),
         ),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             'Let’s shape the idea.',
-            style: TextStyle(color: AiAssistantAppTheme.ink, fontSize: 8, fontWeight: FontWeight.w700),
+            style: TextStyle(
+              color: dark ? AiAssistantAppTheme.ink : const Color(0xFF171521),
+              fontSize: 8,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-          SizedBox(height: 6),
-          _AnswerLine(width: 92),
-          SizedBox(height: 4),
-          _AnswerLine(width: 76),
-          SizedBox(height: 4),
-          _AnswerLine(width: 58),
-          SizedBox(height: 9),
-          Row(
+          const SizedBox(height: 6),
+          _AnswerLine(width: 92, dark: dark),
+          const SizedBox(height: 4),
+          _AnswerLine(width: 76, dark: dark),
+          const SizedBox(height: 4),
+          _AnswerLine(width: 58, dark: dark),
+          const SizedBox(height: 9),
+          const Row(
             children: <Widget>[
               Icon(Icons.copy_all_outlined, color: AiAssistantAppTheme.mutedInk, size: 8),
               SizedBox(width: 7),
@@ -105,73 +125,88 @@ class _AssistantAnswer extends StatelessWidget {
 }
 
 class _AnswerLine extends StatelessWidget {
-  const _AnswerLine({required this.width});
+  const _AnswerLine({required this.width, required this.dark});
 
   final double width;
+  final bool dark;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       height: 3,
-      decoration: const BoxDecoration(color: Color(0xFF596078), borderRadius: BorderRadius.all(Radius.circular(99))),
+      decoration: BoxDecoration(
+        color: dark ? const Color(0xFF596078) : const Color(0xFF918AA4),
+        borderRadius: const BorderRadius.all(Radius.circular(99)),
+      ),
     );
   }
 }
 
 class _PromptStack extends StatelessWidget {
-  const _PromptStack();
+  const _PromptStack({required this.dark});
+
+  final bool dark;
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        _PromptCard(icon: Icons.draw_outlined, color: AiAssistantAppTheme.pink),
-        SizedBox(height: 6),
-        _PromptCard(icon: Icons.code_rounded, color: AiAssistantAppTheme.aqua),
-        SizedBox(height: 6),
-        _PromptCard(icon: Icons.lightbulb_outline_rounded, color: AiAssistantAppTheme.lavender),
+        _PromptCard(icon: Icons.draw_outlined, color: AiAssistantAppTheme.pink, dark: dark),
+        const SizedBox(height: 6),
+        _PromptCard(icon: Icons.code_rounded, color: AiAssistantAppTheme.aqua, dark: dark),
+        const SizedBox(height: 6),
+        _PromptCard(icon: Icons.lightbulb_outline_rounded, color: AiAssistantAppTheme.lavender, dark: dark),
       ],
     );
   }
 }
 
 class _PromptCard extends StatelessWidget {
-  const _PromptCard({required this.icon, required this.color});
+  const _PromptCard({required this.icon, required this.color, required this.dark});
 
   final IconData icon;
   final Color color;
+  final bool dark;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 47,
       height: 25,
-      decoration: const BoxDecoration(color: Color(0xCC202744), borderRadius: BorderRadius.all(Radius.circular(9))),
+      decoration: BoxDecoration(
+        color: dark ? const Color(0xCC202744) : const Color(0xE6FFFFFF),
+        borderRadius: const BorderRadius.all(Radius.circular(9)),
+      ),
       child: Icon(icon, color: color, size: 12),
     );
   }
 }
 
 class _PreviewComposer extends StatelessWidget {
-  const _PreviewComposer();
+  const _PreviewComposer({required this.dark});
+
+  final bool dark;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 26,
       padding: const EdgeInsets.fromLTRB(10, 0, 3, 0),
-      decoration: const BoxDecoration(
-        color: AiAssistantAppTheme.raisedSurface,
-        borderRadius: BorderRadius.all(Radius.circular(13)),
+      decoration: BoxDecoration(
+        color: dark ? AiAssistantAppTheme.raisedSurface : Colors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(13)),
       ),
-      child: const Row(
+      child: Row(
         children: <Widget>[
           Expanded(
-            child: Text('Message Nova', style: TextStyle(color: AiAssistantAppTheme.mutedInk, fontSize: 5.5)),
+            child: Text(
+              'Message Nova',
+              style: TextStyle(color: dark ? AiAssistantAppTheme.mutedInk : const Color(0xFF706F7B), fontSize: 5.5),
+            ),
           ),
-          CircleAvatar(
+          const CircleAvatar(
             radius: 10,
             backgroundColor: AiAssistantAppTheme.primary,
             child: Icon(Icons.arrow_upward_rounded, size: 11, color: AiAssistantAppTheme.background),
@@ -183,7 +218,9 @@ class _PreviewComposer extends StatelessWidget {
 }
 
 class _AuroraBackdropPainter extends CustomPainter {
-  const _AuroraBackdropPainter();
+  const _AuroraBackdropPainter({required this.dark});
+
+  final bool dark;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -193,7 +230,7 @@ class _AuroraBackdropPainter extends CustomPainter {
       ..lineTo(size.width + 20, -20)
       ..lineTo(-20, -20)
       ..close();
-    canvas.drawPath(violet, Paint()..color = const Color(0x338C7CFF));
+    canvas.drawPath(violet, Paint()..color = dark ? const Color(0x338C7CFF) : const Color(0x556247D6));
 
     final aqua = Path()
       ..moveTo(-20, size.height * 0.82)
@@ -208,9 +245,9 @@ class _AuroraBackdropPainter extends CustomPainter {
       ..lineTo(size.width + 20, size.height + 20)
       ..lineTo(-20, size.height + 20)
       ..close();
-    canvas.drawPath(aqua, Paint()..color = const Color(0x2866E0D2));
+    canvas.drawPath(aqua, Paint()..color = dark ? const Color(0x2866E0D2) : const Color(0x445CF1D4));
   }
 
   @override
-  bool shouldRepaint(covariant _AuroraBackdropPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _AuroraBackdropPainter oldDelegate) => dark != oldDelegate.dark;
 }

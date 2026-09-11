@@ -3,37 +3,45 @@ import 'package:flutter/material.dart';
 import '../travel_app_theme.dart';
 
 class TravelGalleryPreview extends StatelessWidget {
-  const TravelGalleryPreview({super.key});
+  const TravelGalleryPreview({this.brightness = Brightness.light, super.key});
+
+  final Brightness brightness;
 
   @override
   Widget build(BuildContext context) {
+    final dark = brightness == Brightness.dark;
+    final ink = dark ? const Color(0xFFE5F1EF) : TravelAppTheme.ink;
+    final island = dark ? const Color(0xFF285149) : TravelAppTheme.seaGlass;
+
     return Semantics(
       excludeSemantics: true,
       image: true,
       label: 'Roam travel itinerary preview',
-      child: const DecoratedBox(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: <Color>[Color(0xFFF7F0E2), Color(0xFFD6E9E2)],
+            colors: dark
+                ? const <Color>[Color(0xFF101A17), Color(0xFF173B36)]
+                : const <Color>[Color(0xFFF7F0E2), Color(0xFFD6E9E2)],
           ),
         ),
         child: Stack(
           children: <Widget>[
-            Positioned(left: -25, bottom: -34, child: _MapIsland(width: 150, height: 104)),
-            Positioned(left: 72, top: 24, child: _MapIsland(width: 92, height: 62)),
-            Positioned.fill(child: CustomPaint(painter: _TravelRoutePainter())),
+            Positioned(left: -25, bottom: -34, child: _MapIsland(width: 150, height: 104, color: island)),
+            Positioned(left: 72, top: 24, child: _MapIsland(width: 92, height: 62, color: island)),
+            const Positioned.fill(child: CustomPaint(painter: _TravelRoutePainter())),
             Positioned(
               left: 13,
               top: 12,
               child: Text(
                 'Roam',
-                style: TextStyle(color: TravelAppTheme.ink, fontSize: 11, fontWeight: FontWeight.w800),
+                style: TextStyle(color: ink, fontSize: 11, fontWeight: FontWeight.w800),
               ),
             ),
-            Positioned(left: 13, top: 30, child: _RouteBadge()),
-            Positioned(right: 12, top: 14, bottom: 12, width: 78, child: _MiniItinerary()),
+            const Positioned(left: 13, top: 30, child: _RouteBadge()),
+            Positioned(right: 12, top: 14, bottom: 12, width: 78, child: _MiniItinerary(dark: dark)),
           ],
         ),
       ),
@@ -42,10 +50,11 @@ class TravelGalleryPreview extends StatelessWidget {
 }
 
 class _MapIsland extends StatelessWidget {
-  const _MapIsland({required this.width, required this.height});
+  const _MapIsland({required this.width, required this.height, required this.color});
 
   final double width;
   final double height;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +64,7 @@ class _MapIsland extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: TravelAppTheme.seaGlass,
+          color: color,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(width * 0.36),
             topRight: Radius.circular(width * 0.18),
@@ -98,31 +107,38 @@ class _RouteBadge extends StatelessWidget {
 }
 
 class _MiniItinerary extends StatelessWidget {
-  const _MiniItinerary();
+  const _MiniItinerary({required this.dark});
+
+  final bool dark;
 
   @override
   Widget build(BuildContext context) {
+    final ink = dark ? const Color(0xFFE5F1EF) : TravelAppTheme.ink;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(9, 10, 8, 8),
-      decoration: const BoxDecoration(
-        color: TravelAppTheme.surface,
-        borderRadius: BorderRadius.all(Radius.circular(13)),
-        boxShadow: <BoxShadow>[BoxShadow(color: Color(0x22152B2D), blurRadius: 9, offset: Offset(0, 4))],
+      decoration: BoxDecoration(
+        color: dark ? const Color(0xFF1B2925) : TravelAppTheme.surface,
+        borderRadius: const BorderRadius.all(Radius.circular(13)),
+        boxShadow: const <BoxShadow>[BoxShadow(color: Color(0x22152B2D), blurRadius: 9, offset: Offset(0, 4))],
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Friday, 18', style: TextStyle(fontSize: 6.5, fontWeight: FontWeight.w800)),
-          SizedBox(height: 9),
-          _MiniStop(color: TravelAppTheme.coral, width: 42),
-          _MiniStop(color: TravelAppTheme.sun, width: 34),
-          _MiniStop(color: TravelAppTheme.ocean, width: 46),
-          Spacer(),
+          Text(
+            'Friday, 18',
+            style: TextStyle(color: ink, fontSize: 6.5, fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 9),
+          const _MiniStop(color: TravelAppTheme.coral, width: 42),
+          const _MiniStop(color: TravelAppTheme.sun, width: 34),
+          const _MiniStop(color: TravelAppTheme.ocean, width: 46),
+          const Spacer(),
           Row(
             children: <Widget>[
-              Icon(Icons.near_me_rounded, size: 7, color: TravelAppTheme.primary),
-              SizedBox(width: 3),
-              Text('4 stops', style: TextStyle(fontSize: 4.5, color: TravelAppTheme.mutedInk)),
+              const Icon(Icons.near_me_rounded, size: 7, color: TravelAppTheme.primary),
+              const SizedBox(width: 3),
+              Text('4 stops', style: TextStyle(fontSize: 4.5, color: ink.withValues(alpha: 0.7))),
             ],
           ),
         ],

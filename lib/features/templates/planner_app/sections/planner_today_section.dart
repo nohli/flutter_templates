@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/planner_task.dart';
 import '../planner_app_theme.dart';
-import '../widgets/planner_task_tile.dart';
+import '../widgets/planner_timeline.dart';
 
 class PlannerTodaySection extends StatelessWidget {
   const PlannerTodaySection({
@@ -37,12 +37,7 @@ class PlannerTodaySection extends StatelessWidget {
         const SizedBox(height: 18),
         _QuickCapture(controller: taskController, onAddTask: onAddTask),
         const SizedBox(height: 26),
-        const Text('Today', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 12),
-        for (final task in tasks) ...<Widget>[
-          PlannerTaskTile(task: task, onToggle: () => onToggleTask(task)),
-          if (task != tasks.last) const SizedBox(height: 10),
-        ],
+        PlannerTimeline(tasks: tasks, onToggleTask: onToggleTask),
       ],
     );
   }

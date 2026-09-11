@@ -66,6 +66,9 @@ void main() {
 
     expect(find.text('ORBIT / LIVE PORTFOLIO'), findsOneWidget);
     expect(find.text(r'$24,860'), findsOneWidget);
+    for (final action in <String>['SEND', 'ADD', 'REQUEST']) {
+      expect(find.text(action), findsOneWidget);
+    }
     expect(find.bySemanticsLabel('Orbit finance market dashboard preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
     semantics.dispose();

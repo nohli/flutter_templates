@@ -69,6 +69,9 @@ void main() {
 
     expect(find.text('DAYMARK  /  THURSDAY'), findsOneWidget);
     expect(find.text('11'), findsOneWidget);
+    for (final time in <String>['09:30', '11:00', '14:00']) {
+      expect(find.text(time), findsOneWidget);
+    }
     expect(find.bySemanticsLabel('Daymark graphic daily planner preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
     semantics.dispose();

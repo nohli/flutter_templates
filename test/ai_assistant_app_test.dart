@@ -80,7 +80,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('assistant gallery preview uses its own aurora workspace composition', (WidgetTester tester) async {
+  testWidgets('assistant gallery preview uses its own spatial workspace composition', (WidgetTester tester) async {
     final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
@@ -89,6 +89,8 @@ void main() {
     );
 
     expect(find.text('Nova'), findsOneWidget);
+    expect(find.text('THOUGHT MAP / LIVE'), findsOneWidget);
+    expect(find.text('STORY'), findsOneWidget);
     expect(find.text('Message Nova'), findsOneWidget);
     expect(find.bySemanticsLabel('Nova assistant workspace preview'), findsOneWidget);
     expect(tester.takeException(), isNull);

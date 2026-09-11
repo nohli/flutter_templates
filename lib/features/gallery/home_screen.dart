@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_identity.dart';
 import '../../app/app_theme.dart';
+import '../templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import '../templates/design_course/home_design_course.dart';
 import '../templates/design_course/models/saved_courses.dart';
 import '../templates/finance_app/finance_home_screen.dart';
 import '../templates/fitness_app/fitness_app_home_screen.dart';
 import '../templates/food_delivery_app/food_delivery_home_screen.dart';
 import '../templates/hotel_booking/hotel_home_screen.dart';
-import '../templates/messenger_app/messenger_home_screen.dart';
 import '../templates/planner_app/planner_home_screen.dart';
 import '../templates/podcast_app/podcast_home_screen.dart';
-import '../templates/smart_home_app/smart_home_screen.dart';
+import '../templates/social_app/social_home_screen.dart';
 import '../templates/storefront_app/storefront_home_screen.dart';
 import 'models/template_gallery_item.dart';
 import 'template_gallery_artwork.dart';
@@ -126,10 +126,10 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.personalFinance => const FinanceHomeScreen(),
     TemplateGalleryDestination.storefront => const StorefrontHomeScreen(),
     TemplateGalleryDestination.planner => const PlannerHomeScreen(),
-    TemplateGalleryDestination.messenger => const MessengerHomeScreen(),
+    TemplateGalleryDestination.aiAssistant => const AiAssistantHomeScreen(),
     TemplateGalleryDestination.foodDelivery => const FoodDeliveryHomeScreen(),
     TemplateGalleryDestination.podcast => const PodcastHomeScreen(),
-    TemplateGalleryDestination.smartHome => const SmartHomeScreen(),
+    TemplateGalleryDestination.social => const SocialHomeScreen(),
   };
 }
 

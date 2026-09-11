@@ -5,10 +5,10 @@ enum TemplateGalleryDestination {
   personalFinance,
   storefront,
   planner,
-  messenger,
+  aiAssistant,
   foodDelivery,
   podcast,
-  smartHome,
+  social,
 }
 
 class TemplateGalleryItem {
@@ -37,9 +37,9 @@ class TemplateGalleryItem {
     TemplateGalleryItem(title: 'Personal Finance', destination: TemplateGalleryDestination.personalFinance),
     TemplateGalleryItem(title: 'E-commerce Store', destination: TemplateGalleryDestination.storefront),
     TemplateGalleryItem(title: 'Project Planner', destination: TemplateGalleryDestination.planner),
-    TemplateGalleryItem(title: 'Messaging App', destination: TemplateGalleryDestination.messenger),
+    TemplateGalleryItem(title: 'AI Assistant', destination: TemplateGalleryDestination.aiAssistant),
     TemplateGalleryItem(title: 'Food Delivery', destination: TemplateGalleryDestination.foodDelivery),
     TemplateGalleryItem(title: 'Podcast Player', destination: TemplateGalleryDestination.podcast),
-    TemplateGalleryItem(title: 'Smart Home', destination: TemplateGalleryDestination.smartHome),
+    TemplateGalleryItem(title: 'Social Community', destination: TemplateGalleryDestination.social),
   ];
 }

@@ -17,10 +17,10 @@ void main() {
     await _openTemplate(tester, cardLabel: 'Personal Finance', screenText: 'Your money, at a glance');
     await _openTemplate(tester, cardLabel: 'E-commerce Store', screenText: 'Curated objects for calmer spaces.');
     await _openTemplate(tester, cardLabel: 'Project Planner', screenText: 'Make space for what matters.');
-    await _openTemplate(tester, cardLabel: 'Messaging App', screenText: 'Messages that feel close.');
+    await _openTemplate(tester, cardLabel: 'AI Assistant', screenText: 'What can I help you create?');
     await _openTemplate(tester, cardLabel: 'Food Delivery', screenText: 'Good food, right on time.');
     await _openTemplate(tester, cardLabel: 'Podcast Player', screenText: 'Stories worth your time.');
-    await _openTemplate(tester, cardLabel: 'Smart Home', screenText: 'Everything feels just right.');
+    await _openTemplate(tester, cardLabel: 'Social Community', screenText: 'Share what feels alive.');
   });
 }
 

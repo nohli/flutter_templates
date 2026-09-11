@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart' hide TextDirection;
-import 'package:templates/features/support/about_screen.dart';
 import 'package:templates/app/app_drawer.dart';
-import 'package:templates/app/app_shell.dart';
 import 'package:templates/app/app_identity.dart';
+import 'package:templates/app/app_shell.dart';
+import 'package:templates/features/support/about_screen.dart';
+import 'package:templates/features/support/feedback_screen.dart';
+import 'package:templates/features/support/help_screen.dart';
+import 'package:templates/features/support/invite_friend_screen.dart';
+import 'package:templates/features/gallery/home_screen.dart';
+import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import 'package:templates/features/templates/design_course/course_info_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
 import 'package:templates/features/templates/design_course/models/category.dart';
 import 'package:templates/features/templates/design_course/models/saved_courses.dart';
-import 'package:templates/features/support/feedback_screen.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/food_delivery_app/food_delivery_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/bottom_navigation_view/bottom_bar_view.dart';
@@ -24,8 +28,6 @@ import 'package:templates/features/templates/fitness_app/ui_view/area_list_view.
 import 'package:templates/features/templates/fitness_app/ui_view/fitness_section_scaffold.dart';
 import 'package:templates/features/templates/fitness_app/ui_view/glass_view.dart';
 import 'package:templates/features/templates/fitness_app/ui_view/workout_view.dart';
-import 'package:templates/features/support/help_screen.dart';
-import 'package:templates/features/gallery/home_screen.dart';
 import 'package:templates/features/templates/hotel_booking/calendar_popup_view.dart';
 import 'package:templates/features/templates/hotel_booking/custom_calendar.dart';
 import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
@@ -35,13 +37,11 @@ import 'package:templates/features/templates/hotel_booking/model/hotel_list_data
 import 'package:templates/features/templates/hotel_booking/range_slider_view.dart';
 import 'package:templates/features/templates/hotel_booking/slider_view.dart';
 import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
-import 'package:templates/features/support/invite_friend_screen.dart';
-import 'package:templates/main.dart' as app;
-import 'package:templates/features/templates/messenger_app/messenger_home_screen.dart';
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
-import 'package:templates/features/templates/smart_home_app/smart_home_screen.dart';
+import 'package:templates/features/templates/social_app/social_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
+import 'package:templates/main.dart' as app;
 
 void main() {
   testWidgets('root app uses the adaptive shell', (WidgetTester tester) async {
@@ -109,10 +109,10 @@ void main() {
       await _expectStatusBarTapScrollsToTop(tester, const FinanceHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const StorefrontHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const PlannerHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const MessengerHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const AiAssistantHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const FoodDeliveryHomeScreen());
       await _expectStatusBarTapScrollsToTop(tester, const PodcastHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const SmartHomeScreen());
+      await _expectStatusBarTapScrollsToTop(tester, const SocialHomeScreen());
     },
     variant: TargetPlatformVariant.only(TargetPlatform.iOS),
   );
@@ -469,10 +469,10 @@ void main() {
       (title: 'Personal Finance', destination: FinanceHomeScreen),
       (title: 'E-commerce Store', destination: StorefrontHomeScreen),
       (title: 'Project Planner', destination: PlannerHomeScreen),
-      (title: 'Messaging App', destination: MessengerHomeScreen),
+      (title: 'AI Assistant', destination: AiAssistantHomeScreen),
       (title: 'Food Delivery', destination: FoodDeliveryHomeScreen),
       (title: 'Podcast Player', destination: PodcastHomeScreen),
-      (title: 'Smart Home', destination: SmartHomeScreen),
+      (title: 'Social Community', destination: SocialHomeScreen),
     ]) {
       await tester.tap(find.bySemanticsLabel(scenario.title));
       await tester.pump();

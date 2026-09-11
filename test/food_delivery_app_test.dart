@@ -6,6 +6,7 @@ import 'package:templates/features/templates/food_delivery_app/sections/delivery
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_bottom_bar.dart';
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_basket_item.dart';
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_gallery_preview.dart';
+import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('delivery sample meals expose unique identifiers and valid values', () {
@@ -85,7 +86,9 @@ void main() {
     );
 
     expect(find.text('SAVOR'), findsOneWidget);
-    expect(find.text('Good food, right on time.'), findsOneWidget);
+    expect(find.text('Good food,'), findsOneWidget);
+    expect(find.text('right on time.'), findsOneWidget);
+    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 

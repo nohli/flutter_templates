@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../templates/ai_assistant_app/widgets/assistant_gallery_preview.dart';
 import '../templates/finance_app/widgets/finance_gallery_preview.dart';
 import '../templates/food_delivery_app/widgets/delivery_gallery_preview.dart';
-import '../templates/messenger_app/widgets/messenger_gallery_preview.dart';
 import '../templates/planner_app/widgets/planner_gallery_preview.dart';
 import '../templates/podcast_app/widgets/podcast_gallery_preview.dart';
-import '../templates/smart_home_app/widgets/smart_home_gallery_preview.dart';
+import '../templates/social_app/widgets/social_gallery_preview.dart';
 import '../templates/storefront_app/widgets/storefront_gallery_preview.dart';
 import 'models/template_gallery_item.dart';
 
@@ -24,10 +24,10 @@ class TemplateGalleryArtwork extends StatelessWidget {
       TemplateGalleryDestination.personalFinance => const FinanceGalleryPreview(),
       TemplateGalleryDestination.storefront => const StorefrontGalleryPreview(),
       TemplateGalleryDestination.planner => const PlannerGalleryPreview(),
-      TemplateGalleryDestination.messenger => const MessengerGalleryPreview(),
+      TemplateGalleryDestination.aiAssistant => const AssistantGalleryPreview(),
       TemplateGalleryDestination.foodDelivery => const DeliveryGalleryPreview(),
       TemplateGalleryDestination.podcast => const PodcastGalleryPreview(),
-      TemplateGalleryDestination.smartHome => const SmartHomeGalleryPreview(),
+      TemplateGalleryDestination.social => const SocialGalleryPreview(),
       TemplateGalleryDestination.hotelBooking ||
       TemplateGalleryDestination.fitness ||
       TemplateGalleryDestination.designCourse => const SizedBox.shrink(),

@@ -7,6 +7,7 @@ import 'package:templates/features/templates/finance_app/widgets/finance_bottom_
 import 'package:templates/features/templates/finance_app/widgets/finance_entrance.dart';
 import 'package:templates/features/templates/finance_app/widgets/finance_gallery_preview.dart';
 import 'package:templates/features/templates/finance_app/widgets/spending_overview.dart';
+import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('finance sample models expose stable values and bounded progress', () {
@@ -49,9 +50,9 @@ void main() {
       ),
     );
 
-    expect(find.text('Finance'), findsOneWidget);
-    expect(find.text('BALANCE'), findsOneWidget);
-    expect(find.text('WEEK'), findsOneWidget);
+    expect(find.text('Overview'), findsOneWidget);
+    expect(find.text('Activity'), findsOneWidget);
+    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 

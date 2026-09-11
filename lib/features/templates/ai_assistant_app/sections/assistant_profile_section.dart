@@ -20,7 +20,7 @@ class AssistantProfileSection extends StatelessWidget {
 
     return ListView(
       controller: scrollController,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
       children: <Widget>[
         const _ProfileHeader(),
         const SizedBox(height: 24),
@@ -36,13 +36,16 @@ class AssistantProfileSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 28),
-        const Text('Preferences', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+        const Text(
+          'SYSTEM PREFERENCES',
+          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+        ),
         const SizedBox(height: 12),
         SwitchListTile.adaptive(
           value: conciseReplies,
           onChanged: onConciseRepliesChanged,
           tileColor: colors.surface,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+          shape: RoundedRectangleBorder(side: BorderSide(color: colors.outlineVariant)),
           secondary: const Icon(Icons.short_text_rounded, color: AiAssistantAppTheme.aqua),
           title: const Text('Concise replies', style: TextStyle(fontWeight: FontWeight.w700)),
           subtitle: const Text('Prefer focused answers by default.'),
@@ -63,28 +66,46 @@ class _ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Row(
-      children: <Widget>[
-        CircleAvatar(
-          radius: 38,
-          backgroundColor: colors.primaryContainer,
-          child: Text(
-            'AR',
-            style: TextStyle(color: colors.onPrimaryContainer, fontSize: 22, fontWeight: FontWeight.w800),
-          ),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        border: Border.all(color: colors.outlineVariant),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: <Widget>[
+            DecoratedBox(
+              decoration: const BoxDecoration(color: AiAssistantAppTheme.primary),
+              child: SizedBox.square(
+                dimension: 70,
+                child: Center(
+                  child: Text(
+                    'AR',
+                    style: TextStyle(color: colors.onPrimary, fontSize: 22, fontWeight: FontWeight.w900),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'IDENTITY / BUILDER',
+                    style: TextStyle(color: colors.secondary, fontSize: 8, fontWeight: FontWeight.w900),
+                  ),
+                  const SizedBox(height: 5),
+                  const Text('Alex Rivera', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+                  const SizedBox(height: 4),
+                  Text('Curious builder', style: TextStyle(color: colors.onSurfaceVariant)),
+                ],
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text('Alex Rivera', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
-              const SizedBox(height: 4),
-              Text('Curious builder', style: TextStyle(color: colors.onSurfaceVariant)),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -101,7 +122,10 @@ class _ProfileMetric extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(color: colors.surface, borderRadius: const BorderRadius.all(Radius.circular(22))),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        border: Border.all(color: colors.outlineVariant),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -130,7 +154,7 @@ class _PreferenceTile extends StatelessWidget {
 
     return ListTile(
       tileColor: colors.surface,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+      shape: RoundedRectangleBorder(side: BorderSide(color: colors.outlineVariant)),
       leading: Icon(icon, color: colors.primary),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
       subtitle: Text(detail),

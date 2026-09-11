@@ -14,21 +14,24 @@ class AssistantDiscoverSection extends StatelessWidget {
 
     return ListView(
       controller: scrollController,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
       children: <Widget>[
         const Text(
-          'A specialist for every idea.',
-          style: TextStyle(fontSize: 34, height: 1.05, fontWeight: FontWeight.w800),
+          'CHOOSE A\nNEW MIND.',
+          style: TextStyle(fontSize: 34, height: 0.86, fontWeight: FontWeight.w900, letterSpacing: -1.3),
         ),
         const SizedBox(height: 12),
         Text(
-          'Reusable cards, filters, and responsive layouts for an assistant marketplace.',
+          'A modular assistant constellation for every kind of work.',
           style: TextStyle(color: colors.onSurfaceVariant, height: 1.4),
         ),
         const SizedBox(height: 24),
         const _FeaturedAssistant(),
         const SizedBox(height: 28),
-        const Text('Explore assistants', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+        const Text(
+          'AVAILABLE MODULES / 03',
+          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+        ),
         const SizedBox(height: 14),
         ..._assistants.map(
           (({Color color, IconData icon, String subtitle, String title}) assistant) => Padding(
@@ -76,16 +79,18 @@ class _FeaturedAssistant extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: <Color>[Color(0xFF392F83), Color(0xFF165D63)]),
-        borderRadius: BorderRadius.all(Radius.circular(28)),
+        color: AiAssistantAppTheme.raisedSurface,
+        border: Border.fromBorderSide(BorderSide(color: AiAssistantAppTheme.aqua)),
         boxShadow: AiAssistantAppTheme.softShadow,
       ),
       child: const Row(
         children: <Widget>[
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Color(0x24FFFFFF),
-            child: Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.aqua, size: 28),
+          DecoratedBox(
+            decoration: BoxDecoration(color: AiAssistantAppTheme.primary),
+            child: SizedBox.square(
+              dimension: 60,
+              child: Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.ink, size: 28),
+            ),
           ),
           SizedBox(width: 16),
           Expanded(
@@ -93,11 +98,14 @@ class _FeaturedAssistant extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Featured',
-                  style: TextStyle(color: AiAssistantAppTheme.aqua, fontWeight: FontWeight.w700),
+                  'FEATURED / 00',
+                  style: TextStyle(color: AiAssistantAppTheme.aqua, fontSize: 8, fontWeight: FontWeight.w900),
                 ),
                 SizedBox(height: 5),
-                Text('Creative studio', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+                Text(
+                  'Creative studio',
+                  style: TextStyle(color: AiAssistantAppTheme.ink, fontSize: 22, fontWeight: FontWeight.w900),
+                ),
                 SizedBox(height: 4),
                 Text('Words, concepts, and visual directions.', style: TextStyle(color: Color(0xFFD8DAEF))),
               ],
@@ -130,25 +138,26 @@ class _AssistantCard extends StatelessWidget {
 
     return Material(
       color: colors.surface,
-      borderRadius: const BorderRadius.all(Radius.circular(22)),
+      shape: RoundedRectangleBorder(side: BorderSide(color: colors.outlineVariant)),
       child: InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(22)),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
             children: <Widget>[
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: color.withValues(alpha: 0.16),
-                child: Icon(icon, color: color),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.2),
+                  border: Border.all(color: color),
+                ),
+                child: SizedBox.square(dimension: 48, child: Icon(icon, color: color)),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                    Text(title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 4),
                     Text(subtitle, style: TextStyle(color: colors.onSurfaceVariant, height: 1.3)),
                   ],

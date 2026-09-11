@@ -20,21 +20,42 @@ class AssistantMessageBubble extends StatelessWidget {
         child: Container(
           constraints: const BoxConstraints(maxWidth: 330),
           margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
           decoration: BoxDecoration(
-            gradient: isUser
-                ? const LinearGradient(colors: <Color>[AiAssistantAppTheme.primary, Color(0xFF6D5CE8)])
-                : null,
-            color: isUser ? null : colors.surface,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(20),
-              topRight: const Radius.circular(20),
-              bottomLeft: Radius.circular(isUser ? 20 : 5),
-              bottomRight: Radius.circular(isUser ? 5 : 20),
-            ),
-            border: isUser ? null : Border.all(color: colors.outlineVariant),
+            color: isUser ? colors.primaryContainer : colors.surface,
+            border: Border.all(color: isUser ? colors.primary : colors.outlineVariant),
           ),
-          child: Text(message.text, style: TextStyle(color: isUser ? Colors.white : colors.onSurface, height: 1.35)),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                ColoredBox(
+                  color: isUser ? AiAssistantAppTheme.pink : AiAssistantAppTheme.aqua,
+                  child: const SizedBox(width: 5),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          isUser ? 'YOU / INPUT' : 'NOVA / RESPONSE',
+                          style: TextStyle(
+                            color: isUser ? colors.primary : colors.secondary,
+                            fontSize: 8,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        const SizedBox(height: 7),
+                        Text(message.text, style: TextStyle(color: colors.onSurface, height: 1.35)),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

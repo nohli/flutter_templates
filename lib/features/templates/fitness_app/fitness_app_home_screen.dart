@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/motion_preferences.dart';
+import '../shared/template_motion.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
 import 'my_diary/my_diary_screen.dart';
@@ -38,15 +39,28 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen> with Single
   @override
   Widget build(BuildContext context) {
     final theme = FitnessAppTheme.build();
-    final tabBody = _selectedIndex.isEven
-        ? MyDiaryScreen(animation: _animationController)
-        : TrainingScreen(animation: _animationController);
+    final selectedSection = _selectedIndex.isEven ? 0 : 1;
 
     return Theme(
       data: theme,
       child: Material(
         color: theme.scaffoldBackgroundColor,
-        child: Stack(children: <Widget>[tabBody, _buildBottomBar()]),
+        child: TemplateEntrance(
+          child: Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: TemplateSectionSwitcher(
+                  selectedIndex: selectedSection,
+                  children: <Widget>[
+                    MyDiaryScreen(animation: _animationController),
+                    TrainingScreen(animation: _animationController),
+                  ],
+                ),
+              ),
+              _buildBottomBar(),
+            ],
+          ),
+        ),
       ),
     );
   }

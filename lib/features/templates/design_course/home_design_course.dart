@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_motion.dart';
 import 'category_list_view.dart';
 import 'course_info_screen.dart';
 import 'design_course_app_theme.dart';
@@ -40,16 +41,18 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         controller: _scrollController,
         child: Scaffold(
           backgroundColor: colors.surface,
-          body: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).padding.top),
-                _buildAppBar(colors),
-                _buildSearchBar(colors),
-                _buildCategorySection(colors),
-                _buildPopularCourseSection(colors),
-              ],
+          body: TemplateEntrance(
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: MediaQuery.of(context).padding.top),
+                  _buildAppBar(colors),
+                  _buildSearchBar(colors),
+                  _buildCategorySection(colors),
+                  _buildPopularCourseSection(colors),
+                ],
+              ),
             ),
           ),
         ),
@@ -167,11 +170,18 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
       label: 'Select ${category.label} category',
       excludeSemantics: true,
       onTap: selectCategory,
-      child: Container(
+      child: AnimatedContainer(
+        duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
         decoration: BoxDecoration(
           color: isSelected ? colors.primary : colors.surface,
           borderRadius: const BorderRadius.all(Radius.circular(24.0)),
           border: Border.all(color: colors.primary),
+          boxShadow: isSelected
+              ? <BoxShadow>[
+                  BoxShadow(color: colors.primary.withValues(alpha: 0.24), blurRadius: 14, offset: const Offset(0, 6)),
+                ]
+              : const <BoxShadow>[],
         ),
         child: Material(
           color: Colors.transparent,

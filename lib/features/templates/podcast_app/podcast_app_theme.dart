@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_theme.dart';
+
 abstract final class PodcastAppTheme {
   static const background = Color(0xFFF6F2EA);
   static const surface = Color(0xFFFFFFFF);
@@ -27,11 +29,6 @@ abstract final class PodcastAppTheme {
       outlineVariant: divider,
     );
 
-    return ThemeData(
-      colorScheme: colors,
-      fontFamily: fontName,
-      scaffoldBackgroundColor: background,
-      useMaterial3: true,
-    );
+    return buildTemplateTheme(colors: colors, background: background, navigationIndicator: blush, fontFamily: fontName);
   }
 }

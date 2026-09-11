@@ -22,11 +22,22 @@ class PodcastShowCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
 
-    return Material(
-      color: PodcastAppTheme.surface,
-      borderRadius: const BorderRadius.all(Radius.circular(26)),
+    return AnimatedContainer(
+      duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 220),
+      curve: Curves.easeOutCubic,
+      decoration: BoxDecoration(
+        color: isSaved ? const Color(0xFFFFF8F8) : PodcastAppTheme.surface,
+        border: Border.all(color: isSaved ? PodcastAppTheme.blush : Colors.transparent, width: 1.5),
+        borderRadius: const BorderRadius.all(Radius.circular(26)),
+      ),
       clipBehavior: Clip.antiAlias,
-      child: Padding(padding: const EdgeInsets.all(14), child: usesLargeText ? _largeTextLayout() : _standardLayout()),
+      child: Material(
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: usesLargeText ? _largeTextLayout() : _standardLayout(),
+        ),
+      ),
     );
   }
 

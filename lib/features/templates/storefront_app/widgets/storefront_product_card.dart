@@ -46,11 +46,14 @@ class StorefrontProductCard extends StatelessWidget {
     return Semantics(
       container: true,
       label: '${product.name}, ${formatStorePrice(context, product.price)}',
-      child: Container(
+      child: AnimatedContainer(
+        duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
         padding: const EdgeInsets.all(12),
-        decoration: const BoxDecoration(
-          color: StorefrontAppTheme.surface,
-          borderRadius: BorderRadius.all(Radius.circular(26)),
+        decoration: BoxDecoration(
+          color: isSaved ? const Color(0xFFFFFAF5) : StorefrontAppTheme.surface,
+          border: Border.all(color: isSaved ? StorefrontAppTheme.blush : Colors.transparent, width: 1.5),
+          borderRadius: const BorderRadius.all(Radius.circular(26)),
           boxShadow: StorefrontAppTheme.softShadow,
         ),
         child: Stack(

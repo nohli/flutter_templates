@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/motion_preferences.dart';
+import '../shared/template_motion.dart';
 import 'finance_app_theme.dart';
 import 'models/finance_section.dart';
 import 'sections/finance_activity_section.dart';
@@ -53,41 +54,43 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen> with SingleTicker
         child: Scaffold(
           body: SafeArea(
             bottom: false,
-            child: Column(
-              children: <Widget>[
-                FinanceTopBar(title: _titleFor(_selectedSection)),
-                Expanded(
-                  child: IndexedStack(
-                    index: _selectedSection.index,
-                    children: <Widget>[
-                      FinanceOverviewSection(
-                        animation: _entranceController,
-                        scrollController: _scrollControllers[FinanceSection.overview]!,
-                        balanceIsVisible: _balanceIsVisible,
-                        onToggleBalance: () {
-                          setState(() {
-                            _balanceIsVisible = !_balanceIsVisible;
-                          });
-                        },
-                        onQuickAction: _showPreviewMessage,
-                        onViewAllActivity: () => _selectSection(FinanceSection.activity),
-                      ),
-                      FinanceActivitySection(
-                        animation: _entranceController,
-                        scrollController: _scrollControllers[FinanceSection.activity]!,
-                      ),
-                      FinanceCardsSection(
-                        animation: _entranceController,
-                        scrollController: _scrollControllers[FinanceSection.cards]!,
-                      ),
-                      FinanceProfileSection(
-                        animation: _entranceController,
-                        scrollController: _scrollControllers[FinanceSection.profile]!,
-                      ),
-                    ],
+            child: TemplateEntrance(
+              child: Column(
+                children: <Widget>[
+                  FinanceTopBar(title: _titleFor(_selectedSection)),
+                  Expanded(
+                    child: TemplateSectionSwitcher(
+                      selectedIndex: _selectedSection.index,
+                      children: <Widget>[
+                        FinanceOverviewSection(
+                          animation: _entranceController,
+                          scrollController: _scrollControllers[FinanceSection.overview]!,
+                          balanceIsVisible: _balanceIsVisible,
+                          onToggleBalance: () {
+                            setState(() {
+                              _balanceIsVisible = !_balanceIsVisible;
+                            });
+                          },
+                          onQuickAction: _showPreviewMessage,
+                          onViewAllActivity: () => _selectSection(FinanceSection.activity),
+                        ),
+                        FinanceActivitySection(
+                          animation: _entranceController,
+                          scrollController: _scrollControllers[FinanceSection.activity]!,
+                        ),
+                        FinanceCardsSection(
+                          animation: _entranceController,
+                          scrollController: _scrollControllers[FinanceSection.cards]!,
+                        ),
+                        FinanceProfileSection(
+                          animation: _entranceController,
+                          scrollController: _scrollControllers[FinanceSection.profile]!,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           bottomNavigationBar: FinanceBottomBar(selectedSection: _selectedSection, onSelected: _selectSection),

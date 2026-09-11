@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_theme.dart';
+
 abstract final class StorefrontAppTheme {
   static const background = Color(0xFFFBF7F0);
   static const surface = Color(0xFFFFFDF8);
@@ -26,12 +28,7 @@ abstract final class StorefrontAppTheme {
       outlineVariant: divider,
     );
 
-    return ThemeData(
-      colorScheme: colors,
-      fontFamily: fontName,
-      scaffoldBackgroundColor: background,
-      useMaterial3: true,
-    );
+    return buildTemplateTheme(colors: colors, background: background, navigationIndicator: blush, fontFamily: fontName);
   }
 
   static const softShadow = <BoxShadow>[BoxShadow(color: Color(0x1425231F), blurRadius: 22, offset: Offset(0, 9))];

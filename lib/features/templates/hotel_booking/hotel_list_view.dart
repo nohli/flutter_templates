@@ -36,11 +36,12 @@ class HotelListView extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                  border: Border.all(color: colors.outlineVariant.withValues(alpha: 0.7)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: showFullText ? colors.shadow.withValues(alpha: 0.3) : Colors.grey.withValues(alpha: 0.6),
-                      offset: const Offset(4, 4),
-                      blurRadius: 16,
+                      color: colors.shadow.withValues(alpha: showFullText ? 0.14 : 0.1),
+                      offset: const Offset(0, 8),
+                      blurRadius: 24,
                     ),
                   ],
                 ),

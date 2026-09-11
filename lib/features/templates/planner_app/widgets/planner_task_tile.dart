@@ -17,11 +17,14 @@ class PlannerTaskTile extends StatelessWidget {
     return Semantics(
       container: true,
       label: '${task.title}, ${task.project}, ${isDone ? 'completed' : task.timeLabel}',
-      child: Container(
+      child: AnimatedContainer(
+        duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
         padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
-        decoration: const BoxDecoration(
-          color: PlannerAppTheme.surface,
-          borderRadius: BorderRadius.all(Radius.circular(22)),
+        decoration: BoxDecoration(
+          color: isDone ? const Color(0xFFF8FAF2) : PlannerAppTheme.surface,
+          border: Border.all(color: isDone ? PlannerAppTheme.lime : Colors.transparent, width: 1.5),
+          borderRadius: const BorderRadius.all(Radius.circular(22)),
           boxShadow: PlannerAppTheme.softShadow,
         ),
         child: Row(

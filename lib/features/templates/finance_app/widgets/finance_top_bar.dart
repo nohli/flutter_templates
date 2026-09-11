@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../finance_app_theme.dart';
-
 class FinanceTopBar extends StatelessWidget {
-  const FinanceTopBar({required this.title, super.key});
+  const FinanceTopBar({required this.title, required this.trailing, super.key});
 
   final String title;
+  final Widget trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class FinanceTopBar extends StatelessWidget {
                   _BackButton(onPressed: () => Navigator.of(context).pop())
                 else
                   const SizedBox.square(dimension: 48),
-                const _SampleDataBadge(compact: true),
+                trailing,
               ],
             ),
             Padding(
@@ -36,7 +35,11 @@ class FinanceTopBar extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.fade,
                 softWrap: false,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: FinanceAppTheme.ink),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
           ],
@@ -66,12 +69,16 @@ class FinanceTopBar extends StatelessWidget {
               child: Text(
                 title,
                 key: ValueKey<String>(title),
-                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: FinanceAppTheme.ink),
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w700,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
           ),
-          const _SampleDataBadge(),
-          const SizedBox(width: 16),
+          trailing,
+          const SizedBox(width: 8),
         ],
       ),
     );
@@ -91,36 +98,6 @@ class _BackButton extends StatelessWidget {
         tooltip: 'Back to template gallery',
         onPressed: onPressed,
         icon: const Icon(Icons.arrow_back_rounded),
-      ),
-    );
-  }
-}
-
-class _SampleDataBadge extends StatelessWidget {
-  const _SampleDataBadge({this.compact = false});
-
-  final bool compact;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: 'Sample data',
-      child: ExcludeSemantics(
-        child: Container(
-          height: 32,
-          padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 10),
-          decoration: const BoxDecoration(
-            color: FinanceAppTheme.lavender,
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
-          alignment: Alignment.center,
-          child: compact
-              ? const Icon(Icons.science_outlined, color: FinanceAppTheme.primaryDark, size: 18)
-              : const Text(
-                  'Sample data',
-                  style: TextStyle(color: FinanceAppTheme.primaryDark, fontSize: 11, fontWeight: FontWeight.w600),
-                ),
-        ),
       ),
     );
   }

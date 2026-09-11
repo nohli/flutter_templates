@@ -29,9 +29,9 @@ class _FinanceCardsSectionState extends State<FinanceCardsSection> {
         FinanceEntrance(
           animation: widget.animation,
           index: 0,
-          child: const Text(
+          child: Text(
             'Manage your sample cards and limits.',
-            style: TextStyle(color: FinanceAppTheme.mutedInk, fontSize: 14),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 14),
           ),
         ),
         const SizedBox(height: 18),
@@ -170,13 +170,13 @@ class _CardSettings extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _SettingRow(icon: Icons.shield_outlined, label: 'Card status', value: isLocked ? 'Locked' : 'Active'),
-          const Divider(height: 1, indent: 64, color: FinanceAppTheme.divider),
+          Divider(height: 1, indent: 64, color: Theme.of(context).colorScheme.outlineVariant),
           _SettingRow(
             icon: Icons.speed_rounded,
             label: 'Monthly limit',
             value: formatCurrency(context, 3000, decimalDigits: 0),
           ),
-          const Divider(height: 1, indent: 64, color: FinanceAppTheme.divider),
+          Divider(height: 1, indent: 64, color: Theme.of(context).colorScheme.outlineVariant),
           const _SettingRow(icon: Icons.public_rounded, label: 'Online payments', value: 'Enabled'),
         ],
       ),
@@ -194,9 +194,9 @@ class _SettingRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: FinanceAppTheme.primary),
+      leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
       title: Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-      trailing: Text(value, style: const TextStyle(color: FinanceAppTheme.mutedInk)),
+      trailing: Text(value, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
     );
   }
 }

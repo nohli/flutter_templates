@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../finance_app_theme.dart';
 import '../models/finance_section.dart';
 
 class FinanceBottomBar extends StatelessWidget {
@@ -41,17 +40,17 @@ class FinanceBottomBar extends StatelessWidget {
     final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
 
     return ColoredBox(
-      color: FinanceAppTheme.background,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: SafeArea(
         top: false,
         minimum: const EdgeInsets.fromLTRB(16, 6, 16, 12),
         child: Material(
-          color: FinanceAppTheme.surface,
+          color: Theme.of(context).colorScheme.surface,
           elevation: 4,
           shadowColor: const Color(0x24182033),
           borderRadius: const BorderRadius.all(Radius.circular(24)),
           clipBehavior: Clip.antiAlias,
-          child: usesLargeText ? _buildLargeTextNavigation() : _buildStandardNavigation(),
+          child: usesLargeText ? _buildLargeTextNavigation() : _buildStandardNavigation(context),
         ),
       ),
     );
@@ -76,12 +75,12 @@ class FinanceBottomBar extends StatelessWidget {
     );
   }
 
-  Widget _buildStandardNavigation() {
+  Widget _buildStandardNavigation(BuildContext context) {
     return NavigationBar(
       height: 68,
       selectedIndex: selectedSection.index,
       backgroundColor: Colors.transparent,
-      indicatorColor: FinanceAppTheme.lavender,
+      indicatorColor: Theme.of(context).colorScheme.primaryContainer,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       onDestinationSelected: (int index) => onSelected(FinanceSection.values[index]),
       destinations: <NavigationDestination>[

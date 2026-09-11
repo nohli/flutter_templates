@@ -37,13 +37,6 @@ class TemplateGalleryPreviewFrame extends StatelessWidget {
               child: Stack(
                 children: <Widget>[
                   Positioned(
-                    left: -24,
-                    bottom: -42,
-                    child: _PreviewOrb(color: accent.withValues(alpha: 0.08), size: 120),
-                  ),
-                  Positioned(right: 20, top: 15, child: _PreviewRing(color: accent.withValues(alpha: 0.22), size: 24)),
-                  Positioned(right: 132, top: 24, child: _PreviewOrb(color: accent.withValues(alpha: 0.24), size: 8)),
-                  Positioned(
                     left: 44,
                     top: 12,
                     width: 86,
@@ -181,34 +174,4 @@ class _PreviewHomeIndicator extends StatelessWidget {
       child: PreviewLine(width: 24, height: 2, color: color),
     );
   }
-}
-
-class _PreviewOrb extends StatelessWidget {
-  const _PreviewOrb({required this.color, required this.size});
-
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) => DecoratedBox(
-    decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-    child: SizedBox.square(dimension: size),
-  );
-}
-
-class _PreviewRing extends StatelessWidget {
-  const _PreviewRing({required this.color, required this.size});
-
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    width: size,
-    height: size,
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      border: Border.all(color: color, width: 4),
-    ),
-  );
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../finance_app_theme.dart';
 import '../models/finance_transaction.dart';
 import '../widgets/finance_entrance.dart';
 import '../widgets/transaction_list.dart';
@@ -41,9 +40,9 @@ class _FinanceActivitySectionState extends State<FinanceActivitySection> {
         FinanceEntrance(
           animation: widget.animation,
           index: 0,
-          child: const Text(
+          child: Text(
             'A clear view of every sample transaction.',
-            style: TextStyle(color: FinanceAppTheme.mutedInk, fontSize: 14),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 14),
           ),
         ),
         const SizedBox(height: 18),

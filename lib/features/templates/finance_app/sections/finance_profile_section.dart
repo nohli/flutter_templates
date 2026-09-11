@@ -50,7 +50,7 @@ class _FinanceProfileSectionState extends State<FinanceProfileSection> {
                         });
                       },
                     ),
-                    const Divider(height: 1, indent: 64, color: FinanceAppTheme.divider),
+                    Divider(height: 1, indent: 64, color: Theme.of(context).colorScheme.outlineVariant),
                     SwitchListTile.adaptive(
                       secondary: const Icon(Icons.fingerprint_rounded, color: FinanceAppTheme.primary),
                       title: const Text('Biometric sign-in', style: TextStyle(fontWeight: FontWeight.w600)),
@@ -80,30 +80,32 @@ class _ProfileSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const FinanceSurface(
-      padding: EdgeInsets.all(20),
+    final colors = Theme.of(context).colorScheme;
+
+    return FinanceSurface(
+      padding: const EdgeInsets.all(20),
       child: Row(
         children: <Widget>[
           CircleAvatar(
             radius: 30,
-            backgroundColor: FinanceAppTheme.lavender,
+            backgroundColor: colors.primaryContainer,
             child: Text(
               'AR',
-              style: TextStyle(color: FinanceAppTheme.primaryDark, fontSize: 18, fontWeight: FontWeight.w700),
+              style: TextStyle(color: colors.onPrimaryContainer, fontSize: 18, fontWeight: FontWeight.w700),
             ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Alex Rivera', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                SizedBox(height: 3),
-                Text('Demo profile', style: TextStyle(color: FinanceAppTheme.mutedInk, fontSize: 13)),
+                const Text('Alex Rivera', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 3),
+                Text('Demo profile', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 13)),
               ],
             ),
           ),
-          Icon(Icons.verified_user_outlined, color: FinanceAppTheme.mint),
+          const Icon(Icons.verified_user_outlined, color: FinanceAppTheme.mint),
         ],
       ),
     );
@@ -117,19 +119,19 @@ class _PrivacyNotice extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: const BoxDecoration(
-        color: FinanceAppTheme.lavender,
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
-      child: const Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(Icons.info_outline_rounded, color: FinanceAppTheme.primaryDark),
-          SizedBox(width: 12),
+          Icon(Icons.info_outline_rounded, color: Theme.of(context).colorScheme.onPrimaryContainer),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               'This template uses fictional local data and does not connect to a bank.',
-              style: TextStyle(color: FinanceAppTheme.primaryDark, height: 1.4),
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer, height: 1.4),
             ),
           ),
         ],

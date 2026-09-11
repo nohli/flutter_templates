@@ -15,6 +15,8 @@ class SpendingOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return FinanceSurface(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -23,19 +25,19 @@ class SpendingOverview extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Spending', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                    SizedBox(height: 3),
-                    Text('This month', style: TextStyle(color: FinanceAppTheme.mutedInk, fontSize: 12)),
+                    const Text('Spending', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 3),
+                    Text('This month', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
                   ],
                 ),
               ),
               Text(
                 formatCurrency(context, 2340, decimalDigits: 0),
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: FinanceAppTheme.primaryDark),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: colors.primary),
               ),
             ],
           ),
@@ -52,14 +54,14 @@ class SpendingOverview extends StatelessWidget {
                     animation: animation,
                     day: _dayLabels[index],
                     fraction: fraction,
-                    color: isCurrentDay ? FinanceAppTheme.primary : FinanceAppTheme.lavender,
+                    color: isCurrentDay ? colors.primary : colors.primaryContainer,
                   ),
                 );
               }),
             ),
           ),
           const SizedBox(height: 22),
-          const Divider(height: 1, color: FinanceAppTheme.divider),
+          Divider(height: 1, color: colors.outlineVariant),
           const SizedBox(height: 18),
           for (final category in SpendingCategory.samples) ...<Widget>[
             _CategoryProgress(animation: animation, category: category),
@@ -110,7 +112,7 @@ class _SpendingBar extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(day, style: const TextStyle(fontSize: 11, color: FinanceAppTheme.mutedInk)),
+                Text(day, style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant)),
               ],
             );
           },
@@ -128,7 +130,7 @@ class _CategoryProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = _colorsFor(category.kind);
+    final colors = _colorsFor(context, category.kind);
     final spent = formatCurrency(context, category.spent, decimalDigits: 0);
     final budget = formatCurrency(context, category.budget, decimalDigits: 0);
 
@@ -156,7 +158,10 @@ class _CategoryProgress extends StatelessWidget {
                       Expanded(
                         child: Text(category.label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                       ),
-                      Text('$spent of $budget', style: const TextStyle(fontSize: 11, color: FinanceAppTheme.mutedInk)),
+                      Text(
+                        '$spent of $budget',
+                        style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 7),
@@ -184,8 +189,11 @@ class _CategoryProgress extends StatelessWidget {
     );
   }
 
-  ({Color background, Color foreground}) _colorsFor(SpendingCategoryKind kind) => switch (kind) {
-    SpendingCategoryKind.home => (background: FinanceAppTheme.lavender, foreground: FinanceAppTheme.primary),
+  ({Color background, Color foreground}) _colorsFor(BuildContext context, SpendingCategoryKind kind) => switch (kind) {
+    SpendingCategoryKind.home => (
+      background: Theme.of(context).colorScheme.primaryContainer,
+      foreground: Theme.of(context).colorScheme.primary,
+    ),
     SpendingCategoryKind.food => (background: const Color(0xFFFFE7E2), foreground: FinanceAppTheme.coral),
     SpendingCategoryKind.transport => (background: const Color(0xFFE0F7EF), foreground: const Color(0xFF258E70)),
   };

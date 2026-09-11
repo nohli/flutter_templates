@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../finance_app_theme.dart';
 import '../models/finance_transaction.dart';
 import '../widgets/balance_card.dart';
+import '../widgets/crypto_portfolio.dart';
 import '../widgets/finance_entrance.dart';
 import '../widgets/quick_actions.dart';
 import '../widgets/spending_overview.dart';
@@ -44,15 +44,17 @@ class FinanceOverviewSection extends StatelessWidget {
         const SizedBox(height: 22),
         FinanceQuickActions(animation: animation, onSelected: onQuickAction),
         const SizedBox(height: 28),
+        FinanceEntrance(animation: animation, index: 3, child: const CryptoPortfolio()),
+        const SizedBox(height: 28),
         FinanceEntrance(
           animation: animation,
-          index: 3,
+          index: 4,
           child: SpendingOverview(animation: animation),
         ),
         const SizedBox(height: 28),
         FinanceEntrance(
           animation: animation,
-          index: 4,
+          index: 5,
           child: Column(
             children: <Widget>[
               _SectionHeader(title: 'Recent activity', actionLabel: 'See all', onPressed: onViewAllActivity),
@@ -71,24 +73,28 @@ class _OverviewGreeting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final colors = Theme.of(context).colorScheme;
+
+    return Row(
       children: <Widget>[
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Good morning, Alex', style: TextStyle(color: FinanceAppTheme.mutedInk, fontSize: 14)),
-              SizedBox(height: 3),
-              Text('Your money, at a glance', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700)),
+              Text('Good morning, Alex', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 14)),
+              const SizedBox(height: 3),
+              const Text('Money and crypto, together', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700)),
             ],
           ),
         ),
-        CircleAvatar(
-          radius: 22,
-          backgroundColor: FinanceAppTheme.lavender,
-          child: Text(
-            'AR',
-            style: TextStyle(color: FinanceAppTheme.primaryDark, fontSize: 13, fontWeight: FontWeight.w700),
+        DecoratedBox(
+          decoration: BoxDecoration(color: colors.primaryContainer, shape: BoxShape.circle),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Text(
+              'AR',
+              style: TextStyle(color: colors.onPrimaryContainer, fontSize: 13, fontWeight: FontWeight.w700),
+            ),
           ),
         ),
       ],

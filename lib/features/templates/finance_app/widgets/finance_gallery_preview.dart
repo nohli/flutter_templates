@@ -78,7 +78,7 @@ class FinanceGalleryPreview extends StatelessWidget {
                   left: 14,
                   right: 14,
                   bottom: 10,
-                  child: _Ticker(ink: ink, muted: muted),
+                  child: _TransferDeckPreview(ink: ink, muted: muted),
                 ),
               ],
             ),
@@ -139,8 +139,8 @@ class _AssetOrbit extends StatelessWidget {
   }
 }
 
-class _Ticker extends StatelessWidget {
-  const _Ticker({required this.ink, required this.muted});
+class _TransferDeckPreview extends StatelessWidget {
+  const _TransferDeckPreview({required this.ink, required this.muted});
 
   final Color ink;
   final Color muted;
@@ -148,30 +148,42 @@ class _Ticker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 22,
+      height: 29,
+      padding: const EdgeInsets.symmetric(horizontal: 6),
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: ink.withValues(alpha: 0.18))),
+        border: Border.all(color: ink.withValues(alpha: 0.18)),
+        borderRadius: const BorderRadius.all(Radius.circular(4)),
       ),
       child: Row(
         children: <Widget>[
-          _TickerValue(symbol: 'BTC', value: '+3.8%', color: FinanceAppTheme.amber, ink: ink),
+          Container(
+            width: 19,
+            height: 19,
+            decoration: const BoxDecoration(color: FinanceAppTheme.mint, shape: BoxShape.circle),
+            child: const Icon(Icons.arrow_outward_rounded, color: Color(0xFF11162A), size: 11),
+          ),
+          const SizedBox(width: 5),
+          Text(
+            'SEND',
+            style: TextStyle(color: ink, fontSize: 5.5, fontWeight: FontWeight.w900),
+          ),
           const Spacer(),
-          _TickerValue(symbol: 'ETH', value: '+1.2%', color: FinanceAppTheme.primary, ink: ink),
+          _DeckAction(label: 'ADD', icon: Icons.add_rounded, color: FinanceAppTheme.primary, ink: ink),
           const Spacer(),
-          _TickerValue(symbol: 'SOL', value: '−0.4%', color: FinanceAppTheme.mint, ink: ink),
+          _DeckAction(label: 'REQUEST', icon: Icons.south_west_rounded, color: FinanceAppTheme.mint, ink: ink),
           const Spacer(),
-          Text('17:42 UTC', style: TextStyle(color: muted, fontSize: 5, letterSpacing: 0.6)),
+          Icon(Icons.more_horiz_rounded, color: muted, size: 10),
         ],
       ),
     );
   }
 }
 
-class _TickerValue extends StatelessWidget {
-  const _TickerValue({required this.symbol, required this.value, required this.color, required this.ink});
+class _DeckAction extends StatelessWidget {
+  const _DeckAction({required this.label, required this.icon, required this.color, required this.ink});
 
-  final String symbol;
-  final String value;
+  final String label;
+  final IconData icon;
   final Color color;
   final Color ink;
 
@@ -179,16 +191,11 @@ class _TickerValue extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Container(width: 5, height: 5, color: color),
-        const SizedBox(width: 4),
-        Text(
-          symbol,
-          style: TextStyle(color: ink, fontSize: 5.5, fontWeight: FontWeight.w800),
-        ),
+        Icon(icon, color: color, size: 9),
         const SizedBox(width: 3),
         Text(
-          value,
-          style: TextStyle(color: color, fontSize: 5.5, fontWeight: FontWeight.w700),
+          label,
+          style: TextStyle(color: ink, fontSize: 4.5, fontWeight: FontWeight.w800),
         ),
       ],
     );

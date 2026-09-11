@@ -78,13 +78,7 @@ class PlannerGalleryPreview extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(left: 62, right: 18, top: 112, child: _PlanStrip(ink: ink)),
-                Positioned(
-                  left: 62,
-                  right: 18,
-                  top: 143,
-                  child: _PlanStrip(ink: ink, accent: PlannerAppTheme.peach),
-                ),
+                Positioned(left: 62, right: 18, top: 108, child: _TimelinePreview(ink: ink)),
                 Positioned(
                   right: 18,
                   bottom: 14,
@@ -102,32 +96,57 @@ class PlannerGalleryPreview extends StatelessWidget {
   }
 }
 
-class _PlanStrip extends StatelessWidget {
-  const _PlanStrip({required this.ink, this.accent = PlannerAppTheme.sky});
+class _TimelinePreview extends StatelessWidget {
+  const _TimelinePreview({required this.ink});
 
   final Color ink;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        _TimelineEntry(time: '09:30', accent: PlannerAppTheme.peach, ink: ink, widthFactor: 0.92),
+        const SizedBox(height: 8),
+        _TimelineEntry(time: '11:00', accent: PlannerAppTheme.sky, ink: ink, widthFactor: 0.74),
+        const SizedBox(height: 8),
+        _TimelineEntry(time: '14:00', accent: PlannerAppTheme.lime, ink: ink, widthFactor: 0.84),
+      ],
+    );
+  }
+}
+
+class _TimelineEntry extends StatelessWidget {
+  const _TimelineEntry({required this.time, required this.accent, required this.ink, required this.widthFactor});
+
+  final String time;
   final Color accent;
+  final Color ink;
+  final double widthFactor;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Container(
-          width: 20,
-          height: 20,
-          color: accent,
-          alignment: Alignment.center,
-          child: Icon(Icons.check, size: 10, color: ink),
+        SizedBox(
+          width: 30,
+          child: Text(
+            time,
+            style: TextStyle(color: ink, fontSize: 5, fontWeight: FontWeight.w800),
+          ),
         ),
-        const SizedBox(width: 9),
+        Transform.rotate(angle: 0.785, child: Container(width: 7, height: 7, color: accent)),
+        const SizedBox(width: 8),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(height: 3, color: ink),
-              const SizedBox(height: 5),
-              FractionallySizedBox(widthFactor: 0.56, child: Container(height: 2, color: ink.withValues(alpha: 0.3))),
-            ],
+          child: FractionallySizedBox(
+            alignment: Alignment.centerLeft,
+            widthFactor: widthFactor,
+            child: Container(
+              height: 15,
+              decoration: BoxDecoration(color: accent, borderRadius: const BorderRadius.all(Radius.circular(2))),
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Container(width: 34, height: 2, color: PlannerAppTheme.navy),
+            ),
           ),
         ),
       ],

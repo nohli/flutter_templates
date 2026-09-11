@@ -122,6 +122,28 @@ void main() {
 
     expect(Theme.of(tester.element(find.text('Savor'))).brightness, Brightness.dark);
   });
+
+  testWidgets('delivery returns to its gallery route', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (BuildContext context) => TextButton(
+            onPressed: () =>
+                Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const FoodDeliveryHomeScreen())),
+            child: const Text('Open delivery template'),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Open delivery template'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Back to template gallery'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Open delivery template'), findsOneWidget);
+    expect(find.byType(FoodDeliveryHomeScreen), findsNothing);
+  });
 }
 
 Future<void> _pumpDelivery(

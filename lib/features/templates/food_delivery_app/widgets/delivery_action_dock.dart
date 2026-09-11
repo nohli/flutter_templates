@@ -21,8 +21,7 @@ class DeliveryActionDock extends StatelessWidget {
 
     return Material(
       color: colors.surface,
-      elevation: 10,
-      shadowColor: Colors.black26,
+      shape: Border(top: BorderSide(color: colors.outlineVariant)),
       child: SafeArea(
         top: false,
         minimum: const EdgeInsets.fromLTRB(14, 10, 14, 12),
@@ -87,14 +86,15 @@ class _DockIconAction extends StatelessWidget {
         selected: isSelected,
         label: label,
         child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(18)),
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
           onTap: onPressed,
           child: Container(
             constraints: const BoxConstraints(minWidth: 58, minHeight: 54),
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
             decoration: BoxDecoration(
               color: isSelected ? colors.secondaryContainer : Colors.transparent,
-              borderRadius: const BorderRadius.all(Radius.circular(18)),
+              border: Border.all(color: isSelected ? colors.primary : colors.outlineVariant),
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -140,7 +140,7 @@ class _OrderAction extends StatelessWidget {
           minimumSize: const Size.fromHeight(54),
           backgroundColor: isSelected ? colors.secondary : colors.primary,
           foregroundColor: isSelected ? colors.onSecondary : colors.onPrimary,
-          shape: const StadiumBorder(),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
         ),
         icon: Icon(isSelected ? Icons.route_rounded : Icons.delivery_dining_rounded),
         label: FittedBox(child: Text(isSelected ? 'Track order' : 'Order status')),

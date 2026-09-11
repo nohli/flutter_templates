@@ -7,7 +7,7 @@ abstract final class TravelAppTheme {
   static const surface = Color(0xFFFFF9E9);
   static const ink = Color(0xFF17352F);
   static const mutedInk = Color(0xFF61716A);
-  static const primary = Color(0xFFE85232);
+  static const primary = Color(0xFFC93C22);
   static const ocean = Color(0xFF0B716C);
   static const seaGlass = Color(0xFFBDE2D5);
   static const sun = Color(0xFFF4CF45);

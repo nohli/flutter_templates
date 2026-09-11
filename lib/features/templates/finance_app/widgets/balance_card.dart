@@ -100,7 +100,6 @@ class _BalanceHeader extends StatelessWidget {
         IconButton(
           tooltip: balanceIsVisible ? 'Hide balance' : 'Show balance',
           onPressed: onToggleBalance,
-          visualDensity: VisualDensity.compact,
           style: IconButton.styleFrom(
             foregroundColor: Colors.white,
             side: const BorderSide(color: Color(0x3DFFFFFF)),

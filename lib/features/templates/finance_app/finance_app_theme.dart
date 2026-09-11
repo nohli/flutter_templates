@@ -11,7 +11,7 @@ abstract final class FinanceAppTheme {
   static const darkSurface = Color(0xFF0D121C);
   static const darkInk = Color(0xFFF8FAFF);
   static const darkMutedInk = Color(0xFFAAB3C2);
-  static const primary = Color(0xFF5367FF);
+  static const primary = Color(0xFF4658DF);
   static const primaryDark = Color(0xFF101936);
   static const mint = Color(0xFF6EE7B7);
   static const coral = Color(0xFFFF7B6B);

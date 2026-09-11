@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'models/store_product.dart';
 import 'models/storefront_section.dart';
@@ -7,7 +8,7 @@ import 'sections/storefront_bag_section.dart';
 import 'sections/storefront_saved_section.dart';
 import 'sections/storefront_shop_section.dart';
 import 'storefront_app_theme.dart';
-import 'widgets/storefront_bottom_bar.dart';
+import 'widgets/storefront_section_tabs.dart';
 
 class StorefrontHomeScreen extends StatefulWidget {
   const StorefrontHomeScreen({super.key});
@@ -46,80 +47,81 @@ class _StorefrontHomeScreenState extends State<StorefrontHomeScreen> {
         .toList(growable: false);
     final scrollController = _scrollControllers[_selectedSection]!;
 
-    return Theme(
-      data: StorefrontAppTheme.build(),
-      child: PrimaryScrollController(
-        controller: scrollController,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: StorefrontAppTheme.background,
-            surfaceTintColor: Colors.transparent,
-            leading: Navigator.of(context).canPop()
-                ? IconButton(
-                    tooltip: 'Back to template gallery',
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back_rounded),
-                  )
-                : null,
-            title: const Text('NEST', style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 2)),
-            actions: const <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: 16),
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: StorefrontAppTheme.blush,
-                  child: Text(
-                    'AR',
-                    style: TextStyle(color: StorefrontAppTheme.ink, fontSize: 11, fontWeight: FontWeight.w700),
-                  ),
-                ),
+    return TemplateAppearanceShell(
+      themeBuilder: StorefrontAppTheme.build,
+      builder: (BuildContext context, Widget appearanceButton) {
+        return PrimaryScrollController(
+          controller: scrollController,
+          child: Scaffold(
+            appBar: AppBar(
+              leading: Navigator.of(context).canPop()
+                  ? IconButton(
+                      tooltip: 'Back to template gallery',
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.arrow_back_rounded),
+                    )
+                  : null,
+              titleSpacing: 8,
+              title: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Nest', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: -0.4)),
+                  Text('Objects for everyday', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w400)),
+                ],
               ),
-            ],
-          ),
-          body: TemplateEntrance(
-            child: TemplateSectionSwitcher(
-              selectedIndex: _selectedSection.index,
-              children: <Widget>[
-                StorefrontShopSection(
-                  products: matchingProducts,
-                  selectedCategory: _selectedCategory,
-                  savedProductIds: _savedProductIds,
-                  scrollController: _scrollControllers[StorefrontSection.shop]!,
-                  onCategorySelected: (StoreCategory category) {
-                    setState(() {
-                      _selectedCategory = category;
-                    });
-                  },
-                  onQueryChanged: (String query) {
-                    setState(() {
-                      _query = query.trim().toLowerCase();
-                    });
-                  },
-                  onToggleSaved: _toggleSaved,
-                  onAddToBag: _addToBag,
-                ),
-                StorefrontSavedSection(
-                  products: savedProducts,
-                  scrollController: _scrollControllers[StorefrontSection.saved]!,
-                  onToggleSaved: _toggleSaved,
-                  onAddToBag: _addToBag,
-                ),
-                StorefrontBagSection(
-                  products: bagProducts,
-                  scrollController: _scrollControllers[StorefrontSection.bag]!,
-                  onRemove: _removeFromBag,
-                  onCheckout: () => _showMessage('Checkout is shown as an interface preview.'),
-                ),
-              ],
+              actions: <Widget>[appearanceButton, const SizedBox(width: 8)],
+            ),
+            body: TemplateEntrance(
+              child: Column(
+                children: <Widget>[
+                  StorefrontSectionTabs(
+                    selectedSection: _selectedSection,
+                    bagItemCount: _bagProductIds.length,
+                    onSelected: _selectSection,
+                  ),
+                  Expanded(
+                    child: TemplateSectionSwitcher(
+                      selectedIndex: _selectedSection.index,
+                      children: <Widget>[
+                        StorefrontShopSection(
+                          products: matchingProducts,
+                          selectedCategory: _selectedCategory,
+                          savedProductIds: _savedProductIds,
+                          scrollController: _scrollControllers[StorefrontSection.shop]!,
+                          onCategorySelected: (StoreCategory category) {
+                            setState(() {
+                              _selectedCategory = category;
+                            });
+                          },
+                          onQueryChanged: (String query) {
+                            setState(() {
+                              _query = query.trim().toLowerCase();
+                            });
+                          },
+                          onToggleSaved: _toggleSaved,
+                          onAddToBag: _addToBag,
+                        ),
+                        StorefrontSavedSection(
+                          products: savedProducts,
+                          scrollController: _scrollControllers[StorefrontSection.saved]!,
+                          onToggleSaved: _toggleSaved,
+                          onAddToBag: _addToBag,
+                        ),
+                        StorefrontBagSection(
+                          products: bagProducts,
+                          scrollController: _scrollControllers[StorefrontSection.bag]!,
+                          onRemove: _removeFromBag,
+                          onCheckout: () => _showMessage('Checkout is shown as an interface preview.'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          bottomNavigationBar: StorefrontBottomBar(
-            selectedSection: _selectedSection,
-            bagItemCount: _bagProductIds.length,
-            onSelected: _selectSection,
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 

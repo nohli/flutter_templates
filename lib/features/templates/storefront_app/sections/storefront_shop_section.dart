@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/store_product.dart';
-import '../storefront_app_theme.dart';
 import '../widgets/storefront_product_card.dart';
 
 class StorefrontShopSection extends StatelessWidget {
@@ -29,6 +28,7 @@ class StorefrontShopSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+    final colors = Theme.of(context).colorScheme;
 
     return CustomScrollView(
       key: const PageStorageKey<String>('storefront-shop'),
@@ -44,19 +44,19 @@ class StorefrontShopSection extends StatelessWidget {
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, height: 1.1),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'A tactile storefront made entirely with Flutter widgets.',
-                style: TextStyle(color: StorefrontAppTheme.mutedInk, height: 1.4),
+                style: TextStyle(color: colors.onSurfaceVariant, height: 1.4),
               ),
               const SizedBox(height: 20),
               TextField(
                 onChanged: onQueryChanged,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Search the collection',
-                  prefixIcon: Icon(Icons.search_rounded),
+                  prefixIcon: const Icon(Icons.search_rounded),
                   filled: true,
-                  fillColor: StorefrontAppTheme.surface,
-                  border: OutlineInputBorder(
+                  fillColor: colors.surface,
+                  border: const OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.all(Radius.circular(18)),
                   ),

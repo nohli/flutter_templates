@@ -33,7 +33,7 @@ class _StorefrontHomePreview extends StatelessWidget {
           Row(
             children: <Widget>[
               Expanded(
-                child: Text('NEST', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, letterSpacing: 1)),
+                child: Text('Nest', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w700)),
               ),
               Icon(Icons.shopping_bag_outlined, size: 8),
             ],

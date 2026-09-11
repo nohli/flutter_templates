@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/features/templates/storefront_app/models/store_product.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
-import 'package:templates/features/templates/storefront_app/widgets/storefront_bottom_bar.dart';
 import 'package:templates/features/templates/storefront_app/widgets/storefront_gallery_preview.dart';
+import 'package:templates/features/templates/storefront_app/widgets/storefront_section_tabs.dart';
 import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
@@ -66,7 +66,7 @@ void main() {
       ),
     );
 
-    expect(find.text('NEST'), findsOneWidget);
+    expect(find.text('Nest'), findsOneWidget);
     expect(find.text('Calmer spaces.'), findsOneWidget);
     expect(find.text('Saved'), findsOneWidget);
     expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
@@ -76,13 +76,29 @@ void main() {
   testWidgets('storefront remains usable on compact and large-text layouts', (WidgetTester tester) async {
     await _pumpStorefront(tester, size: const Size(320, 568), textScale: 3.2);
 
-    for (final label in <String>['Saved', 'Bag', 'Shop']) {
-      final navigationScroll = find.descendant(of: find.byType(StorefrontBottomBar), matching: find.byType(Scrollable));
+    for (final label in <String>['Saved', 'Bag', 'Collection']) {
+      final navigationScroll = find.descendant(
+        of: find.byType(StorefrontSectionTabs),
+        matching: find.byType(Scrollable),
+      );
       await tester.scrollUntilVisible(find.text(label), 160, scrollable: navigationScroll);
       await tester.tap(find.text(label).hitTestable());
       await tester.pump();
       expect(tester.takeException(), isNull, reason: label);
     }
+  });
+
+  testWidgets('storefront appearance menu supports a dark editorial palette', (WidgetTester tester) async {
+    await _pumpStorefront(tester);
+
+    await tester.tap(find.byTooltip('Appearance: Light'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dark').last);
+    await tester.pumpAndSettle();
+
+    expect(Theme.of(tester.element(find.text('Nest'))).brightness, Brightness.dark);
+    expect(find.byTooltip('Appearance: Dark'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }
 

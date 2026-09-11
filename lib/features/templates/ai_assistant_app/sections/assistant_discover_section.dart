@@ -10,6 +10,8 @@ class AssistantDiscoverSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       controller: scrollController,
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
@@ -19,9 +21,9 @@ class AssistantDiscoverSection extends StatelessWidget {
           style: TextStyle(fontSize: 34, height: 1.05, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 12),
-        const Text(
+        Text(
           'Reusable cards, filters, and responsive layouts for an assistant marketplace.',
-          style: TextStyle(color: AiAssistantAppTheme.mutedInk, height: 1.4),
+          style: TextStyle(color: colors.onSurfaceVariant, height: 1.4),
         ),
         const SizedBox(height: 24),
         const _FeaturedAssistant(),
@@ -124,8 +126,10 @@ class _AssistantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Material(
-      color: AiAssistantAppTheme.surface,
+      color: colors.surface,
       borderRadius: const BorderRadius.all(Radius.circular(22)),
       child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(22)),
@@ -146,11 +150,11 @@ class _AssistantCard extends StatelessWidget {
                   children: <Widget>[
                     Text(title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
                     const SizedBox(height: 4),
-                    Text(subtitle, style: const TextStyle(color: AiAssistantAppTheme.mutedInk, height: 1.3)),
+                    Text(subtitle, style: TextStyle(color: colors.onSurfaceVariant, height: 1.3)),
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_rounded, color: AiAssistantAppTheme.mutedInk),
+              Icon(Icons.arrow_forward_rounded, color: colors.onSurfaceVariant),
             ],
           ),
         ),

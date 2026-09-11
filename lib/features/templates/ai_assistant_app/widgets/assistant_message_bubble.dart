@@ -11,6 +11,7 @@ class AssistantMessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUser = message.role == AssistantMessageRole.user;
+    final colors = Theme.of(context).colorScheme;
 
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
@@ -24,16 +25,16 @@ class AssistantMessageBubble extends StatelessWidget {
             gradient: isUser
                 ? const LinearGradient(colors: <Color>[AiAssistantAppTheme.primary, Color(0xFF6D5CE8)])
                 : null,
-            color: isUser ? null : AiAssistantAppTheme.surface,
+            color: isUser ? null : colors.surface,
             borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(20),
               topRight: const Radius.circular(20),
               bottomLeft: Radius.circular(isUser ? 20 : 5),
               bottomRight: Radius.circular(isUser ? 5 : 20),
             ),
-            border: isUser ? null : Border.all(color: AiAssistantAppTheme.divider),
+            border: isUser ? null : Border.all(color: colors.outlineVariant),
           ),
-          child: Text(message.text, style: const TextStyle(height: 1.35)),
+          child: Text(message.text, style: TextStyle(color: isUser ? Colors.white : colors.onSurface, height: 1.35)),
         ),
       ),
     );

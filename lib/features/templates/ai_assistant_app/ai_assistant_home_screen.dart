@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'ai_assistant_app_theme.dart';
 import 'models/assistant_message.dart';
@@ -7,7 +8,7 @@ import 'models/assistant_section.dart';
 import 'sections/assistant_chat_section.dart';
 import 'sections/assistant_discover_section.dart';
 import 'sections/assistant_profile_section.dart';
-import 'widgets/assistant_bottom_bar.dart';
+import 'widgets/assistant_navigation_drawer.dart';
 
 class AiAssistantHomeScreen extends StatefulWidget {
   const AiAssistantHomeScreen({super.key});
@@ -38,55 +39,74 @@ class _AiAssistantHomeScreenState extends State<AiAssistantHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: AiAssistantAppTheme.build(),
-      child: PrimaryScrollController(
-        controller: _scrollControllers[_selectedSection]!,
-        child: Scaffold(
-          appBar: AppBar(
-            leading: Navigator.of(context).canPop()
-                ? IconButton(
-                    tooltip: 'Back to template gallery',
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back_rounded),
-                  )
-                : null,
-            title: const Text('NOVA', style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 2)),
-            actions: <Widget>[
-              IconButton(tooltip: 'Start a new chat', onPressed: _startNewChat, icon: const Icon(Icons.edit_square)),
-              const SizedBox(width: 8),
-            ],
-          ),
-          body: TemplateEntrance(
-            child: TemplateSectionSwitcher(
-              selectedIndex: _selectedSection.index,
-              children: <Widget>[
-                AssistantChatSection(
-                  messages: _messages,
-                  composer: _composer,
-                  scrollController: _scrollControllers[AssistantSection.chat]!,
-                  onPromptSelected: _selectPrompt,
-                  onSend: _sendMessage,
-                ),
-                AssistantDiscoverSection(
-                  scrollController: _scrollControllers[AssistantSection.discover]!,
-                  onOpen: _openAssistant,
-                ),
-                AssistantProfileSection(
-                  scrollController: _scrollControllers[AssistantSection.profile]!,
-                  conciseReplies: _conciseReplies,
-                  onConciseRepliesChanged: (bool value) {
-                    setState(() {
-                      _conciseReplies = value;
-                    });
+    return TemplateAppearanceShell(
+      themeBuilder: AiAssistantAppTheme.build,
+      initialAppearance: TemplateAppearance.dark,
+      builder: (BuildContext context, Widget appearanceButton) {
+        return PrimaryScrollController(
+          controller: _scrollControllers[_selectedSection]!,
+          child: Scaffold(
+            appBar: AppBar(
+              surfaceTintColor: Colors.transparent,
+              leading: Navigator.of(context).canPop()
+                  ? IconButton(
+                      tooltip: 'Back to template gallery',
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.arrow_back_rounded),
+                    )
+                  : null,
+              title: const Text(
+                'Nova',
+                style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
+              ),
+              actions: <Widget>[
+                appearanceButton,
+                Builder(
+                  builder: (BuildContext context) {
+                    return IconButton(
+                      tooltip: 'Open workspace',
+                      onPressed: () => Scaffold.of(context).openEndDrawer(),
+                      icon: const Icon(Icons.menu_open_rounded),
+                    );
                   },
                 ),
               ],
             ),
+            body: TemplateEntrance(
+              child: TemplateSectionSwitcher(
+                selectedIndex: _selectedSection.index,
+                children: <Widget>[
+                  AssistantChatSection(
+                    messages: _messages,
+                    composer: _composer,
+                    scrollController: _scrollControllers[AssistantSection.chat]!,
+                    onPromptSelected: _selectPrompt,
+                    onSend: _sendMessage,
+                  ),
+                  AssistantDiscoverSection(
+                    scrollController: _scrollControllers[AssistantSection.discover]!,
+                    onOpen: _openAssistant,
+                  ),
+                  AssistantProfileSection(
+                    scrollController: _scrollControllers[AssistantSection.profile]!,
+                    conciseReplies: _conciseReplies,
+                    onConciseRepliesChanged: (bool value) {
+                      setState(() {
+                        _conciseReplies = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            endDrawer: AssistantNavigationDrawer(
+              selectedSection: _selectedSection,
+              onSelected: _selectSection,
+              onNewChat: _startNewChat,
+            ),
           ),
-          bottomNavigationBar: AssistantBottomBar(selectedSection: _selectedSection, onSelected: _selectSection),
-        ),
-      ),
+        );
+      },
     );
   }
 

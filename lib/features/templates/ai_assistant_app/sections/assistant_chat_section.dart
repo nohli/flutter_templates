@@ -96,7 +96,7 @@ class _NovaMark extends StatelessWidget {
           child: Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.aqua),
         ),
         SizedBox(width: 10),
-        Text('NOVA', style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 2)),
+        Text('Nova', style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: -0.2)),
       ],
     );
   }
@@ -128,6 +128,8 @@ class _PromptSuggestions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Wrap(
       spacing: 9,
       runSpacing: 9,
@@ -137,8 +139,8 @@ class _PromptSuggestions extends StatelessWidget {
               avatar: Icon(prompt.icon, color: prompt.color, size: 18),
               label: Text(prompt.label),
               onPressed: () => onSelected(prompt.label),
-              backgroundColor: AiAssistantAppTheme.surface,
-              side: const BorderSide(color: AiAssistantAppTheme.divider),
+              backgroundColor: colors.surface,
+              side: BorderSide(color: colors.outlineVariant),
             ),
           )
           .toList(growable: false),

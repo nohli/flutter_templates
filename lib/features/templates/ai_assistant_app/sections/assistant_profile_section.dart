@@ -16,6 +16,8 @@ class AssistantProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       controller: scrollController,
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
@@ -39,7 +41,7 @@ class AssistantProfileSection extends StatelessWidget {
         SwitchListTile.adaptive(
           value: conciseReplies,
           onChanged: onConciseRepliesChanged,
-          tileColor: AiAssistantAppTheme.surface,
+          tileColor: colors.surface,
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
           secondary: const Icon(Icons.short_text_rounded, color: AiAssistantAppTheme.aqua),
           title: const Text('Concise replies', style: TextStyle(fontWeight: FontWeight.w700)),
@@ -59,21 +61,26 @@ class _ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final colors = Theme.of(context).colorScheme;
+
+    return Row(
       children: <Widget>[
         CircleAvatar(
           radius: 38,
-          backgroundColor: AiAssistantAppTheme.raisedSurface,
-          child: Text('AR', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+          backgroundColor: colors.primaryContainer,
+          child: Text(
+            'AR',
+            style: TextStyle(color: colors.onPrimaryContainer, fontSize: 22, fontWeight: FontWeight.w800),
+          ),
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Alex Rivera', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
-              SizedBox(height: 4),
-              Text('Curious builder', style: TextStyle(color: AiAssistantAppTheme.mutedInk)),
+              const Text('Alex Rivera', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+              const SizedBox(height: 4),
+              Text('Curious builder', style: TextStyle(color: colors.onSurfaceVariant)),
             ],
           ),
         ),
@@ -90,21 +97,20 @@ class _ProfileMetric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: const BoxDecoration(
-        color: AiAssistantAppTheme.surface,
-        borderRadius: BorderRadius.all(Radius.circular(22)),
-      ),
+      decoration: BoxDecoration(color: colors.surface, borderRadius: const BorderRadius.all(Radius.circular(22))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             value,
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AiAssistantAppTheme.lavender),
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: colors.primary),
           ),
           const SizedBox(height: 5),
-          Text(label, style: const TextStyle(color: AiAssistantAppTheme.mutedInk)),
+          Text(label, style: TextStyle(color: colors.onSurfaceVariant)),
         ],
       ),
     );
@@ -120,10 +126,12 @@ class _PreferenceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListTile(
-      tileColor: AiAssistantAppTheme.surface,
+      tileColor: colors.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-      leading: Icon(icon, color: AiAssistantAppTheme.primary),
+      leading: Icon(icon, color: colors.primary),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
       subtitle: Text(detail),
       trailing: const Icon(Icons.chevron_right_rounded),

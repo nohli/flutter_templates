@@ -15,24 +15,46 @@ abstract final class AiAssistantAppTheme {
   static const divider = Color(0xFF2B3352);
   static const fontName = 'WorkSans';
 
-  static ThemeData build() {
-    const colors = ColorScheme.dark(
-      primary: primary,
-      onPrimary: background,
-      secondary: aqua,
-      onSecondary: background,
-      surface: surface,
-      onSurface: ink,
-      error: Color(0xFFFFB4AB),
-      onError: Color(0xFF690005),
-      outline: mutedInk,
-      outlineVariant: divider,
-    );
+  static ThemeData build([Brightness brightness = Brightness.dark]) {
+    final isDark = brightness == Brightness.dark;
+    final colors = isDark
+        ? const ColorScheme.dark(
+            primary: primary,
+            onPrimary: background,
+            primaryContainer: raisedSurface,
+            onPrimaryContainer: ink,
+            secondary: aqua,
+            onSecondary: background,
+            secondaryContainer: Color(0xFF124D52),
+            onSecondaryContainer: Color(0xFFB4F4ED),
+            surface: surface,
+            onSurface: ink,
+            error: Color(0xFFFFB4AB),
+            onError: Color(0xFF690005),
+            outline: mutedInk,
+            outlineVariant: divider,
+          )
+        : const ColorScheme.light(
+            primary: Color(0xFF5946C7),
+            onPrimary: Colors.white,
+            primaryContainer: Color(0xFFE5DFFF),
+            onPrimaryContainer: Color(0xFF1A0065),
+            secondary: Color(0xFF006A65),
+            onSecondary: Colors.white,
+            secondaryContainer: Color(0xFF9CF2EA),
+            onSecondaryContainer: Color(0xFF00201E),
+            surface: Color(0xFFFFFBFF),
+            onSurface: Color(0xFF1B1B22),
+            error: Color(0xFFBA1A1A),
+            onError: Colors.white,
+            outline: Color(0xFF706F7B),
+            outlineVariant: Color(0xFFE4E1EC),
+          );
 
     return buildTemplateTheme(
       colors: colors,
-      background: background,
-      navigationIndicator: raisedSurface,
+      background: isDark ? background : const Color(0xFFF7F5FF),
+      navigationIndicator: isDark ? raisedSurface : const Color(0xFFE5DFFF),
       fontFamily: fontName,
     );
   }

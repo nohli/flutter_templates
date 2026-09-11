@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/template_gallery_preview.dart';
 import '../ai_assistant_app_theme.dart';
 
 class AssistantGalleryPreview extends StatelessWidget {
@@ -8,119 +7,95 @@ class AssistantGalleryPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TemplateGalleryPreviewFrame(
-      background: AiAssistantAppTheme.background,
-      accent: AiAssistantAppTheme.primary,
-      surface: AiAssistantAppTheme.surface,
-      primary: _AssistantHomePreview(),
-      secondary: _AssistantChatPreview(),
-    );
-  }
-}
-
-class _AssistantHomePreview extends StatelessWidget {
-  const _AssistantHomePreview();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(7, 3, 7, 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'NOVA',
-            style: TextStyle(
-              color: AiAssistantAppTheme.ink,
-              fontSize: 7,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1,
-            ),
+    return Semantics(
+      image: true,
+      label: 'Nova assistant workspace preview',
+      child: const DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[Color(0xFF0B0E20), Color(0xFF17142F), Color(0xFF0D2630)],
           ),
-          SizedBox(height: 6),
-          _AuroraCard(),
-          SizedBox(height: 7),
-          _PromptCard(icon: Icons.draw_outlined, label: 'Launch plan', color: AiAssistantAppTheme.pink),
-          SizedBox(height: 4),
-          _PromptCard(icon: Icons.code_rounded, label: 'Explain code', color: AiAssistantAppTheme.aqua),
-          SizedBox(height: 4),
-          _PromptCard(icon: Icons.travel_explore_rounded, label: 'Research', color: AiAssistantAppTheme.lavender),
-        ],
+        ),
+        child: Stack(
+          children: <Widget>[
+            Positioned.fill(child: CustomPaint(painter: _AuroraBackdropPainter())),
+            Positioned(left: 13, top: 11, child: _NovaHeader()),
+            Positioned(left: 13, top: 40, right: 68, child: _AssistantAnswer()),
+            Positioned(right: 12, top: 30, child: _PromptStack()),
+            Positioned(left: 13, right: 13, bottom: 11, child: _PreviewComposer()),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _AssistantChatPreview extends StatelessWidget {
-  const _AssistantChatPreview();
+class _NovaHeader extends StatelessWidget {
+  const _NovaHeader();
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(7, 3, 7, 3),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              CircleAvatar(
-                radius: 7,
-                backgroundColor: AiAssistantAppTheme.raisedSurface,
-                child: Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.aqua, size: 8),
-              ),
-              SizedBox(width: 4),
-              Expanded(
-                child: Text(
-                  'Nova',
-                  style: TextStyle(color: AiAssistantAppTheme.ink, fontSize: 7, fontWeight: FontWeight.w800),
-                ),
-              ),
-              Icon(Icons.more_horiz_rounded, color: AiAssistantAppTheme.mutedInk, size: 8),
-            ],
+    return const Row(
+      children: <Widget>[
+        DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: <Color>[AiAssistantAppTheme.primary, AiAssistantAppTheme.aqua]),
+            borderRadius: BorderRadius.all(Radius.circular(7)),
           ),
-          SizedBox(height: 7),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: _ChatBubble(width: 65, color: AiAssistantAppTheme.raisedSurface),
+          child: SizedBox.square(
+            dimension: 22,
+            child: Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.background, size: 12),
           ),
-          SizedBox(height: 5),
-          Align(
-            alignment: Alignment.centerRight,
-            child: _ChatBubble(width: 57, color: AiAssistantAppTheme.primary),
-          ),
-          SizedBox(height: 5),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: _ChatBubble(width: 72, color: AiAssistantAppTheme.raisedSurface),
-          ),
-          Spacer(),
-          _MiniComposer(),
-        ],
-      ),
+        ),
+        SizedBox(width: 7),
+        Text(
+          'Nova',
+          style: TextStyle(color: AiAssistantAppTheme.ink, fontSize: 10, fontWeight: FontWeight.w800),
+        ),
+      ],
     );
   }
 }
 
-class _AuroraCard extends StatelessWidget {
-  const _AuroraCard();
+class _AssistantAnswer extends StatelessWidget {
+  const _AssistantAnswer();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 54,
-      padding: const EdgeInsets.all(7),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: <Color>[Color(0xFF503FBB), Color(0xFF1C6673)]),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+      padding: const EdgeInsets.all(11),
+      decoration: BoxDecoration(
+        color: AiAssistantAppTheme.surface.withValues(alpha: 0.9),
+        border: Border.all(color: const Color(0xFF353A5A)),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(5),
+          topRight: Radius.circular(15),
+          bottomLeft: Radius.circular(15),
+          bottomRight: Radius.circular(15),
+        ),
       ),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.aqua, size: 10),
-          Spacer(),
           Text(
-            'Make ideas real.',
-            style: TextStyle(color: Colors.white, fontSize: 7.5, height: 1.05, fontWeight: FontWeight.w800),
+            'Let’s shape the idea.',
+            style: TextStyle(color: AiAssistantAppTheme.ink, fontSize: 8, fontWeight: FontWeight.w700),
+          ),
+          SizedBox(height: 6),
+          _AnswerLine(width: 92),
+          SizedBox(height: 4),
+          _AnswerLine(width: 76),
+          SizedBox(height: 4),
+          _AnswerLine(width: 58),
+          SizedBox(height: 9),
+          Row(
+            children: <Widget>[
+              Icon(Icons.copy_all_outlined, color: AiAssistantAppTheme.mutedInk, size: 8),
+              SizedBox(width: 7),
+              Icon(Icons.thumb_up_alt_outlined, color: AiAssistantAppTheme.mutedInk, size: 8),
+            ],
           ),
         ],
       ),
@@ -128,89 +103,113 @@ class _AuroraCard extends StatelessWidget {
   }
 }
 
-class _PromptCard extends StatelessWidget {
-  const _PromptCard({required this.icon, required this.label, required this.color});
-
-  final IconData icon;
-  final String label;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 22,
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: const BoxDecoration(
-        color: AiAssistantAppTheme.raisedSurface,
-        borderRadius: BorderRadius.all(Radius.circular(7)),
-      ),
-      child: Row(
-        children: <Widget>[
-          Icon(icon, color: color, size: 9),
-          const SizedBox(width: 4),
-          Expanded(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: AiAssistantAppTheme.ink, fontSize: 4.5, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ChatBubble extends StatelessWidget {
-  const _ChatBubble({required this.width, required this.color});
+class _AnswerLine extends StatelessWidget {
+  const _AnswerLine({required this.width});
 
   final double width;
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: 20,
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(color: color, borderRadius: const BorderRadius.all(Radius.circular(9))),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      height: 3,
+      decoration: const BoxDecoration(color: Color(0xFF596078), borderRadius: BorderRadius.all(Radius.circular(99))),
+    );
+  }
+}
+
+class _PromptStack extends StatelessWidget {
+  const _PromptStack();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        _PromptCard(icon: Icons.draw_outlined, color: AiAssistantAppTheme.pink),
+        SizedBox(height: 6),
+        _PromptCard(icon: Icons.code_rounded, color: AiAssistantAppTheme.aqua),
+        SizedBox(height: 6),
+        _PromptCard(icon: Icons.lightbulb_outline_rounded, color: AiAssistantAppTheme.lavender),
+      ],
+    );
+  }
+}
+
+class _PromptCard extends StatelessWidget {
+  const _PromptCard({required this.icon, required this.color});
+
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 47,
+      height: 25,
+      decoration: const BoxDecoration(color: Color(0xCC202744), borderRadius: BorderRadius.all(Radius.circular(9))),
+      child: Icon(icon, color: color, size: 12),
+    );
+  }
+}
+
+class _PreviewComposer extends StatelessWidget {
+  const _PreviewComposer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 26,
+      padding: const EdgeInsets.fromLTRB(10, 0, 3, 0),
+      decoration: const BoxDecoration(
+        color: AiAssistantAppTheme.raisedSurface,
+        borderRadius: BorderRadius.all(Radius.circular(13)),
+      ),
+      child: const Row(
         children: <Widget>[
-          PreviewLine(width: 44, height: 2, color: AiAssistantAppTheme.ink),
-          SizedBox(height: 3),
-          PreviewLine(width: 32, height: 2, color: AiAssistantAppTheme.mutedInk),
+          Expanded(
+            child: Text('Message Nova', style: TextStyle(color: AiAssistantAppTheme.mutedInk, fontSize: 5.5)),
+          ),
+          CircleAvatar(
+            radius: 10,
+            backgroundColor: AiAssistantAppTheme.primary,
+            child: Icon(Icons.arrow_upward_rounded, size: 11, color: AiAssistantAppTheme.background),
+          ),
         ],
       ),
     );
   }
 }
 
-class _MiniComposer extends StatelessWidget {
-  const _MiniComposer();
+class _AuroraBackdropPainter extends CustomPainter {
+  const _AuroraBackdropPainter();
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 18,
-      padding: const EdgeInsets.only(left: 6, right: 2),
-      decoration: const BoxDecoration(
-        color: AiAssistantAppTheme.raisedSurface,
-        borderRadius: BorderRadius.all(Radius.circular(9)),
-      ),
-      child: const Row(
-        children: <Widget>[
-          Expanded(
-            child: Text('Message Nova', style: TextStyle(color: AiAssistantAppTheme.mutedInk, fontSize: 4.5)),
-          ),
-          CircleAvatar(
-            radius: 7,
-            backgroundColor: AiAssistantAppTheme.primary,
-            child: Icon(Icons.arrow_upward_rounded, size: 8, color: AiAssistantAppTheme.background),
-          ),
-        ],
-      ),
-    );
+  void paint(Canvas canvas, Size size) {
+    final violet = Path()
+      ..moveTo(-20, size.height * 0.18)
+      ..cubicTo(size.width * 0.28, -20, size.width * 0.48, size.height * 0.5, size.width + 20, size.height * 0.18)
+      ..lineTo(size.width + 20, -20)
+      ..lineTo(-20, -20)
+      ..close();
+    canvas.drawPath(violet, Paint()..color = const Color(0x338C7CFF));
+
+    final aqua = Path()
+      ..moveTo(-20, size.height * 0.82)
+      ..cubicTo(
+        size.width * 0.32,
+        size.height * 0.48,
+        size.width * 0.66,
+        size.height * 1.08,
+        size.width + 20,
+        size.height * 0.62,
+      )
+      ..lineTo(size.width + 20, size.height + 20)
+      ..lineTo(-20, size.height + 20)
+      ..close();
+    canvas.drawPath(aqua, Paint()..color = const Color(0x2866E0D2));
   }
+
+  @override
+  bool shouldRepaint(covariant _AuroraBackdropPainter oldDelegate) => false;
 }

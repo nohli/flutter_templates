@@ -144,6 +144,8 @@ Future<void> _openMenuAndSelect(WidgetTester tester, String label) async {
   await tester.tap(find.byTooltip('Open listening menu'));
   await tester.pumpAndSettle();
   expect(find.byType(PodcastNavigationDrawer), findsOneWidget);
+  final scaffold = find.descendant(of: find.byType(PodcastHomeScreen), matching: find.byType(Scaffold));
+  expect(PrimaryScrollController.of(tester.element(scaffold)).positions, hasLength(1));
   final drawerScroll = find.descendant(of: find.byType(PodcastNavigationDrawer), matching: find.byType(Scrollable));
   final destination = find.descendant(of: find.byType(PodcastNavigationDrawer), matching: find.text(label));
   await tester.scrollUntilVisible(destination, 120, scrollable: drawerScroll);

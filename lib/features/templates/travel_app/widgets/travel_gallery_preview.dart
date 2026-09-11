@@ -37,7 +37,12 @@ class TravelGalleryPreview extends StatelessWidget {
               top: 12,
               child: Text(
                 'Roam',
-                style: TextStyle(color: ink, fontSize: 11, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  color: ink,
+                  fontFamily: TravelAppTheme.displayFontName,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
             const Positioned(left: 13, top: 30, child: _RouteBadge()),

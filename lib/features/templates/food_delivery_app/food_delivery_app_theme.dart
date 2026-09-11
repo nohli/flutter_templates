@@ -14,7 +14,8 @@ abstract final class FoodDeliveryAppTheme {
   static const peach = Color(0xFFFFD9C8);
   static const yellow = Color(0xFFFFE7A3);
   static const divider = Color(0xFFEDE5D9);
-  static const fontName = 'Roboto';
+  static const fontName = 'BricolageGrotesque';
+  static const displayFontName = 'BricolageGrotesque';
 
   static ThemeData build([Brightness brightness = Brightness.light]) {
     final isDark = brightness == Brightness.dark;
@@ -57,6 +58,7 @@ abstract final class FoodDeliveryAppTheme {
       background: isDark ? const Color(0xFF15120F) : background,
       navigationIndicator: isDark ? const Color(0xFF593126) : peach,
       fontFamily: fontName,
+      displayFontFamily: displayFontName,
     );
   }
 

@@ -12,6 +12,34 @@ import 'package:templates/app/font_licenses.dart';
 import 'package:templates/features/support/help_screen.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
 
+const _fontLicenseAssets = <String>[
+  'assets/fonts/WorkSans-LICENSE.txt',
+  'assets/fonts/Roboto-LICENSE.txt',
+  'assets/fonts/ArchivoBlack-LICENSE.txt',
+  'assets/fonts/Anybody-LICENSE.txt',
+  'assets/fonts/BricolageGrotesque-LICENSE.txt',
+  'assets/fonts/DMSerifDisplay-LICENSE.txt',
+  'assets/fonts/Fraunces-LICENSE.txt',
+  'assets/fonts/InstrumentSerif-LICENSE.txt',
+  'assets/fonts/SpaceGrotesk-LICENSE.txt',
+  'assets/fonts/Syne-LICENSE.txt',
+  'assets/fonts/Unbounded-LICENSE.txt',
+];
+
+const _fontNames = <String>[
+  'Work Sans',
+  'Roboto',
+  'Archivo Black',
+  'Anybody',
+  'Bricolage Grotesque',
+  'DM Serif Display',
+  'Fraunces',
+  'Instrument Serif',
+  'Space Grotesk',
+  'Syne',
+  'Unbounded',
+];
+
 void main() {
   test('feedback email preserves spaces and reserved characters', () {
     final uri = feedbackEmailUri('Hotel & fitness + course? Yes.');
@@ -276,32 +304,24 @@ void main() {
   });
 
   testWidgets('bundled font license registration is idempotent at the registry boundary', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/fonts/WorkSans-LICENSE.txt',
-      'assets/fonts/Roboto-LICENSE.txt',
-      'assets/licenses/smooth_star_rating-LICENSE.txt',
-    ]);
+    _evictAssets(<String>[..._fontLicenseAssets, 'assets/licenses/smooth_star_rating-LICENSE.txt']);
     registerBundledFontLicenses();
     registerBundledFontLicenses();
 
     final entries = await LicenseRegistry.licenses.toList();
     final bundledPackages = entries
         .expand((LicenseEntry entry) => entry.packages)
-        .where(<String>{'Work Sans', 'Roboto', 'Smooth Star Rating'}.contains)
+        .where(<String>{..._fontNames, 'Smooth Star Rating'}.contains)
         .toList(growable: false);
 
-    expect(bundledPackages, containsAll(<String>['Work Sans', 'Roboto', 'Smooth Star Rating']));
-    expect(bundledPackages.where((String package) => package == 'Work Sans'), hasLength(1));
-    expect(bundledPackages.where((String package) => package == 'Roboto'), hasLength(1));
-    expect(bundledPackages.where((String package) => package == 'Smooth Star Rating'), hasLength(1));
+    expect(bundledPackages, containsAll(<String>[..._fontNames, 'Smooth Star Rating']));
+    for (final package in <String>[..._fontNames, 'Smooth Star Rating']) {
+      expect(bundledPackages.where((String candidate) => candidate == package), hasLength(1), reason: package);
+    }
   });
 
   testWidgets('about opens native licenses with every bundled notice', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/fonts/WorkSans-LICENSE.txt',
-      'assets/fonts/Roboto-LICENSE.txt',
-      'assets/licenses/smooth_star_rating-LICENSE.txt',
-    ]);
+    _evictAssets(<String>[..._fontLicenseAssets, 'assets/licenses/smooth_star_rating-LICENSE.txt']);
     registerBundledFontLicenses();
     registerBundledFontLicenses();
     await _pumpScreen(tester, const AboutScreen());
@@ -311,9 +331,11 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(LicensePage), findsOneWidget);
-    expect(find.text('Work Sans'), findsOneWidget);
-    expect(find.text('Roboto'), findsOneWidget);
-    expect(find.text('Smooth Star Rating'), findsOneWidget);
+    final licenseScroll = find.descendant(of: find.byType(LicensePage), matching: find.byType(Scrollable)).first;
+    for (final fontName in <String>[..._fontNames, 'Smooth Star Rating']) {
+      await tester.scrollUntilVisible(find.text(fontName), 160, scrollable: licenseScroll);
+      expect(find.text(fontName), findsOneWidget);
+    }
     expect(tester.takeException(), isNull);
   });
 }

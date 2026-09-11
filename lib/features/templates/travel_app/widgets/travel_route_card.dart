@@ -121,7 +121,12 @@ class _AccessibleRouteCard extends StatelessWidget {
           SizedBox(height: 14),
           Text(
             'Lisbon to Madeira',
-            style: TextStyle(color: TravelAppTheme.surface, fontSize: 24, fontWeight: FontWeight.w900),
+            style: TextStyle(
+              color: TravelAppTheme.surface,
+              fontFamily: TravelAppTheme.displayFontName,
+              fontSize: 29,
+              fontWeight: FontWeight.w400,
+            ),
           ),
           SizedBox(height: 18),
           _RouteDetail(label: 'DEPART', value: '18 Oct · 07:05', light: true),
@@ -145,7 +150,15 @@ class _Airport extends StatelessWidget {
     return Column(
       crossAxisAlignment: alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: <Widget>[
-        Text(code, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, height: 0.9)),
+        Text(
+          code,
+          style: const TextStyle(
+            fontFamily: TravelAppTheme.displayFontName,
+            fontSize: 28,
+            fontWeight: FontWeight.w400,
+            height: 0.9,
+          ),
+        ),
         Text(city, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 9)),
       ],
     );

@@ -29,7 +29,10 @@ class StorefrontBagSection extends StatelessWidget {
       physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
       children: <Widget>[
-        const Text('Your bag', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
+        const Text(
+          'Your bag',
+          style: TextStyle(fontFamily: StorefrontAppTheme.displayFontName, fontSize: 32, fontWeight: FontWeight.w400),
+        ),
         const SizedBox(height: 8),
         Text(
           products.isEmpty

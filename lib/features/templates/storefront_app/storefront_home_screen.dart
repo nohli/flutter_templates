@@ -79,7 +79,11 @@ class _StorefrontHomeScreenState extends State<StorefrontHomeScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.fade,
                       softWrap: false,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                      style: TextStyle(
+                        fontFamily: StorefrontAppTheme.displayFontName,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w400,
+                      ),
                     )
                   : const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +93,16 @@ class _StorefrontHomeScreenState extends State<StorefrontHomeScreen> {
                           style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700, letterSpacing: 1.5),
                         ),
                         SizedBox(height: 3),
-                        Text('Nest', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, letterSpacing: -0.8)),
+                        Text(
+                          'Nest',
+                          style: TextStyle(
+                            fontFamily: StorefrontAppTheme.displayFontName,
+                            fontSize: 34,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: -0.5,
+                            height: 0.9,
+                          ),
+                        ),
                       ],
                     ),
               actions: usesLargeText

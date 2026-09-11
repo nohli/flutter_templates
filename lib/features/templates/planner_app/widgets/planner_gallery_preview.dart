@@ -54,6 +54,7 @@ class PlannerGalleryPreview extends StatelessWidget {
                     '11',
                     style: TextStyle(
                       color: ink,
+                      fontFamily: PlannerAppTheme.displayFontName,
                       fontSize: 67,
                       height: 0.82,
                       fontWeight: FontWeight.w800,
@@ -68,7 +69,13 @@ class PlannerGalleryPreview extends StatelessWidget {
                   child: Text(
                     'SEP\n2026',
                     textAlign: TextAlign.right,
-                    style: TextStyle(color: ink, fontSize: 8, fontWeight: FontWeight.w700, height: 1.05),
+                    style: TextStyle(
+                      color: ink,
+                      fontFamily: PlannerAppTheme.fontName,
+                      fontSize: 8,
+                      fontWeight: FontWeight.w700,
+                      height: 1.05,
+                    ),
                   ),
                 ),
                 Positioned(left: 62, right: 18, top: 112, child: _PlanStrip(ink: ink)),

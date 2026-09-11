@@ -67,14 +67,36 @@ class _SocialHomeScreenState extends State<SocialHomeScreen> {
                     )
                   : null,
               title: usesLargeText
-                  ? const Text('Mingle', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                  ? const Text(
+                      'Mingle',
+                      style: TextStyle(
+                        fontFamily: SocialAppTheme.displayFontName,
+                        color: SocialAppTheme.amber,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    )
                   : const Row(
                       children: <Widget>[
-                        Text('Mingle', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -1)),
+                        Text(
+                          'Mingle',
+                          style: TextStyle(
+                            fontFamily: SocialAppTheme.displayFontName,
+                            color: SocialAppTheme.amber,
+                            fontSize: 23,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.8,
+                          ),
+                        ),
                         SizedBox(width: 9),
                         Text(
                           'ZINE / 04',
-                          style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+                          style: TextStyle(
+                            color: SocialAppTheme.amber,
+                            fontSize: 8,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2,
+                          ),
                         ),
                       ],
                     ),

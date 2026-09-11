@@ -38,7 +38,13 @@ class SocialGalleryPreview extends StatelessWidget {
                   top: 13,
                   child: Text(
                     'MINGLE!',
-                    style: TextStyle(color: ink, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: -1.2),
+                    style: TextStyle(
+                      color: ink,
+                      fontFamily: SocialAppTheme.displayFontName,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.8,
+                    ),
                   ),
                 ),
                 Positioned(

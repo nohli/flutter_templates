@@ -4,7 +4,8 @@ ThemeData buildTemplateTheme({
   required ColorScheme colors,
   required Color background,
   required Color navigationIndicator,
-  String? fontFamily,
+  required String fontFamily,
+  required String displayFontFamily,
 }) {
   final theme = ThemeData(
     colorScheme: colors,
@@ -12,8 +13,18 @@ ThemeData buildTemplateTheme({
     scaffoldBackgroundColor: background,
     useMaterial3: true,
   );
+  final textTheme = theme.textTheme;
 
   return theme.copyWith(
+    textTheme: textTheme.copyWith(
+      displayLarge: textTheme.displayLarge?.copyWith(fontFamily: displayFontFamily),
+      displayMedium: textTheme.displayMedium?.copyWith(fontFamily: displayFontFamily),
+      displaySmall: textTheme.displaySmall?.copyWith(fontFamily: displayFontFamily),
+      headlineLarge: textTheme.headlineLarge?.copyWith(fontFamily: displayFontFamily),
+      headlineMedium: textTheme.headlineMedium?.copyWith(fontFamily: displayFontFamily),
+      headlineSmall: textTheme.headlineSmall?.copyWith(fontFamily: displayFontFamily),
+      titleLarge: textTheme.titleLarge?.copyWith(fontFamily: displayFontFamily),
+    ),
     appBarTheme: AppBarThemeData(
       backgroundColor: background,
       foregroundColor: colors.onSurface,
@@ -22,7 +33,7 @@ ThemeData buildTemplateTheme({
       scrolledUnderElevation: 0,
       titleTextStyle: TextStyle(
         color: colors.onSurface,
-        fontFamily: fontFamily,
+        fontFamily: displayFontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w800,
       ),

@@ -14,6 +14,10 @@ The bundled Work Sans files identify themselves as version 1.400, copyright © 2
 
 The bundled Roboto files identify themselves as version 2.137 (2017), copyright 2011 Google Inc. They are licensed under the Apache License 2.0; the complete license is preserved in [`assets/fonts/Roboto-LICENSE.txt`](assets/fonts/Roboto-LICENSE.txt).
 
+## Additional typefaces
+
+Anybody, Archivo Black, Bricolage Grotesque, DM Serif Display, Fraunces, Instrument Serif, Space Grotesk, Syne, and Unbounded are distributed under the SIL Open Font License 1.1. Their complete copyright notices and licenses are preserved beside the font files in [`assets/fonts`](assets/fonts).
+
 ## Smooth Star Rating
 
 The Hotel sample contains a rating control distributed under the MIT License with copyright © 2019 Thangrobul Infimate. Its complete notice is preserved in [`assets/licenses/smooth_star_rating-LICENSE.txt`](assets/licenses/smooth_star_rating-LICENSE.txt).

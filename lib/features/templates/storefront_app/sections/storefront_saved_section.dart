@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/store_product.dart';
+import '../storefront_app_theme.dart';
 import '../widgets/storefront_product_card.dart';
 
 class StorefrontSavedSection extends StatelessWidget {
@@ -27,7 +28,10 @@ class StorefrontSavedSection extends StatelessWidget {
       physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
       children: <Widget>[
-        const Text('Saved pieces', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
+        const Text(
+          'Saved pieces',
+          style: TextStyle(fontFamily: StorefrontAppTheme.displayFontName, fontSize: 32, fontWeight: FontWeight.w400),
+        ),
         const SizedBox(height: 8),
         Text(
           'Keep a shortlist while you shape your space.',

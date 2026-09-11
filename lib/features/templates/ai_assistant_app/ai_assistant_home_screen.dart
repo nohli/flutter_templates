@@ -68,10 +68,27 @@ class _AiAssistantHomeScreenState extends State<AiAssistantHomeScreen> {
                     )
                   : null,
               title: usesLargeText
-                  ? const Text('Nova', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                  ? const Text(
+                      'Nova',
+                      style: TextStyle(
+                        fontFamily: AiAssistantAppTheme.displayFontName,
+                        color: AiAssistantAppTheme.ink,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    )
                   : const Row(
                       children: <Widget>[
-                        Text('Nova', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -1)),
+                        Text(
+                          'Nova',
+                          style: TextStyle(
+                            fontFamily: AiAssistantAppTheme.displayFontName,
+                            color: AiAssistantAppTheme.ink,
+                            fontSize: 23,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.7,
+                          ),
+                        ),
                         SizedBox(width: 9),
                         Text(
                           'SPATIAL OS / 01',

@@ -64,7 +64,13 @@ class PodcastPlayerSection extends StatelessWidget {
         const SizedBox(height: 20),
         Text(
           show.title,
-          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: -1.1, height: 0.95),
+          style: const TextStyle(
+            fontFamily: PodcastAppTheme.displayFontName,
+            fontSize: 28,
+            fontWeight: FontWeight.w400,
+            letterSpacing: -0.8,
+            height: 0.95,
+          ),
         ),
         const SizedBox(height: 7),
         Text(show.episodeTitle, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 15, height: 1.3)),

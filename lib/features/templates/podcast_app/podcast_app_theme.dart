@@ -13,7 +13,8 @@ abstract final class PodcastAppTheme {
   static const sky = Color(0xFF0C7892);
   static const sage = Color(0xFF337252);
   static const divider = Color(0xFFD8CFB1);
-  static const fontName = 'WorkSans';
+  static const fontName = 'SpaceGrotesk';
+  static const displayFontName = 'ArchivoBlack';
 
   static ThemeData build([Brightness brightness = Brightness.light]) {
     final isDark = brightness == Brightness.dark;
@@ -56,6 +57,7 @@ abstract final class PodcastAppTheme {
       background: isDark ? const Color(0xFF12110E) : background,
       navigationIndicator: isDark ? const Color(0xFF5B2B20) : const Color(0xFFFFD8CA),
       fontFamily: fontName,
+      displayFontFamily: displayFontName,
     );
   }
 }

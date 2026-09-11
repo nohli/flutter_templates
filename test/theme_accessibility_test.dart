@@ -2,9 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/app/app_theme.dart';
 import 'package:templates/features/templates/ai_assistant_app/ai_assistant_app_theme.dart';
 import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
+import 'package:templates/features/templates/dating_app/dating_app_theme.dart';
+import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
 import 'package:templates/features/templates/finance_app/finance_app_theme.dart';
@@ -35,6 +38,7 @@ void main() {
           ({
             String name,
             String font,
+            String displayFont,
             ThemeData Function() build,
             Color primary,
             Color scaffold,
@@ -45,6 +49,7 @@ void main() {
           (
             name: 'App',
             font: AppTheme.fontName,
+            displayFont: AppTheme.fontName,
             build: AppTheme.build,
             primary: Colors.blue,
             scaffold: AppTheme.nearlyWhite,
@@ -54,6 +59,7 @@ void main() {
           (
             name: 'Design Course',
             font: DesignCourseAppTheme.fontName,
+            displayFont: DesignCourseAppTheme.fontName,
             build: DesignCourseAppTheme.build,
             primary: DesignCourseAppTheme.nearlyBlue,
             scaffold: DesignCourseAppTheme.nearlyWhite,
@@ -63,6 +69,7 @@ void main() {
           (
             name: 'Hotel',
             font: 'WorkSans',
+            displayFont: 'WorkSans',
             build: HotelAppTheme.build,
             primary: HotelAppTheme.seedColor,
             scaffold: const Color(0xFFF6F6F6),
@@ -72,6 +79,7 @@ void main() {
           (
             name: 'Fitness',
             font: FitnessAppTheme.fontName,
+            displayFont: FitnessAppTheme.fontName,
             build: FitnessAppTheme.build,
             primary: FitnessAppTheme.nearlyDarkBlue,
             scaffold: FitnessAppTheme.background,
@@ -81,6 +89,7 @@ void main() {
           (
             name: 'Finance',
             font: FinanceAppTheme.fontName,
+            displayFont: FinanceAppTheme.displayFontName,
             build: FinanceAppTheme.build,
             primary: FinanceAppTheme.primary,
             scaffold: FinanceAppTheme.background,
@@ -90,6 +99,7 @@ void main() {
           (
             name: 'Storefront',
             font: StorefrontAppTheme.fontName,
+            displayFont: StorefrontAppTheme.displayFontName,
             build: StorefrontAppTheme.build,
             primary: StorefrontAppTheme.primary,
             scaffold: StorefrontAppTheme.background,
@@ -99,6 +109,7 @@ void main() {
           (
             name: 'Planner',
             font: PlannerAppTheme.fontName,
+            displayFont: PlannerAppTheme.displayFontName,
             build: PlannerAppTheme.build,
             primary: PlannerAppTheme.primary,
             scaffold: PlannerAppTheme.background,
@@ -108,6 +119,7 @@ void main() {
           (
             name: 'AI assistant',
             font: AiAssistantAppTheme.fontName,
+            displayFont: AiAssistantAppTheme.displayFontName,
             build: AiAssistantAppTheme.build,
             primary: AiAssistantAppTheme.primary,
             scaffold: AiAssistantAppTheme.background,
@@ -117,6 +129,7 @@ void main() {
           (
             name: 'Food delivery',
             font: FoodDeliveryAppTheme.fontName,
+            displayFont: FoodDeliveryAppTheme.displayFontName,
             build: FoodDeliveryAppTheme.build,
             primary: FoodDeliveryAppTheme.primary,
             scaffold: FoodDeliveryAppTheme.background,
@@ -126,6 +139,7 @@ void main() {
           (
             name: 'Podcast',
             font: PodcastAppTheme.fontName,
+            displayFont: PodcastAppTheme.displayFontName,
             build: PodcastAppTheme.build,
             primary: PodcastAppTheme.primary,
             scaffold: PodcastAppTheme.background,
@@ -135,6 +149,7 @@ void main() {
           (
             name: 'Social community',
             font: SocialAppTheme.fontName,
+            displayFont: SocialAppTheme.displayFontName,
             build: SocialAppTheme.build,
             primary: SocialAppTheme.primary,
             scaffold: SocialAppTheme.background,
@@ -144,11 +159,22 @@ void main() {
           (
             name: 'Travel planner',
             font: TravelAppTheme.fontName,
+            displayFont: TravelAppTheme.displayFontName,
             build: TravelAppTheme.build,
             primary: TravelAppTheme.primary,
             scaffold: TravelAppTheme.background,
             useMaterial3: true,
             brightness: Brightness.light,
+          ),
+          (
+            name: 'Dating',
+            font: DatingAppTheme.fontName,
+            displayFont: DatingAppTheme.displayFontName,
+            build: DatingAppTheme.build,
+            primary: DatingAppTheme.primary,
+            scaffold: DatingAppTheme.background,
+            useMaterial3: true,
+            brightness: Brightness.dark,
           ),
         ];
 
@@ -162,6 +188,10 @@ void main() {
       expect(theme.scaffoldBackgroundColor, themeCase.scaffold, reason: themeCase.name);
       expect(colors.primary, themeCase.primary, reason: themeCase.name);
       expect(theme.textTheme.bodyMedium?.fontFamily, themeCase.font, reason: themeCase.name);
+      expect(theme.textTheme.headlineMedium?.fontFamily, themeCase.displayFont, reason: themeCase.name);
+      if (themeCase.useMaterial3) {
+        expect(theme.appBarTheme.titleTextStyle?.fontFamily, themeCase.displayFont, reason: themeCase.name);
+      }
       _expectContrast('${themeCase.name} onSurface/surface', colors.onSurface, colors.surface, 4.5);
       _expectContrast('${themeCase.name} onPrimary/primary', colors.onPrimary, colors.primary, 4.5);
       _expectContrast('${themeCase.name} onError/error', colors.onError, colors.error, 4.5);
@@ -187,7 +217,22 @@ void main() {
       expect(PodcastAppTheme.build().platform, platform);
       expect(SocialAppTheme.build().platform, platform);
       expect(TravelAppTheme.build().platform, platform);
+      expect(DatingAppTheme.build().platform, platform);
     }
+  });
+
+  test('new templates keep distinct display typography', () {
+    expect(<String>{
+      FinanceAppTheme.displayFontName,
+      StorefrontAppTheme.displayFontName,
+      PlannerAppTheme.displayFontName,
+      AiAssistantAppTheme.displayFontName,
+      FoodDeliveryAppTheme.displayFontName,
+      PodcastAppTheme.displayFontName,
+      SocialAppTheme.displayFontName,
+      TravelAppTheme.displayFontName,
+      DatingAppTheme.displayFontName,
+    }, hasLength(9));
   });
 
   testWidgets('opened navigation drawer meets text contrast guidelines', (WidgetTester tester) async {
@@ -212,6 +257,39 @@ void main() {
     final galleryTheme = Theme.of(tester.element(find.byTooltip('Appearance: System')));
     expect(galleryTheme.brightness, Brightness.dark);
     expect(galleryTheme.scaffoldBackgroundColor, const Color(0xFF111719));
+  });
+
+  testWidgets('branded dark app bars keep their titles readable in every appearance', (WidgetTester tester) async {
+    final cases = <({Color background, Color foreground, Widget Function(AppAppearance) screen, String title})>[
+      (
+        title: 'Mingle',
+        screen: (AppAppearance appearance) => SocialHomeScreen(appearance: appearance),
+        foreground: SocialAppTheme.amber,
+        background: SocialAppTheme.ink,
+      ),
+      (
+        title: 'Roam',
+        screen: (AppAppearance appearance) => TravelHomeScreen(appearance: appearance),
+        foreground: TravelAppTheme.surface,
+        background: TravelAppTheme.ink,
+      ),
+      (
+        title: 'Nova',
+        screen: (AppAppearance appearance) => AiAssistantHomeScreen(appearance: appearance),
+        foreground: AiAssistantAppTheme.ink,
+        background: AiAssistantAppTheme.background,
+      ),
+    ];
+
+    for (final appearance in <AppAppearance>[AppAppearance.light, AppAppearance.dark]) {
+      for (final themeCase in cases) {
+        await _pumpThemedScreen(tester, themeCase.screen(appearance));
+        final title = find.descendant(of: find.byType(AppBar), matching: find.text(themeCase.title));
+        expect(tester.widget<Text>(title).style?.color, themeCase.foreground, reason: themeCase.title);
+        _expectContrast(themeCase.title, themeCase.foreground, themeCase.background, 4.5);
+        expect(tester.takeException(), isNull, reason: themeCase.title);
+      }
+    }
   });
 
   testWidgets('template surfaces inherit their accessible semantic themes', (WidgetTester tester) async {
@@ -272,6 +350,10 @@ void main() {
 
     await _pumpThemedScreen(tester, const TravelHomeScreen());
     _expectTemplateTheme(tester, find.text('Roam'), TravelAppTheme.build());
+    await _expectAccessible(tester);
+
+    await _pumpThemedScreen(tester, const DatingHomeScreen());
+    _expectTemplateTheme(tester, find.text('Sway'), DatingAppTheme.build());
     await _expectAccessible(tester);
     semantics.dispose();
   });
@@ -417,6 +499,7 @@ Future<void> _pumpThemedScreen(
 }
 
 void _expectTemplateTheme(WidgetTester tester, Finder finder, ThemeData expected) {
+  expect(tester.takeException(), isNull, reason: finder.toString());
   final actual = Theme.of(tester.element(finder));
   expect(actual.brightness, expected.brightness);
   expect(actual.useMaterial3, expected.useMaterial3);

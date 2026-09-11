@@ -13,7 +13,8 @@ abstract final class AiAssistantAppTheme {
   static const aqua = Color(0xFF5CF1D4);
   static const pink = Color(0xFFFF70AE);
   static const divider = Color(0xFF30384C);
-  static const fontName = 'WorkSans';
+  static const fontName = 'SpaceGrotesk';
+  static const displayFontName = 'Unbounded';
 
   static ThemeData build([Brightness brightness = Brightness.dark]) {
     final isDark = brightness == Brightness.dark;
@@ -56,6 +57,7 @@ abstract final class AiAssistantAppTheme {
       background: isDark ? background : const Color(0xFFF3EFFB),
       navigationIndicator: isDark ? raisedSurface : const Color(0xFFE5DFFF),
       fontFamily: fontName,
+      displayFontFamily: displayFontName,
     );
   }
 

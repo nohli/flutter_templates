@@ -65,6 +65,7 @@ class _NovaHeader extends StatelessWidget {
           'Nova',
           style: TextStyle(
             color: dark ? AiAssistantAppTheme.ink : const Color(0xFF171521),
+            fontFamily: AiAssistantAppTheme.displayFontName,
             fontSize: 10,
             fontWeight: FontWeight.w800,
           ),
@@ -100,6 +101,7 @@ class _AssistantAnswer extends StatelessWidget {
             'Let’s shape the idea.',
             style: TextStyle(
               color: dark ? AiAssistantAppTheme.ink : const Color(0xFF171521),
+              fontFamily: AiAssistantAppTheme.fontName,
               fontSize: 8,
               fontWeight: FontWeight.w700,
             ),

@@ -59,12 +59,32 @@ class _TravelHomeScreenState extends State<TravelHomeScreen> {
                     )
                   : null,
               title: usesLargeText
-                  ? const Text('Roam', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                  ? const Text(
+                      'Roam',
+                      style: TextStyle(
+                        fontFamily: TravelAppTheme.displayFontName,
+                        color: TravelAppTheme.surface,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )
                   : const Row(
                       children: <Widget>[
-                        Text('Roam', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -1)),
+                        Text(
+                          'Roam',
+                          style: TextStyle(
+                            fontFamily: TravelAppTheme.displayFontName,
+                            color: TravelAppTheme.surface,
+                            fontSize: 29,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: -0.4,
+                          ),
+                        ),
                         SizedBox(width: 9),
-                        Text('FIELD ATLAS / 01', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
+                        Text(
+                          'FIELD ATLAS / 01',
+                          style: TextStyle(color: TravelAppTheme.surface, fontSize: 8, fontWeight: FontWeight.w800),
+                        ),
                       ],
                     ),
               actions: <Widget>[
@@ -90,7 +110,12 @@ class _TravelHomeScreenState extends State<TravelHomeScreen> {
                         if (usesLargeText)
                           const Text(
                             'Madeira field atlas.',
-                            style: TextStyle(fontSize: 22, height: 1, fontWeight: FontWeight.w900),
+                            style: TextStyle(
+                              fontFamily: TravelAppTheme.displayFontName,
+                              fontSize: 29,
+                              height: 1,
+                              fontWeight: FontWeight.w400,
+                            ),
                           )
                         else
                           const Column(
@@ -104,10 +129,11 @@ class _TravelHomeScreenState extends State<TravelHomeScreen> {
                               Text(
                                 'MADEIRA\nFIELD ATLAS.',
                                 style: TextStyle(
-                                  fontSize: 31,
-                                  height: 0.86,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: -1.2,
+                                  fontFamily: TravelAppTheme.displayFontName,
+                                  fontSize: 39,
+                                  height: 0.82,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: -0.6,
                                 ),
                               ),
                             ],

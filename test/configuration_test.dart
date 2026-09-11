@@ -13,9 +13,17 @@ void main() {
     final appEntryPoint = File('lib/main.dart').readAsStringSync();
     final iosInfo = File('ios/Runner/Info.plist').readAsStringSync();
     final iosFrameworkInfo = File('ios/Flutter/AppFrameworkInfo.plist').readAsStringSync();
-    final iosPodfile = File('ios/Podfile').readAsStringSync();
     final iosProject = File('ios/Runner.xcodeproj/project.pbxproj').readAsStringSync();
+    final iosScheme = File('ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme').readAsStringSync();
+    final iosWorkspace = File('ios/Runner.xcworkspace/contents.xcworkspacedata').readAsStringSync();
+    final iosDebugConfig = File('ios/Flutter/Debug.xcconfig').readAsStringSync();
+    final iosReleaseConfig = File('ios/Flutter/Release.xcconfig').readAsStringSync();
     final macOSConfig = File('macos/Runner/Configs/AppInfo.xcconfig').readAsStringSync();
+    final macOSProject = File('macos/Runner.xcodeproj/project.pbxproj').readAsStringSync();
+    final macOSScheme = File('macos/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme').readAsStringSync();
+    final macOSWorkspace = File('macos/Runner.xcworkspace/contents.xcworkspacedata').readAsStringSync();
+    final macOSDebugConfig = File('macos/Flutter/Flutter-Debug.xcconfig').readAsStringSync();
+    final macOSReleaseConfig = File('macos/Flutter/Flutter-Release.xcconfig').readAsStringSync();
     final androidBuild = File('android/app/build.gradle').readAsStringSync();
     final androidManifest = File('android/app/src/main/AndroidManifest.xml').readAsStringSync();
     final androidDebugManifest = File('android/app/src/debug/AndroidManifest.xml').readAsStringSync();
@@ -50,13 +58,37 @@ void main() {
     expect(iosProject, contains('com.achimsapps.templates'));
     expect(iosProject, isNot(contains('com.example.templates')));
     expect(iosProject, isNot(contains('MARKETING_VERSION')));
-    expect(iosPodfile, contains("platform :ios, '15.0'"));
+    expect(File('ios/Podfile').existsSync(), isFalse);
+    expect(File('ios/Podfile.lock').existsSync(), isFalse);
+    expect(iosProject, contains('FlutterGeneratedPluginSwiftPackage'));
+    expect(iosProject, isNot(contains('Pods')));
+    expect(iosScheme, contains('Run Prepare Flutter Framework Script'));
+    expect(iosScheme, contains('xcode_backend.sh&quot; prepare'));
+    expect(iosWorkspace, isNot(contains('Pods/Pods.xcodeproj')));
+    expect(iosDebugConfig, isNot(contains('Pods/')));
+    expect(iosReleaseConfig, isNot(contains('Pods/')));
     expect(RegExp(r'IPHONEOS_DEPLOYMENT_TARGET = 15\.0;').allMatches(iosProject), hasLength(3));
     expect(iosProject, isNot(contains('IPHONEOS_DEPLOYMENT_TARGET = 13.0;')));
     expect(iosFrameworkInfo, contains('<key>MinimumOSVersion</key>\n  <string>15.0</string>'));
     expect(File('ios/Runner/Runner.entitlements').existsSync(), isFalse);
     expect(macOSConfig, contains('PRODUCT_BUNDLE_IDENTIFIER = com.achimsapps.templates'));
     expect(macOSConfig, contains('PRODUCT_COPYRIGHT = Copyright © UI Templates contributors.'));
+    expect(File('macos/Podfile').existsSync(), isFalse);
+    expect(File('macos/Podfile.lock').existsSync(), isFalse);
+    expect(macOSProject, contains('FlutterGeneratedPluginSwiftPackage'));
+    expect(macOSProject, isNot(contains('Pods')));
+    expect(
+      RegExp(
+        r'PBXShellScriptBuildPhase;[^}]*alwaysOutOfDate = 1;[^}]*macos_assemble\.sh && touch',
+        dotAll: true,
+      ).hasMatch(macOSProject),
+      isTrue,
+    );
+    expect(macOSScheme, contains('Run Prepare Flutter Framework Script'));
+    expect(macOSScheme, contains('macos_assemble.sh prepare'));
+    expect(macOSWorkspace, isNot(contains('Pods/Pods.xcodeproj')));
+    expect(macOSDebugConfig, isNot(contains('Pods/')));
+    expect(macOSReleaseConfig, isNot(contains('Pods/')));
     expect(androidBuild, contains('namespace = "com.achimsapps.templates"'));
     expect(androidBuild, contains('applicationId = "com.achimsapps.templates"'));
     expect(androidBuild, contains('compileSdk = flutter.compileSdkVersion'));

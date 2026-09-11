@@ -37,26 +37,44 @@ class _TravelHomeScreenState extends State<TravelHomeScreen> {
       appearance: widget.appearance,
       themeBuilder: TravelAppTheme.build,
       builder: (BuildContext context) {
+        final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+
         return PrimaryScrollController(
           controller: _scrollController,
           child: Scaffold(
             appBar: AppBar(
+              backgroundColor: TravelAppTheme.ink,
+              foregroundColor: TravelAppTheme.surface,
               surfaceTintColor: Colors.transparent,
+              toolbarHeight: usesLargeText ? 92 : 72,
               leading: Navigator.of(context).canPop()
                   ? IconButton(
                       tooltip: 'Back to template gallery',
                       onPressed: () => Navigator.of(context).pop(),
+                      style: IconButton.styleFrom(
+                        side: const BorderSide(color: TravelAppTheme.sun),
+                        shape: const RoundedRectangleBorder(),
+                      ),
                       icon: const Icon(Icons.arrow_back_rounded),
                     )
                   : null,
-              title: const Text(
-                'Roam',
-                style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
-              ),
+              title: usesLargeText
+                  ? const Text('Roam', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                  : const Row(
+                      children: <Widget>[
+                        Text('Roam', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -1)),
+                        SizedBox(width: 9),
+                        Text('FIELD ATLAS / 01', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
+                      ],
+                    ),
               actions: <Widget>[
                 IconButton(
                   tooltip: 'Open trip map',
                   onPressed: () => _showMessage('The trip map is shown as an interface preview.'),
+                  style: IconButton.styleFrom(
+                    side: const BorderSide(color: TravelAppTheme.sun),
+                    shape: const RoundedRectangleBorder(),
+                  ),
                   icon: const Icon(Icons.map_outlined),
                 ),
               ],
@@ -69,21 +87,32 @@ class _TravelHomeScreenState extends State<TravelHomeScreen> {
                     padding: const EdgeInsets.fromLTRB(18, 8, 18, 36),
                     sliver: SliverList.list(
                       children: <Widget>[
-                        const Text(
-                          'Madeira, mapped beautifully.',
-                          style: TextStyle(
-                            fontSize: 32,
-                            height: 1.05,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -1.1,
+                        if (usesLargeText)
+                          const Text(
+                            'Madeira field atlas.',
+                            style: TextStyle(fontSize: 22, height: 1, fontWeight: FontWeight.w900),
+                          )
+                        else
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'N 32°39′ / W 16°54′',
+                                style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.4),
+                              ),
+                              SizedBox(height: 7),
+                              Text(
+                                'MADEIRA\nFIELD ATLAS.',
+                                style: TextStyle(
+                                  fontSize: 31,
+                                  height: 0.86,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -1.2,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Flights, stays, and slow moments in one calm plan.',
-                          style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
-                        ),
-                        const SizedBox(height: 22),
+                        const SizedBox(height: 16),
                         const TravelRouteCard(),
                         const SizedBox(height: 28),
                         const _ItineraryHeader(),
@@ -158,7 +187,10 @@ class _ItineraryHeader extends StatelessWidget {
     return Row(
       children: <Widget>[
         const Expanded(
-          child: Text('Your itinerary', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700)),
+          child: Text(
+            'FIELD NOTES / ITINERARY',
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+          ),
         ),
         Icon(Icons.near_me_rounded, color: Theme.of(context).colorScheme.secondary),
       ],

@@ -50,17 +50,15 @@ class _DayButton extends StatelessWidget {
       selected: isSelected,
       label: '${day.weekday} ${day.date}',
       child: InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(22)),
         onTap: onPressed,
         child: AnimatedContainer(
           duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 220),
           curve: Curves.easeOutCubic,
-          width: usesLargeText ? 150 : 66,
+          width: usesLargeText ? 150 : 72,
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             color: isSelected ? colors.primary : colors.surface,
-            border: Border.all(color: isSelected ? colors.primary : colors.outlineVariant),
-            borderRadius: const BorderRadius.all(Radius.circular(22)),
+            border: Border.all(color: isSelected ? colors.primary : colors.outlineVariant, width: 1.5),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

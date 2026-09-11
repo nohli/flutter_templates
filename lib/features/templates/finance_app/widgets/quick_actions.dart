@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../finance_app_theme.dart';
 import 'finance_entrance.dart';
 
 class FinanceQuickActions extends StatelessWidget {
@@ -65,22 +64,35 @@ class _QuickAction extends StatelessWidget {
         child: TextButton(
           style: TextButton.styleFrom(
             foregroundColor: colors.primary,
-            padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(18))),
+            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
           ),
           onPressed: () => onTap(label),
           child: Column(
             children: <Widget>[
               Container(
-                width: 50,
-                height: 50,
+                width: 54,
+                height: 48,
                 decoration: BoxDecoration(
                   color: colors.surface,
-                  borderRadius: const BorderRadius.all(Radius.circular(17)),
-                  boxShadow: FinanceAppTheme.softShadow,
+                  border: Border.all(color: colors.outlineVariant),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
                 ),
                 alignment: Alignment.center,
-                child: Icon(icon, color: colors.primary, size: 22),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Positioned(
+                      right: 5,
+                      top: 5,
+                      child: Text(
+                        '0${_actionIndex(label)}',
+                        style: TextStyle(color: colors.onSurfaceVariant, fontSize: 7, letterSpacing: 0.4),
+                      ),
+                    ),
+                    Icon(icon, color: colors.primary, size: 21),
+                  ],
+                ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -96,4 +108,11 @@ class _QuickAction extends StatelessWidget {
       ),
     );
   }
+
+  int _actionIndex(String action) => switch (action) {
+    'Send' => 1,
+    'Add money' => 2,
+    'Request' => 3,
+    _ => 4,
+  };
 }

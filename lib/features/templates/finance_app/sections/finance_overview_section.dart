@@ -32,10 +32,10 @@ class FinanceOverviewSection extends StatelessWidget {
       key: const PageStorageKey<String>('finance-overview'),
       controller: scrollController,
       physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+      padding: const EdgeInsets.fromLTRB(16, 6, 16, 28),
       children: <Widget>[
         FinanceEntrance(animation: animation, index: 0, child: const _OverviewGreeting()),
-        const SizedBox(height: 14),
+        const SizedBox(height: 18),
         FinanceEntrance(
           animation: animation,
           index: 1,
@@ -44,13 +44,13 @@ class FinanceOverviewSection extends StatelessWidget {
         const SizedBox(height: 22),
         FinanceQuickActions(animation: animation, onSelected: onQuickAction),
         const SizedBox(height: 28),
-        FinanceEntrance(animation: animation, index: 3, child: const CryptoPortfolio()),
-        const SizedBox(height: 28),
         FinanceEntrance(
           animation: animation,
-          index: 4,
+          index: 3,
           child: SpendingOverview(animation: animation),
         ),
+        const SizedBox(height: 28),
+        FinanceEntrance(animation: animation, index: 4, child: const CryptoPortfolio()),
         const SizedBox(height: 28),
         FinanceEntrance(
           animation: animation,
@@ -76,25 +76,57 @@ class _OverviewGreeting extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Good morning, Alex', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 14)),
-              const SizedBox(height: 3),
-              const Text('Money and crypto, together', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700)),
+              Row(
+                children: <Widget>[
+                  Container(width: 24, height: 2, color: colors.secondary),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Good morning, Alex',
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                      style: TextStyle(
+                        color: colors.onSurfaceVariant,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.9,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 9),
+              const Text(
+                'Money and crypto, together',
+                style: TextStyle(fontSize: 27, fontWeight: FontWeight.w800, letterSpacing: -1.1, height: 1.02),
+              ),
             ],
           ),
         ),
-        DecoratedBox(
-          decoration: BoxDecoration(color: colors.primaryContainer, shape: BoxShape.circle),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Text(
-              'AR',
-              style: TextStyle(color: colors.onPrimaryContainer, fontSize: 13, fontWeight: FontWeight.w700),
+        const SizedBox(width: 12),
+        Container(
+          width: 46,
+          height: 46,
+          decoration: BoxDecoration(
+            color: colors.primary,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(23),
+              topRight: Radius.circular(23),
+              bottomLeft: Radius.circular(23),
+              bottomRight: Radius.circular(6),
             ),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            'AR',
+            style: TextStyle(color: colors.onPrimary, fontSize: 12, fontWeight: FontWeight.w800),
           ),
         ),
       ],

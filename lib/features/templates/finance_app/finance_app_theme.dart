@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import '../shared/template_theme.dart';
 
 abstract final class FinanceAppTheme {
-  static const background = Color(0xFFF6F4EE);
-  static const surface = Color(0xFFFFFEFA);
-  static const ink = Color(0xFF182033);
-  static const mutedInk = Color(0xFF687084);
-  static const darkBackground = Color(0xFF0E1118);
-  static const darkSurface = Color(0xFF191E28);
-  static const darkInk = Color(0xFFF4F6FB);
-  static const darkMutedInk = Color(0xFFAEB6C6);
-  static const primary = Color(0xFF5364F4);
-  static const primaryDark = Color(0xFF27368F);
-  static const mint = Color(0xFF63D7B0);
-  static const coral = Color(0xFFFF8D7A);
-  static const amber = Color(0xFFFFC766);
-  static const lavender = Color(0xFFE7E9FF);
-  static const divider = Color(0xFFE9E6DE);
+  static const background = Color(0xFFF1EFE8);
+  static const surface = Color(0xFFFFFEF9);
+  static const ink = Color(0xFF0B1020);
+  static const mutedInk = Color(0xFF666D7C);
+  static const darkBackground = Color(0xFF05080D);
+  static const darkSurface = Color(0xFF0D121C);
+  static const darkInk = Color(0xFFF8FAFF);
+  static const darkMutedInk = Color(0xFFAAB3C2);
+  static const primary = Color(0xFF5367FF);
+  static const primaryDark = Color(0xFF101936);
+  static const mint = Color(0xFF6EE7B7);
+  static const coral = Color(0xFFFF7B6B);
+  static const amber = Color(0xFFFFC857);
+  static const lavender = Color(0xFFE3E6FF);
+  static const divider = Color(0xFFE2E0D8);
   static const fontName = 'Roboto';
 
   static ThemeData build([Brightness brightness = Brightness.light]) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
+import 'package:templates/features/templates/finance_app/finance_app_theme.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/finance_app/models/finance_transaction.dart';
 import 'package:templates/features/templates/finance_app/models/spending_category.dart';
@@ -97,7 +98,7 @@ void main() {
 
     final theme = Theme.of(tester.element(find.text('Overview')));
     expect(theme.brightness, Brightness.dark);
-    expect(theme.scaffoldBackgroundColor, const Color(0xFF0E1118));
+    expect(theme.scaffoldBackgroundColor, FinanceAppTheme.darkBackground);
     expect(tester.takeException(), isNull);
   });
 
@@ -241,7 +242,10 @@ void main() {
     );
     await tester.tap(find.text('Cards'));
     await tester.pump();
-    expect(tester.widget<AnimatedContainer>(find.byType(AnimatedContainer)).duration, Duration.zero);
+    expect(
+      tester.widgetList<AnimatedContainer>(find.byType(AnimatedContainer)).map((container) => container.duration),
+      everyElement(Duration.zero),
+    );
     expect(tester.takeException(), isNull);
   });
 }

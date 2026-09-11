@@ -331,16 +331,16 @@ void main() {
     expect(_entryNames('lib'), <String>{'app', 'features', 'main.dart'});
     expect(_entryNames('lib/features'), <String>{'gallery', 'support', 'templates'});
     expect(_entryNames('lib/features/templates'), <String>{
+      'ai_assistant_app',
       'design_course',
       'finance_app',
       'fitness_app',
       'food_delivery_app',
       'hotel_booking',
-      'messenger_app',
       'planner_app',
       'podcast_app',
       'shared',
-      'smart_home_app',
+      'social_app',
       'storefront_app',
     });
   });

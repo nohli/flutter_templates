@@ -4,6 +4,7 @@ import 'package:templates/features/templates/podcast_app/models/podcast_show.dar
 import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
 import 'package:templates/features/templates/podcast_app/widgets/podcast_bottom_bar.dart';
 import 'package:templates/features/templates/podcast_app/widgets/podcast_gallery_preview.dart';
+import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 import 'package:templates/features/templates/podcast_app/widgets/podcast_show_card.dart';
 
 void main() {
@@ -84,7 +85,8 @@ void main() {
     );
 
     expect(find.text('WAVE'), findsOneWidget);
-    expect(find.text('Stories worth your time.'), findsOneWidget);
+    expect(find.text('Small Wonders'), findsOneWidget);
+    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 

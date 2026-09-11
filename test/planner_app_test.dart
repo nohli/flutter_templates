@@ -4,6 +4,7 @@ import 'package:templates/features/templates/planner_app/models/planner_task.dar
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/planner_app/widgets/planner_bottom_bar.dart';
 import 'package:templates/features/templates/planner_app/widgets/planner_gallery_preview.dart';
+import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('planner tasks copy state without losing stable identity', () {
@@ -66,7 +67,8 @@ void main() {
     );
 
     expect(find.text('DAYMARK'), findsOneWidget);
-    expect(find.text('Make it count.'), findsOneWidget);
+    expect(find.text('Focus day'), findsOneWidget);
+    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 

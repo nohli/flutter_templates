@@ -4,6 +4,7 @@ import 'package:templates/features/templates/storefront_app/models/store_product
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/widgets/storefront_bottom_bar.dart';
 import 'package:templates/features/templates/storefront_app/widgets/storefront_gallery_preview.dart';
+import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('storefront sample products have stable unique identifiers', () {
@@ -66,8 +67,9 @@ void main() {
     );
 
     expect(find.text('NEST'), findsOneWidget);
-    expect(find.text('Calm living'), findsOneWidget);
-    expect(find.text('SHOP'), findsOneWidget);
+    expect(find.text('Calmer spaces.'), findsOneWidget);
+    expect(find.text('Saved'), findsOneWidget);
+    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 

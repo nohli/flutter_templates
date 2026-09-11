@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_shell.dart';
 import 'package:templates/app/app_theme.dart';
+import 'package:templates/features/templates/ai_assistant_app/ai_assistant_app_theme.dart';
+import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
 import 'package:templates/features/templates/finance_app/finance_app_theme.dart';
@@ -15,22 +17,30 @@ import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart'
 import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart';
 import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
-import 'package:templates/main.dart';
-import 'package:templates/features/templates/messenger_app/messenger_app_theme.dart';
-import 'package:templates/features/templates/messenger_app/messenger_home_screen.dart';
 import 'package:templates/features/templates/planner_app/planner_app_theme.dart';
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/podcast_app/podcast_app_theme.dart';
 import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
-import 'package:templates/features/templates/smart_home_app/smart_home_app_theme.dart';
-import 'package:templates/features/templates/smart_home_app/smart_home_screen.dart';
+import 'package:templates/features/templates/social_app/social_app_theme.dart';
+import 'package:templates/features/templates/social_app/social_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/storefront_app_theme.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
+import 'package:templates/main.dart';
 
 void main() {
-  test('template themes preserve their accepted light palettes and accessible semantic roles', () {
+  test('template themes preserve their accepted palettes and accessible semantic roles', () {
     final cases =
-        <({String name, String font, ThemeData Function() build, Color primary, Color scaffold, bool useMaterial3})>[
+        <
+          ({
+            String name,
+            String font,
+            ThemeData Function() build,
+            Color primary,
+            Color scaffold,
+            bool useMaterial3,
+            Brightness brightness,
+          })
+        >[
           (
             name: 'App',
             font: AppTheme.fontName,
@@ -38,6 +48,7 @@ void main() {
             primary: Colors.blue,
             scaffold: AppTheme.nearlyWhite,
             useMaterial3: false,
+            brightness: Brightness.light,
           ),
           (
             name: 'Design Course',
@@ -46,6 +57,7 @@ void main() {
             primary: DesignCourseAppTheme.nearlyBlue,
             scaffold: DesignCourseAppTheme.nearlyWhite,
             useMaterial3: false,
+            brightness: Brightness.light,
           ),
           (
             name: 'Hotel',
@@ -54,6 +66,7 @@ void main() {
             primary: HotelAppTheme.seedColor,
             scaffold: const Color(0xFFF6F6F6),
             useMaterial3: false,
+            brightness: Brightness.light,
           ),
           (
             name: 'Fitness',
@@ -62,6 +75,7 @@ void main() {
             primary: FitnessAppTheme.nearlyDarkBlue,
             scaffold: FitnessAppTheme.background,
             useMaterial3: false,
+            brightness: Brightness.light,
           ),
           (
             name: 'Finance',
@@ -70,6 +84,7 @@ void main() {
             primary: FinanceAppTheme.primary,
             scaffold: FinanceAppTheme.background,
             useMaterial3: true,
+            brightness: Brightness.light,
           ),
           (
             name: 'Storefront',
@@ -78,6 +93,7 @@ void main() {
             primary: StorefrontAppTheme.primary,
             scaffold: StorefrontAppTheme.background,
             useMaterial3: true,
+            brightness: Brightness.light,
           ),
           (
             name: 'Planner',
@@ -86,14 +102,16 @@ void main() {
             primary: PlannerAppTheme.primary,
             scaffold: PlannerAppTheme.background,
             useMaterial3: true,
+            brightness: Brightness.light,
           ),
           (
-            name: 'Messenger',
-            font: MessengerAppTheme.fontName,
-            build: MessengerAppTheme.build,
-            primary: MessengerAppTheme.primary,
-            scaffold: MessengerAppTheme.background,
+            name: 'AI assistant',
+            font: AiAssistantAppTheme.fontName,
+            build: AiAssistantAppTheme.build,
+            primary: AiAssistantAppTheme.primary,
+            scaffold: AiAssistantAppTheme.background,
             useMaterial3: true,
+            brightness: Brightness.dark,
           ),
           (
             name: 'Food delivery',
@@ -102,6 +120,7 @@ void main() {
             primary: FoodDeliveryAppTheme.primary,
             scaffold: FoodDeliveryAppTheme.background,
             useMaterial3: true,
+            brightness: Brightness.light,
           ),
           (
             name: 'Podcast',
@@ -110,14 +129,16 @@ void main() {
             primary: PodcastAppTheme.primary,
             scaffold: PodcastAppTheme.background,
             useMaterial3: true,
+            brightness: Brightness.light,
           ),
           (
-            name: 'Smart home',
-            font: SmartHomeAppTheme.fontName,
-            build: SmartHomeAppTheme.build,
-            primary: SmartHomeAppTheme.primary,
-            scaffold: SmartHomeAppTheme.background,
+            name: 'Social community',
+            font: SocialAppTheme.fontName,
+            build: SocialAppTheme.build,
+            primary: SocialAppTheme.primary,
+            scaffold: SocialAppTheme.background,
             useMaterial3: true,
+            brightness: Brightness.light,
           ),
         ];
 
@@ -125,7 +146,7 @@ void main() {
       final theme = themeCase.build();
       final colors = theme.colorScheme;
 
-      expect(theme.brightness, Brightness.light, reason: themeCase.name);
+      expect(theme.brightness, themeCase.brightness, reason: themeCase.name);
       expect(theme.useMaterial3, themeCase.useMaterial3, reason: themeCase.name);
       expect(theme.platform, defaultTargetPlatform, reason: themeCase.name);
       expect(theme.scaffoldBackgroundColor, themeCase.scaffold, reason: themeCase.name);
@@ -151,10 +172,10 @@ void main() {
       expect(FinanceAppTheme.build().platform, platform);
       expect(StorefrontAppTheme.build().platform, platform);
       expect(PlannerAppTheme.build().platform, platform);
-      expect(MessengerAppTheme.build().platform, platform);
+      expect(AiAssistantAppTheme.build().platform, platform);
       expect(FoodDeliveryAppTheme.build().platform, platform);
       expect(PodcastAppTheme.build().platform, platform);
-      expect(SmartHomeAppTheme.build().platform, platform);
+      expect(SocialAppTheme.build().platform, platform);
     }
   });
 
@@ -184,7 +205,7 @@ void main() {
     expect(Theme.of(tester.element(find.byType(AppShell))).scaffoldBackgroundColor, AppTheme.nearlyWhite);
   });
 
-  testWidgets('template surfaces inherit accessible fixed-light semantic themes', (WidgetTester tester) async {
+  testWidgets('template surfaces inherit their accessible semantic themes', (WidgetTester tester) async {
     final semantics = tester.ensureSemantics();
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
     addTearDown(tester.view.reset);
@@ -220,8 +241,12 @@ void main() {
     _expectTemplateTheme(tester, find.text('DAYMARK'), PlannerAppTheme.build());
     await _expectAccessible(tester);
 
-    await _pumpThemedScreen(tester, const MessengerHomeScreen());
-    _expectTemplateTheme(tester, find.text('LUMA'), MessengerAppTheme.build());
+    await _pumpThemedScreen(tester, const AiAssistantHomeScreen());
+    _expectTemplateTheme(
+      tester,
+      find.descendant(of: find.byType(AppBar), matching: find.text('NOVA')),
+      AiAssistantAppTheme.build(),
+    );
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen());
@@ -232,8 +257,8 @@ void main() {
     _expectTemplateTheme(tester, find.text('WAVE'), PodcastAppTheme.build());
     await _expectAccessible(tester);
 
-    await _pumpThemedScreen(tester, const SmartHomeScreen());
-    _expectTemplateTheme(tester, find.text('HOMELINE'), SmartHomeAppTheme.build());
+    await _pumpThemedScreen(tester, const SocialHomeScreen());
+    _expectTemplateTheme(tester, find.text('MINGLE'), SocialAppTheme.build());
     await _expectAccessible(tester);
     semantics.dispose();
   });
@@ -292,9 +317,9 @@ void main() {
     _expectNoLayoutException(tester);
     expect(find.text('DAYMARK'), findsOneWidget);
 
-    await _pumpThemedScreen(tester, const MessengerHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    await _pumpThemedScreen(tester, const AiAssistantHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
-    expect(find.text('LUMA'), findsOneWidget);
+    expect(find.descendant(of: find.byType(AppBar), matching: find.text('NOVA')), findsOneWidget);
 
     await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
@@ -304,9 +329,9 @@ void main() {
     _expectNoLayoutException(tester);
     expect(find.text('WAVE'), findsOneWidget);
 
-    await _pumpThemedScreen(tester, const SmartHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    await _pumpThemedScreen(tester, const SocialHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
-    expect(find.text('HOMELINE'), findsOneWidget);
+    expect(find.text('MINGLE'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {
@@ -376,7 +401,7 @@ Future<void> _pumpThemedScreen(
 
 void _expectTemplateTheme(WidgetTester tester, Finder finder, ThemeData expected) {
   final actual = Theme.of(tester.element(finder));
-  expect(actual.brightness, Brightness.light);
+  expect(actual.brightness, expected.brightness);
   expect(actual.useMaterial3, expected.useMaterial3);
   expect(actual.platform, defaultTargetPlatform);
   expect(actual.colorScheme.primary, expected.colorScheme.primary);

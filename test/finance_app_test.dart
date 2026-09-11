@@ -148,7 +148,10 @@ void main() {
       300,
       scrollable: find.descendant(of: find.byType(FinanceHomeScreen), matching: find.byType(Scrollable)).first,
     );
-    await tester.tap(find.text('See all'));
+    final seeAllButton = find.widgetWithText(TextButton, 'See all');
+    await Scrollable.ensureVisible(tester.element(seeAllButton), alignment: 0.5);
+    await tester.pump();
+    await tester.tap(seeAllButton);
     await tester.pumpAndSettle();
 
     expect(find.text('Activity'), findsWidgets);

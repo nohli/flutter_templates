@@ -35,16 +35,16 @@ class StorefrontBagSection extends StatelessWidget {
           products.isEmpty
               ? 'Add a sample product to see the checkout pattern.'
               : '${products.length} sample ${products.length == 1 ? 'item' : 'items'}',
-          style: const TextStyle(color: StorefrontAppTheme.mutedInk),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
         const SizedBox(height: 20),
         if (products.isEmpty)
           const _EmptyBagState()
         else ...<Widget>[
           Container(
-            decoration: const BoxDecoration(
-              color: StorefrontAppTheme.surface,
-              borderRadius: BorderRadius.all(Radius.circular(28)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.all(Radius.circular(28)),
               boxShadow: StorefrontAppTheme.softShadow,
             ),
             child: Column(
@@ -52,9 +52,9 @@ class StorefrontBagSection extends StatelessWidget {
                 for (final product in products) ...<Widget>[
                   _BagRow(product: product, onRemove: () => onRemove(product)),
                   if (product != products.last)
-                    const Padding(
-                      padding: EdgeInsets.only(left: 92),
-                      child: Divider(height: 1, color: StorefrontAppTheme.divider),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 92),
+                      child: Divider(height: 1, color: Theme.of(context).colorScheme.outlineVariant),
                     ),
                 ],
               ],
@@ -63,20 +63,27 @@ class StorefrontBagSection extends StatelessWidget {
           const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: StorefrontAppTheme.ink,
-              borderRadius: BorderRadius.all(Radius.circular(28)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.inverseSurface,
+              borderRadius: const BorderRadius.all(Radius.circular(28)),
             ),
             child: Column(
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    const Expanded(
-                      child: Text('Sample total', style: TextStyle(color: Color(0xFFD8D1C6))),
+                    Expanded(
+                      child: Text(
+                        'Sample total',
+                        style: TextStyle(color: Theme.of(context).colorScheme.onInverseSurface),
+                      ),
                     ),
                     Text(
                       formatStorePrice(context, total),
-                      style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onInverseSurface,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ],
                 ),
@@ -86,8 +93,8 @@ class StorefrontBagSection extends StatelessWidget {
                   child: FilledButton(
                     onPressed: onCheckout,
                     style: FilledButton.styleFrom(
-                      backgroundColor: StorefrontAppTheme.primary,
-                      foregroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
                     child: const Text('Preview checkout'),
                   ),
@@ -128,7 +135,7 @@ class _BagRow extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   formatStorePrice(context, product.price),
-                  style: const TextStyle(color: StorefrontAppTheme.primary, fontWeight: FontWeight.w700),
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w700),
                 ),
               ],
             ),
@@ -151,17 +158,17 @@ class _EmptyBagState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 42),
-      decoration: const BoxDecoration(
-        color: StorefrontAppTheme.surface,
-        borderRadius: BorderRadius.all(Radius.circular(28)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.all(Radius.circular(28)),
       ),
-      child: const Column(
+      child: Column(
         children: <Widget>[
-          Icon(Icons.shopping_bag_outlined, size: 44, color: StorefrontAppTheme.primary),
-          SizedBox(height: 14),
-          Text('Your bag is ready', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-          SizedBox(height: 6),
-          Text('Choose a product in Shop to try the cart flow.', textAlign: TextAlign.center),
+          Icon(Icons.shopping_bag_outlined, size: 44, color: Theme.of(context).colorScheme.primary),
+          const SizedBox(height: 14),
+          const Text('Your bag is ready', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 6),
+          const Text('Choose a product in Collection to try the cart flow.', textAlign: TextAlign.center),
         ],
       ),
     );

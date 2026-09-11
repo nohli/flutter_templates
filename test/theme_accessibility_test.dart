@@ -234,7 +234,7 @@ void main() {
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const StorefrontHomeScreen());
-    _expectTemplateTheme(tester, find.text('NEST'), StorefrontAppTheme.build());
+    _expectTemplateTheme(tester, find.text('Nest'), StorefrontAppTheme.build());
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const PlannerHomeScreen());
@@ -311,7 +311,7 @@ void main() {
 
     await _pumpThemedScreen(tester, const StorefrontHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
-    expect(find.text('NEST'), findsOneWidget);
+    expect(find.text('Nest'), findsOneWidget);
 
     await _pumpThemedScreen(tester, const PlannerHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);

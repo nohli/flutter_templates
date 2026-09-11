@@ -30,7 +30,7 @@ class StorefrontProductArt extends StatelessWidget {
               decoration: const BoxDecoration(color: Color(0x33FFFFFF), shape: BoxShape.circle),
             ),
           ),
-          Icon(_iconFor(kind), size: compact ? 38 : 64, color: StorefrontAppTheme.ink),
+          Icon(_iconFor(kind), size: compact ? 38 : 64, color: Theme.of(context).colorScheme.onSurface),
         ],
       ),
     );

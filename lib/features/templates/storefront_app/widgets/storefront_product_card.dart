@@ -23,6 +23,7 @@ class StorefrontProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final content = horizontal
         ? Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,8 +52,8 @@ class StorefrontProductCard extends StatelessWidget {
         curve: Curves.easeOutCubic,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSaved ? const Color(0xFFFFFAF5) : StorefrontAppTheme.surface,
-          border: Border.all(color: isSaved ? StorefrontAppTheme.blush : Colors.transparent, width: 1.5),
+          color: isSaved ? colors.primaryContainer.withValues(alpha: 0.36) : colors.surface,
+          border: Border.all(color: isSaved ? colors.primary : Colors.transparent, width: 1.5),
           borderRadius: const BorderRadius.all(Radius.circular(26)),
           boxShadow: StorefrontAppTheme.softShadow,
         ),
@@ -98,7 +99,7 @@ class _ProductDetails extends StatelessWidget {
           product.description,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(color: StorefrontAppTheme.mutedInk, fontSize: 11, height: 1.3),
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 11, height: 1.3),
         ),
         const SizedBox(height: 8),
         Row(
@@ -106,7 +107,11 @@ class _ProductDetails extends StatelessWidget {
             Expanded(
               child: Text(
                 formatStorePrice(context, product.price),
-                style: const TextStyle(color: StorefrontAppTheme.primary, fontSize: 16, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             IconButton.filled(

@@ -30,7 +30,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
 
   check_formatting:
     name: Check Formatting
@@ -47,7 +47,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Check Dart formatting
         run: dart format --page-width 120 --output=none --set-exit-if-changed lib test integration_test test_driver
 
@@ -66,7 +66,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Run Dart analyze
         run: dart analyze --fatal-infos
 
@@ -85,7 +85,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Flutter test
         run: flutter test --coverage
       - name: Check coverage

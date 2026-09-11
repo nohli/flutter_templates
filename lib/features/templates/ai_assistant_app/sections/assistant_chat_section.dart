@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../ai_assistant_app_theme.dart';
 import '../models/assistant_message.dart';
+import '../widgets/assistant_idea_constellation.dart';
 import '../widgets/assistant_message_bubble.dart';
 
 class AssistantChatSection extends StatelessWidget {
@@ -32,6 +33,8 @@ class AssistantChatSection extends StatelessWidget {
               const _AssistantHero(),
               const SizedBox(height: 20),
               _PromptSuggestions(onSelected: onPromptSelected),
+              const SizedBox(height: 18),
+              AssistantIdeaConstellation(onPromptSelected: onPromptSelected),
               const SizedBox(height: 24),
               ...messages.map((AssistantMessage message) => AssistantMessageBubble(message: message)),
             ],

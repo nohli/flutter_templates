@@ -113,8 +113,7 @@ class _TimelineMarker extends StatelessWidget {
               height: 24,
               decoration: BoxDecoration(
                 color: colors.secondaryContainer,
-                shape: BoxShape.circle,
-                border: Border.all(color: colors.surface, width: 3),
+                border: Border.all(color: colors.onSecondaryContainer, width: 2),
               ),
               child: Icon(_iconFor(kind), size: 12, color: colors.onSecondaryContainer),
             ),
@@ -151,8 +150,7 @@ class _TravelStopCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSaved ? colors.secondaryContainer.withValues(alpha: 0.7) : colors.surface,
         border: Border.all(color: isSaved ? colors.secondary : colors.outlineVariant),
-        borderRadius: const BorderRadius.all(Radius.circular(22)),
-        boxShadow: const <BoxShadow>[BoxShadow(color: Color(0x12152B2D), blurRadius: 18, offset: Offset(0, 7))],
+        boxShadow: const <BoxShadow>[BoxShadow(color: Color(0x2517352F), offset: Offset(5, 5))],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

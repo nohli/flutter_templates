@@ -289,16 +289,21 @@ void main() {
         expect(commands.any((String command) => command.contains('flutter test integration_test -d linux')), isTrue);
         expect(commands.any((String command) => command.contains('flutter test integration_test -d macos')), isTrue);
         expect(commands.any((String command) => command.contains('flutter test integration_test -d windows')), isTrue);
-        expect(
-          commands.any((String command) {
-            return command.contains('chromedriver --port=4444') &&
-                command.contains('flutter drive --driver=test_driver/integration_test.dart') &&
-                command.contains('-d web-server');
-          }),
-          isTrue,
-        );
         final webSteps = _asYamlList(_asYamlMap(jobs['web'])['steps']).map(_asYamlMap);
-        expect(webSteps.map((YamlMap step) => step['name']), isNot(contains('ChromeDriver')));
+        final browser = webSteps.singleWhere((YamlMap step) => step['uses'] == 'browser-actions/setup-chrome@v2');
+        expect(
+          _asYamlMap(browser['with']),
+          allOf(containsPair('chrome-version', 'stable'), containsPair('install-chromedriver', true)),
+        );
+        final webTest = webSteps.singleWhere((YamlMap step) => step['name'] == 'Test');
+        expect(
+          _asYamlMap(webTest['env']),
+          containsPair('CHROME_EXECUTABLE', r'${{ steps.browser.outputs.chrome-path }}'),
+        );
+        final webCommand = webTest['run'] as String;
+        expect(webCommand, contains(r'"${{ steps.browser.outputs.chromedriver-path }}" --port=4444'));
+        expect(webCommand, contains('flutter drive --driver=test_driver/integration_test.dart'));
+        expect(webCommand, contains('-d web-server'));
         expect(
           webSteps.map((YamlMap step) => step['run']).whereType<String>().join('\n'),
           isNot(contains('@puppeteer/browsers')),

@@ -13,6 +13,7 @@ import 'package:templates/features/support/help_screen.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
 import 'package:templates/features/gallery/home_screen.dart';
 import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
+import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/design_course/course_info_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
@@ -113,6 +114,7 @@ void main() {
     await _expectStatusBarTapScrollsToTop(tester, const PodcastHomeScreen());
     await _expectStatusBarTapScrollsToTop(tester, const SocialHomeScreen());
     await _expectStatusBarTapScrollsToTop(tester, const TravelHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const DatingHomeScreen());
   }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
 
   testWidgets('course details and staged actions render without layout errors', (WidgetTester tester) async {

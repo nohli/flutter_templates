@@ -10,6 +10,7 @@ enum TemplateGalleryDestination {
   podcast,
   social,
   travel,
+  dating,
 }
 
 class TemplateGalleryItem {
@@ -43,5 +44,6 @@ class TemplateGalleryItem {
     TemplateGalleryItem(title: 'Social Community', destination: TemplateGalleryDestination.social),
     TemplateGalleryItem(title: 'Travel Planner', destination: TemplateGalleryDestination.travel),
     TemplateGalleryItem(title: 'AI Assistant', destination: TemplateGalleryDestination.aiAssistant),
+    TemplateGalleryItem(title: 'Dating & Social', destination: TemplateGalleryDestination.dating),
   ];
 }

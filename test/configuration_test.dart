@@ -333,6 +333,7 @@ void main() {
     expect(_entryNames('lib/features/templates'), <String>{
       'ai_assistant_app',
       'design_course',
+      'dating_app',
       'finance_app',
       'fitness_app',
       'food_delivery_app',

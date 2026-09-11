@@ -11,9 +11,11 @@ fvm flutter run
 
 ## Gallery
 
-![Hotel booking interface](assets/hotel/hotel_booking.png)
-![Fitness tracking interface](assets/fitness_app/fitness_app.png)
-![Design course interface](assets/design_course/design_course.png)
+Twelve reusable examples with system, light, and dark appearances.
+
+| Light | Dark |
+| :---: | :---: |
+| ![Template gallery in light mode](screenshots/gallery-light.png) | ![Template gallery in dark mode](screenshots/gallery-dark.png) |
 
 ## License and attribution
 

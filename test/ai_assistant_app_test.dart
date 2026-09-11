@@ -90,6 +90,38 @@ void main() {
     await _pumpAssistant(tester, appearance: AppAppearance.light);
     expect(Theme.of(tester.element(find.text('Nova').first)).brightness, Brightness.light);
   });
+
+  testWidgets('assistant keeps an empty command in the composer', (WidgetTester tester) async {
+    await _pumpAssistant(tester);
+
+    await tester.tap(find.byTooltip('Send message'));
+    await tester.pump();
+
+    expect(find.text('Write a message first.'), findsOneWidget);
+    expect(find.byType(AssistantMessageBubble), findsOneWidget);
+  });
+
+  testWidgets('assistant returns to its gallery route', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (BuildContext context) => TextButton(
+            onPressed: () =>
+                Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AiAssistantHomeScreen())),
+            child: const Text('Open assistant template'),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Open assistant template'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Back to template gallery'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Open assistant template'), findsOneWidget);
+    expect(find.byType(AiAssistantHomeScreen), findsNothing);
+  });
 }
 
 Future<void> _openWorkspaceAndSelect(WidgetTester tester, String label) async {

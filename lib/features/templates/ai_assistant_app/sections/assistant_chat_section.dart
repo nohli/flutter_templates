@@ -27,7 +27,7 @@ class AssistantChatSection extends StatelessWidget {
         Expanded(
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 18),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 18),
             children: <Widget>[
               const _AssistantHero(),
               const SizedBox(height: 20),
@@ -48,71 +48,127 @@ class _AssistantHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(22),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[Color(0xFF503FBB), Color(0xFF1C6673)],
-        ),
-        borderRadius: BorderRadius.all(Radius.circular(30)),
-        boxShadow: AiAssistantAppTheme.softShadow,
-      ),
-      child: const Stack(
-        children: <Widget>[
-          Positioned(right: -22, top: -30, child: _GlowOrb(size: 126, color: Color(0x3366E0D2))),
-          Positioned(left: 96, bottom: -54, child: _GlowOrb(size: 110, color: Color(0x338C7CFF))),
-          Column(
+    final largeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+
+    if (largeText) {
+      return const DecoratedBox(
+        decoration: BoxDecoration(color: AiAssistantAppTheme.raisedSurface),
+        child: Padding(
+          padding: EdgeInsets.all(18),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _NovaMark(),
-              SizedBox(height: 28),
               Text(
-                'What can I help you create?',
-                style: TextStyle(fontSize: 32, height: 1.05, fontWeight: FontWeight.w800),
+                'NOVA / CREATIVE ORBIT',
+                style: TextStyle(color: AiAssistantAppTheme.aqua, fontSize: 8, fontWeight: FontWeight.w900),
+              ),
+              SizedBox(height: 14),
+              Text(
+                'Ideas have gravity.',
+                style: TextStyle(
+                  color: AiAssistantAppTheme.ink,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  height: 0.95,
+                ),
               ),
               SizedBox(height: 12),
-              Text('A thoughtful local interface preview.', style: TextStyle(color: Color(0xFFD8DAEF))),
+              Text('What can I help you create?', style: TextStyle(color: AiAssistantAppTheme.mutedInk, fontSize: 11)),
             ],
           ),
-        ],
+        ),
+      );
+    }
+
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+
+    return SizedBox(
+      height: 212,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: AiAssistantAppTheme.raisedSurface,
+          boxShadow: AiAssistantAppTheme.softShadow,
+        ),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              right: -20,
+              top: -18,
+              width: 210,
+              height: 210,
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: -0.12, end: 0),
+                duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 900),
+                curve: Curves.easeOutCubic,
+                builder: (BuildContext context, double value, Widget? child) {
+                  return Transform.rotate(angle: value, child: child);
+                },
+                child: const CustomPaint(painter: _OrbitPainter()),
+              ),
+            ),
+            const Positioned(
+              left: 17,
+              top: 15,
+              child: Text(
+                'NOVA / CREATIVE ORBIT',
+                style: TextStyle(
+                  color: AiAssistantAppTheme.aqua,
+                  fontSize: 8,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+            const Positioned(
+              left: 17,
+              bottom: 53,
+              child: Text(
+                'IDEAS HAVE\nGRAVITY.',
+                style: TextStyle(
+                  color: AiAssistantAppTheme.ink,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -1.2,
+                  height: 0.84,
+                ),
+              ),
+            ),
+            const Positioned(
+              left: 17,
+              bottom: 18,
+              child: Text(
+                'What can I help you create?',
+                style: TextStyle(color: AiAssistantAppTheme.mutedInk, fontSize: 11),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _NovaMark extends StatelessWidget {
-  const _NovaMark();
+class _OrbitPainter extends CustomPainter {
+  const _OrbitPainter();
 
   @override
-  Widget build(BuildContext context) {
-    return const Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        CircleAvatar(
-          radius: 18,
-          backgroundColor: Color(0x33FFFFFF),
-          child: Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.aqua),
-        ),
-        SizedBox(width: 10),
-        Text('Nova', style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: -0.2)),
-      ],
-    );
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width * 0.54, size.height * 0.48);
+    final orbit = Paint()
+      ..color = AiAssistantAppTheme.aqua.withValues(alpha: 0.42)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+    for (final radius in <double>[34, 58, 82]) {
+      canvas.drawOval(Rect.fromCenter(center: center, width: radius * 2, height: radius * 1.1), orbit);
+    }
+    canvas.drawCircle(center, 20, Paint()..color = AiAssistantAppTheme.primary);
+    canvas.drawCircle(Offset(center.dx + 70, center.dy), 7, Paint()..color = AiAssistantAppTheme.pink);
+    canvas.drawCircle(Offset(center.dx - 42, center.dy - 24), 5, Paint()..color = AiAssistantAppTheme.aqua);
+    canvas.drawCircle(Offset(center.dx + 20, center.dy + 42), 4, Paint()..color = AiAssistantAppTheme.lavender);
   }
-}
-
-class _GlowOrb extends StatelessWidget {
-  const _GlowOrb({required this.size, required this.color});
-
-  final double size;
-  final Color color;
 
   @override
-  Widget build(BuildContext context) => DecoratedBox(
-    decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-    child: SizedBox.square(dimension: size),
-  );
+  bool shouldRepaint(covariant _OrbitPainter oldDelegate) => false;
 }
 
 class _PromptSuggestions extends StatelessWidget {
@@ -141,6 +197,7 @@ class _PromptSuggestions extends StatelessWidget {
               onPressed: () => onSelected(prompt.label),
               backgroundColor: colors.surface,
               side: BorderSide(color: colors.outlineVariant),
+              shape: const RoundedRectangleBorder(),
             ),
           )
           .toList(growable: false),
@@ -156,22 +213,32 @@ class _Composer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      minimum: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      child: TextField(
-        controller: controller,
-        minLines: 1,
-        maxLines: 4,
-        textInputAction: TextInputAction.send,
-        onSubmitted: (_) => onSend(),
-        decoration: InputDecoration(
-          hintText: 'Message Nova',
-          prefixIcon: const Icon(Icons.add_circle_outline_rounded),
-          suffixIcon: IconButton.filled(
-            tooltip: 'Send message',
-            onPressed: onSend,
-            icon: const Icon(Icons.arrow_upward_rounded),
+    final colors = Theme.of(context).colorScheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        border: Border(top: BorderSide(color: colors.outlineVariant)),
+      ),
+      child: SafeArea(
+        top: false,
+        minimum: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: TextField(
+          controller: controller,
+          minLines: 1,
+          maxLines: 4,
+          textInputAction: TextInputAction.send,
+          onSubmitted: (_) => onSend(),
+          decoration: InputDecoration(
+            hintText: 'Message Nova',
+            prefixIcon: const Icon(Icons.add_circle_outline_rounded),
+            border: const OutlineInputBorder(borderRadius: BorderRadius.zero),
+            suffixIcon: IconButton.filled(
+              tooltip: 'Send message',
+              onPressed: onSend,
+              style: IconButton.styleFrom(shape: const RoundedRectangleBorder()),
+              icon: const Icon(Icons.arrow_upward_rounded),
+            ),
           ),
         ),
       ),

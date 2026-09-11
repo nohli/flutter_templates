@@ -46,28 +46,49 @@ class _AiAssistantHomeScreenState extends State<AiAssistantHomeScreen> {
       appearance: widget.appearance,
       themeBuilder: AiAssistantAppTheme.build,
       builder: (BuildContext context) {
+        final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+
         return PrimaryScrollController(
           controller: _scrollControllers[_selectedSection]!,
           child: Scaffold(
             appBar: AppBar(
+              backgroundColor: AiAssistantAppTheme.background,
+              foregroundColor: AiAssistantAppTheme.ink,
               surfaceTintColor: Colors.transparent,
+              toolbarHeight: usesLargeText ? 92 : 72,
               leading: Navigator.of(context).canPop()
                   ? IconButton(
                       tooltip: 'Back to template gallery',
                       onPressed: () => Navigator.of(context).pop(),
+                      style: IconButton.styleFrom(
+                        side: const BorderSide(color: AiAssistantAppTheme.aqua),
+                        shape: const RoundedRectangleBorder(),
+                      ),
                       icon: const Icon(Icons.arrow_back_rounded),
                     )
                   : null,
-              title: const Text(
-                'Nova',
-                style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
-              ),
+              title: usesLargeText
+                  ? const Text('Nova', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                  : const Row(
+                      children: <Widget>[
+                        Text('Nova', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -1)),
+                        SizedBox(width: 9),
+                        Text(
+                          'SPATIAL OS / 01',
+                          style: TextStyle(color: AiAssistantAppTheme.aqua, fontSize: 8, fontWeight: FontWeight.w900),
+                        ),
+                      ],
+                    ),
               actions: <Widget>[
                 Builder(
                   builder: (BuildContext context) {
                     return IconButton(
                       tooltip: 'Open workspace',
                       onPressed: () => Scaffold.of(context).openEndDrawer(),
+                      style: IconButton.styleFrom(
+                        side: const BorderSide(color: AiAssistantAppTheme.aqua),
+                        shape: const RoundedRectangleBorder(),
+                      ),
                       icon: const Icon(Icons.menu_open_rounded),
                     );
                   },

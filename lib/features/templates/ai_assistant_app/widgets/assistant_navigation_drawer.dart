@@ -17,10 +17,9 @@ class AssistantNavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Drawer(
-      backgroundColor: colors.surface,
+      backgroundColor: AiAssistantAppTheme.background,
+      shape: const RoundedRectangleBorder(),
       child: SafeArea(
         child: ListView(
           primary: false,
@@ -35,25 +34,35 @@ class AssistantNavigationDrawer extends StatelessWidget {
               },
               icon: const Icon(Icons.add_rounded),
               label: const Text('New conversation'),
-              style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(50)),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+                backgroundColor: AiAssistantAppTheme.aqua,
+                foregroundColor: AiAssistantAppTheme.background,
+                shape: const RoundedRectangleBorder(),
+              ),
             ),
             const SizedBox(height: 18),
             for (final section in AssistantSection.values)
               ListTile(
                 selected: selectedSection == section,
+                selectedTileColor: AiAssistantAppTheme.primary,
+                iconColor: AiAssistantAppTheme.aqua,
+                textColor: AiAssistantAppTheme.ink,
+                selectedColor: AiAssistantAppTheme.background,
+                shape: const RoundedRectangleBorder(),
                 leading: Icon(_iconFor(section)),
-                title: Text(_labelFor(section)),
+                title: Text(_labelFor(section), style: const TextStyle(fontWeight: FontWeight.w800)),
                 onTap: () {
                   Navigator.of(context).pop();
                   onSelected(section);
                 },
               ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 22, 12, 10),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(12, 22, 12, 10),
               child: Text(
                 'RECENT',
                 style: TextStyle(
-                  color: colors.onSurfaceVariant,
+                  color: AiAssistantAppTheme.mutedInk,
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.2,
@@ -104,8 +113,6 @@ class _WorkspaceHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Row(
@@ -114,18 +121,21 @@ class _WorkspaceHeader extends StatelessWidget {
             width: 46,
             height: 46,
             decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: <Color>[AiAssistantAppTheme.primary, AiAssistantAppTheme.aqua]),
-              borderRadius: BorderRadius.all(Radius.circular(16)),
+              color: AiAssistantAppTheme.primary,
+              border: Border.fromBorderSide(BorderSide(color: AiAssistantAppTheme.aqua)),
             ),
             child: const Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.background),
           ),
           const SizedBox(width: 13),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text('Nova', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7)),
-                Text('Private workspace', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
+                Text(
+                  'NOVA / SPATIAL OS',
+                  style: TextStyle(color: AiAssistantAppTheme.ink, fontSize: 15, fontWeight: FontWeight.w900),
+                ),
+                Text('Private workspace', style: TextStyle(color: AiAssistantAppTheme.mutedInk, fontSize: 12)),
               ],
             ),
           ),
@@ -145,6 +155,8 @@ class _RecentConversation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      iconColor: AiAssistantAppTheme.aqua,
+      textColor: AiAssistantAppTheme.ink,
       leading: Icon(icon, size: 20),
       title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
       onTap: onTap,

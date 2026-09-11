@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import '../shared/template_theme.dart';
 
 abstract final class AiAssistantAppTheme {
-  static const background = Color(0xFF0C1022);
-  static const surface = Color(0xFF171D34);
-  static const raisedSurface = Color(0xFF202744);
-  static const ink = Color(0xFFF7F8FF);
-  static const mutedInk = Color(0xFFA7AEC7);
-  static const primary = Color(0xFF8C7CFF);
-  static const lavender = Color(0xFFCDC5FF);
-  static const aqua = Color(0xFF66E0D2);
-  static const pink = Color(0xFFFF8FBB);
-  static const divider = Color(0xFF2B3352);
+  static const background = Color(0xFF080A12);
+  static const surface = Color(0xFF121622);
+  static const raisedSurface = Color(0xFF1A2030);
+  static const ink = Color(0xFFF4F1FF);
+  static const mutedInk = Color(0xFFA7AEC5);
+  static const primary = Color(0xFF9B7BFF);
+  static const lavender = Color(0xFFD3C7FF);
+  static const aqua = Color(0xFF5CF1D4);
+  static const pink = Color(0xFFFF70AE);
+  static const divider = Color(0xFF30384C);
   static const fontName = 'WorkSans';
 
   static ThemeData build([Brightness brightness = Brightness.dark]) {
@@ -25,7 +25,7 @@ abstract final class AiAssistantAppTheme {
             onPrimaryContainer: ink,
             secondary: aqua,
             onSecondary: background,
-            secondaryContainer: Color(0xFF124D52),
+            secondaryContainer: Color(0xFF0E5048),
             onSecondaryContainer: Color(0xFFB4F4ED),
             surface: surface,
             onSurface: ink,
@@ -35,16 +35,16 @@ abstract final class AiAssistantAppTheme {
             outlineVariant: divider,
           )
         : const ColorScheme.light(
-            primary: Color(0xFF5946C7),
+            primary: Color(0xFF6247D6),
             onPrimary: Colors.white,
             primaryContainer: Color(0xFFE5DFFF),
             onPrimaryContainer: Color(0xFF1A0065),
-            secondary: Color(0xFF006A65),
+            secondary: Color(0xFF006B5F),
             onSecondary: Colors.white,
             secondaryContainer: Color(0xFF9CF2EA),
             onSecondaryContainer: Color(0xFF00201E),
             surface: Color(0xFFFFFBFF),
-            onSurface: Color(0xFF1B1B22),
+            onSurface: Color(0xFF171521),
             error: Color(0xFFBA1A1A),
             onError: Colors.white,
             outline: Color(0xFF706F7B),
@@ -53,11 +53,11 @@ abstract final class AiAssistantAppTheme {
 
     return buildTemplateTheme(
       colors: colors,
-      background: isDark ? background : const Color(0xFFF7F5FF),
+      background: isDark ? background : const Color(0xFFF3EFFB),
       navigationIndicator: isDark ? raisedSurface : const Color(0xFFE5DFFF),
       fontFamily: fontName,
     );
   }
 
-  static const softShadow = <BoxShadow>[BoxShadow(color: Color(0x52000000), blurRadius: 26, offset: Offset(0, 10))];
+  static const softShadow = <BoxShadow>[BoxShadow(color: Color(0x66000000), blurRadius: 0, offset: Offset(6, 6))];
 }

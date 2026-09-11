@@ -4,13 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:templates/about_screen.dart';
-import 'package:templates/app_identity.dart';
-import 'package:templates/external_actions.dart';
-import 'package:templates/feedback_screen.dart';
-import 'package:templates/font_licenses.dart';
-import 'package:templates/help_screen.dart';
-import 'package:templates/invite_friend_screen.dart';
+import 'package:templates/features/support/about_screen.dart';
+import 'package:templates/app/app_identity.dart';
+import 'package:templates/features/support/external_actions.dart';
+import 'package:templates/features/support/feedback_screen.dart';
+import 'package:templates/app/font_licenses.dart';
+import 'package:templates/features/support/help_screen.dart';
+import 'package:templates/features/support/invite_friend_screen.dart';
 
 void main() {
   test('feedback email preserves spaces and reserved characters', () {

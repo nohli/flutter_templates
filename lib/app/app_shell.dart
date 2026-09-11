@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'about_screen.dart';
 import 'app_drawer.dart';
 import 'app_theme.dart';
-import 'feedback_screen.dart';
-import 'help_screen.dart';
-import 'home_screen.dart';
-import 'invite_friend_screen.dart';
+import '../features/gallery/home_screen.dart';
+import '../features/support/about_screen.dart';
+import '../features/support/feedback_screen.dart';
+import '../features/support/help_screen.dart';
+import '../features/support/invite_friend_screen.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});

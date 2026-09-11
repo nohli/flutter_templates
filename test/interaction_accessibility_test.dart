@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
-import 'package:templates/design_course/home_design_course.dart';
-import 'package:templates/design_course/models/category.dart';
-import 'package:templates/fitness_app/bottom_navigation_view/bottom_bar_view.dart';
-import 'package:templates/fitness_app/fitness_app_home_screen.dart';
-import 'package:templates/fitness_app/fitness_app_theme.dart';
-import 'package:templates/fitness_app/ui_view/area_list_view.dart';
-import 'package:templates/hotel_booking/custom_calendar.dart';
-import 'package:templates/hotel_booking/hotel_home_screen.dart';
-import 'package:templates/hotel_booking/model/hotel_list_data.dart';
-import 'package:templates/hotel_booking/smooth_star_rating.dart';
-import 'package:templates/home_screen.dart';
+import 'package:templates/features/templates/design_course/home_design_course.dart';
+import 'package:templates/features/templates/design_course/models/category.dart';
+import 'package:templates/features/templates/fitness_app/bottom_navigation_view/bottom_bar_view.dart';
+import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
+import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
+import 'package:templates/features/templates/fitness_app/ui_view/area_list_view.dart';
+import 'package:templates/features/templates/hotel_booking/custom_calendar.dart';
+import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
+import 'package:templates/features/templates/hotel_booking/model/hotel_list_data.dart';
+import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
+import 'package:templates/features/gallery/home_screen.dart';
 
 void main() {
   test('course lesson labels use correct singular and plural grammar', () {

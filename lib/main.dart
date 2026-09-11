@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'app_identity.dart';
-import 'app_shell.dart';
-import 'app_theme.dart';
-import 'font_licenses.dart';
+import 'app/app_identity.dart';
+import 'app/app_shell.dart';
+import 'app/app_theme.dart';
+import 'app/font_licenses.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

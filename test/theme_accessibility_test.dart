@@ -2,15 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:templates/app_shell.dart';
-import 'package:templates/app_theme.dart';
-import 'package:templates/design_course/design_course_app_theme.dart';
-import 'package:templates/design_course/home_design_course.dart';
-import 'package:templates/fitness_app/fitness_app_home_screen.dart';
-import 'package:templates/fitness_app/fitness_app_theme.dart';
-import 'package:templates/hotel_booking/hotel_app_theme.dart';
-import 'package:templates/hotel_booking/filters_screen.dart';
-import 'package:templates/hotel_booking/hotel_home_screen.dart';
+import 'package:templates/app/app_shell.dart';
+import 'package:templates/app/app_theme.dart';
+import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
+import 'package:templates/features/templates/design_course/home_design_course.dart';
+import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
+import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
+import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart';
+import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
+import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/main.dart';
 
 void main() {

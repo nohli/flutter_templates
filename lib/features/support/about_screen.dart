@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'app_identity.dart';
-import 'app_theme.dart';
+import '../../app/app_identity.dart';
+import '../../app/app_theme.dart';
 import 'external_actions.dart';
 
 class AboutScreen extends StatefulWidget {

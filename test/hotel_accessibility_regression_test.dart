@@ -3,11 +3,11 @@ import 'dart:ui' show SemanticsAction, Tristate;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
-import 'package:templates/hotel_booking/calendar_popup_view.dart';
-import 'package:templates/hotel_booking/custom_calendar.dart';
-import 'package:templates/hotel_booking/hotel_app_theme.dart';
-import 'package:templates/hotel_booking/hotel_list_view.dart';
-import 'package:templates/hotel_booking/model/hotel_list_data.dart';
+import 'package:templates/features/templates/hotel_booking/calendar_popup_view.dart';
+import 'package:templates/features/templates/hotel_booking/custom_calendar.dart';
+import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart';
+import 'package:templates/features/templates/hotel_booking/hotel_list_view.dart';
+import 'package:templates/features/templates/hotel_booking/model/hotel_list_data.dart';
 
 void main() {
   test('Hotel theme keeps mint surfaces and uses an accessible action foreground', () {

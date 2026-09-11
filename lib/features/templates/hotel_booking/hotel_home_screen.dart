@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
-import '../motion_preferences.dart';
+import '../../../app/motion_preferences.dart';
 import 'calendar_popup_view.dart';
 import 'filters_screen.dart';
 import 'hotel_app_theme.dart';

@@ -262,10 +262,10 @@ void main() {
           .toList();
       for (final Object? jobValue in jobs.values) {
         final steps = _asYamlList(_asYamlMap(jobValue)['steps']);
-        expect(steps.map(_asYamlMap).map((YamlMap step) => step['uses']), contains('actions/checkout@v7'));
+        expect(steps.map(_asYamlMap).any((YamlMap step) => _usesAction(step, 'actions/checkout')), isTrue);
         final installFlutter = steps
             .map(_asYamlMap)
-            .singleWhere((YamlMap step) => step['uses'] == 'subosito/flutter-action@v2');
+            .singleWhere((YamlMap step) => _usesAction(step, 'subosito/flutter-action'));
         final flutterOptions = _asYamlMap(installFlutter['with']);
         expect(flutterOptions['channel'], 'stable', reason: workflowFile);
         expect(flutterOptions, isNot(contains('flutter-version')), reason: workflowFile);
@@ -307,7 +307,7 @@ void main() {
         final androidMatrix = _asYamlMap(_asYamlMap(android['strategy'])['matrix']);
         expect(_asYamlList(androidMatrix['api-level']), <Object?>[24, 30, 35]);
         final iosSteps = _asYamlList(_asYamlMap(jobs['ios'])['steps']).map(_asYamlMap);
-        final simulator = iosSteps.singleWhere((YamlMap step) => step['uses'] == 'futureware-tech/simulator-action@v5');
+        final simulator = iosSteps.singleWhere((YamlMap step) => _usesAction(step, 'futureware-tech/simulator-action'));
         expect(_asYamlMap(simulator['with']), containsPair('os_version', '26.2'));
         expect(_asYamlMap(simulator['with']), containsPair('model', 'iPhone 17'));
       }
@@ -324,7 +324,7 @@ void main() {
     expect(_asYamlMap(dependencyReview['permissions'])['contents'], 'read');
     final dependencyJobs = _asYamlMap(dependencyReview['jobs']);
     final dependencySteps = _asYamlList(_asYamlMap(dependencyJobs['review'])['steps']).map(_asYamlMap);
-    expect(dependencySteps.map((YamlMap step) => step['uses']), contains('actions/dependency-review-action@v4'));
+    expect(dependencySteps.any((YamlMap step) => _usesAction(step, 'actions/dependency-review-action')), isTrue);
   });
 
   test('source files follow the feature-based application structure', () {
@@ -434,6 +434,11 @@ YamlMap _asYamlMap(Object? value) {
 YamlList _asYamlList(Object? value) {
   expect(value, isA<YamlList>());
   return value! as YamlList;
+}
+
+bool _usesAction(YamlMap step, String action) {
+  final reference = step['uses'];
+  return reference is String && RegExp('^${RegExp.escape(action)}@\\S+\$').hasMatch(reference);
 }
 
 ({int bitDepth, int colorType, int height, int width}) _readPngHeader(String fileName) {

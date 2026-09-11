@@ -13,6 +13,7 @@ import '../templates/planner_app/planner_home_screen.dart';
 import '../templates/podcast_app/podcast_home_screen.dart';
 import '../templates/social_app/social_home_screen.dart';
 import '../templates/storefront_app/storefront_home_screen.dart';
+import '../templates/travel_app/travel_home_screen.dart';
 import 'models/template_gallery_item.dart';
 import 'template_gallery_artwork.dart';
 
@@ -130,6 +131,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.foodDelivery => const FoodDeliveryHomeScreen(),
     TemplateGalleryDestination.podcast => const PodcastHomeScreen(),
     TemplateGalleryDestination.social => const SocialHomeScreen(),
+    TemplateGalleryDestination.travel => const TravelHomeScreen(),
   };
 }
 

@@ -342,6 +342,7 @@ void main() {
       'shared',
       'social_app',
       'storefront_app',
+      'travel_app',
     });
   });
 

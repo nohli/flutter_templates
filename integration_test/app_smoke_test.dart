@@ -21,6 +21,7 @@ void main() {
     await _openTemplate(tester, cardLabel: 'Food Delivery', screenText: 'Good food, right on time.');
     await _openTemplate(tester, cardLabel: 'Podcast Player', screenText: 'Stories worth your time.');
     await _openTemplate(tester, cardLabel: 'Social Community', screenText: 'Share what feels alive.');
+    await _openTemplate(tester, cardLabel: 'Travel Planner', screenText: 'Madeira, mapped beautifully.');
   });
 }
 

@@ -25,6 +25,8 @@ import 'package:templates/features/templates/social_app/social_app_theme.dart';
 import 'package:templates/features/templates/social_app/social_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/storefront_app_theme.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
+import 'package:templates/features/templates/travel_app/travel_app_theme.dart';
+import 'package:templates/features/templates/travel_app/travel_home_screen.dart';
 import 'package:templates/main.dart';
 
 void main() {
@@ -140,6 +142,15 @@ void main() {
             useMaterial3: true,
             brightness: Brightness.light,
           ),
+          (
+            name: 'Travel planner',
+            font: TravelAppTheme.fontName,
+            build: TravelAppTheme.build,
+            primary: TravelAppTheme.primary,
+            scaffold: TravelAppTheme.background,
+            useMaterial3: true,
+            brightness: Brightness.light,
+          ),
         ];
 
     for (final themeCase in cases) {
@@ -176,6 +187,7 @@ void main() {
       expect(FoodDeliveryAppTheme.build().platform, platform);
       expect(PodcastAppTheme.build().platform, platform);
       expect(SocialAppTheme.build().platform, platform);
+      expect(TravelAppTheme.build().platform, platform);
     }
   });
 
@@ -260,6 +272,10 @@ void main() {
     await _pumpThemedScreen(tester, const SocialHomeScreen());
     _expectTemplateTheme(tester, find.text('Mingle'), SocialAppTheme.build());
     await _expectAccessible(tester);
+
+    await _pumpThemedScreen(tester, const TravelHomeScreen());
+    _expectTemplateTheme(tester, find.text('Roam'), TravelAppTheme.build());
+    await _expectAccessible(tester);
     semantics.dispose();
   });
 
@@ -332,6 +348,10 @@ void main() {
     await _pumpThemedScreen(tester, const SocialHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
     expect(find.text('Mingle'), findsOneWidget);
+
+    await _pumpThemedScreen(tester, const TravelHomeScreen(), size: const Size(320, 568), textScale: 3.2);
+    _expectNoLayoutException(tester);
+    expect(find.text('Roam'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {

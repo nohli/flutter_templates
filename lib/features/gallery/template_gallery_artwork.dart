@@ -7,6 +7,7 @@ import '../templates/planner_app/widgets/planner_gallery_preview.dart';
 import '../templates/podcast_app/widgets/podcast_gallery_preview.dart';
 import '../templates/social_app/widgets/social_gallery_preview.dart';
 import '../templates/storefront_app/widgets/storefront_gallery_preview.dart';
+import '../templates/travel_app/widgets/travel_gallery_preview.dart';
 import 'models/template_gallery_item.dart';
 
 class TemplateGalleryArtwork extends StatelessWidget {
@@ -28,6 +29,7 @@ class TemplateGalleryArtwork extends StatelessWidget {
       TemplateGalleryDestination.foodDelivery => const DeliveryGalleryPreview(),
       TemplateGalleryDestination.podcast => const PodcastGalleryPreview(),
       TemplateGalleryDestination.social => const SocialGalleryPreview(),
+      TemplateGalleryDestination.travel => const TravelGalleryPreview(),
       TemplateGalleryDestination.hotelBooking ||
       TemplateGalleryDestination.fitness ||
       TemplateGalleryDestination.designCourse => const SizedBox.shrink(),

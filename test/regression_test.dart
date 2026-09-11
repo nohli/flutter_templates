@@ -41,6 +41,7 @@ import 'package:templates/features/templates/planner_app/planner_home_screen.dar
 import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
 import 'package:templates/features/templates/social_app/social_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
+import 'package:templates/features/templates/travel_app/travel_home_screen.dart';
 import 'package:templates/main.dart' as app;
 
 void main() {
@@ -100,22 +101,19 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets(
-    'iOS status-bar tap scrolls every template home screen to the top',
-    (WidgetTester tester) async {
-      await _expectStatusBarTapScrollsToTop(tester, const HotelHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const FinanceHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const StorefrontHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const PlannerHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const AiAssistantHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const FoodDeliveryHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const PodcastHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const SocialHomeScreen());
-    },
-    variant: TargetPlatformVariant.only(TargetPlatform.iOS),
-  );
+  testWidgets('iOS status-bar tap scrolls every template home screen to the top', (WidgetTester tester) async {
+    await _expectStatusBarTapScrollsToTop(tester, const HotelHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const FinanceHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const StorefrontHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const PlannerHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const AiAssistantHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const FoodDeliveryHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const PodcastHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const SocialHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const TravelHomeScreen());
+  }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
 
   testWidgets('course details and staged actions render without layout errors', (WidgetTester tester) async {
     _evictAssets(<String>['assets/design_course/interFace4.png']);
@@ -473,8 +471,12 @@ void main() {
       (title: 'Food Delivery', destination: FoodDeliveryHomeScreen),
       (title: 'Podcast Player', destination: PodcastHomeScreen),
       (title: 'Social Community', destination: SocialHomeScreen),
+      (title: 'Travel Planner', destination: TravelHomeScreen),
     ]) {
-      await tester.tap(find.bySemanticsLabel(scenario.title));
+      final card = find.bySemanticsLabel(scenario.title);
+      await tester.ensureVisible(card);
+      await tester.pump();
+      await tester.tap(card);
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
 

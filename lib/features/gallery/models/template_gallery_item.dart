@@ -9,6 +9,7 @@ enum TemplateGalleryDestination {
   foodDelivery,
   podcast,
   social,
+  travel,
 }
 
 class TemplateGalleryItem {
@@ -37,9 +38,10 @@ class TemplateGalleryItem {
     TemplateGalleryItem(title: 'Personal Finance', destination: TemplateGalleryDestination.personalFinance),
     TemplateGalleryItem(title: 'E-commerce Store', destination: TemplateGalleryDestination.storefront),
     TemplateGalleryItem(title: 'Project Planner', destination: TemplateGalleryDestination.planner),
-    TemplateGalleryItem(title: 'AI Assistant', destination: TemplateGalleryDestination.aiAssistant),
     TemplateGalleryItem(title: 'Food Delivery', destination: TemplateGalleryDestination.foodDelivery),
     TemplateGalleryItem(title: 'Podcast Player', destination: TemplateGalleryDestination.podcast),
     TemplateGalleryItem(title: 'Social Community', destination: TemplateGalleryDestination.social),
+    TemplateGalleryItem(title: 'Travel Planner', destination: TemplateGalleryDestination.travel),
+    TemplateGalleryItem(title: 'AI Assistant', destination: TemplateGalleryDestination.aiAssistant),
   ];
 }

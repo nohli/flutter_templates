@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../food_delivery_app_theme.dart';
 import '../food_delivery_formatters.dart';
 import '../models/meal.dart';
 import 'meal_art.dart';
@@ -13,8 +12,10 @@ class MealCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Material(
-      color: FoodDeliveryAppTheme.surface,
+      color: colors.surface,
       borderRadius: const BorderRadius.all(Radius.circular(26)),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -26,18 +27,15 @@ class MealCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(meal.restaurant, style: const TextStyle(color: FoodDeliveryAppTheme.green, fontSize: 12)),
+                Text(meal.restaurant, style: TextStyle(color: colors.secondary, fontSize: 12)),
                 const SizedBox(height: 3),
                 Text(meal.name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 5),
-                Text(
-                  meal.description,
-                  style: const TextStyle(color: FoodDeliveryAppTheme.mutedInk, fontSize: 12, height: 1.35),
-                ),
+                Text(meal.description, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12, height: 1.35)),
                 const SizedBox(height: 12),
                 Row(
                   children: <Widget>[
-                    const Icon(Icons.star_rounded, color: FoodDeliveryAppTheme.primary, size: 17),
+                    Icon(Icons.star_rounded, color: colors.primary, size: 17),
                     const SizedBox(width: 3),
                     Text('${meal.rating}', style: const TextStyle(fontWeight: FontWeight.w700)),
                     const SizedBox(width: 8),
@@ -45,7 +43,7 @@ class MealCard extends StatelessWidget {
                       child: Text(
                         meal.etaLabel,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: FoodDeliveryAppTheme.mutedInk, fontSize: 11),
+                        style: TextStyle(color: colors.onSurfaceVariant, fontSize: 11),
                       ),
                     ),
                   ],

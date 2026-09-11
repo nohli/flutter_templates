@@ -32,7 +32,7 @@ class _DeliveryDiscoverPreview extends StatelessWidget {
           Row(
             children: <Widget>[
               Expanded(
-                child: Text('SAVOR', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, letterSpacing: 0.8)),
+                child: Text('Savor', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, letterSpacing: -0.2)),
               ),
               Icon(Icons.location_on_rounded, size: 8, color: FoodDeliveryAppTheme.primary),
             ],

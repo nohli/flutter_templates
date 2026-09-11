@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'food_delivery_app_theme.dart';
 import 'models/delivery_section.dart';
@@ -7,7 +8,7 @@ import 'models/meal.dart';
 import 'sections/delivery_basket_section.dart';
 import 'sections/delivery_discover_section.dart';
 import 'sections/delivery_order_section.dart';
-import 'widgets/delivery_bottom_bar.dart';
+import 'widgets/delivery_action_dock.dart';
 
 class FoodDeliveryHomeScreen extends StatefulWidget {
   const FoodDeliveryHomeScreen({super.key});
@@ -40,80 +41,77 @@ class _FoodDeliveryHomeScreenState extends State<FoodDeliveryHomeScreen> {
     final itemCount = _quantities.values.fold<int>(0, (int sum, int quantity) => sum + quantity);
     final scrollController = _scrollControllers[_selectedSection]!;
 
-    return Theme(
-      data: FoodDeliveryAppTheme.build(),
-      child: PrimaryScrollController(
-        controller: scrollController,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: FoodDeliveryAppTheme.background,
-            surfaceTintColor: Colors.transparent,
-            leading: Navigator.of(context).canPop()
-                ? IconButton(
-                    tooltip: 'Back to template gallery',
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back_rounded),
-                  )
-                : null,
-            title: const Text('SAVOR', style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 1.8)),
-            actions: const <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: 16),
-                child: Chip(
-                  avatar: Icon(Icons.location_on_rounded, size: 17),
-                  label: Text('Home'),
-                  backgroundColor: FoodDeliveryAppTheme.surface,
-                  side: BorderSide.none,
-                ),
+    return TemplateAppearanceShell(
+      themeBuilder: FoodDeliveryAppTheme.build,
+      builder: (BuildContext context, Widget appearanceButton) {
+        return PrimaryScrollController(
+          controller: scrollController,
+          child: Scaffold(
+            appBar: AppBar(
+              surfaceTintColor: Colors.transparent,
+              leading: Navigator.of(context).canPop()
+                  ? IconButton(
+                      tooltip: 'Back to template gallery',
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.arrow_back_rounded),
+                    )
+                  : null,
+              title: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Savor', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w800, letterSpacing: -0.8)),
+                  Text('Home · 18 min', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w400)),
+                ],
               ),
-            ],
-          ),
-          body: TemplateEntrance(
-            child: TemplateSectionSwitcher(
-              selectedIndex: _selectedSection.index,
-              children: <Widget>[
-                DeliveryDiscoverSection(
-                  meals: meals,
-                  selectedCategory: _selectedCategory,
-                  scrollController: _scrollControllers[DeliverySection.discover]!,
-                  onQueryChanged: (String query) {
-                    setState(() {
-                      _query = query.trim().toLowerCase();
-                    });
-                  },
-                  onCategorySelected: (MealCategory category) {
-                    setState(() {
-                      _selectedCategory = category;
-                    });
-                  },
-                  onAddMeal: _addMeal,
-                ),
-                DeliveryOrderSection(
-                  isDelivered: _isDelivered,
-                  scrollController: _scrollControllers[DeliverySection.order]!,
-                  onToggle: () {
-                    setState(() {
-                      _isDelivered = !_isDelivered;
-                    });
-                  },
-                ),
-                DeliveryBasketSection(
-                  quantities: _quantities,
-                  scrollController: _scrollControllers[DeliverySection.basket]!,
-                  onAdd: _addMeal,
-                  onRemove: _removeMeal,
-                  onCheckout: () => _showMessage('Checkout is shown as an interface preview.'),
-                ),
-              ],
+              actions: <Widget>[appearanceButton],
+            ),
+            body: TemplateEntrance(
+              child: TemplateSectionSwitcher(
+                selectedIndex: _selectedSection.index,
+                children: <Widget>[
+                  DeliveryDiscoverSection(
+                    meals: meals,
+                    selectedCategory: _selectedCategory,
+                    scrollController: _scrollControllers[DeliverySection.discover]!,
+                    onQueryChanged: (String query) {
+                      setState(() {
+                        _query = query.trim().toLowerCase();
+                      });
+                    },
+                    onCategorySelected: (MealCategory category) {
+                      setState(() {
+                        _selectedCategory = category;
+                      });
+                    },
+                    onAddMeal: _addMeal,
+                  ),
+                  DeliveryOrderSection(
+                    isDelivered: _isDelivered,
+                    scrollController: _scrollControllers[DeliverySection.order]!,
+                    onToggle: () {
+                      setState(() {
+                        _isDelivered = !_isDelivered;
+                      });
+                    },
+                  ),
+                  DeliveryBasketSection(
+                    quantities: _quantities,
+                    scrollController: _scrollControllers[DeliverySection.basket]!,
+                    onAdd: _addMeal,
+                    onRemove: _removeMeal,
+                    onCheckout: () => _showMessage('Checkout is shown as an interface preview.'),
+                  ),
+                ],
+              ),
+            ),
+            bottomNavigationBar: DeliveryActionDock(
+              selectedSection: _selectedSection,
+              itemCount: itemCount,
+              onSelected: _selectSection,
             ),
           ),
-          bottomNavigationBar: DeliveryBottomBar(
-            selectedSection: _selectedSection,
-            itemCount: itemCount,
-            onSelected: _selectSection,
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 

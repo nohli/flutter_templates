@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../food_delivery_app_theme.dart';
 import '../models/meal.dart';
 import '../widgets/meal_card.dart';
 
@@ -24,6 +23,8 @@ class DeliveryDiscoverSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       key: const PageStorageKey<String>('delivery-discover'),
       controller: scrollController,
@@ -32,19 +33,16 @@ class DeliveryDiscoverSection extends StatelessWidget {
       children: <Widget>[
         const Text('Good food, right on time.', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
         const SizedBox(height: 8),
-        const Text(
-          'Fresh local favorites, ready when you are.',
-          style: TextStyle(color: FoodDeliveryAppTheme.mutedInk),
-        ),
+        Text('Fresh local favorites, ready when you are.', style: TextStyle(color: colors.onSurfaceVariant)),
         const SizedBox(height: 20),
         TextField(
           onChanged: onQueryChanged,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: 'Search meals or restaurants',
-            prefixIcon: Icon(Icons.search_rounded),
+            prefixIcon: const Icon(Icons.search_rounded),
             filled: true,
-            fillColor: FoodDeliveryAppTheme.surface,
-            border: OutlineInputBorder(
+            fillColor: colors.surface,
+            border: const OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.all(Radius.circular(18)),
             ),
@@ -72,7 +70,7 @@ class DeliveryDiscoverSection extends StatelessWidget {
             const Expanded(
               child: Text('Popular nearby', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             ),
-            Text('${meals.length} meals', style: const TextStyle(color: FoodDeliveryAppTheme.mutedInk)),
+            Text('${meals.length} meals', style: TextStyle(color: colors.onSurfaceVariant)),
           ],
         ),
         const SizedBox(height: 14),
@@ -114,16 +112,18 @@ class _EmptyMealState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Material(
-      color: FoodDeliveryAppTheme.surface,
-      borderRadius: BorderRadius.all(Radius.circular(24)),
+    final colors = Theme.of(context).colorScheme;
+
+    return Material(
+      color: colors.surface,
+      borderRadius: const BorderRadius.all(Radius.circular(24)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
         child: Column(
           children: <Widget>[
-            Icon(Icons.search_off_rounded, size: 42, color: FoodDeliveryAppTheme.primary),
-            SizedBox(height: 12),
-            Text('No matching meals', style: TextStyle(fontWeight: FontWeight.w700)),
+            Icon(Icons.search_off_rounded, size: 42, color: colors.primary),
+            const SizedBox(height: 12),
+            const Text('No matching meals', style: TextStyle(fontWeight: FontWeight.w700)),
           ],
         ),
       ),

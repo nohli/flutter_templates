@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../models/podcast_section.dart';
 import '../models/podcast_show.dart';
-import 'podcast_artwork.dart';
+import '../podcast_app_theme.dart';
+import 'podcast_vinyl.dart';
 
 class PodcastNavigationDrawer extends StatelessWidget {
   const PodcastNavigationDrawer({
@@ -18,38 +19,61 @@ class PodcastNavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Drawer(
-      backgroundColor: colors.surface,
+      backgroundColor: PodcastAppTheme.ink,
+      shape: const RoundedRectangleBorder(),
       child: SafeArea(
         child: ListView(
           primary: false,
           padding: EdgeInsets.zero,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 18),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(24, 24, 24, 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Wave',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w700),
+                    'WAVE / 072',
+                    style: TextStyle(
+                      color: PodcastAppTheme.signal,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.4,
+                    ),
                   ),
-                  const SizedBox(height: 6),
-                  Text('Your listening space', style: TextStyle(color: colors.onSurfaceVariant)),
+                  SizedBox(height: 14),
+                  Text(
+                    'TUNE YOUR\nLISTENING.',
+                    style: TextStyle(
+                      color: Color(0xFFFFFCF0),
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -1,
+                      height: 0.9,
+                    ),
+                  ),
                 ],
               ),
             ),
-            Divider(height: 1, color: colors.outlineVariant),
+            const Divider(height: 1, color: Color(0xFF4B473D)),
             const SizedBox(height: 10),
             for (final section in PodcastSection.values)
               ListTile(
                 selected: selectedSection == section,
+                selectedTileColor: PodcastAppTheme.primary,
+                iconColor: PodcastAppTheme.signal,
+                textColor: const Color(0xFFFFFCF0),
+                selectedColor: PodcastAppTheme.ink,
+                shape: const RoundedRectangleBorder(),
                 leading: Icon(_iconFor(section)),
-                title: Text(_labelFor(section)),
+                title: Text(_labelFor(section), style: const TextStyle(fontWeight: FontWeight.w800)),
                 subtitle: section == PodcastSection.player
-                    ? Text(currentShow.title, maxLines: 1, overflow: TextOverflow.ellipsis)
+                    ? Text(
+                        currentShow.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Color(0xB3FFFCF0)),
+                      )
                     : null,
                 onTap: () {
                   Navigator.of(context).pop();
@@ -61,14 +85,14 @@ class PodcastNavigationDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(18),
               child: Row(
                 children: <Widget>[
-                  SizedBox.square(dimension: 52, child: PodcastArtwork(show: currentShow, compact: true)),
+                  SizedBox.square(dimension: 52, child: PodcastVinyl(show: currentShow, compact: true)),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       currentShow.episodeTitle,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      style: const TextStyle(color: Color(0xFFFFFCF0), fontWeight: FontWeight.w700),
                     ),
                   ),
                 ],

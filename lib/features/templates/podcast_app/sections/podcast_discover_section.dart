@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/podcast_show.dart';
 import '../widgets/podcast_show_card.dart';
+import '../widgets/podcast_vinyl.dart';
 
 class PodcastDiscoverSection extends StatelessWidget {
   const PodcastDiscoverSection({
@@ -35,10 +36,8 @@ class PodcastDiscoverSection extends StatelessWidget {
       physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
       children: <Widget>[
-        const Text('Stories worth your time.', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
-        const SizedBox(height: 8),
-        Text('Thoughtful listening for curious days.', style: TextStyle(color: colors.onSurfaceVariant)),
-        const SizedBox(height: 20),
+        const _BroadcastHero(),
+        const SizedBox(height: 16),
         TextField(
           onChanged: onQueryChanged,
           decoration: InputDecoration(
@@ -46,9 +45,13 @@ class PodcastDiscoverSection extends StatelessWidget {
             prefixIcon: const Icon(Icons.search_rounded),
             filled: true,
             fillColor: colors.surface,
-            border: const OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.all(Radius.circular(18)),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: colors.outlineVariant),
+              borderRadius: const BorderRadius.all(Radius.circular(2)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: colors.outlineVariant),
+              borderRadius: const BorderRadius.all(Radius.circular(2)),
             ),
           ),
         ),
@@ -61,6 +64,8 @@ class PodcastDiscoverSection extends StatelessWidget {
                 ChoiceChip(
                   label: Text(_labelFor(category)),
                   selected: category == selectedCategory,
+                  showCheckmark: false,
+                  shape: const StadiumBorder(),
                   onSelected: (_) => onCategorySelected(category),
                 ),
                 if (category != PodcastCategory.values.last) const SizedBox(width: 8),
@@ -72,7 +77,10 @@ class PodcastDiscoverSection extends StatelessWidget {
         Row(
           children: <Widget>[
             const Expanded(
-              child: Text('Fresh episodes', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+              child: Text(
+                'ON AIR NOW',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.4),
+              ),
             ),
             Text('${shows.length} shows', style: TextStyle(color: colors.onSurfaceVariant)),
           ],
@@ -100,6 +108,130 @@ class PodcastDiscoverSection extends StatelessWidget {
     PodcastCategory.culture => 'Culture',
     PodcastCategory.science => 'Science',
   };
+}
+
+class _BroadcastHero extends StatelessWidget {
+  const _BroadcastHero();
+
+  @override
+  Widget build(BuildContext context) {
+    final largeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+    final show = PodcastShow.samples.first;
+
+    if (largeText) {
+      return const DecoratedBox(
+        decoration: BoxDecoration(color: Color(0xFF191711)),
+        child: Padding(
+          padding: EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'WAVE RADIO · LIVE',
+                style: TextStyle(color: Color(0xFFF3DD43), fontSize: 8, fontWeight: FontWeight.w900),
+              ),
+              SizedBox(height: 14),
+              Text(
+                'Listen closer.',
+                style: TextStyle(color: Color(0xFFFFFCF0), fontSize: 20, fontWeight: FontWeight.w900, height: 0.95),
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Independent voices and curious ideas, tuned for today.',
+                style: TextStyle(color: Color(0xCCFFFCF0), fontSize: 11, height: 1.3),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: 188,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(color: Color(0xFF191711)),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: <Widget>[
+            const Positioned.fill(child: CustomPaint(painter: _SignalPainter())),
+            const Positioned(
+              left: 18,
+              top: 16,
+              child: Text(
+                'WAVE RADIO · LIVE',
+                style: TextStyle(
+                  color: Color(0xFFF3DD43),
+                  fontSize: 8,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+            const Positioned(
+              left: 18,
+              top: 48,
+              child: Text(
+                'LISTEN\nCLOSER.',
+                style: TextStyle(
+                  color: Color(0xFFFFFCF0),
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -1.4,
+                  height: 0.82,
+                ),
+              ),
+            ),
+            const Positioned(
+              left: 18,
+              bottom: 18,
+              child: Text(
+                'INDEPENDENT VOICES / CURIOUS IDEAS',
+                style: TextStyle(color: Color(0xB3FFFCF0), fontSize: 7, fontWeight: FontWeight.w700),
+              ),
+            ),
+            Positioned(right: 12, top: 20, width: 154, height: 154, child: PodcastVinyl(show: show)),
+            const Positioned(
+              right: 75,
+              top: 72,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: Color(0xFFF3DD43), shape: BoxShape.circle),
+                child: SizedBox.square(
+                  dimension: 30,
+                  child: Center(
+                    child: Text('072', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w900)),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SignalPainter extends CustomPainter {
+  const _SignalPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0x33F3DD43)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+    final path = Path()..moveTo(0, size.height * 0.77);
+    for (var x = 0.0; x <= size.width; x += 9) {
+      final height = x % 36 == 0 ? 22.0 : 8.0;
+      path
+        ..lineTo(x, size.height * 0.77 - height)
+        ..lineTo(x + 4.5, size.height * 0.77 + height)
+        ..lineTo(x + 9, size.height * 0.77);
+    }
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _SignalPainter oldDelegate) => false;
 }
 
 class _EmptyPodcastState extends StatelessWidget {

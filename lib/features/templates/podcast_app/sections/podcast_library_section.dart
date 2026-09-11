@@ -31,10 +31,15 @@ class PodcastLibrarySection extends StatelessWidget {
       physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
       children: <Widget>[
-        const Text('Your library', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
-        const SizedBox(height: 8),
-        Text('Saved episodes stay local to this sample.', style: TextStyle(color: colors.onSurfaceVariant)),
-        const SizedBox(height: 20),
+        const Text(
+          'ARCHIVE / SAVED SIGNALS',
+          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.3),
+        ),
+        const SizedBox(height: 10),
+        const Text('Your library', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, letterSpacing: -1.1)),
+        const SizedBox(height: 6),
+        Text('Episodes worth another listen.', style: TextStyle(color: colors.onSurfaceVariant)),
+        const SizedBox(height: 18),
         if (shows.isEmpty)
           const _EmptyLibraryState()
         else
@@ -64,7 +69,7 @@ class _EmptyLibraryState extends StatelessWidget {
 
     return Material(
       color: colors.surface,
-      borderRadius: const BorderRadius.all(Radius.circular(26)),
+      shape: RoundedRectangleBorder(side: BorderSide(color: colors.outlineVariant)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 42),
         child: Column(

@@ -256,7 +256,7 @@ void main() {
     await _pumpThemedScreen(tester, const AiAssistantHomeScreen());
     _expectTemplateTheme(
       tester,
-      find.descendant(of: find.byType(AppBar), matching: find.text('NOVA')),
+      find.descendant(of: find.byType(AppBar), matching: find.text('Nova')),
       AiAssistantAppTheme.build(),
     );
     await _expectAccessible(tester);
@@ -335,7 +335,7 @@ void main() {
 
     await _pumpThemedScreen(tester, const AiAssistantHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
-    expect(find.descendant(of: find.byType(AppBar), matching: find.text('NOVA')), findsOneWidget);
+    expect(find.descendant(of: find.byType(AppBar), matching: find.text('Nova')), findsOneWidget);
 
     await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);

@@ -49,9 +49,10 @@ class DatingProfileCard extends StatelessWidget {
                                     '${profile.name}, ${profile.age}',
                                     style: const TextStyle(
                                       color: Colors.white,
-                                      fontSize: 27,
-                                      fontWeight: FontWeight.w900,
-                                      letterSpacing: -0.9,
+                                      fontFamily: DatingAppTheme.displayFontName,
+                                      fontSize: 31,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: -0.4,
                                     ),
                                   ),
                                 ),
@@ -72,7 +73,12 @@ class DatingProfileCard extends StatelessWidget {
                     if (largeText) ...<Widget>[
                       Text(
                         '${profile.name}, ${profile.age}',
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, letterSpacing: -0.8),
+                        style: const TextStyle(
+                          fontFamily: DatingAppTheme.displayFontName,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: -0.3,
+                        ),
                       ),
                       const SizedBox(height: 8),
                     ],
@@ -93,7 +99,12 @@ class DatingProfileCard extends StatelessWidget {
                     const SizedBox(height: 7),
                     Text(
                       profile.answer,
-                      style: const TextStyle(fontSize: 18, height: 1.3, fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                        fontFamily: DatingAppTheme.displayFontName,
+                        fontSize: 22,
+                        height: 1.15,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(height: 18),
                     Wrap(

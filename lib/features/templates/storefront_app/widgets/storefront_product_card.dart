@@ -97,7 +97,12 @@ class _ProductDetails extends StatelessWidget {
           product.name,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: -0.35),
+          style: const TextStyle(
+            fontFamily: StorefrontAppTheme.displayFontName,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+            letterSpacing: -0.2,
+          ),
         ),
         const SizedBox(height: 3),
         Text(

@@ -73,7 +73,13 @@ class _ZineHero extends StatelessWidget {
           padding: EdgeInsets.all(16),
           child: Text(
             'Good people. Good energy.',
-            style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900, height: 0.95),
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: SocialAppTheme.displayFontName,
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              height: 0.95,
+            ),
           ),
         ),
       );
@@ -101,10 +107,11 @@ class _ZineHero extends StatelessWidget {
                 'GOOD PEOPLE.\nGOOD ENERGY.',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -1.1,
-                  height: 0.84,
+                  fontFamily: SocialAppTheme.displayFontName,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.8,
+                  height: 0.88,
                 ),
               ),
             ),

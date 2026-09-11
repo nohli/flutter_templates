@@ -54,8 +54,9 @@ class _PreviewWordmark extends StatelessWidget {
           'Sway',
           style: TextStyle(
             color: dark ? DatingAppTheme.ink : const Color(0xFF21181D),
-            fontSize: 10,
-            fontWeight: FontWeight.w800,
+            fontFamily: DatingAppTheme.displayFontName,
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
           ),
         ),
         const SizedBox(width: 5),
@@ -94,7 +95,12 @@ class _PreviewCopy extends StatelessWidget {
         children: <Widget>[
           Text(
             'Mina, 29',
-            style: TextStyle(color: ink, fontSize: 9, fontWeight: FontWeight.w800),
+            style: TextStyle(
+              color: ink,
+              fontFamily: DatingAppTheme.displayFontName,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(height: 5),
           Text('Choosing dessert first.', style: TextStyle(color: muted, fontSize: 5.5, height: 1.25)),

@@ -13,7 +13,8 @@ abstract final class DatingAppTheme {
   static const mint = Color(0xFF76E6D1);
   static const coral = Color(0xFFFF7B61);
   static const sun = Color(0xFFFFD449);
-  static const fontName = 'WorkSans';
+  static const fontName = 'BricolageGrotesque';
+  static const displayFontName = 'Fraunces';
 
   static ThemeData build([Brightness brightness = Brightness.dark]) {
     final isDark = brightness == Brightness.dark;
@@ -56,6 +57,7 @@ abstract final class DatingAppTheme {
       background: isDark ? background : const Color(0xFFFFF3EA),
       navigationIndicator: isDark ? raisedSurface : const Color(0xFFFFD9E4),
       fontFamily: fontName,
+      displayFontFamily: displayFontName,
     );
   }
 }

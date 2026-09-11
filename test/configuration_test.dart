@@ -369,6 +369,44 @@ void main() {
     expect(robotoLicense, contains('Apache License\n                           Version 2.0, January 2004'));
     expect(smoothStarRatingLicense, contains('Copyright (c) 2019 Thangrobul Infimate'));
     expect(smoothStarRatingLicense, contains('The MIT License (MIT)'));
+
+    const additionalFonts = <({String asset, String copyright, String family})>[
+      (
+        family: 'ArchivoBlack',
+        asset: 'ArchivoBlack-Regular.ttf',
+        copyright: 'Copyright 2017 The Archivo Black Project Authors',
+      ),
+      (family: 'Anybody', asset: 'Anybody.ttf', copyright: 'Copyright 2020 The Anybody Project Authors'),
+      (
+        family: 'BricolageGrotesque',
+        asset: 'BricolageGrotesque.ttf',
+        copyright: 'Copyright 2022 The Bricolage Grotesque Project Authors',
+      ),
+      (family: 'DMSerifDisplay', asset: 'DMSerifDisplay-Regular.ttf', copyright: 'Copyright 2014-2018 Adobe'),
+      (family: 'Fraunces', asset: 'Fraunces.ttf', copyright: 'Copyright 2018 The Fraunces Project Authors'),
+      (
+        family: 'InstrumentSerif',
+        asset: 'InstrumentSerif-Regular.ttf',
+        copyright: 'Copyright 2022 The Instrument Serif Project Authors',
+      ),
+      (
+        family: 'SpaceGrotesk',
+        asset: 'SpaceGrotesk.ttf',
+        copyright: 'Copyright 2020 The Space Grotesk Project Authors',
+      ),
+      (family: 'Syne', asset: 'Syne.ttf', copyright: 'Copyright 2017 The Syne Project Authors'),
+      (family: 'Unbounded', asset: 'Unbounded.ttf', copyright: 'Copyright 2022 The Unbounded Project Authors'),
+    ];
+
+    for (final font in additionalFonts) {
+      final licensePath = 'assets/fonts/${font.family}-LICENSE.txt';
+      final license = File(licensePath).readAsStringSync();
+      expect(pubspec, contains('- $licensePath'), reason: font.family);
+      expect(pubspec, contains('- family: ${font.family}'), reason: font.family);
+      expect(pubspec, contains('- asset: assets/fonts/${font.asset}'), reason: font.family);
+      expect(license, startsWith(font.copyright), reason: font.family);
+      expect(license, contains('SIL Open Font License, Version 1.1'), reason: font.family);
+    }
   });
 
   test('Google Play icon has exact dimensions and PNG color contracts', () async {

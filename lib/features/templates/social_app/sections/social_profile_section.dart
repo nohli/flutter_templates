@@ -120,7 +120,12 @@ class _ProfileHeader extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     'Ana Rivera',
-                    style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w900),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: SocialAppTheme.displayFontName,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   SizedBox(height: 5),
                   Text('Designer · Collector of small joys', style: TextStyle(color: Color(0xD1FFFFFF))),

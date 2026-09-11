@@ -58,6 +58,15 @@ flutter:
     - assets/hotel/
     - assets/fonts/WorkSans-LICENSE.txt
     - assets/fonts/Roboto-LICENSE.txt
+    - assets/fonts/ArchivoBlack-LICENSE.txt
+    - assets/fonts/Anybody-LICENSE.txt
+    - assets/fonts/BricolageGrotesque-LICENSE.txt
+    - assets/fonts/DMSerifDisplay-LICENSE.txt
+    - assets/fonts/Fraunces-LICENSE.txt
+    - assets/fonts/InstrumentSerif-LICENSE.txt
+    - assets/fonts/SpaceGrotesk-LICENSE.txt
+    - assets/fonts/Syne-LICENSE.txt
+    - assets/fonts/Unbounded-LICENSE.txt
     - assets/licenses/smooth_star_rating-LICENSE.txt
 
   fonts:
@@ -77,3 +86,30 @@ flutter:
         - asset: assets/fonts/Roboto-Regular.ttf
         - asset: assets/fonts/Roboto-Medium.ttf
           weight: 500
+    - family: ArchivoBlack
+      fonts:
+        - asset: assets/fonts/ArchivoBlack-Regular.ttf
+    - family: Anybody
+      fonts:
+        - asset: assets/fonts/Anybody.ttf
+    - family: BricolageGrotesque
+      fonts:
+        - asset: assets/fonts/BricolageGrotesque.ttf
+    - family: DMSerifDisplay
+      fonts:
+        - asset: assets/fonts/DMSerifDisplay-Regular.ttf
+    - family: Fraunces
+      fonts:
+        - asset: assets/fonts/Fraunces.ttf
+    - family: InstrumentSerif
+      fonts:
+        - asset: assets/fonts/InstrumentSerif-Regular.ttf
+    - family: SpaceGrotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk.ttf
+    - family: Syne
+      fonts:
+        - asset: assets/fonts/Syne.ttf
+    - family: Unbounded
+      fonts:
+        - asset: assets/fonts/Unbounded.ttf

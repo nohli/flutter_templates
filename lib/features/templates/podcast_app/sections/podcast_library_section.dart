@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/podcast_show.dart';
+import '../podcast_app_theme.dart';
 import '../widgets/podcast_show_card.dart';
 
 class PodcastLibrarySection extends StatelessWidget {
@@ -36,7 +37,15 @@ class PodcastLibrarySection extends StatelessWidget {
           style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.3),
         ),
         const SizedBox(height: 10),
-        const Text('Your library', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, letterSpacing: -1.1)),
+        const Text(
+          'Your library',
+          style: TextStyle(
+            fontFamily: PodcastAppTheme.displayFontName,
+            fontSize: 28,
+            fontWeight: FontWeight.w400,
+            letterSpacing: -0.7,
+          ),
+        ),
         const SizedBox(height: 6),
         Text('Episodes worth another listen.', style: TextStyle(color: colors.onSurfaceVariant)),
         const SizedBox(height: 18),

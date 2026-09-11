@@ -80,10 +80,25 @@ class _PodcastHomeScreenState extends State<PodcastHomeScreen> {
                     )
                   : null,
               title: usesLargeText
-                  ? const Text('Wave', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                  ? const Text(
+                      'Wave',
+                      style: TextStyle(
+                        fontFamily: PodcastAppTheme.displayFontName,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )
                   : const Row(
                       children: <Widget>[
-                        Text('Wave', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -1)),
+                        Text(
+                          'Wave',
+                          style: TextStyle(
+                            fontFamily: PodcastAppTheme.displayFontName,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: -0.8,
+                          ),
+                        ),
                         SizedBox(width: 8),
                         Text('/ 072', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1.2)),
                       ],

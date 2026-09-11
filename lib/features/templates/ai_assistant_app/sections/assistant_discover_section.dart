@@ -18,7 +18,13 @@ class AssistantDiscoverSection extends StatelessWidget {
       children: <Widget>[
         const Text(
           'CHOOSE A\nNEW MIND.',
-          style: TextStyle(fontSize: 34, height: 0.86, fontWeight: FontWeight.w900, letterSpacing: -1.3),
+          style: TextStyle(
+            fontFamily: AiAssistantAppTheme.displayFontName,
+            fontSize: 33,
+            height: 0.9,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.8,
+          ),
         ),
         const SizedBox(height: 12),
         Text(
@@ -104,7 +110,12 @@ class _FeaturedAssistant extends StatelessWidget {
                 SizedBox(height: 5),
                 Text(
                   'Creative studio',
-                  style: TextStyle(color: AiAssistantAppTheme.ink, fontSize: 22, fontWeight: FontWeight.w900),
+                  style: TextStyle(
+                    color: AiAssistantAppTheme.ink,
+                    fontFamily: AiAssistantAppTheme.displayFontName,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 SizedBox(height: 4),
                 Text('Words, concepts, and visual directions.', style: TextStyle(color: Color(0xFFD8DAEF))),

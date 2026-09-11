@@ -164,7 +164,12 @@ class _DatingHeader extends StatelessWidget {
                     'Sway',
                     maxLines: 1,
                     overflow: TextOverflow.fade,
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: -1),
+                    style: TextStyle(
+                      fontFamily: DatingAppTheme.displayFontName,
+                      fontSize: 31,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: -0.5,
+                    ),
                   ),
                 ),
                 if (!largeText) ...<Widget>[
@@ -222,7 +227,15 @@ class _DiscoveryIntro extends StatelessWidget {
         children: <Widget>[
           Text('CURATED CONNECTIONS', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900)),
           SizedBox(height: 10),
-          Text('One good introduction.', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, height: 0.95)),
+          Text(
+            'One good introduction.',
+            style: TextStyle(
+              fontFamily: DatingAppTheme.displayFontName,
+              fontSize: 29,
+              fontWeight: FontWeight.w500,
+              height: 0.95,
+            ),
+          ),
         ],
       );
     }
@@ -241,7 +254,13 @@ class _DiscoveryIntro extends StatelessWidget {
               SizedBox(height: 8),
               Text(
                 'ONE GOOD\nINTRODUCTION.',
-                style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, letterSpacing: -1, height: 0.84),
+                style: TextStyle(
+                  fontFamily: DatingAppTheme.displayFontName,
+                  fontSize: 34,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: -0.5,
+                  height: 0.82,
+                ),
               ),
             ],
           ),

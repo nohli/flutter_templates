@@ -17,6 +17,7 @@ abstract final class StorefrontAppTheme {
   static const blush = Color(0xFFE8B8A8);
   static const divider = Color(0xFFE9E1D5);
   static const fontName = 'WorkSans';
+  static const displayFontName = 'InstrumentSerif';
 
   static ThemeData build([Brightness brightness = Brightness.light]) {
     final isDark = brightness == Brightness.dark;
@@ -57,6 +58,7 @@ abstract final class StorefrontAppTheme {
       background: isDark ? darkBackground : background,
       navigationIndicator: colors.primaryContainer,
       fontFamily: fontName,
+      displayFontFamily: displayFontName,
     );
   }
 

@@ -53,6 +53,20 @@ void main() {
     expect(find.text('System'), findsOneWidget);
     expect(find.text('Light'), findsOneWidget);
     expect(find.text('Dark'), findsOneWidget);
+    final menuItems = find.byType(MenuItemButton);
+    expect(menuItems, findsNWidgets(3));
+    for (var index = 0; index < 3; index += 1) {
+      expect(tester.getSize(menuItems.at(index)).height, 48);
+      if (index > 0) {
+        expect(tester.getTopLeft(menuItems.at(index)).dy, tester.getBottomLeft(menuItems.at(index - 1)).dy);
+      }
+    }
+    final selectedItem = tester.widget<MenuItemButton>(find.byKey(const ValueKey<String>('appearance-system')));
+    expect(selectedItem.style?.backgroundColor?.resolve(<WidgetState>{}), Colors.transparent);
+    final selectedLabel = tester.widget<Text>(
+      find.descendant(of: find.byKey(const ValueKey<String>('appearance-system')), matching: find.text('System')),
+    );
+    expect(selectedLabel.style?.color, Theme.of(tester.element(find.text('System'))).colorScheme.primary);
 
     await tester.tap(find.text('Dark').last);
     await tester.pumpAndSettle();
@@ -78,9 +92,14 @@ void main() {
       await tester.pumpWidget(KeyedSubtree(key: ValueKey<Brightness>(brightness), child: const UiTemplatesApp()));
       await tester.pump();
 
-      final button = tester.widget<PopupMenuButton<AppAppearance>>(find.byType(PopupMenuButton<AppAppearance>));
-      final icon = button.icon! as Icon;
-      expect(icon.icon, brightness == Brightness.light ? Icons.light_mode_rounded : Icons.dark_mode_rounded);
+      final button = find.byTooltip('Appearance: System');
+      expect(
+        find.descendant(
+          of: button,
+          matching: find.byIcon(brightness == Brightness.light ? Icons.light_mode_rounded : Icons.dark_mode_rounded),
+        ),
+        findsOneWidget,
+      );
       expect(find.byIcon(Icons.brightness_auto_rounded), findsNothing);
     }
   });

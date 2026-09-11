@@ -13,7 +13,8 @@ abstract final class SocialAppTheme {
   static const mint = Color(0xFF7DE36B);
   static const amber = Color(0xFFFFC936);
   static const divider = Color(0xFFD5CDB7);
-  static const fontName = 'WorkSans';
+  static const fontName = 'BricolageGrotesque';
+  static const displayFontName = 'Anybody';
 
   static ThemeData build([Brightness brightness = Brightness.light]) {
     final isDark = brightness == Brightness.dark;
@@ -56,6 +57,7 @@ abstract final class SocialAppTheme {
       background: isDark ? const Color(0xFF13120F) : background,
       navigationIndicator: isDark ? const Color(0xFF2038C3) : const Color(0xFFDDE1FF),
       fontFamily: fontName,
+      displayFontFamily: displayFontName,
     );
   }
 

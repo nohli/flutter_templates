@@ -12,7 +12,8 @@ abstract final class TravelAppTheme {
   static const seaGlass = Color(0xFFBDE2D5);
   static const sun = Color(0xFFF4CF45);
   static const coral = Color(0xFFF07A58);
-  static const fontName = 'WorkSans';
+  static const fontName = 'SpaceGrotesk';
+  static const displayFontName = 'DMSerifDisplay';
 
   static ThemeData build([Brightness brightness = Brightness.light]) {
     final isDark = brightness == Brightness.dark;
@@ -55,6 +56,7 @@ abstract final class TravelAppTheme {
       background: isDark ? const Color(0xFF101A17) : background,
       navigationIndicator: isDark ? const Color(0xFF00504F) : seaGlass,
       fontFamily: fontName,
+      displayFontFamily: displayFontName,
     );
   }
 }

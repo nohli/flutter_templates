@@ -106,6 +106,11 @@ void main() {
   });
 
   testWidgets('iOS status-bar tap scrolls every template home screen to the top', (WidgetTester tester) async {
+    tester.view
+      ..devicePixelRatio = 1
+      ..physicalSize = const Size(430, 600);
+    addTearDown(tester.view.reset);
+
     await _expectStatusBarTapScrollsToTop(tester, const HotelHomeScreen());
     await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
     await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
@@ -1220,10 +1225,10 @@ Future<void> _expectStatusBarTapScrollsToTop(WidgetTester tester, Widget screen)
   expect(scaffold, findsOneWidget);
 
   final controller = PrimaryScrollController.of(tester.element(scaffold));
-  expect(controller.hasClients, isTrue);
+  expect(controller.hasClients, isTrue, reason: '${screen.runtimeType} must use the primary scroll controller');
   controller.jumpTo(controller.position.maxScrollExtent);
   await tester.pump();
-  expect(controller.offset, greaterThan(0));
+  expect(controller.offset, greaterThan(0), reason: '${screen.runtimeType} must overflow the test viewport');
 
   tester.simulateStatusBarTap();
   await tester.pumpAndSettle();

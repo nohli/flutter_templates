@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/podcast_show.dart';
+import '../podcast_app_theme.dart';
 import '../widgets/podcast_show_card.dart';
 import '../widgets/podcast_vinyl.dart';
 
@@ -133,7 +134,13 @@ class _BroadcastHero extends StatelessWidget {
               SizedBox(height: 14),
               Text(
                 'Listen closer.',
-                style: TextStyle(color: Color(0xFFFFFCF0), fontSize: 20, fontWeight: FontWeight.w900, height: 0.95),
+                style: TextStyle(
+                  color: Color(0xFFFFFCF0),
+                  fontFamily: PodcastAppTheme.displayFontName,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0.95,
+                ),
               ),
               SizedBox(height: 12),
               Text(
@@ -174,10 +181,11 @@ class _BroadcastHero extends StatelessWidget {
                 'LISTEN\nCLOSER.',
                 style: TextStyle(
                   color: Color(0xFFFFFCF0),
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -1.4,
-                  height: 0.82,
+                  fontFamily: PodcastAppTheme.displayFontName,
+                  fontSize: 27,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: -1,
+                  height: 0.88,
                 ),
               ),
             ),

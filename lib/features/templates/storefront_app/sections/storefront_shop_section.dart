@@ -133,7 +133,13 @@ class _EditorialHero extends StatelessWidget {
                   const Spacer(),
                   const Text(
                     'Objects\nwith a\npoint of view.',
-                    style: TextStyle(fontSize: 27, fontWeight: FontWeight.w800, letterSpacing: -1.2, height: 0.88),
+                    style: TextStyle(
+                      fontFamily: StorefrontAppTheme.displayFontName,
+                      fontSize: 37,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: -0.8,
+                      height: 0.76,
+                    ),
                   ),
                   const Spacer(),
                   Text(
@@ -202,7 +208,13 @@ class _LargeTextEditorialHero extends StatelessWidget {
             const SizedBox(height: 18),
             const Text(
               'Objects with a point of view.',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: -0.8, height: 0.95),
+              style: TextStyle(
+                fontFamily: StorefrontAppTheme.displayFontName,
+                fontSize: 28,
+                fontWeight: FontWeight.w400,
+                letterSpacing: -0.4,
+                height: 0.92,
+              ),
             ),
             const SizedBox(height: 18),
             Text(

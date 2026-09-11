@@ -18,7 +18,8 @@ abstract final class FinanceAppTheme {
   static const amber = Color(0xFFFFC857);
   static const lavender = Color(0xFFE3E6FF);
   static const divider = Color(0xFFE2E0D8);
-  static const fontName = 'Roboto';
+  static const fontName = 'SpaceGrotesk';
+  static const displayFontName = 'SpaceGrotesk';
 
   static ThemeData build([Brightness brightness = Brightness.light]) {
     final isDark = brightness == Brightness.dark;
@@ -55,6 +56,7 @@ abstract final class FinanceAppTheme {
       background: isDark ? darkBackground : background,
       navigationIndicator: isDark ? const Color(0xFF29315A) : lavender,
       fontFamily: fontName,
+      displayFontFamily: displayFontName,
     );
   }
 

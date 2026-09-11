@@ -30,6 +30,7 @@ class PlannerDayRail extends StatelessWidget {
             ),
             Expanded(
               child: ListView(
+                primary: false,
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 children: <Widget>[
                   for (final section in PlannerSection.values) ...<Widget>[

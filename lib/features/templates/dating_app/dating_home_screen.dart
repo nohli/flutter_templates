@@ -138,31 +138,44 @@ class _DatingHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final largeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+
     return Row(
       children: <Widget>[
         if (Navigator.of(context).canPop())
           IconButton(
             tooltip: 'Back to template gallery',
             onPressed: () => Navigator.of(context).pop(),
+            style: IconButton.styleFrom(
+              side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+              shape: const RoundedRectangleBorder(),
+            ),
             icon: const Icon(Icons.arrow_back_rounded),
           )
         else
           const SizedBox.square(dimension: 48),
-        const Expanded(
+        Expanded(
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Flexible(
+                const Flexible(
                   child: Text(
                     'Sway',
                     maxLines: 1,
                     overflow: TextOverflow.fade,
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -1),
+                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: -1),
                   ),
                 ),
-                SizedBox(width: 8),
-                _LiveDot(),
+                if (!largeText) ...<Widget>[
+                  const SizedBox(width: 8),
+                  const Text(
+                    'AFTER DARK / 04',
+                    style: TextStyle(fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 0.8),
+                  ),
+                  const SizedBox(width: 7),
+                  const _LiveDot(),
+                ],
               ],
             ),
           ),
@@ -201,6 +214,18 @@ class _DiscoveryIntro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final largeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+
+    if (largeText) {
+      return const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('CURATED CONNECTIONS', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900)),
+          SizedBox(height: 10),
+          Text('One good introduction.', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, height: 0.95)),
+        ],
+      );
+    }
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -209,15 +234,21 @@ class _DiscoveryIntro extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Tonight’s people', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800, letterSpacing: -1)),
-              SizedBox(height: 5),
-              Text('Four thoughtful introductions, refreshed daily.'),
+              Text(
+                'CURATED CONNECTIONS / TONIGHT',
+                style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'ONE GOOD\nINTRODUCTION.',
+                style: TextStyle(fontSize: 27, fontWeight: FontWeight.w900, letterSpacing: -1, height: 0.84),
+              ),
             ],
           ),
         ),
         const SizedBox(width: 12),
         DecoratedBox(
-          decoration: BoxDecoration(color: colors.primaryContainer, shape: BoxShape.circle),
+          decoration: BoxDecoration(color: colors.primaryContainer),
           child: SizedBox.square(
             dimension: 48,
             child: Center(
@@ -243,12 +274,10 @@ class _DatingActionDock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface.withValues(alpha: 0.96),
-        border: Border(top: BorderSide(color: colors.outlineVariant)),
+      decoration: const BoxDecoration(
+        color: DatingAppTheme.background,
+        border: Border(top: BorderSide(color: DatingAppTheme.primary, width: 3)),
       ),
       child: SafeArea(
         top: false,
@@ -288,18 +317,20 @@ class _TonightCard extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: <Color>[colors.primaryContainer, colors.secondaryContainer],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: const BorderRadius.all(Radius.circular(24)),
+        color: colors.primaryContainer,
+        border: Border.all(color: colors.primary),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
           children: <Widget>[
-            Icon(Icons.local_bar_outlined, color: colors.onPrimaryContainer, size: 28),
+            const DecoratedBox(
+              decoration: BoxDecoration(color: DatingAppTheme.sun),
+              child: SizedBox.square(
+                dimension: 44,
+                child: Icon(Icons.local_bar_outlined, color: DatingAppTheme.background, size: 24),
+              ),
+            ),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -307,7 +338,7 @@ class _TonightCard extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     'Thursday social',
-                    style: TextStyle(color: colors.onPrimaryContainer, fontSize: 17, fontWeight: FontWeight.w800),
+                    style: TextStyle(color: colors.onPrimaryContainer, fontSize: 17, fontWeight: FontWeight.w900),
                   ),
                   const SizedBox(height: 3),
                   Text('12 seats · Old Port · 19:30', style: TextStyle(color: colors.onPrimaryContainer)),

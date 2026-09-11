@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../app/app_appearance.dart';
 import '../../app/app_identity.dart';
-import '../../app/app_theme.dart';
 import '../templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import '../templates/dating_app/dating_home_screen.dart';
 import '../templates/design_course/home_design_course.dart';
@@ -19,7 +19,10 @@ import 'models/template_gallery_item.dart';
 import 'template_gallery_artwork.dart';
 
 class TemplateGalleryScreen extends StatefulWidget {
-  const TemplateGalleryScreen({super.key});
+  const TemplateGalleryScreen({required this.appearance, required this.onAppearanceChanged, super.key});
+
+  final AppAppearance appearance;
+  final ValueChanged<AppAppearance> onAppearanceChanged;
 
   @override
   State<TemplateGalleryScreen> createState() => _TemplateGalleryScreenState();
@@ -69,6 +72,8 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
       child: Column(
         children: <Widget>[
           _GalleryHeader(
+            appearance: widget.appearance,
+            onAppearanceChanged: widget.onAppearanceChanged,
             multiple: _multiple,
             onToggleLayout: () {
               setState(() {
@@ -125,23 +130,28 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.hotelBooking => const HotelHomeScreen(),
     TemplateGalleryDestination.fitness => const FitnessAppHomeScreen(),
     TemplateGalleryDestination.designCourse => DesignCourseHomeScreen(savedCourses: _savedCourses),
-    TemplateGalleryDestination.personalFinance => const FinanceHomeScreen(),
-    TemplateGalleryDestination.storefront => const StorefrontHomeScreen(),
-    TemplateGalleryDestination.planner => const PlannerHomeScreen(),
-    TemplateGalleryDestination.aiAssistant => const AiAssistantHomeScreen(),
-    TemplateGalleryDestination.foodDelivery => const FoodDeliveryHomeScreen(),
-    TemplateGalleryDestination.podcast => const PodcastHomeScreen(),
-    TemplateGalleryDestination.social => const SocialHomeScreen(),
-    TemplateGalleryDestination.travel => const TravelHomeScreen(),
-    TemplateGalleryDestination.dating => const DatingHomeScreen(),
+    TemplateGalleryDestination.personalFinance => FinanceHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.storefront => StorefrontHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.planner => PlannerHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.aiAssistant => AiAssistantHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.foodDelivery => FoodDeliveryHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.podcast => PodcastHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.social => SocialHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.travel => TravelHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.dating => DatingHomeScreen(appearance: widget.appearance),
   };
 }
 
 class _GalleryHeader extends StatelessWidget {
-  const _GalleryHeader({required this.multiple, required this.onToggleLayout});
+  const _GalleryHeader({
+    required this.appearance,
+    required this.onAppearanceChanged,
+    required this.multiple,
+    required this.onToggleLayout,
+  });
 
-  static const _titleStyle = TextStyle(fontSize: 22, color: AppTheme.darkText, fontWeight: FontWeight.w700);
-
+  final AppAppearance appearance;
+  final ValueChanged<AppAppearance> onAppearanceChanged;
   final bool multiple;
   final VoidCallback onToggleLayout;
 
@@ -149,22 +159,36 @@ class _GalleryHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        final titleStyle = TextStyle(
+          fontSize: 22,
+          color: Theme.of(context).colorScheme.onSurface,
+          fontWeight: FontWeight.w700,
+        );
         final titlePainter = TextPainter(
-          text: const TextSpan(text: AppIdentity.name, style: _titleStyle),
+          text: TextSpan(text: AppIdentity.name, style: titleStyle),
           textDirection: Directionality.of(context),
           textScaler: MediaQuery.textScalerOf(context),
           maxLines: 1,
         )..layout();
-        final stackTitle = titlePainter.width > constraints.maxWidth - 112;
-        final toggle = Padding(
+        final stackTitle = titlePainter.width > constraints.maxWidth - 208;
+        final actions = Padding(
           padding: const EdgeInsets.only(right: 8),
-          child: SizedBox.square(
-            dimension: 48,
-            child: IconButton(
-              tooltip: multiple ? 'Show one column' : 'Show multiple columns',
-              onPressed: onToggleLayout,
-              icon: Icon(multiple ? Icons.dashboard : Icons.view_agenda, color: AppTheme.darkGrey),
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox.square(
+                dimension: 48,
+                child: AppAppearanceButton(appearance: appearance, onChanged: onAppearanceChanged),
+              ),
+              SizedBox.square(
+                dimension: 48,
+                child: IconButton(
+                  tooltip: multiple ? 'Show one column' : 'Show multiple columns',
+                  onPressed: onToggleLayout,
+                  icon: Icon(multiple ? Icons.dashboard : Icons.view_agenda),
+                ),
+              ),
+            ],
           ),
         );
         if (stackTitle) {
@@ -175,12 +199,12 @@ class _GalleryHeader extends StatelessWidget {
                 height: kToolbarHeight,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[const SizedBox.square(dimension: 56), toggle],
+                  children: <Widget>[const SizedBox.square(dimension: 56), actions],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(12, 4, 12, 8),
-                child: Text(AppIdentity.name, textAlign: TextAlign.center, style: _titleStyle),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+                child: Text(AppIdentity.name, textAlign: TextAlign.center, style: titleStyle),
               ),
             ],
           );
@@ -189,16 +213,16 @@ class _GalleryHeader extends StatelessWidget {
           constraints: const BoxConstraints(minHeight: kToolbarHeight),
           child: Row(
             children: <Widget>[
-              const SizedBox.square(dimension: 56),
-              const Expanded(
+              const SizedBox(width: 104),
+              Expanded(
                 child: Center(
                   child: Padding(
-                    padding: EdgeInsets.only(top: 4),
-                    child: Text(AppIdentity.name, textAlign: TextAlign.center, style: _titleStyle),
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(AppIdentity.name, textAlign: TextAlign.center, style: titleStyle),
                   ),
                 ),
               ),
-              toggle,
+              actions,
             ],
           ),
         );

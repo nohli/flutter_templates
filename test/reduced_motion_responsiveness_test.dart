@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/design_course/course_info_screen.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
 import 'package:templates/features/templates/design_course/models/category.dart' as course_model;
@@ -31,7 +32,7 @@ void main() {
       'assets/hotel/hotel_5.png',
     ]);
 
-    await _pumpScreen(tester, const TemplateGalleryScreen(), disableAnimations: true);
+    await _pumpScreen(tester, _gallery(), disableAnimations: true);
     _expectStableEndState(tester);
     _expectCompleteFadeTransitions(tester);
     final initialGalleryCard = tester.getRect(find.bySemanticsLabel('Hotel Booking'));
@@ -201,6 +202,8 @@ void main() {
     _expectStableEndState(tester);
   });
 }
+
+Widget _gallery() => TemplateGalleryScreen(appearance: AppAppearance.light, onAppearanceChanged: (_) {});
 
 double _firstWaveOffset(WidgetTester tester) {
   final clipPath = tester.widget<ClipPath>(find.byType(ClipPath).first);

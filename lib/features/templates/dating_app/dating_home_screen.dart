@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'dating_app_theme.dart';
@@ -8,7 +9,9 @@ import 'widgets/dating_action_bar.dart';
 import 'widgets/dating_profile_card.dart';
 
 class DatingHomeScreen extends StatefulWidget {
-  const DatingHomeScreen({super.key});
+  const DatingHomeScreen({this.appearance = AppAppearance.dark, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<DatingHomeScreen> createState() => _DatingHomeScreenState();
@@ -32,9 +35,9 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
     final profile = DatingProfile.samples[_profileIndex];
 
     return TemplateAppearanceShell(
+      appearance: widget.appearance,
       themeBuilder: DatingAppTheme.build,
-      initialAppearance: TemplateAppearance.dark,
-      builder: (BuildContext context, Widget appearanceButton) {
+      builder: (BuildContext context) {
         return PrimaryScrollController(
           controller: _scrollController,
           child: Scaffold(
@@ -54,7 +57,7 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
                       padding: const EdgeInsets.fromLTRB(18, 4, 18, 30),
                       sliver: SliverList.list(
                         children: <Widget>[
-                          _DatingHeader(appearanceButton: appearanceButton),
+                          const _DatingHeader(),
                           const SizedBox(height: 18),
                           const _DiscoveryIntro(),
                           const SizedBox(height: 12),
@@ -131,9 +134,7 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
 enum _ProfileDecision { dismiss, spark, like }
 
 class _DatingHeader extends StatelessWidget {
-  const _DatingHeader({required this.appearanceButton});
-
-  final Widget appearanceButton;
+  const _DatingHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +167,7 @@ class _DatingHeader extends StatelessWidget {
             ),
           ),
         ),
-        appearanceButton,
+        const SizedBox.square(dimension: 48),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/planner_app/models/planner_task.dart';
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/planner_app/widgets/planner_day_rail.dart';
@@ -82,16 +83,10 @@ void main() {
     }
   });
 
-  testWidgets('planner exposes light, dark, and system appearances', (WidgetTester tester) async {
-    await _pumpPlanner(tester);
-
-    await tester.tap(find.byTooltip('Appearance: Light'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Dark').last);
-    await tester.pumpAndSettle();
+  testWidgets('planner supports an externally selected dark appearance', (WidgetTester tester) async {
+    await _pumpPlanner(tester, appearance: AppAppearance.dark);
 
     expect(Theme.of(tester.element(find.text('Daymark'))).brightness, Brightness.dark);
-    expect(find.byTooltip('Appearance: Dark'), findsOneWidget);
 
     final completedTitle = tester.widget<Text>(find.text('Shape next sprint'));
     final completedTile = tester.widget<AnimatedContainer>(
@@ -104,7 +99,12 @@ void main() {
   });
 }
 
-Future<void> _pumpPlanner(WidgetTester tester, {Size size = const Size(430, 932), double textScale = 1}) async {
+Future<void> _pumpPlanner(
+  WidgetTester tester, {
+  Size size = const Size(430, 932),
+  double textScale = 1,
+  AppAppearance appearance = AppAppearance.light,
+}) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
@@ -112,7 +112,10 @@ Future<void> _pumpPlanner(WidgetTester tester, {Size size = const Size(430, 932)
   final mediaQuery = MediaQueryData.fromView(tester.view).copyWith(textScaler: TextScaler.linear(textScale));
   await tester.pumpWidget(
     MaterialApp(
-      home: MediaQuery(data: mediaQuery, child: const PlannerHomeScreen()),
+      home: MediaQuery(
+        data: mediaQuery,
+        child: PlannerHomeScreen(appearance: appearance),
+      ),
     ),
   );
   await tester.pumpAndSettle();

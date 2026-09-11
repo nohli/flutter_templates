@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../../../app/motion_preferences.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
@@ -13,7 +14,9 @@ import 'widgets/finance_bottom_bar.dart';
 import 'widgets/finance_top_bar.dart';
 
 class FinanceHomeScreen extends StatefulWidget {
-  const FinanceHomeScreen({super.key});
+  const FinanceHomeScreen({this.appearance = AppAppearance.light, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<FinanceHomeScreen> createState() => _FinanceHomeScreenState();
@@ -48,8 +51,9 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen> with SingleTicker
     final scrollController = _scrollControllers[_selectedSection]!;
 
     return TemplateAppearanceShell(
+      appearance: widget.appearance,
       themeBuilder: FinanceAppTheme.build,
-      builder: (BuildContext context, Widget appearanceButton) {
+      builder: (BuildContext context) {
         return PrimaryScrollController(
           controller: scrollController,
           child: Scaffold(
@@ -58,7 +62,7 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen> with SingleTicker
               child: TemplateEntrance(
                 child: Column(
                   children: <Widget>[
-                    FinanceTopBar(title: _titleFor(_selectedSection), trailing: appearanceButton),
+                    FinanceTopBar(title: _titleFor(_selectedSection)),
                     Expanded(
                       child: TemplateSectionSwitcher(
                         selectedIndex: _selectedSection.index,

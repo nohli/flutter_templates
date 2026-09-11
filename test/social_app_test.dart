@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 import 'package:templates/features/templates/social_app/models/social_post.dart';
 import 'package:templates/features/templates/social_app/social_home_screen.dart';
@@ -76,24 +77,25 @@ void main() {
     expect(find.text('Share what feels alive.'), findsOneWidget);
   });
 
-  testWidgets('social action bar creates a sample post and appearance switches to dark mode', (
+  testWidgets('social action bar creates a sample post in the externally selected dark mode', (
     WidgetTester tester,
   ) async {
-    await _pumpSocial(tester);
+    await _pumpSocial(tester, appearance: AppAppearance.dark);
 
     await tester.tap(find.byTooltip('Create post'));
     await tester.pump();
     expect(find.text('Post creation is shown as an interface preview.'), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Appearance: Light'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Dark').last);
-    await tester.pumpAndSettle();
     expect(Theme.of(tester.element(find.text('Mingle'))).brightness, Brightness.dark);
   });
 }
 
-Future<void> _pumpSocial(WidgetTester tester, {Size size = const Size(430, 932), double textScale = 1}) async {
+Future<void> _pumpSocial(
+  WidgetTester tester, {
+  Size size = const Size(430, 932),
+  double textScale = 1,
+  AppAppearance appearance = AppAppearance.light,
+}) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
@@ -103,7 +105,10 @@ Future<void> _pumpSocial(WidgetTester tester, {Size size = const Size(430, 932),
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
   await tester.pumpWidget(
     MaterialApp(
-      home: MediaQuery(data: mediaQuery, child: const SocialHomeScreen()),
+      home: MediaQuery(
+        data: mediaQuery,
+        child: SocialHomeScreen(appearance: appearance),
+      ),
     ),
   );
   await tester.pump();

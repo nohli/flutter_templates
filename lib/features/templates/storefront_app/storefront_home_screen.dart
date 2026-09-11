@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'models/store_product.dart';
@@ -11,7 +12,9 @@ import 'storefront_app_theme.dart';
 import 'widgets/storefront_section_tabs.dart';
 
 class StorefrontHomeScreen extends StatefulWidget {
-  const StorefrontHomeScreen({super.key});
+  const StorefrontHomeScreen({this.appearance = AppAppearance.light, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<StorefrontHomeScreen> createState() => _StorefrontHomeScreenState();
@@ -48,8 +51,9 @@ class _StorefrontHomeScreenState extends State<StorefrontHomeScreen> {
     final scrollController = _scrollControllers[_selectedSection]!;
 
     return TemplateAppearanceShell(
+      appearance: widget.appearance,
       themeBuilder: StorefrontAppTheme.build,
-      builder: (BuildContext context, Widget appearanceButton) {
+      builder: (BuildContext context) {
         return PrimaryScrollController(
           controller: scrollController,
           child: Scaffold(
@@ -69,7 +73,6 @@ class _StorefrontHomeScreenState extends State<StorefrontHomeScreen> {
                   Text('Objects for everyday', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w400)),
                 ],
               ),
-              actions: <Widget>[appearanceButton, const SizedBox(width: 8)],
             ),
             body: TemplateEntrance(
               child: Column(

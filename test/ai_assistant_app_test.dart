@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import 'package:templates/features/templates/ai_assistant_app/models/assistant_message.dart';
 import 'package:templates/features/templates/ai_assistant_app/widgets/assistant_gallery_preview.dart';
@@ -81,14 +82,11 @@ void main() {
     }
   });
 
-  testWidgets('assistant defaults to dark mode and supports a light workspace', (WidgetTester tester) async {
+  testWidgets('assistant supports dark and light appearances selected by its host', (WidgetTester tester) async {
     await _pumpAssistant(tester);
 
     expect(Theme.of(tester.element(find.text('Nova').first)).brightness, Brightness.dark);
-    await tester.tap(find.byTooltip('Appearance: Dark'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Light').last);
-    await tester.pumpAndSettle();
+    await _pumpAssistant(tester, appearance: AppAppearance.light);
     expect(Theme.of(tester.element(find.text('Nova').first)).brightness, Brightness.light);
   });
 }
@@ -122,7 +120,12 @@ Future<void> _openWorkspace(WidgetTester tester) async {
   expect(PrimaryScrollController.of(tester.element(scaffold)).positions, hasLength(1));
 }
 
-Future<void> _pumpAssistant(WidgetTester tester, {Size size = const Size(430, 932), double textScale = 1}) async {
+Future<void> _pumpAssistant(
+  WidgetTester tester, {
+  Size size = const Size(430, 932),
+  double textScale = 1,
+  AppAppearance appearance = AppAppearance.dark,
+}) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
@@ -132,7 +135,10 @@ Future<void> _pumpAssistant(WidgetTester tester, {Size size = const Size(430, 93
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
   await tester.pumpWidget(
     MaterialApp(
-      home: MediaQuery(data: mediaQuery, child: const AiAssistantHomeScreen()),
+      home: MediaQuery(
+        data: mediaQuery,
+        child: AiAssistantHomeScreen(appearance: appearance),
+      ),
     ),
   );
   await tester.pump();

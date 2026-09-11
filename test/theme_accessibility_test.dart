@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:templates/app/app_shell.dart';
 import 'package:templates/app/app_theme.dart';
 import 'package:templates/features/templates/ai_assistant_app/ai_assistant_app_theme.dart';
 import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
@@ -202,7 +201,7 @@ void main() {
     await expectLater(tester, meetsGuideline(textContrastGuideline));
   });
 
-  testWidgets('root app keeps its accepted light appearance when the system is dark', (WidgetTester tester) async {
+  testWidgets('gallery follows the system appearance until the user chooses a mode', (WidgetTester tester) async {
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
     _evictAssets(_galleryAssets);
 
@@ -210,11 +209,9 @@ void main() {
     await tester.pumpWidget(const UiTemplatesApp());
     await tester.pump();
 
-    final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
-    expect(app.theme?.useMaterial3, isFalse);
-    expect(app.darkTheme, isNull);
-    expect(Theme.of(tester.element(find.byType(AppShell))).brightness, Brightness.light);
-    expect(Theme.of(tester.element(find.byType(AppShell))).scaffoldBackgroundColor, AppTheme.nearlyWhite);
+    final galleryTheme = Theme.of(tester.element(find.byTooltip('Appearance: System')));
+    expect(galleryTheme.brightness, Brightness.dark);
+    expect(galleryTheme.scaffoldBackgroundColor, const Color(0xFF111719));
   });
 
   testWidgets('template surfaces inherit their accessible semantic themes', (WidgetTester tester) async {

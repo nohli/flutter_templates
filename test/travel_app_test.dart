@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 import 'package:templates/features/templates/travel_app/models/travel_day.dart';
 import 'package:templates/features/templates/travel_app/travel_home_screen.dart';
@@ -28,17 +29,13 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('travel map and appearance controls remain truthful', (WidgetTester tester) async {
-    await _pumpTravel(tester);
+  testWidgets('travel map and externally selected dark appearance remain truthful', (WidgetTester tester) async {
+    await _pumpTravel(tester, appearance: AppAppearance.dark);
 
     await tester.tap(find.byTooltip('Open trip map'));
     await tester.pump();
     expect(find.text('The trip map is shown as an interface preview.'), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Appearance: Light'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Dark').last);
-    await tester.pumpAndSettle();
     expect(Theme.of(tester.element(find.text('Roam'))).brightness, Brightness.dark);
   });
 
@@ -73,7 +70,12 @@ void main() {
   });
 }
 
-Future<void> _pumpTravel(WidgetTester tester, {Size size = const Size(430, 932), double textScale = 1}) async {
+Future<void> _pumpTravel(
+  WidgetTester tester, {
+  Size size = const Size(430, 932),
+  double textScale = 1,
+  AppAppearance appearance = AppAppearance.light,
+}) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
@@ -83,7 +85,10 @@ Future<void> _pumpTravel(WidgetTester tester, {Size size = const Size(430, 932),
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
   await tester.pumpWidget(
     MaterialApp(
-      home: MediaQuery(data: mediaQuery, child: const TravelHomeScreen()),
+      home: MediaQuery(
+        data: mediaQuery,
+        child: TravelHomeScreen(appearance: appearance),
+      ),
     ),
   );
   await tester.pump();

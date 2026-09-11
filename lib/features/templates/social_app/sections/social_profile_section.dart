@@ -26,7 +26,7 @@ class SocialProfileSection extends StatelessWidget {
 
     return ListView(
       controller: scrollController,
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 32),
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
       children: <Widget>[
         const _ProfileHeader(),
         const SizedBox(height: 22),
@@ -50,13 +50,16 @@ class SocialProfileSection extends StatelessWidget {
           value: isPrivate,
           onChanged: onPrivateChanged,
           tileColor: colors.surface,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+          shape: RoundedRectangleBorder(side: BorderSide(color: colors.outlineVariant)),
           secondary: Icon(Icons.lock_outline_rounded, color: colors.primary),
           title: const Text('Private profile', style: TextStyle(fontWeight: FontWeight.w800)),
           subtitle: const Text('Approve new followers.'),
         ),
         const SizedBox(height: 26),
-        const Text('Recent moments', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+        const Text(
+          'RECENT / FIELD NOTES',
+          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+        ),
         const SizedBox(height: 12),
         GridView.builder(
           primary: false,
@@ -70,8 +73,11 @@ class SocialProfileSection extends StatelessWidget {
           ),
           itemBuilder: (BuildContext context, int index) {
             final post = posts[index];
-            return ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(color: SocialAppTheme.ink, width: 2),
+                boxShadow: SocialAppTheme.softShadow,
+              ),
               child: SocialPostArt(artwork: post.artwork),
             );
           },
@@ -86,30 +92,44 @@ class _ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
-    return Row(
-      children: <Widget>[
-        const CircleAvatar(
-          radius: 42,
-          backgroundColor: SocialAppTheme.lavender,
-          child: Text(
-            'AR',
-            style: TextStyle(color: SocialAppTheme.ink, fontSize: 24, fontWeight: FontWeight.w800),
-          ),
+    return const DecoratedBox(
+      decoration: BoxDecoration(color: SocialAppTheme.primary),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Row(
+          children: <Widget>[
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: SocialAppTheme.amber,
+                boxShadow: <BoxShadow>[BoxShadow(color: SocialAppTheme.ink, offset: Offset(4, 4))],
+              ),
+              child: SizedBox.square(
+                dimension: 72,
+                child: Center(
+                  child: Text(
+                    'AR',
+                    style: TextStyle(color: SocialAppTheme.ink, fontSize: 24, fontWeight: FontWeight.w900),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Ana Rivera',
+                    style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w900),
+                  ),
+                  SizedBox(height: 5),
+                  Text('Designer · Collector of small joys', style: TextStyle(color: Color(0xD1FFFFFF))),
+                ],
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text('Ana Rivera', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800)),
-              const SizedBox(height: 5),
-              Text('Designer · Collector of small joys', style: TextStyle(color: colors.onSurfaceVariant)),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -126,7 +146,10 @@ class _ProfileMetric extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      decoration: BoxDecoration(color: colors.surface, borderRadius: const BorderRadius.all(Radius.circular(18))),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        border: Border.all(color: SocialAppTheme.ink),
+      ),
       child: Column(
         children: <Widget>[
           Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),

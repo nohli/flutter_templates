@@ -69,13 +69,17 @@ void main() {
   testWidgets('social community remains usable at compact maximum text size', (WidgetTester tester) async {
     await _pumpSocial(tester, size: const Size(320, 568), textScale: 3.2);
 
-    for (final label in <String>['Discover', 'Profile', 'Feed']) {
+    const sectionMarkers = <String, String>{
+      'Discover': 'FIND YOUR\nPEOPLE.',
+      'Profile': 'Ana Rivera',
+      'Feed': 'Good people. Good energy.',
+    };
+    for (final MapEntry(key: label, value: marker) in sectionMarkers.entries) {
       await tester.tap(find.descendant(of: find.byType(SocialActionBar), matching: find.byTooltip(label)));
       await tester.pump();
       expect(tester.takeException(), isNull, reason: label);
+      expect(find.text(marker), findsOneWidget, reason: label);
     }
-
-    expect(find.text('Share what feels alive.'), findsOneWidget);
   });
 
   testWidgets('social action bar creates a sample post in the externally selected dark mode', (
@@ -88,6 +92,28 @@ void main() {
     expect(find.text('Post creation is shown as an interface preview.'), findsOneWidget);
 
     expect(Theme.of(tester.element(find.text('Mingle'))).brightness, Brightness.dark);
+  });
+
+  testWidgets('social template returns to its gallery route', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (BuildContext context) => TextButton(
+            onPressed: () =>
+                Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SocialHomeScreen())),
+            child: const Text('Open social template'),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Open social template'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Back to template gallery'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Open social template'), findsOneWidget);
+    expect(find.byType(SocialHomeScreen), findsNothing);
   });
 }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app_identity.dart';
 import '../../app/app_theme.dart';
 import '../templates/ai_assistant_app/ai_assistant_home_screen.dart';
+import '../templates/dating_app/dating_home_screen.dart';
 import '../templates/design_course/home_design_course.dart';
 import '../templates/design_course/models/saved_courses.dart';
 import '../templates/finance_app/finance_home_screen.dart';
@@ -132,6 +133,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.podcast => const PodcastHomeScreen(),
     TemplateGalleryDestination.social => const SocialHomeScreen(),
     TemplateGalleryDestination.travel => const TravelHomeScreen(),
+    TemplateGalleryDestination.dating => const DatingHomeScreen(),
   };
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:templates/app/app_identity.dart';
+import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/main.dart' as app;
 
 void main() {
@@ -11,17 +12,28 @@ void main() {
     await _finishAnimations(tester);
 
     expect(find.text(AppIdentity.name), findsOneWidget);
-    await _openTemplate(tester, cardLabel: 'Hotel Booking', screenText: 'Explore');
-    await _openTemplate(tester, cardLabel: 'Fitness App', screenText: 'My Diary');
-    await _openTemplate(tester, cardLabel: 'Design Course', screenText: 'Choose your');
-    await _openTemplate(tester, cardLabel: 'Personal Finance', screenText: 'Money and crypto, together');
-    await _openTemplate(tester, cardLabel: 'E-commerce Store', screenText: 'Curated objects for calmer spaces.');
-    await _openTemplate(tester, cardLabel: 'Project Planner', screenText: 'Make space for what matters.');
-    await _openTemplate(tester, cardLabel: 'AI Assistant', screenText: 'What can I help you create?');
-    await _openTemplate(tester, cardLabel: 'Food Delivery', screenText: 'Good food, right on time.');
-    await _openTemplate(tester, cardLabel: 'Podcast Player', screenText: 'Stories worth your time.');
-    await _openTemplate(tester, cardLabel: 'Social Community', screenText: 'Share what feels alive.');
-    await _openTemplate(tester, cardLabel: 'Travel Planner', screenText: 'Madeira, mapped beautifully.');
+    const templates = <({String cardLabel, String screenText})>[
+      (cardLabel: 'Hotel Booking', screenText: 'Explore'),
+      (cardLabel: 'Fitness App', screenText: 'My Diary'),
+      (cardLabel: 'Design Course', screenText: 'Choose your'),
+      (cardLabel: 'Personal Finance', screenText: 'Money and crypto, together'),
+      (cardLabel: 'E-commerce Store', screenText: 'Curated objects for calmer spaces.'),
+      (cardLabel: 'Project Planner', screenText: 'Make space for what matters.'),
+      (cardLabel: 'Food Delivery', screenText: 'Good food, right on time.'),
+      (cardLabel: 'Podcast Player', screenText: 'Stories worth your time.'),
+      (cardLabel: 'Social Community', screenText: 'Share what feels alive.'),
+      (cardLabel: 'Travel Planner', screenText: 'Madeira, mapped beautifully.'),
+      (cardLabel: 'AI Assistant', screenText: 'What can I help you create?'),
+      (cardLabel: 'Dating & Social', screenText: 'Tonight’s people'),
+    ];
+    expect(
+      templates.map((template) => template.cardLabel).toSet(),
+      TemplateGalleryItem.items.map((item) => item.title).toSet(),
+    );
+
+    for (final template in templates) {
+      await _openTemplate(tester, cardLabel: template.cardLabel, screenText: template.screenText);
+    }
   });
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'models/planner_section.dart';
@@ -11,7 +12,9 @@ import 'sections/planner_today_section.dart';
 import 'widgets/planner_day_rail.dart';
 
 class PlannerHomeScreen extends StatefulWidget {
-  const PlannerHomeScreen({super.key});
+  const PlannerHomeScreen({this.appearance = AppAppearance.light, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<PlannerHomeScreen> createState() => _PlannerHomeScreenState();
@@ -40,8 +43,9 @@ class _PlannerHomeScreenState extends State<PlannerHomeScreen> {
     final scrollController = _scrollControllers[_selectedSection]!;
 
     return TemplateAppearanceShell(
+      appearance: widget.appearance,
       themeBuilder: PlannerAppTheme.build,
-      builder: (BuildContext context, Widget appearanceButton) {
+      builder: (BuildContext context) {
         return PrimaryScrollController(
           controller: scrollController,
           child: Scaffold(
@@ -67,7 +71,6 @@ class _PlannerHomeScreenState extends State<PlannerHomeScreen> {
                   onPressed: () => _showMessage('No new sample notifications.'),
                   icon: const Badge(smallSize: 7, child: Icon(Icons.notifications_none_rounded)),
                 ),
-                appearanceButton,
                 const SizedBox(width: 8),
               ],
             ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import 'app_appearance.dart';
 import 'app_drawer.dart';
 import 'app_theme.dart';
 import '../features/gallery/home_screen.dart';
@@ -17,6 +19,7 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin {
   AppSection _section = AppSection.home;
+  var _appearance = AppAppearance.system;
   late final AnimationController _drawerController;
   late final Animation<double> _menuIconAnimation;
 
@@ -103,117 +106,147 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final drawerWidth = constraints.maxWidth * 0.75;
-        return AnimatedBuilder(
-          animation: _drawerController,
-          child: _screen,
-          builder: (BuildContext context, Widget? child) {
-            final drawerIsClosed = _drawerController.value == 0;
-            return PopScope(
-              canPop: drawerIsClosed,
-              onPopInvokedWithResult: (bool didPop, Object? result) {
-                if (!didPop) {
-                  _closeDrawer();
-                }
-              },
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onHorizontalDragUpdate: (DragUpdateDetails details) {
-                  _updateDrawerDrag(details, drawerWidth);
-                },
-                onHorizontalDragEnd: _endDrawerDrag,
-                onHorizontalDragCancel: _cancelDrawerDrag,
-                child: ClipRect(
-                  child: Stack(
-                    children: <Widget>[
-                      ExcludeSemantics(
-                        excluding: drawerIsClosed,
-                        child: FocusScope(
-                          autofocus: !drawerIsClosed,
-                          canRequestFocus: !drawerIsClosed,
-                          child: ExcludeFocus(
-                            excluding: drawerIsClosed,
-                            child: IgnorePointer(
-                              ignoring: drawerIsClosed,
-                              child: SizedBox(
-                                width: drawerWidth,
-                                child: AppDrawer(
-                                  selectedSection: _section,
-                                  drawerAnimation: _drawerController,
-                                  onSelected: _selectSection,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Transform.translate(
-                        offset: Offset(drawerWidth * _drawerController.value, 0),
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: AppTheme.white,
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(color: AppTheme.grey.withValues(alpha: 0.6), blurRadius: 24, spreadRadius: 8),
-                            ],
-                          ),
-                          child: Stack(
-                            children: <Widget>[
-                              Positioned.fill(
-                                child: ExcludeSemantics(
-                                  excluding: !drawerIsClosed,
-                                  child: ExcludeFocus(
-                                    excluding: !drawerIsClosed,
-                                    child: IgnorePointer(ignoring: !drawerIsClosed, child: child),
-                                  ),
-                                ),
-                              ),
-                              if (!drawerIsClosed)
-                                Positioned.fill(
-                                  child: ExcludeSemantics(
-                                    child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: _closeDrawer),
-                                  ),
-                                ),
-                              SafeArea(
-                                bottom: false,
-                                minimum: const EdgeInsets.only(top: 8, left: 8),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: SizedBox.square(
-                                    dimension: 48,
-                                    child: IconButton(
-                                      tooltip: drawerIsClosed ? 'Open navigation menu' : 'Close navigation menu',
-                                      onPressed: _toggleDrawer,
-                                      icon: AnimatedIcon(
-                                        icon: AnimatedIcons.arrow_menu,
-                                        progress: _menuIconAnimation,
-                                        color: AppTheme.nearlyBlack,
-                                        semanticLabel: drawerIsClosed
-                                            ? 'Open navigation menu'
-                                            : 'Close navigation menu',
+    final brightness = _section == AppSection.home ? _appearance.resolve(context) : Brightness.light;
+    final theme = AppTheme.build(brightness);
+    final systemUiStyle = SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: brightness == Brightness.dark ? Brightness.light : Brightness.dark,
+      statusBarBrightness: brightness,
+      systemNavigationBarColor: theme.colorScheme.surface,
+      systemNavigationBarDividerColor: theme.colorScheme.outlineVariant,
+      systemNavigationBarIconBrightness: brightness == Brightness.dark ? Brightness.light : Brightness.dark,
+    );
+
+    return Theme(
+      data: theme,
+      child: Builder(
+        builder: (BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
+          value: systemUiStyle,
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final drawerWidth = constraints.maxWidth * 0.75;
+              return AnimatedBuilder(
+                animation: _drawerController,
+                child: _screen,
+                builder: (BuildContext context, Widget? child) {
+                  final drawerIsClosed = _drawerController.value == 0;
+                  return PopScope(
+                    canPop: drawerIsClosed,
+                    onPopInvokedWithResult: (bool didPop, Object? result) {
+                      if (!didPop) {
+                        _closeDrawer();
+                      }
+                    },
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onHorizontalDragUpdate: (DragUpdateDetails details) {
+                        _updateDrawerDrag(details, drawerWidth);
+                      },
+                      onHorizontalDragEnd: _endDrawerDrag,
+                      onHorizontalDragCancel: _cancelDrawerDrag,
+                      child: ClipRect(
+                        child: Stack(
+                          children: <Widget>[
+                            ExcludeSemantics(
+                              excluding: drawerIsClosed,
+                              child: FocusScope(
+                                autofocus: !drawerIsClosed,
+                                canRequestFocus: !drawerIsClosed,
+                                child: ExcludeFocus(
+                                  excluding: drawerIsClosed,
+                                  child: IgnorePointer(
+                                    ignoring: drawerIsClosed,
+                                    child: SizedBox(
+                                      width: drawerWidth,
+                                      child: AppDrawer(
+                                        selectedSection: _section,
+                                        drawerAnimation: _drawerController,
+                                        onSelected: _selectSection,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            Transform.translate(
+                              offset: Offset(drawerWidth * _drawerController.value, 0),
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                      color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.34),
+                                      blurRadius: 24,
+                                      spreadRadius: 8,
+                                    ),
+                                  ],
+                                ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Positioned.fill(
+                                      child: ExcludeSemantics(
+                                        excluding: !drawerIsClosed,
+                                        child: ExcludeFocus(
+                                          excluding: !drawerIsClosed,
+                                          child: IgnorePointer(ignoring: !drawerIsClosed, child: child),
+                                        ),
+                                      ),
+                                    ),
+                                    if (!drawerIsClosed)
+                                      Positioned.fill(
+                                        child: ExcludeSemantics(
+                                          child: GestureDetector(behavior: HitTestBehavior.opaque, onTap: _closeDrawer),
+                                        ),
+                                      ),
+                                    SafeArea(
+                                      bottom: false,
+                                      minimum: const EdgeInsets.only(top: 8, left: 8),
+                                      child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: SizedBox.square(
+                                          dimension: 48,
+                                          child: IconButton(
+                                            tooltip: drawerIsClosed ? 'Open navigation menu' : 'Close navigation menu',
+                                            onPressed: _toggleDrawer,
+                                            icon: AnimatedIcon(
+                                              icon: AnimatedIcons.arrow_menu,
+                                              progress: _menuIconAnimation,
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                              semanticLabel: drawerIsClosed
+                                                  ? 'Open navigation menu'
+                                                  : 'Close navigation menu',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 
   Widget get _screen => switch (_section) {
-    AppSection.home => const TemplateGalleryScreen(),
+    AppSection.home => TemplateGalleryScreen(
+      appearance: _appearance,
+      onAppearanceChanged: (AppAppearance appearance) {
+        setState(() {
+          _appearance = appearance;
+        });
+      },
+    ),
     AppSection.help => const HelpScreen(),
     AppSection.feedback => const FeedbackScreen(),
     AppSection.invite => const InviteFriendScreen(),

@@ -3,6 +3,7 @@ import 'dart:ui' show Tristate;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:templates/app/app_drawer.dart';
 import 'package:templates/app/app_identity.dart';
@@ -460,7 +461,7 @@ void main() {
       'assets/fitness_app/fitness_app.png',
       'assets/design_course/design_course.png',
     ]);
-    await _pumpScreen(tester, const TemplateGalleryScreen(), textScale: 2, disableAnimations: true);
+    await _pumpScreen(tester, _gallery(), textScale: 2, disableAnimations: true);
 
     for (final scenario in <({Type destination, String title})>[
       (title: 'Hotel Booking', destination: HotelHomeScreen),
@@ -497,7 +498,7 @@ void main() {
   });
 
   testWidgets('template detail routes keep the original text scale', (WidgetTester tester) async {
-    await _pumpScreen(tester, const TemplateGalleryScreen(), textScale: 2, disableAnimations: true);
+    await _pumpScreen(tester, _gallery(), textScale: 2, disableAnimations: true);
 
     await tester.tap(find.bySemanticsLabel('Design Course'));
     await tester.pumpAndSettle();
@@ -532,7 +533,7 @@ void main() {
       'assets/fitness_app/fitness_app.png',
       'assets/design_course/design_course.png',
     ]);
-    await _pumpScreen(tester, const TemplateGalleryScreen(), disableAnimations: true);
+    await _pumpScreen(tester, _gallery(), disableAnimations: true);
 
     expect(
       (tester.widget<GridView>(find.byType(GridView)).gridDelegate as SliverGridDelegateWithFixedCrossAxisCount)
@@ -540,7 +541,7 @@ void main() {
       2,
     );
 
-    await _pumpScreen(tester, const TemplateGalleryScreen(), size: const Size(1024, 1366), disableAnimations: true);
+    await _pumpScreen(tester, _gallery(), size: const Size(1024, 1366), disableAnimations: true);
 
     expect(
       (tester.widget<GridView>(find.byType(GridView)).gridDelegate as SliverGridDelegateWithFixedCrossAxisCount)
@@ -1136,6 +1137,8 @@ void main() {
     }
   });
 }
+
+Widget _gallery() => TemplateGalleryScreen(appearance: AppAppearance.light, onAppearanceChanged: (_) {});
 
 void _expectFullTextHeight(WidgetTester tester, Finder finder) {
   final RenderBox textBox = tester.renderObject<RenderBox>(finder);

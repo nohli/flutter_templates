@@ -13,18 +13,34 @@ abstract final class AppTheme {
   static const actionBlue = Color(0xFF0D47A1);
   static const fontName = 'WorkSans';
 
-  static ThemeData build() {
-    const colors = ColorScheme.light(
-      primary: Colors.blue,
-      onPrimary: darkerText,
-      surface: nearlyWhite,
-      onSurface: darkerText,
-      error: Color(0xFFB00020),
-      onError: white,
-    );
+  static ThemeData build([Brightness brightness = Brightness.light]) {
+    final colors = brightness == Brightness.dark
+        ? const ColorScheme.dark(
+            primary: Color(0xFF7DC4FF),
+            onPrimary: Color(0xFF002F4D),
+            primaryContainer: Color(0xFF12496C),
+            onPrimaryContainer: Color(0xFFD0E9FF),
+            surface: Color(0xFF111719),
+            onSurface: Color(0xFFE4F0F2),
+            error: Color(0xFFFFB4AB),
+            onError: Color(0xFF690005),
+          )
+        : const ColorScheme.light(
+            primary: Colors.blue,
+            onPrimary: darkerText,
+            primaryContainer: Color(0xFFD5ECFF),
+            onPrimaryContainer: darkerText,
+            surface: nearlyWhite,
+            onSurface: darkerText,
+            error: Color(0xFFB00020),
+            onError: white,
+          );
     final base = ThemeData(colorScheme: colors, fontFamily: fontName, useMaterial3: false);
 
-    return base.copyWith(scaffoldBackgroundColor: nearlyWhite, textTheme: base.textTheme.merge(textTheme));
+    return base.copyWith(
+      scaffoldBackgroundColor: colors.surface,
+      textTheme: base.textTheme.merge(textTheme).apply(bodyColor: colors.onSurface, displayColor: colors.onSurface),
+    );
   }
 
   static const textTheme = TextTheme(

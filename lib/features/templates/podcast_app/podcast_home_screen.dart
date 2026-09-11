@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'models/podcast_section.dart';
@@ -12,7 +13,9 @@ import 'widgets/podcast_mini_player.dart';
 import 'widgets/podcast_navigation_drawer.dart';
 
 class PodcastHomeScreen extends StatefulWidget {
-  const PodcastHomeScreen({super.key});
+  const PodcastHomeScreen({this.appearance = AppAppearance.light, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<PodcastHomeScreen> createState() => _PodcastHomeScreenState();
@@ -50,8 +53,9 @@ class _PodcastHomeScreenState extends State<PodcastHomeScreen> {
     final scrollController = _scrollControllers[_selectedSection]!;
 
     return TemplateAppearanceShell(
+      appearance: widget.appearance,
       themeBuilder: PodcastAppTheme.build,
-      builder: (BuildContext context, Widget appearanceButton) {
+      builder: (BuildContext context) {
         return PrimaryScrollController(
           controller: scrollController,
           child: Scaffold(
@@ -69,7 +73,6 @@ class _PodcastHomeScreenState extends State<PodcastHomeScreen> {
                 style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
               ),
               actions: <Widget>[
-                appearanceButton,
                 Builder(
                   builder: (BuildContext context) {
                     return IconButton(

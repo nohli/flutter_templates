@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/dating_app/models/dating_profile.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_gallery_preview.dart';
@@ -37,7 +38,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('dating actions and appearance controls report truthful state', (WidgetTester tester) async {
+  testWidgets('dating actions report truthful state in host-selected appearances', (WidgetTester tester) async {
     await _pumpDating(tester);
 
     expect(Theme.of(tester.element(find.text('Sway'))).brightness, Brightness.dark);
@@ -45,10 +46,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('A spark was sent to Mina.'), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Appearance: Dark'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Light').last);
-    await tester.pumpAndSettle();
+    await _pumpDating(tester, appearance: AppAppearance.light);
     expect(Theme.of(tester.element(find.text('Sway'))).brightness, Brightness.light);
   });
 
@@ -83,7 +81,12 @@ void main() {
   });
 }
 
-Future<void> _pumpDating(WidgetTester tester, {Size size = const Size(430, 932), double textScale = 1}) async {
+Future<void> _pumpDating(
+  WidgetTester tester, {
+  Size size = const Size(430, 932),
+  double textScale = 1,
+  AppAppearance appearance = AppAppearance.dark,
+}) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
@@ -93,7 +96,10 @@ Future<void> _pumpDating(WidgetTester tester, {Size size = const Size(430, 932),
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
   await tester.pumpWidget(
     MaterialApp(
-      home: MediaQuery(data: mediaQuery, child: const DatingHomeScreen()),
+      home: MediaQuery(
+        data: mediaQuery,
+        child: DatingHomeScreen(appearance: appearance),
+      ),
     ),
   );
   await tester.pump();

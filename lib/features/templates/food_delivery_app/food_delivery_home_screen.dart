@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'food_delivery_app_theme.dart';
@@ -11,7 +12,9 @@ import 'sections/delivery_order_section.dart';
 import 'widgets/delivery_action_dock.dart';
 
 class FoodDeliveryHomeScreen extends StatefulWidget {
-  const FoodDeliveryHomeScreen({super.key});
+  const FoodDeliveryHomeScreen({this.appearance = AppAppearance.light, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<FoodDeliveryHomeScreen> createState() => _FoodDeliveryHomeScreenState();
@@ -42,8 +45,9 @@ class _FoodDeliveryHomeScreenState extends State<FoodDeliveryHomeScreen> {
     final scrollController = _scrollControllers[_selectedSection]!;
 
     return TemplateAppearanceShell(
+      appearance: widget.appearance,
       themeBuilder: FoodDeliveryAppTheme.build,
-      builder: (BuildContext context, Widget appearanceButton) {
+      builder: (BuildContext context) {
         return PrimaryScrollController(
           controller: scrollController,
           child: Scaffold(
@@ -63,7 +67,6 @@ class _FoodDeliveryHomeScreenState extends State<FoodDeliveryHomeScreen> {
                   Text('Home · 18 min', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w400)),
                 ],
               ),
-              actions: <Widget>[appearanceButton],
             ),
             body: TemplateEntrance(
               child: TemplateSectionSwitcher(

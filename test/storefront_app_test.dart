@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/storefront_app/models/store_product.dart';
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/widgets/storefront_gallery_preview.dart';
@@ -88,21 +89,20 @@ void main() {
     }
   });
 
-  testWidgets('storefront appearance menu supports a dark editorial palette', (WidgetTester tester) async {
-    await _pumpStorefront(tester);
-
-    await tester.tap(find.byTooltip('Appearance: Light'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Dark').last);
-    await tester.pumpAndSettle();
+  testWidgets('storefront supports an externally selected dark editorial palette', (WidgetTester tester) async {
+    await _pumpStorefront(tester, appearance: AppAppearance.dark);
 
     expect(Theme.of(tester.element(find.text('Nest'))).brightness, Brightness.dark);
-    expect(find.byTooltip('Appearance: Dark'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
 
-Future<void> _pumpStorefront(WidgetTester tester, {Size size = const Size(430, 932), double textScale = 1}) async {
+Future<void> _pumpStorefront(
+  WidgetTester tester, {
+  Size size = const Size(430, 932),
+  double textScale = 1,
+  AppAppearance appearance = AppAppearance.light,
+}) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
@@ -110,7 +110,10 @@ Future<void> _pumpStorefront(WidgetTester tester, {Size size = const Size(430, 9
   final mediaQuery = MediaQueryData.fromView(tester.view).copyWith(textScaler: TextScaler.linear(textScale));
   await tester.pumpWidget(
     MaterialApp(
-      home: MediaQuery(data: mediaQuery, child: const StorefrontHomeScreen()),
+      home: MediaQuery(
+        data: mediaQuery,
+        child: StorefrontHomeScreen(appearance: appearance),
+      ),
     ),
   );
   await tester.pumpAndSettle();

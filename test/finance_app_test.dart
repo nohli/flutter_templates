@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/finance_app/models/finance_transaction.dart';
 import 'package:templates/features/templates/finance_app/models/spending_category.dart';
@@ -90,19 +91,12 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('finance appearance menu switches between complete light and dark themes', (WidgetTester tester) async {
-    await _pumpFinance(tester);
-
-    expect(Theme.of(tester.element(find.text('Overview'))).brightness, Brightness.light);
-    await tester.tap(find.byTooltip('Appearance: Light'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Dark').last);
-    await tester.pumpAndSettle();
+  testWidgets('finance renders the externally selected dark theme', (WidgetTester tester) async {
+    await _pumpFinance(tester, appearance: AppAppearance.dark);
 
     final theme = Theme.of(tester.element(find.text('Overview')));
     expect(theme.brightness, Brightness.dark);
     expect(theme.scaffoldBackgroundColor, const Color(0xFF0E1118));
-    expect(find.byTooltip('Appearance: Dark'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -255,6 +249,7 @@ Future<void> _pumpFinance(
   WidgetTester tester, {
   Size size = const Size(430, 932),
   double textScale = 1,
+  AppAppearance appearance = AppAppearance.light,
   bool disableAnimations = false,
   bool settle = true,
 }) async {
@@ -267,7 +262,10 @@ Future<void> _pumpFinance(
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
   await tester.pumpWidget(
     MaterialApp(
-      home: MediaQuery(data: mediaQuery, child: const FinanceHomeScreen()),
+      home: MediaQuery(
+        data: mediaQuery,
+        child: FinanceHomeScreen(appearance: appearance),
+      ),
     ),
   );
   if (settle) {

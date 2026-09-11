@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'ai_assistant_app_theme.dart';
@@ -11,7 +12,9 @@ import 'sections/assistant_profile_section.dart';
 import 'widgets/assistant_navigation_drawer.dart';
 
 class AiAssistantHomeScreen extends StatefulWidget {
-  const AiAssistantHomeScreen({super.key});
+  const AiAssistantHomeScreen({this.appearance = AppAppearance.dark, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<AiAssistantHomeScreen> createState() => _AiAssistantHomeScreenState();
@@ -40,9 +43,9 @@ class _AiAssistantHomeScreenState extends State<AiAssistantHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return TemplateAppearanceShell(
+      appearance: widget.appearance,
       themeBuilder: AiAssistantAppTheme.build,
-      initialAppearance: TemplateAppearance.dark,
-      builder: (BuildContext context, Widget appearanceButton) {
+      builder: (BuildContext context) {
         return PrimaryScrollController(
           controller: _scrollControllers[_selectedSection]!,
           child: Scaffold(
@@ -60,7 +63,6 @@ class _AiAssistantHomeScreenState extends State<AiAssistantHomeScreen> {
                 style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
               ),
               actions: <Widget>[
-                appearanceButton,
                 Builder(
                   builder: (BuildContext context) {
                     return IconButton(

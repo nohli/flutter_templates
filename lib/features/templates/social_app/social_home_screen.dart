@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'models/social_post.dart';
@@ -11,7 +12,9 @@ import 'social_app_theme.dart';
 import 'widgets/social_action_bar.dart';
 
 class SocialHomeScreen extends StatefulWidget {
-  const SocialHomeScreen({super.key});
+  const SocialHomeScreen({this.appearance = AppAppearance.light, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<SocialHomeScreen> createState() => _SocialHomeScreenState();
@@ -39,8 +42,9 @@ class _SocialHomeScreenState extends State<SocialHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return TemplateAppearanceShell(
+      appearance: widget.appearance,
       themeBuilder: SocialAppTheme.build,
-      builder: (BuildContext context, Widget appearanceButton) {
+      builder: (BuildContext context) {
         return PrimaryScrollController(
           controller: _scrollControllers[_selectedSection]!,
           child: Scaffold(
@@ -58,7 +62,6 @@ class _SocialHomeScreenState extends State<SocialHomeScreen> {
                 style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
               ),
               actions: <Widget>[
-                appearanceButton,
                 IconButton(
                   tooltip: 'Social notifications',
                   onPressed: () => _showMessage('You are all caught up.'),

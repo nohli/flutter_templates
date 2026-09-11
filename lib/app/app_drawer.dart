@@ -2,8 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'app_theme.dart';
-
 enum AppSection { home, help, feedback, invite, about }
 
 class AppDrawer extends StatelessWidget {
@@ -15,12 +13,13 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Semantics(
       label: 'Navigation menu',
       container: true,
       explicitChildNodes: true,
       child: ColoredBox(
-        color: AppTheme.notWhite.withValues(alpha: 0.5),
+        color: colors.surface,
         child: SafeArea(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -43,11 +42,11 @@ class AppDrawer extends StatelessWidget {
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: AppTheme.white,
+                          color: colors.surface,
                           shape: BoxShape.circle,
                           boxShadow: <BoxShadow>[
                             BoxShadow(
-                              color: AppTheme.grey.withValues(alpha: 0.6),
+                              color: colors.shadow.withValues(alpha: 0.3),
                               offset: const Offset(2, 4),
                               blurRadius: 8,
                             ),
@@ -59,17 +58,17 @@ class AppDrawer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8, left: 4),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8, left: 4),
                       child: Text(
                         'Shaquille Oatmeal',
-                        style: TextStyle(fontWeight: FontWeight.w600, color: AppTheme.grey, fontSize: 18),
+                        style: TextStyle(fontWeight: FontWeight.w600, color: colors.onSurfaceVariant, fontSize: 18),
                       ),
                     ),
                   ],
                 ),
               ),
-              Divider(height: 1, color: AppTheme.grey.withValues(alpha: 0.6)),
+              Divider(height: 1, color: colors.outlineVariant),
               const SizedBox(height: 4),
               ...AppSection.values.map((AppSection section) {
                 return _DrawerItem(
@@ -103,7 +102,8 @@ class _DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedForeground = Theme.of(context).colorScheme.onPrimaryContainer;
+    final colors = Theme.of(context).colorScheme;
+    final selectedForeground = colors.onPrimaryContainer;
     return Semantics(
       selected: isSelected,
       button: true,
@@ -133,7 +133,7 @@ class _DrawerItem extends StatelessWidget {
                           widthFactor: 0.78,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Colors.blue.withValues(alpha: 0.2),
+                              color: colors.primaryContainer,
                               borderRadius: const BorderRadius.horizontal(right: Radius.circular(28)),
                             ),
                           ),
@@ -146,7 +146,7 @@ class _DrawerItem extends StatelessWidget {
                       constraints: const BoxConstraints(minHeight: 46),
                       child: Row(
                         children: <Widget>[
-                          Icon(section.icon, color: isSelected ? selectedForeground : AppTheme.nearlyBlack),
+                          Icon(section.icon, color: isSelected ? selectedForeground : colors.onSurface),
                           const SizedBox(width: 16),
                           Expanded(
                             child: Text(
@@ -154,7 +154,7 @@ class _DrawerItem extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,
-                                color: isSelected ? selectedForeground : AppTheme.nearlyBlack,
+                                color: isSelected ? selectedForeground : colors.onSurface,
                               ),
                             ),
                           ),

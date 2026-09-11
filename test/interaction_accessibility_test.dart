@@ -3,6 +3,7 @@ import 'dart:ui' show CheckedState, SemanticsAction, Tristate;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:intl/intl.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
 import 'package:templates/features/templates/design_course/models/category.dart';
@@ -104,7 +105,7 @@ void main() {
       'assets/design_course/interFace4.png',
       'assets/design_course/userImage.png',
     ]);
-    await _pumpScreen(tester, const TemplateGalleryScreen());
+    await _pumpScreen(tester, _gallery());
     await tester.pump(const Duration(seconds: 2));
     await tester.tap(find.bySemanticsLabel('Design Course'));
     await tester.pumpAndSettle();
@@ -547,6 +548,8 @@ void main() {
     expect(find.byType(InkWell), findsNothing);
   });
 }
+
+Widget _gallery() => TemplateGalleryScreen(appearance: AppAppearance.light, onAppearanceChanged: (_) {});
 
 Future<void> _pumpScreen(WidgetTester tester, Widget screen, {Size size = const Size(430, 932)}) async {
   tester.view.devicePixelRatio = 1;

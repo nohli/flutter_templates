@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FinanceTopBar extends StatelessWidget {
-  const FinanceTopBar({required this.title, required this.trailing, super.key});
+  const FinanceTopBar({required this.title, super.key});
 
   final String title;
-  final Widget trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +16,7 @@ class FinanceTopBar extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                if (canGoBack)
-                  _BackButton(onPressed: () => Navigator.of(context).pop())
-                else
-                  const SizedBox.square(dimension: 48),
-                trailing,
-              ],
-            ),
+            if (canGoBack) _BackButton(onPressed: () => Navigator.of(context).pop()),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
@@ -77,7 +67,6 @@ class FinanceTopBar extends StatelessWidget {
               ),
             ),
           ),
-          trailing,
           const SizedBox(width: 8),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'models/travel_day.dart';
@@ -9,7 +10,9 @@ import 'widgets/travel_route_card.dart';
 import 'widgets/travel_timeline.dart';
 
 class TravelHomeScreen extends StatefulWidget {
-  const TravelHomeScreen({super.key});
+  const TravelHomeScreen({this.appearance = AppAppearance.light, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<TravelHomeScreen> createState() => _TravelHomeScreenState();
@@ -31,8 +34,9 @@ class _TravelHomeScreenState extends State<TravelHomeScreen> {
     final selectedDay = TravelDay.samples[_selectedDayIndex];
 
     return TemplateAppearanceShell(
+      appearance: widget.appearance,
       themeBuilder: TravelAppTheme.build,
-      builder: (BuildContext context, Widget appearanceButton) {
+      builder: (BuildContext context) {
         return PrimaryScrollController(
           controller: _scrollController,
           child: Scaffold(
@@ -50,7 +54,6 @@ class _TravelHomeScreenState extends State<TravelHomeScreen> {
                 style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
               ),
               actions: <Widget>[
-                appearanceButton,
                 IconButton(
                   tooltip: 'Open trip map',
                   onPressed: () => _showMessage('The trip map is shown as an interface preview.'),

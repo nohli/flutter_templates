@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/podcast_app/models/podcast_show.dart';
 import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
 import 'package:templates/features/templates/podcast_app/widgets/podcast_gallery_preview.dart';
@@ -124,13 +125,8 @@ void main() {
     expect(find.byTooltip('Play mini player'), findsOneWidget);
   });
 
-  testWidgets('podcast appearance can switch to dark mode', (WidgetTester tester) async {
-    await _pumpPodcast(tester);
-
-    await tester.tap(find.byTooltip('Appearance: Light'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Dark').last);
-    await tester.pumpAndSettle();
+  testWidgets('podcast supports an externally selected dark mode', (WidgetTester tester) async {
+    await _pumpPodcast(tester, appearance: AppAppearance.dark);
 
     expect(Theme.of(tester.element(find.text('Wave'))).brightness, Brightness.dark);
   });
@@ -165,8 +161,18 @@ Future<void> _openMenuAndSelect(WidgetTester tester, String label) async {
   expect(find.byType(PodcastNavigationDrawer), findsNothing);
 }
 
-Future<void> _pumpPodcast(WidgetTester tester, {Size size = const Size(430, 932), double textScale = 1}) async {
-  await _pumpPodcastScreen(tester, const PodcastHomeScreen(), size: size, textScale: textScale);
+Future<void> _pumpPodcast(
+  WidgetTester tester, {
+  Size size = const Size(430, 932),
+  double textScale = 1,
+  AppAppearance appearance = AppAppearance.light,
+}) async {
+  await _pumpPodcastScreen(
+    tester,
+    PodcastHomeScreen(appearance: appearance),
+    size: size,
+    textScale: textScale,
+  );
 }
 
 Future<void> _pumpPodcastScreen(

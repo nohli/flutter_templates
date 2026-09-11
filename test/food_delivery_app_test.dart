@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/food_delivery_app/food_delivery_home_screen.dart';
 import 'package:templates/features/templates/food_delivery_app/models/meal.dart';
 import 'package:templates/features/templates/food_delivery_app/sections/delivery_basket_section.dart';
@@ -116,20 +117,25 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('delivery appearance can switch to dark mode', (WidgetTester tester) async {
-    await _pumpDelivery(tester);
-
-    await tester.tap(find.byTooltip('Appearance: Light'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Dark').last);
-    await tester.pumpAndSettle();
+  testWidgets('delivery supports an externally selected dark mode', (WidgetTester tester) async {
+    await _pumpDelivery(tester, appearance: AppAppearance.dark);
 
     expect(Theme.of(tester.element(find.text('Savor'))).brightness, Brightness.dark);
   });
 }
 
-Future<void> _pumpDelivery(WidgetTester tester, {Size size = const Size(430, 932), double textScale = 1}) async {
-  await _pumpDeliveryScreen(tester, const FoodDeliveryHomeScreen(), size: size, textScale: textScale);
+Future<void> _pumpDelivery(
+  WidgetTester tester, {
+  Size size = const Size(430, 932),
+  double textScale = 1,
+  AppAppearance appearance = AppAppearance.light,
+}) async {
+  await _pumpDeliveryScreen(
+    tester,
+    FoodDeliveryHomeScreen(appearance: appearance),
+    size: size,
+    textScale: textScale,
+  );
 }
 
 Future<void> _pumpDeliveryScreen(

@@ -22,6 +22,8 @@ class SocialProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       controller: scrollController,
       padding: const EdgeInsets.fromLTRB(18, 14, 18, 32),
@@ -47,9 +49,9 @@ class SocialProfileSection extends StatelessWidget {
         SwitchListTile.adaptive(
           value: isPrivate,
           onChanged: onPrivateChanged,
-          tileColor: SocialAppTheme.surface,
+          tileColor: colors.surface,
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-          secondary: const Icon(Icons.lock_outline_rounded, color: SocialAppTheme.primary),
+          secondary: Icon(Icons.lock_outline_rounded, color: colors.primary),
           title: const Text('Private profile', style: TextStyle(fontWeight: FontWeight.w800)),
           subtitle: const Text('Approve new followers.'),
         ),
@@ -84,21 +86,26 @@ class _ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final colors = Theme.of(context).colorScheme;
+
+    return Row(
       children: <Widget>[
-        CircleAvatar(
+        const CircleAvatar(
           radius: 42,
           backgroundColor: SocialAppTheme.lavender,
-          child: Text('AR', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+          child: Text(
+            'AR',
+            style: TextStyle(color: SocialAppTheme.ink, fontSize: 24, fontWeight: FontWeight.w800),
+          ),
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Ana Rivera', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800)),
-              SizedBox(height: 5),
-              Text('Designer · Collector of small joys', style: TextStyle(color: SocialAppTheme.mutedInk)),
+              const Text('Ana Rivera', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800)),
+              const SizedBox(height: 5),
+              Text('Designer · Collector of small joys', style: TextStyle(color: colors.onSurfaceVariant)),
             ],
           ),
         ),
@@ -115,17 +122,16 @@ class _ProfileMetric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      decoration: const BoxDecoration(
-        color: SocialAppTheme.surface,
-        borderRadius: BorderRadius.all(Radius.circular(18)),
-      ),
+      decoration: BoxDecoration(color: colors.surface, borderRadius: const BorderRadius.all(Radius.circular(18))),
       child: Column(
         children: <Widget>[
           Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
           const SizedBox(height: 3),
-          Text(label, style: const TextStyle(color: SocialAppTheme.mutedInk, fontSize: 12)),
+          Text(label, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
         ],
       ),
     );

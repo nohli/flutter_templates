@@ -26,6 +26,8 @@ class SocialFeedSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       controller: scrollController,
       padding: const EdgeInsets.fromLTRB(18, 12, 18, 32),
@@ -35,7 +37,7 @@ class SocialFeedSection extends StatelessWidget {
           style: TextStyle(fontSize: 34, height: 1.05, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 12),
-        const Text('Small moments from a thoughtful community.', style: TextStyle(color: SocialAppTheme.mutedInk)),
+        Text('Small moments from a thoughtful community.', style: TextStyle(color: colors.onSurfaceVariant)),
         const SizedBox(height: 22),
         const _StoryRow(),
         const SizedBox(height: 24),
@@ -90,7 +92,10 @@ class _StoryRow extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 28,
                     backgroundColor: story.color,
-                    child: Text(story.initials, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                    child: Text(
+                      story.initials,
+                      style: const TextStyle(color: SocialAppTheme.ink, fontSize: 12, fontWeight: FontWeight.w800),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 6),

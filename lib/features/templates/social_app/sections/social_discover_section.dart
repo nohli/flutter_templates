@@ -132,10 +132,15 @@ class _CreatorTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListTile(
-      tileColor: SocialAppTheme.surface,
+      tileColor: colors.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-      leading: CircleAvatar(backgroundColor: color, child: Text(name.characters.first)),
+      leading: CircleAvatar(
+        backgroundColor: color,
+        child: Text(name.characters.first, style: const TextStyle(color: SocialAppTheme.ink)),
+      ),
       title: Text(name, style: const TextStyle(fontWeight: FontWeight.w800)),
       subtitle: Text(role),
       trailing: FilledButton.tonal(onPressed: onToggleFollowed, child: Text(isFollowed ? 'Following' : 'Follow')),

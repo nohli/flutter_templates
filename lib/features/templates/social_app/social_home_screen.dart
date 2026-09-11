@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'models/social_post.dart';
 import 'models/social_section.dart';
@@ -7,7 +8,7 @@ import 'sections/social_discover_section.dart';
 import 'sections/social_feed_section.dart';
 import 'sections/social_profile_section.dart';
 import 'social_app_theme.dart';
-import 'widgets/social_bottom_bar.dart';
+import 'widgets/social_action_bar.dart';
 
 class SocialHomeScreen extends StatefulWidget {
   const SocialHomeScreen({super.key});
@@ -37,71 +38,74 @@ class _SocialHomeScreenState extends State<SocialHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: SocialAppTheme.build(),
-      child: PrimaryScrollController(
-        controller: _scrollControllers[_selectedSection]!,
-        child: Scaffold(
-          appBar: AppBar(
-            leading: Navigator.of(context).canPop()
-                ? IconButton(
-                    tooltip: 'Back to template gallery',
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back_rounded),
-                  )
-                : null,
-            title: const Text('MINGLE', style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 1.8)),
-            actions: <Widget>[
-              IconButton(
-                tooltip: 'Social notifications',
-                onPressed: () => _showMessage('You are all caught up.'),
-                icon: const Badge(smallSize: 7, child: Icon(Icons.notifications_none_rounded)),
+    return TemplateAppearanceShell(
+      themeBuilder: SocialAppTheme.build,
+      builder: (BuildContext context, Widget appearanceButton) {
+        return PrimaryScrollController(
+          controller: _scrollControllers[_selectedSection]!,
+          child: Scaffold(
+            appBar: AppBar(
+              surfaceTintColor: Colors.transparent,
+              leading: Navigator.of(context).canPop()
+                  ? IconButton(
+                      tooltip: 'Back to template gallery',
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.arrow_back_rounded),
+                    )
+                  : null,
+              title: const Text(
+                'Mingle',
+                style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
               ),
-              const SizedBox(width: 8),
-            ],
-          ),
-          body: TemplateEntrance(
-            child: TemplateSectionSwitcher(
-              selectedIndex: _selectedSection.index,
-              children: <Widget>[
-                SocialFeedSection(
-                  posts: SocialPost.samples,
-                  likedPostIds: _likedPostIds,
-                  savedPostIds: _savedPostIds,
-                  scrollController: _scrollControllers[SocialSection.feed]!,
-                  onToggleLiked: _toggleLiked,
-                  onToggleSaved: _toggleSaved,
-                  onPreviewAction: _showMessage,
-                ),
-                SocialDiscoverSection(
-                  scrollController: _scrollControllers[SocialSection.discover]!,
-                  followedCreatorIds: _followedCreatorIds,
-                  onToggleFollowed: _toggleFollowed,
-                ),
-                SocialProfileSection(
-                  scrollController: _scrollControllers[SocialSection.profile]!,
-                  posts: SocialPost.samples,
-                  savedPostCount: _savedPostIds.length,
-                  isPrivate: _isPrivate,
-                  onPrivateChanged: (bool value) {
-                    setState(() {
-                      _isPrivate = value;
-                    });
-                  },
+              actions: <Widget>[
+                appearanceButton,
+                IconButton(
+                  tooltip: 'Social notifications',
+                  onPressed: () => _showMessage('You are all caught up.'),
+                  icon: const Badge(smallSize: 7, child: Icon(Icons.notifications_none_rounded)),
                 ),
               ],
             ),
+            body: TemplateEntrance(
+              child: TemplateSectionSwitcher(
+                selectedIndex: _selectedSection.index,
+                children: <Widget>[
+                  SocialFeedSection(
+                    posts: SocialPost.samples,
+                    likedPostIds: _likedPostIds,
+                    savedPostIds: _savedPostIds,
+                    scrollController: _scrollControllers[SocialSection.feed]!,
+                    onToggleLiked: _toggleLiked,
+                    onToggleSaved: _toggleSaved,
+                    onPreviewAction: _showMessage,
+                  ),
+                  SocialDiscoverSection(
+                    scrollController: _scrollControllers[SocialSection.discover]!,
+                    followedCreatorIds: _followedCreatorIds,
+                    onToggleFollowed: _toggleFollowed,
+                  ),
+                  SocialProfileSection(
+                    scrollController: _scrollControllers[SocialSection.profile]!,
+                    posts: SocialPost.samples,
+                    savedPostCount: _savedPostIds.length,
+                    isPrivate: _isPrivate,
+                    onPrivateChanged: (bool value) {
+                      setState(() {
+                        _isPrivate = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            bottomNavigationBar: SocialActionBar(
+              selectedSection: _selectedSection,
+              onSelected: _selectSection,
+              onCreate: () => _showMessage('Post creation is shown as an interface preview.'),
+            ),
           ),
-          floatingActionButton: _selectedSection == SocialSection.feed
-              ? FloatingActionButton(
-                  tooltip: 'Create a new post',
-                  onPressed: () => _showMessage('Post creation is shown as an interface preview.'),
-                  child: const Icon(Icons.add_rounded),
-                )
-              : null,
-          bottomNavigationBar: SocialBottomBar(selectedSection: _selectedSection, onSelected: _selectSection),
-        ),
-      ),
+        );
+      },
     );
   }
 

@@ -24,6 +24,8 @@ class SocialPostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Semantics(
       container: true,
       label: '${post.author}, ${post.caption}',
@@ -32,8 +34,8 @@ class SocialPostCard extends StatelessWidget {
         curve: Curves.easeOutCubic,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          color: isSaved ? const Color(0xFFFCFAFF) : SocialAppTheme.surface,
-          border: Border.all(color: isSaved ? SocialAppTheme.lavender : Colors.transparent, width: 1.5),
+          color: isSaved ? colors.primaryContainer.withValues(alpha: 0.55) : colors.surface,
+          border: Border.all(color: isSaved ? colors.primary : Colors.transparent, width: 1.5),
           borderRadius: const BorderRadius.all(Radius.circular(28)),
           boxShadow: SocialAppTheme.softShadow,
         ),
@@ -49,7 +51,10 @@ class SocialPostCard extends StatelessWidget {
                     CircleAvatar(
                       radius: 20,
                       backgroundColor: SocialAppTheme.lavender,
-                      child: Text(post.initials, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                      child: Text(
+                        post.initials,
+                        style: const TextStyle(color: SocialAppTheme.ink, fontSize: 12, fontWeight: FontWeight.w800),
+                      ),
                     ),
                     const SizedBox(width: 11),
                     Expanded(
@@ -58,7 +63,7 @@ class SocialPostCard extends StatelessWidget {
                         children: <Widget>[
                           Text(post.author, style: const TextStyle(fontWeight: FontWeight.w800)),
                           const SizedBox(height: 2),
-                          Text(post.location, style: const TextStyle(color: SocialAppTheme.mutedInk, fontSize: 12)),
+                          Text(post.location, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
                         ],
                       ),
                     ),
@@ -85,7 +90,7 @@ class SocialPostCard extends StatelessWidget {
                         child: Icon(
                           isLiked ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                           key: ValueKey<bool>(isLiked),
-                          color: isLiked ? SocialAppTheme.coral : SocialAppTheme.ink,
+                          color: isLiked ? SocialAppTheme.coral : colors.onSurface,
                         ),
                       ),
                     ),

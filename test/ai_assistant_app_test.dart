@@ -22,7 +22,7 @@ void main() {
     expect(tester.widget<TextField>(find.byType(TextField)).controller?.text, 'Sketch a launch plan');
 
     await tester.tap(find.byTooltip('Send message'));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Sketch a launch plan'), findsWidgets);
     expect(find.text('Start with the goal, then shape the smallest useful first version.'), findsOneWidget);
@@ -33,6 +33,27 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(AssistantMessageBubble), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('assistant idea constellation changes focus and composes its prompt', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
+    await _pumpAssistant(tester);
+
+    expect(find.byKey(const Key('idea-constellation')), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('Interactive idea constellation')), findsOneWidget);
+    expect(find.byKey(const Key('selected-idea-label')), findsOneWidget);
+    expect(find.text('STORY'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('idea-node-system')));
+    await tester.pump();
+
+    expect(find.text('SYSTEM'), findsOneWidget);
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).controller?.text,
+      'Turn my idea into a clear product system',
+    );
+    expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('assistant keeps preference state and opens specialists in chat', (WidgetTester tester) async {
@@ -76,6 +97,20 @@ void main() {
 
   testWidgets('assistant remains usable at compact maximum text size', (WidgetTester tester) async {
     await _pumpAssistant(tester, size: const Size(320, 568), textScale: 3.2);
+
+    final chatScroll = find.descendant(of: find.byType(AiAssistantHomeScreen), matching: find.byType(Scrollable)).first;
+    await tester.drag(chatScroll, const Offset(0, -700));
+    await tester.pumpAndSettle();
+    expect(find.text('THOUGHT MAP'), findsOneWidget);
+    final systemIdea = find.widgetWithText(OutlinedButton, 'SYSTEM — Connect the pieces');
+    await tester.ensureVisible(systemIdea);
+    await tester.pumpAndSettle();
+    await tester.tap(systemIdea);
+    await tester.pump();
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).controller?.text,
+      'Turn my idea into a clear product system',
+    );
 
     for (final label in <String>['Assistants', 'Profile', 'Chat']) {
       await _openWorkspaceAndSelect(tester, label);

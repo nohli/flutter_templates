@@ -93,15 +93,11 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets(
-    'iOS status-bar tap scrolls every template home screen to the top',
-    (WidgetTester tester) async {
-      await _expectStatusBarTapScrollsToTop(tester, const HotelHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
-      await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
-    },
-    variant: TargetPlatformVariant.only(TargetPlatform.iOS),
-  );
+  testWidgets('iOS status-bar tap scrolls every template home screen to the top', (WidgetTester tester) async {
+    await _expectStatusBarTapScrollsToTop(tester, const HotelHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
+    await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
+  }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
 
   testWidgets('course details and staged actions render without layout errors', (WidgetTester tester) async {
     _evictAssets(<String>['assets/design_course/interFace4.png']);

@@ -97,18 +97,17 @@ class _FocusTip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: const BoxDecoration(
-        color: PlannerAppTheme.surface,
-        borderRadius: BorderRadius.all(Radius.circular(22)),
-      ),
-      child: const Row(
+      decoration: BoxDecoration(color: colors.surface, borderRadius: const BorderRadius.all(Radius.circular(22))),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(Icons.lightbulb_outline_rounded, color: PlannerAppTheme.primary),
-          SizedBox(width: 12),
-          Expanded(
+          Icon(Icons.lightbulb_outline_rounded, color: colors.primary),
+          const SizedBox(width: 12),
+          const Expanded(
             child: Text(
               'Use this state pattern with your own timer service and lifecycle handling.',
               style: TextStyle(height: 1.4),

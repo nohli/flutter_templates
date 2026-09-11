@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'models/planner_section.dart';
 import 'models/planner_task.dart';
@@ -7,7 +8,7 @@ import 'planner_app_theme.dart';
 import 'sections/planner_focus_section.dart';
 import 'sections/planner_projects_section.dart';
 import 'sections/planner_today_section.dart';
-import 'widgets/planner_bottom_bar.dart';
+import 'widgets/planner_day_rail.dart';
 
 class PlannerHomeScreen extends StatefulWidget {
   const PlannerHomeScreen({super.key});
@@ -38,58 +39,75 @@ class _PlannerHomeScreenState extends State<PlannerHomeScreen> {
   Widget build(BuildContext context) {
     final scrollController = _scrollControllers[_selectedSection]!;
 
-    return Theme(
-      data: PlannerAppTheme.build(),
-      child: PrimaryScrollController(
-        controller: scrollController,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: PlannerAppTheme.background,
-            surfaceTintColor: Colors.transparent,
-            leading: Navigator.of(context).canPop()
-                ? IconButton(
-                    tooltip: 'Back to template gallery',
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back_rounded),
-                  )
-                : null,
-            title: const Text('DAYMARK', style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 1.5)),
-            actions: <Widget>[
-              IconButton(
-                tooltip: 'Planner notifications',
-                onPressed: () => _showMessage('No new sample notifications.'),
-                icon: const Badge(smallSize: 7, child: Icon(Icons.notifications_none_rounded)),
+    return TemplateAppearanceShell(
+      themeBuilder: PlannerAppTheme.build,
+      builder: (BuildContext context, Widget appearanceButton) {
+        return PrimaryScrollController(
+          controller: scrollController,
+          child: Scaffold(
+            appBar: AppBar(
+              surfaceTintColor: Colors.transparent,
+              leading: Navigator.of(context).canPop()
+                  ? IconButton(
+                      tooltip: 'Back to template gallery',
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.arrow_back_rounded),
+                    )
+                  : null,
+              title: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Daymark', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: -0.5)),
+                  Text('Thursday, 11 September', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w400)),
+                ],
               ),
-              const SizedBox(width: 8),
-            ],
-          ),
-          body: TemplateEntrance(
-            child: TemplateSectionSwitcher(
-              selectedIndex: _selectedSection.index,
-              children: <Widget>[
-                PlannerTodaySection(
-                  tasks: _tasks,
-                  scrollController: _scrollControllers[PlannerSection.today]!,
-                  taskController: _taskController,
-                  onAddTask: _addTask,
-                  onToggleTask: _toggleTask,
+              actions: <Widget>[
+                IconButton(
+                  tooltip: 'Planner notifications',
+                  onPressed: () => _showMessage('No new sample notifications.'),
+                  icon: const Badge(smallSize: 7, child: Icon(Icons.notifications_none_rounded)),
                 ),
-                PlannerProjectsSection(tasks: _tasks, scrollController: _scrollControllers[PlannerSection.projects]!),
-                PlannerFocusSection(
-                  isRunning: _focusIsRunning,
-                  scrollController: _scrollControllers[PlannerSection.focus]!,
-                  onToggle: () {
-                    setState(() {
-                      _focusIsRunning = !_focusIsRunning;
-                    });
-                  },
-                ),
+                appearanceButton,
+                const SizedBox(width: 8),
               ],
             ),
+            body: TemplateEntrance(
+              child: Row(
+                children: <Widget>[
+                  PlannerDayRail(selectedSection: _selectedSection, onSelected: _selectSection),
+                  Expanded(
+                    child: TemplateSectionSwitcher(
+                      selectedIndex: _selectedSection.index,
+                      children: <Widget>[
+                        PlannerTodaySection(
+                          tasks: _tasks,
+                          scrollController: _scrollControllers[PlannerSection.today]!,
+                          taskController: _taskController,
+                          onAddTask: _addTask,
+                          onToggleTask: _toggleTask,
+                        ),
+                        PlannerProjectsSection(
+                          tasks: _tasks,
+                          scrollController: _scrollControllers[PlannerSection.projects]!,
+                        ),
+                        PlannerFocusSection(
+                          isRunning: _focusIsRunning,
+                          scrollController: _scrollControllers[PlannerSection.focus]!,
+                          onToggle: () {
+                            setState(() {
+                              _focusIsRunning = !_focusIsRunning;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          bottomNavigationBar: PlannerBottomBar(selectedSection: _selectedSection, onSelected: _selectSection),
-        ),
-      ),
+        );
+      },
     );
   }
 

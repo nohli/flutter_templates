@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/features/templates/planner_app/models/planner_task.dart';
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
-import 'package:templates/features/templates/planner_app/widgets/planner_bottom_bar.dart';
+import 'package:templates/features/templates/planner_app/widgets/planner_day_rail.dart';
 import 'package:templates/features/templates/planner_app/widgets/planner_gallery_preview.dart';
 import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
@@ -43,13 +43,13 @@ void main() {
   testWidgets('planner board and focus mode reflect current state', (WidgetTester tester) async {
     await _pumpPlanner(tester);
 
-    await tester.tap(find.text('Projects'));
+    await tester.tap(find.byTooltip('Board'));
     await tester.pump();
     expect(find.text('Projects in motion'), findsOneWidget);
     expect(find.text('Next up'), findsOneWidget);
     expect(find.text('In progress'), findsOneWidget);
 
-    await tester.tap(find.text('Focus'));
+    await tester.tap(find.byTooltip('Focus'));
     await tester.pump();
     expect(find.text('READY'), findsOneWidget);
     await tester.tap(find.text('Start focus'));
@@ -66,7 +66,7 @@ void main() {
       ),
     );
 
-    expect(find.text('DAYMARK'), findsOneWidget);
+    expect(find.text('Daymark'), findsOneWidget);
     expect(find.text('Focus day'), findsOneWidget);
     expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
     expect(tester.takeException(), isNull);
@@ -75,13 +75,23 @@ void main() {
   testWidgets('planner remains usable on compact maximum-text layouts', (WidgetTester tester) async {
     await _pumpPlanner(tester, size: const Size(320, 568), textScale: 3.2);
 
-    for (final label in <String>['Projects', 'Focus', 'Today']) {
-      final navigationScroll = find.descendant(of: find.byType(PlannerBottomBar), matching: find.byType(Scrollable));
-      await tester.scrollUntilVisible(find.text(label), 160, scrollable: navigationScroll);
-      await tester.tap(find.text(label).hitTestable());
+    for (final label in <String>['Board', 'Focus', 'Today']) {
+      await tester.tap(find.descendant(of: find.byType(PlannerDayRail), matching: find.byTooltip(label)));
       await tester.pump();
       expect(tester.takeException(), isNull, reason: label);
     }
+  });
+
+  testWidgets('planner exposes light, dark, and system appearances', (WidgetTester tester) async {
+    await _pumpPlanner(tester);
+
+    await tester.tap(find.byTooltip('Appearance: Light'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dark').last);
+    await tester.pumpAndSettle();
+
+    expect(Theme.of(tester.element(find.text('Daymark'))).brightness, Brightness.dark);
+    expect(find.byTooltip('Appearance: Dark'), findsOneWidget);
   });
 }
 

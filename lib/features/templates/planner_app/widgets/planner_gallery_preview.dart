@@ -28,7 +28,7 @@ class _PlannerTodayPreview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('DAYMARK', style: TextStyle(fontSize: 6.5, fontWeight: FontWeight.w800, letterSpacing: 0.7)),
+          Text('Daymark', style: TextStyle(fontSize: 6.5, fontWeight: FontWeight.w800, letterSpacing: -0.2)),
           SizedBox(height: 4),
           _TodayCard(),
           SizedBox(height: 4),

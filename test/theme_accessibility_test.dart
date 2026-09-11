@@ -238,7 +238,7 @@ void main() {
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const PlannerHomeScreen());
-    _expectTemplateTheme(tester, find.text('DAYMARK'), PlannerAppTheme.build());
+    _expectTemplateTheme(tester, find.text('Daymark'), PlannerAppTheme.build());
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const AiAssistantHomeScreen());
@@ -315,7 +315,7 @@ void main() {
 
     await _pumpThemedScreen(tester, const PlannerHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
-    expect(find.text('DAYMARK'), findsOneWidget);
+    expect(find.text('Daymark'), findsOneWidget);
 
     await _pumpThemedScreen(tester, const AiAssistantHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);

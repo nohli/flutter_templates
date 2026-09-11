@@ -68,7 +68,6 @@ class AppDrawer extends StatelessWidget {
                   ],
                 ),
               ),
-              Divider(height: 1, color: colors.outlineVariant),
               const SizedBox(height: 4),
               ...AppSection.values.map((AppSection section) {
                 return _DrawerItem(

@@ -386,6 +386,7 @@ void main() {
     );
     expect(avatar, findsOneWidget);
     expect(find.descendant(of: find.byType(AppDrawer), matching: find.text('Shaquille Oatmeal')), findsOneWidget);
+    expect(find.descendant(of: find.byType(AppDrawer), matching: find.byType(Divider)), findsNothing);
     expect(find.byTooltip('Close navigation menu'), findsOneWidget);
     expect(find.text('Sign Out'), findsNothing);
 

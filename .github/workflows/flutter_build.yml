@@ -35,7 +35,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Create Temporary Signing Key
         run: |
           keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/ui-templates-ci.jks" -storepass local-build-only -keypass local-build-only -alias source-build -dname "CN=CI, OU=Source Build, O=UI Templates, L=Local, S=Local, C=US" -keyalg RSA -keysize 2048 -validity 1
@@ -61,7 +61,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Flutter build iOS
         run: flutter build ios --release --no-codesign
 
@@ -80,7 +80,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Flutter build Web
         run: flutter build web --release
 
@@ -103,7 +103,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Flutter build Linux
         run: flutter build linux --release
 
@@ -122,7 +122,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Flutter build macOS
         run: flutter build macos --release
 
@@ -141,6 +141,6 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get --enforce-lockfile
+        run: flutter pub get
       - name: Flutter build Windows
         run: flutter build windows --release

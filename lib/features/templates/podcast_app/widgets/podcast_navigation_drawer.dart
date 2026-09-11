@@ -24,6 +24,7 @@ class PodcastNavigationDrawer extends StatelessWidget {
       backgroundColor: colors.surface,
       child: SafeArea(
         child: ListView(
+          primary: false,
           padding: EdgeInsets.zero,
           children: <Widget>[
             Padding(

@@ -13,6 +13,7 @@ class PlannerTaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDone = task.status == PlannerTaskStatus.done;
     final colors = _colorsFor(task.kind);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Semantics(
       container: true,
@@ -22,7 +23,7 @@ class PlannerTaskTile extends StatelessWidget {
         curve: Curves.easeOutCubic,
         padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
         decoration: BoxDecoration(
-          color: isDone ? const Color(0xFFF8FAF2) : PlannerAppTheme.surface,
+          color: isDone ? colorScheme.secondaryContainer : colorScheme.surface,
           border: Border.all(color: isDone ? PlannerAppTheme.lime : Colors.transparent, width: 1.5),
           borderRadius: const BorderRadius.all(Radius.circular(22)),
           boxShadow: PlannerAppTheme.softShadow,
@@ -52,7 +53,7 @@ class PlannerTaskTile extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       decoration: isDone ? TextDecoration.lineThrough : null,
-                      color: isDone ? PlannerAppTheme.mutedInk : PlannerAppTheme.ink,
+                      color: isDone ? colorScheme.onSurfaceVariant : colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -60,7 +61,7 @@ class PlannerTaskTile extends StatelessWidget {
                     '${task.project} · ${task.timeLabel}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: PlannerAppTheme.mutedInk, fontSize: 11),
+                    style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 11),
                   ),
                 ],
               ),
@@ -73,7 +74,7 @@ class PlannerTaskTile extends StatelessWidget {
                 child: Icon(
                   isDone ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded,
                   key: ValueKey<bool>(isDone),
-                  color: isDone ? PlannerAppTheme.primary : PlannerAppTheme.mutedInk,
+                  color: isDone ? colorScheme.primary : colorScheme.onSurfaceVariant,
                 ),
               ),
             ),

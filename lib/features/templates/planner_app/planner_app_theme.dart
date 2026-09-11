@@ -15,21 +15,40 @@ abstract final class PlannerAppTheme {
   static const divider = Color(0xFFE2E7F0);
   static const fontName = 'WorkSans';
 
-  static ThemeData build() {
-    const colors = ColorScheme.light(
-      primary: primary,
-      onPrimary: Colors.white,
-      secondary: lime,
-      onSecondary: ink,
-      surface: surface,
-      onSurface: ink,
-      error: Color(0xFFBA1A1A),
-      onError: Colors.white,
-      outline: mutedInk,
-      outlineVariant: divider,
-    );
+  static ThemeData build([Brightness brightness = Brightness.light]) {
+    final isDark = brightness == Brightness.dark;
+    final colors = isDark
+        ? const ColorScheme.dark(
+            primary: Color(0xFF9EADFF),
+            onPrimary: Color(0xFF0D1E68),
+            secondary: lime,
+            onSecondary: Color(0xFF293400),
+            surface: Color(0xFF1A2030),
+            onSurface: Color(0xFFF1F3FA),
+            error: Color(0xFFFFB4AB),
+            onError: Color(0xFF690005),
+            outline: Color(0xFF929AB0),
+            outlineVariant: Color(0xFF3B4355),
+          )
+        : const ColorScheme.light(
+            primary: primary,
+            onPrimary: Colors.white,
+            secondary: lime,
+            onSecondary: ink,
+            surface: surface,
+            onSurface: ink,
+            error: Color(0xFFBA1A1A),
+            onError: Colors.white,
+            outline: mutedInk,
+            outlineVariant: divider,
+          );
 
-    return buildTemplateTheme(colors: colors, background: background, navigationIndicator: lime, fontFamily: fontName);
+    return buildTemplateTheme(
+      colors: colors,
+      background: isDark ? const Color(0xFF101522) : background,
+      navigationIndicator: isDark ? const Color(0xFF34416B) : lime,
+      fontFamily: fontName,
+    );
   }
 
   static const softShadow = <BoxShadow>[BoxShadow(color: Color(0x1215213D), blurRadius: 20, offset: Offset(0, 8))];

@@ -132,6 +132,8 @@ class _QuickCapture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return TextField(
       controller: controller,
       textInputAction: TextInputAction.done,
@@ -141,7 +143,7 @@ class _QuickCapture extends StatelessWidget {
         prefixIcon: const Icon(Icons.add_task_rounded),
         suffixIcon: IconButton(tooltip: 'Add task', onPressed: onAddTask, icon: const Icon(Icons.arrow_upward_rounded)),
         filled: true,
-        fillColor: PlannerAppTheme.surface,
+        fillColor: colors.surface,
         border: const OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.all(Radius.circular(18)),

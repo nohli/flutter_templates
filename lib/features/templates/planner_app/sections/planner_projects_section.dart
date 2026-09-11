@@ -11,6 +11,8 @@ class PlannerProjectsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       key: const PageStorageKey<String>('planner-projects'),
       controller: scrollController,
@@ -19,9 +21,9 @@ class PlannerProjectsSection extends StatelessWidget {
       children: <Widget>[
         const Text('Projects in motion', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'A compact board pattern that stays readable on mobile.',
-          style: TextStyle(color: PlannerAppTheme.mutedInk),
+          style: TextStyle(color: colors.onSurfaceVariant),
         ),
         const SizedBox(height: 20),
         for (final status in PlannerTaskStatus.values) ...<Widget>[
@@ -41,11 +43,13 @@ class _BoardColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: PlannerAppTheme.surface,
-        borderRadius: BorderRadius.all(Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: const BorderRadius.all(Radius.circular(24)),
         boxShadow: PlannerAppTheme.softShadow,
       ),
       child: Column(
@@ -62,27 +66,27 @@ class _BoardColumn extends StatelessWidget {
               Expanded(
                 child: Text(_labelFor(status), style: const TextStyle(fontWeight: FontWeight.w700)),
               ),
-              Text('${tasks.length}', style: const TextStyle(color: PlannerAppTheme.mutedInk)),
+              Text('${tasks.length}', style: TextStyle(color: colors.onSurfaceVariant)),
             ],
           ),
           const SizedBox(height: 12),
           if (tasks.isEmpty)
-            const Text('Nothing here', style: TextStyle(color: PlannerAppTheme.mutedInk))
+            Text('Nothing here', style: TextStyle(color: colors.onSurfaceVariant))
           else
             for (final task in tasks) ...<Widget>[
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(14),
-                decoration: const BoxDecoration(
-                  color: PlannerAppTheme.background,
-                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(16)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(task.title, style: const TextStyle(fontWeight: FontWeight.w600)),
                     const SizedBox(height: 5),
-                    Text(task.project, style: const TextStyle(color: PlannerAppTheme.mutedInk, fontSize: 12)),
+                    Text(task.project, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
                   ],
                 ),
               ),

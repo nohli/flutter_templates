@@ -258,7 +258,7 @@ void main() {
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const SocialHomeScreen());
-    _expectTemplateTheme(tester, find.text('MINGLE'), SocialAppTheme.build());
+    _expectTemplateTheme(tester, find.text('Mingle'), SocialAppTheme.build());
     await _expectAccessible(tester);
     semantics.dispose();
   });
@@ -331,7 +331,7 @@ void main() {
 
     await _pumpThemedScreen(tester, const SocialHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
-    expect(find.text('MINGLE'), findsOneWidget);
+    expect(find.text('Mingle'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {

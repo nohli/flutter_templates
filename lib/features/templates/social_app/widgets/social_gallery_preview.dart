@@ -29,7 +29,7 @@ class _SocialFeedPreview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('MINGLE', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, letterSpacing: 0.8)),
+          Text('Mingle', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, letterSpacing: -0.2)),
           SizedBox(height: 5),
           Text('Share what', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
           Text('feels alive.', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),

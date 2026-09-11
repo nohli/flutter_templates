@@ -27,12 +27,12 @@ class TemplateGalleryArtwork extends StatelessWidget {
       TemplateGalleryDestination.personalFinance => FinanceGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.storefront => StorefrontGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.planner => PlannerGalleryPreview(brightness: brightness),
-      TemplateGalleryDestination.aiAssistant => const AssistantGalleryPreview(),
+      TemplateGalleryDestination.aiAssistant => AssistantGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.foodDelivery => DeliveryGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.podcast => PodcastGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.social => SocialGalleryPreview(brightness: brightness),
-      TemplateGalleryDestination.travel => const TravelGalleryPreview(),
-      TemplateGalleryDestination.dating => const DatingGalleryPreview(),
+      TemplateGalleryDestination.travel => TravelGalleryPreview(brightness: brightness),
+      TemplateGalleryDestination.dating => DatingGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.hotelBooking ||
       TemplateGalleryDestination.fitness ||
       TemplateGalleryDestination.designCourse => const SizedBox.shrink(),

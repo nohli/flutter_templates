@@ -16,6 +16,8 @@ class DeliveryOrderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       key: const PageStorageKey<String>('delivery-order'),
       controller: scrollController,
@@ -26,7 +28,7 @@ class DeliveryOrderSection extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           isDelivered ? 'Delivered. Enjoy every bite.' : 'Mina is heading your way.',
-          style: const TextStyle(color: FoodDeliveryAppTheme.mutedInk),
+          style: TextStyle(color: colors.onSurfaceVariant),
         ),
         const SizedBox(height: 20),
         Container(
@@ -76,7 +78,7 @@ class DeliveryOrderSection extends StatelessWidget {
                 bottom: 28,
                 child: CircleAvatar(
                   radius: 22,
-                  backgroundColor: FoodDeliveryAppTheme.surface,
+                  backgroundColor: colors.surface,
                   child: Icon(
                     isDelivered ? Icons.home_rounded : Icons.restaurant_rounded,
                     color: FoodDeliveryAppTheme.green,
@@ -88,8 +90,11 @@ class DeliveryOrderSection extends StatelessWidget {
                 top: 34,
                 child: CircleAvatar(
                   radius: 24,
-                  backgroundColor: FoodDeliveryAppTheme.primary,
-                  child: Icon(isDelivered ? Icons.check_rounded : Icons.delivery_dining_rounded, color: Colors.white),
+                  backgroundColor: colors.primary,
+                  child: Icon(
+                    isDelivered ? Icons.check_rounded : Icons.delivery_dining_rounded,
+                    color: colors.onPrimary,
+                  ),
                 ),
               ),
             ],
@@ -97,27 +102,27 @@ class DeliveryOrderSection extends StatelessWidget {
         ),
         const SizedBox(height: 18),
         Material(
-          color: FoodDeliveryAppTheme.surface,
+          color: colors.surface,
           borderRadius: const BorderRadius.all(Radius.circular(24)),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
               children: <Widget>[
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 24,
-                  backgroundColor: FoodDeliveryAppTheme.peach,
+                  backgroundColor: colors.secondaryContainer,
                   child: Text(
                     'MK',
-                    style: TextStyle(color: FoodDeliveryAppTheme.ink, fontWeight: FontWeight.w700),
+                    style: TextStyle(color: colors.onSecondaryContainer, fontWeight: FontWeight.w700),
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Mina K.', style: TextStyle(fontWeight: FontWeight.w700)),
-                      Text('Your sample courier', style: TextStyle(color: FoodDeliveryAppTheme.mutedInk)),
+                      const Text('Mina K.', style: TextStyle(fontWeight: FontWeight.w700)),
+                      Text('Your sample courier', style: TextStyle(color: colors.onSurfaceVariant)),
                     ],
                   ),
                 ),

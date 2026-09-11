@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/features/templates/food_delivery_app/food_delivery_home_screen.dart';
 import 'package:templates/features/templates/food_delivery_app/models/meal.dart';
 import 'package:templates/features/templates/food_delivery_app/sections/delivery_basket_section.dart';
-import 'package:templates/features/templates/food_delivery_app/widgets/delivery_bottom_bar.dart';
+import 'package:templates/features/templates/food_delivery_app/widgets/delivery_action_dock.dart';
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_basket_item.dart';
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_gallery_preview.dart';
 import 'package:templates/features/templates/shared/template_gallery_preview.dart';
@@ -39,7 +39,7 @@ void main() {
 
     await tester.tap(find.byTooltip('Add Sunset bowl to basket'));
     await tester.pump();
-    await tester.tap(find.text('Basket'));
+    await tester.tap(find.byTooltip('Basket, 1 item'));
     await tester.pump();
     expect(find.text('Sunset bowl'), findsOneWidget);
     expect(find.descendant(of: find.byType(DeliveryBasketSection), matching: find.text('1')), findsOneWidget);
@@ -62,7 +62,7 @@ void main() {
   testWidgets('delivery order journey exposes its state transition', (WidgetTester tester) async {
     await _pumpDelivery(tester);
 
-    await tester.tap(find.text('Order'));
+    await tester.tap(find.text('Order status'));
     await tester.pump();
     expect(find.text('Arriving in 8–12 min'), findsOneWidget);
     await tester.tap(find.byTooltip('Contact sample courier'));
@@ -85,7 +85,7 @@ void main() {
       ),
     );
 
-    expect(find.text('SAVOR'), findsOneWidget);
+    expect(find.text('Savor'), findsOneWidget);
     expect(find.text('Good food,'), findsOneWidget);
     expect(find.text('right on time.'), findsOneWidget);
     expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
@@ -96,9 +96,10 @@ void main() {
     await _pumpDelivery(tester, size: const Size(320, 568), textScale: 3.2);
 
     for (final label in <String>['Order', 'Basket', 'Discover']) {
-      final navigationScroll = find.descendant(of: find.byType(DeliveryBottomBar), matching: find.byType(Scrollable));
-      await tester.scrollUntilVisible(find.textContaining(label), 160, scrollable: navigationScroll);
-      await tester.tap(find.textContaining(label).hitTestable());
+      final finder = label == 'Order'
+          ? find.descendant(of: find.byType(DeliveryActionDock), matching: find.textContaining('Order'))
+          : find.descendant(of: find.byType(DeliveryActionDock), matching: find.byTooltip(label));
+      await tester.tap(finder);
       await tester.pump();
       expect(tester.takeException(), isNull, reason: label);
     }
@@ -113,6 +114,17 @@ void main() {
     );
     expect(find.text('Sunset bowl'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('delivery appearance can switch to dark mode', (WidgetTester tester) async {
+    await _pumpDelivery(tester);
+
+    await tester.tap(find.byTooltip('Appearance: Light'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dark').last);
+    await tester.pumpAndSettle();
+
+    expect(Theme.of(tester.element(find.text('Savor'))).brightness, Brightness.dark);
   });
 }
 

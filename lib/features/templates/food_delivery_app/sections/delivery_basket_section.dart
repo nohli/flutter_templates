@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../food_delivery_app_theme.dart';
 import '../food_delivery_formatters.dart';
 import '../models/meal.dart';
 import '../widgets/delivery_basket_item.dart';
@@ -25,6 +24,7 @@ class DeliveryBasketSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final meals = Meal.samples.where((Meal meal) => quantities.containsKey(meal.id)).toList(growable: false);
     final subtotal = meals.fold<double>(0, (double sum, Meal meal) => sum + meal.price * quantities[meal.id]!);
+    final colors = Theme.of(context).colorScheme;
 
     return ListView(
       key: const PageStorageKey<String>('delivery-basket'),
@@ -34,16 +34,13 @@ class DeliveryBasketSection extends StatelessWidget {
       children: <Widget>[
         const Text('Your basket', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
         const SizedBox(height: 8),
-        const Text(
-          'A simple, reusable quantity and checkout pattern.',
-          style: TextStyle(color: FoodDeliveryAppTheme.mutedInk),
-        ),
+        Text('A simple, reusable quantity and checkout pattern.', style: TextStyle(color: colors.onSurfaceVariant)),
         const SizedBox(height: 20),
         if (meals.isEmpty)
           const _EmptyBasketState()
         else ...<Widget>[
           Material(
-            color: FoodDeliveryAppTheme.surface,
+            color: colors.surface,
             borderRadius: const BorderRadius.all(Radius.circular(26)),
             clipBehavior: Clip.antiAlias,
             child: Column(
@@ -56,9 +53,9 @@ class DeliveryBasketSection extends StatelessWidget {
                     onRemove: () => onRemove(meal),
                   ),
                   if (meal != meals.last)
-                    const Padding(
-                      padding: EdgeInsets.only(left: 88),
-                      child: Divider(height: 1, color: FoodDeliveryAppTheme.divider),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 88),
+                      child: Divider(height: 1, color: colors.outlineVariant),
                     ),
                 ],
               ],
@@ -67,9 +64,9 @@ class DeliveryBasketSection extends StatelessWidget {
           const SizedBox(height: 18),
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: FoodDeliveryAppTheme.ink,
-              borderRadius: BorderRadius.all(Radius.circular(26)),
+            decoration: BoxDecoration(
+              color: colors.primaryContainer,
+              borderRadius: const BorderRadius.all(Radius.circular(26)),
             ),
             child: Column(
               children: <Widget>[
@@ -89,7 +86,7 @@ class DeliveryBasketSection extends StatelessWidget {
                   width: double.infinity,
                   child: FilledButton(
                     onPressed: onCheckout,
-                    style: FilledButton.styleFrom(backgroundColor: FoodDeliveryAppTheme.primary),
+                    style: FilledButton.styleFrom(backgroundColor: colors.primary, foregroundColor: colors.onPrimary),
                     child: const Text('Preview checkout'),
                   ),
                 ),
@@ -107,18 +104,20 @@ class _EmptyBasketState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Material(
-      color: FoodDeliveryAppTheme.surface,
-      borderRadius: BorderRadius.all(Radius.circular(26)),
+    final colors = Theme.of(context).colorScheme;
+
+    return Material(
+      color: colors.surface,
+      borderRadius: const BorderRadius.all(Radius.circular(26)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 42),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 42),
         child: Column(
           children: <Widget>[
-            Icon(Icons.takeout_dining_outlined, size: 44, color: FoodDeliveryAppTheme.primary),
-            SizedBox(height: 12),
-            Text('Your basket is waiting', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-            SizedBox(height: 6),
-            Text('Add a meal from Discover to try the flow.', textAlign: TextAlign.center),
+            Icon(Icons.takeout_dining_outlined, size: 44, color: colors.primary),
+            const SizedBox(height: 12),
+            const Text('Your basket is waiting', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 6),
+            const Text('Add a meal from Discover to try the flow.', textAlign: TextAlign.center),
           ],
         ),
       ),

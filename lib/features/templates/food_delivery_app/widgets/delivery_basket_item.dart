@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../food_delivery_app_theme.dart';
 import '../food_delivery_formatters.dart';
 import '../models/meal.dart';
 import 'meal_art.dart';
@@ -63,6 +62,8 @@ class _MealDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -70,7 +71,7 @@ class _MealDetails extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           formatDeliveryPrice(context, meal.price * quantity),
-          style: const TextStyle(color: FoodDeliveryAppTheme.primary, fontWeight: FontWeight.w700),
+          style: TextStyle(color: colors.primary, fontWeight: FontWeight.w700),
         ),
       ],
     );

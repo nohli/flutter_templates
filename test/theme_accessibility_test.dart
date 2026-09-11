@@ -250,7 +250,7 @@ void main() {
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen());
-    _expectTemplateTheme(tester, find.text('SAVOR'), FoodDeliveryAppTheme.build());
+    _expectTemplateTheme(tester, find.text('Savor'), FoodDeliveryAppTheme.build());
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const PodcastHomeScreen());
@@ -323,7 +323,7 @@ void main() {
 
     await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
-    expect(find.text('SAVOR'), findsOneWidget);
+    expect(find.text('Savor'), findsOneWidget);
 
     await _pumpThemedScreen(tester, const PodcastHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);

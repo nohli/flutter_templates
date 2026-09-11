@@ -12,18 +12,14 @@ class SocialActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Material(
-      color: colors.surface,
-      elevation: 16,
-      shadowColor: Colors.black38,
+      color: SocialAppTheme.ink,
       child: SafeArea(
         top: false,
         child: Container(
           height: 68,
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: colors.outlineVariant)),
+          decoration: const BoxDecoration(
+            border: Border(top: BorderSide(color: SocialAppTheme.amber, width: 3)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -75,7 +71,6 @@ class _SocialDestination extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
 
     return Tooltip(
@@ -93,12 +88,12 @@ class _SocialDestination extends StatelessWidget {
             width: 54,
             height: 48,
             decoration: BoxDecoration(
-              color: isSelected ? colors.primaryContainer : Colors.transparent,
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
+              color: isSelected ? SocialAppTheme.amber : Colors.transparent,
+              border: Border.all(color: isSelected ? SocialAppTheme.amber : const Color(0xFF4B483F)),
             ),
             child: Icon(
               isSelected ? selectedIcon : icon,
-              color: isSelected ? colors.onPrimaryContainer : colors.onSurfaceVariant,
+              color: isSelected ? SocialAppTheme.ink : const Color(0xFFFFFBED),
               size: isSelected ? 25 : 23,
             ),
           ),
@@ -127,15 +122,10 @@ class _CreateAction extends StatelessWidget {
             width: 52,
             height: 52,
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[SocialAppTheme.primary, SocialAppTheme.coral],
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(19)),
-              boxShadow: <BoxShadow>[BoxShadow(color: Color(0x3D6C5CE7), blurRadius: 16, offset: Offset(0, 7))],
+              color: SocialAppTheme.coral,
+              boxShadow: <BoxShadow>[BoxShadow(color: SocialAppTheme.amber, offset: Offset(5, 5))],
             ),
-            child: const Icon(Icons.add_rounded, color: Colors.white, size: 29),
+            child: const Icon(Icons.add_rounded, color: SocialAppTheme.ink, size: 29),
           ),
         ),
       ),

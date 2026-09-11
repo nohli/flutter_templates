@@ -45,22 +45,39 @@ class _SocialHomeScreenState extends State<SocialHomeScreen> {
       appearance: widget.appearance,
       themeBuilder: SocialAppTheme.build,
       builder: (BuildContext context) {
+        final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+
         return PrimaryScrollController(
           controller: _scrollControllers[_selectedSection]!,
           child: Scaffold(
             appBar: AppBar(
+              backgroundColor: SocialAppTheme.ink,
+              foregroundColor: SocialAppTheme.amber,
               surfaceTintColor: Colors.transparent,
+              toolbarHeight: usesLargeText ? 92 : 72,
               leading: Navigator.of(context).canPop()
                   ? IconButton(
                       tooltip: 'Back to template gallery',
                       onPressed: () => Navigator.of(context).pop(),
+                      style: IconButton.styleFrom(
+                        side: const BorderSide(color: SocialAppTheme.amber),
+                        shape: const RoundedRectangleBorder(),
+                      ),
                       icon: const Icon(Icons.arrow_back_rounded),
                     )
                   : null,
-              title: const Text(
-                'Mingle',
-                style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
-              ),
+              title: usesLargeText
+                  ? const Text('Mingle', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                  : const Row(
+                      children: <Widget>[
+                        Text('Mingle', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -1)),
+                        SizedBox(width: 9),
+                        Text(
+                          'ZINE / 04',
+                          style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+                        ),
+                      ],
+                    ),
               actions: <Widget>[
                 IconButton(
                   tooltip: 'Social notifications',

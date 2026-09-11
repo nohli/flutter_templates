@@ -18,19 +18,41 @@ class SocialDiscoverSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       controller: scrollController,
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 32),
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
       children: <Widget>[
-        const Text('Find your next spark.', style: TextStyle(fontSize: 34, height: 1.05, fontWeight: FontWeight.w800)),
-        const SizedBox(height: 18),
-        const TextField(
-          decoration: InputDecoration(prefixIcon: Icon(Icons.search_rounded), hintText: 'Search people and ideas'),
+        const DecoratedBox(
+          decoration: BoxDecoration(color: SocialAppTheme.coral),
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              'FIND YOUR\nPEOPLE.',
+              style: TextStyle(
+                color: SocialAppTheme.ink,
+                fontSize: 30,
+                height: 0.84,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -1,
+              ),
+            ),
+          ),
         ),
-        const SizedBox(height: 26),
-        const Text('Trending now', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+        const SizedBox(height: 14),
+        const TextField(
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.search_rounded),
+            hintText: 'Search people and ideas',
+            border: OutlineInputBorder(borderRadius: BorderRadius.zero),
+          ),
+        ),
+        const SizedBox(height: 22),
+        const Text(
+          'TRENDING / RIGHT NOW',
+          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+        ),
         const SizedBox(height: 14),
         const _TopicGrid(),
         const SizedBox(height: 28),
-        const Text('People to know', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+        const Text('PEOPLE TO KNOW', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.2)),
         const SizedBox(height: 12),
         ..._creators.map(
           (({Color color, String id, String name, String role}) creator) => Padding(
@@ -95,20 +117,25 @@ class _TopicCard extends StatelessWidget {
       aspectRatio: 1.1,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: colors),
-          borderRadius: const BorderRadius.all(Radius.circular(24)),
+          color: colors.first,
+          border: Border.all(color: SocialAppTheme.ink, width: 2),
           boxShadow: SocialAppTheme.softShadow,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Icon(icon, size: 32, color: SocialAppTheme.ink),
-              Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-            ],
-          ),
+        child: Stack(
+          children: <Widget>[
+            Positioned(right: -18, top: -18, child: CircleAvatar(radius: 46, backgroundColor: colors.last)),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Icon(icon, size: 32, color: SocialAppTheme.ink),
+                  Text(label.toUpperCase(), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900)),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -136,10 +163,18 @@ class _CreatorTile extends StatelessWidget {
 
     return ListTile(
       tileColor: colors.surface,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-      leading: CircleAvatar(
-        backgroundColor: color,
-        child: Text(name.characters.first, style: const TextStyle(color: SocialAppTheme.ink)),
+      shape: RoundedRectangleBorder(side: BorderSide(color: colors.outlineVariant)),
+      leading: DecoratedBox(
+        decoration: BoxDecoration(
+          color: color,
+          border: Border.all(color: SocialAppTheme.ink),
+        ),
+        child: SizedBox.square(
+          dimension: 40,
+          child: Center(
+            child: Text(name.characters.first, style: const TextStyle(color: SocialAppTheme.ink)),
+          ),
+        ),
       ),
       title: Text(name, style: const TextStyle(fontWeight: FontWeight.w800)),
       subtitle: Text(role),

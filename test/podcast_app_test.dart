@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/features/templates/podcast_app/models/podcast_show.dart';
 import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
-import 'package:templates/features/templates/podcast_app/widgets/podcast_bottom_bar.dart';
 import 'package:templates/features/templates/podcast_app/widgets/podcast_gallery_preview.dart';
+import 'package:templates/features/templates/podcast_app/widgets/podcast_mini_player.dart';
+import 'package:templates/features/templates/podcast_app/widgets/podcast_navigation_drawer.dart';
 import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 import 'package:templates/features/templates/podcast_app/widgets/podcast_show_card.dart';
 
@@ -19,13 +20,13 @@ void main() {
 
     tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, 'Science')).onSelected!(true);
     await tester.pump();
-    expect(find.text('Field Notes'), findsOneWidget);
-    expect(find.text('Small Wonders'), findsNothing);
+    expect(_showCard('Field Notes'), findsOneWidget);
+    expect(_showCard('Small Wonders'), findsNothing);
 
     tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, 'All')).onSelected!(true);
     await tester.enterText(find.byType(TextField), 'cities');
     await tester.pump();
-    expect(find.text('After Hours'), findsOneWidget);
+    expect(_showCard('After Hours'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'missing');
     await tester.pump();
@@ -38,9 +39,8 @@ void main() {
 
     await tester.tap(find.byTooltip('Save Small Wonders to library'));
     await tester.pump();
-    await tester.tap(find.text('Library'));
-    await tester.pump();
-    expect(find.text('Small Wonders'), findsOneWidget);
+    await _openMenuAndSelect(tester, 'Library');
+    expect(_showCard('Small Wonders'), findsOneWidget);
 
     await tester.tap(find.text('Download sample'));
     await tester.pump();
@@ -84,7 +84,7 @@ void main() {
       ),
     );
 
-    expect(find.text('WAVE'), findsOneWidget);
+    expect(find.text('Wave'), findsOneWidget);
     expect(find.text('Small Wonders'), findsOneWidget);
     expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
     expect(tester.takeException(), isNull);
@@ -93,11 +93,8 @@ void main() {
   testWidgets('podcast remains usable on compact maximum-text layouts', (WidgetTester tester) async {
     await _pumpPodcast(tester, size: const Size(320, 568), textScale: 3.2);
 
-    for (final label in <String>['Library', 'Player', 'Discover']) {
-      final navigationScroll = find.descendant(of: find.byType(PodcastBottomBar), matching: find.byType(Scrollable));
-      await tester.scrollUntilVisible(find.text(label), 160, scrollable: navigationScroll);
-      await tester.tap(find.text(label).hitTestable());
-      await tester.pump();
+    for (final label in <String>['Library', 'Now playing', 'Discover']) {
+      await _openMenuAndSelect(tester, label);
       expect(tester.takeException(), isNull, reason: label);
     }
 
@@ -109,9 +106,61 @@ void main() {
       size: const Size(320, 568),
       textScale: 3.2,
     );
-    expect(find.text('Small Wonders'), findsOneWidget);
+    expect(_showCard('Small Wonders'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('podcast drawer and mini player preserve playback context', (WidgetTester tester) async {
+    await _pumpPodcast(tester);
+
+    await tester.tap(find.byTooltip('Play Small Wonders'));
+    await tester.pump();
+    await _openMenuAndSelect(tester, 'Discover');
+
+    expect(find.byType(PodcastMiniPlayer), findsOneWidget);
+    expect(find.byTooltip('Pause mini player'), findsOneWidget);
+    await tester.tap(find.byTooltip('Pause mini player'));
+    await tester.pump();
+    expect(find.byTooltip('Play mini player'), findsOneWidget);
+  });
+
+  testWidgets('podcast appearance can switch to dark mode', (WidgetTester tester) async {
+    await _pumpPodcast(tester);
+
+    await tester.tap(find.byTooltip('Appearance: Light'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dark').last);
+    await tester.pumpAndSettle();
+
+    expect(Theme.of(tester.element(find.text('Wave'))).brightness, Brightness.dark);
+  });
+}
+
+Finder _showCard(String title) {
+  return find.byWidgetPredicate((Widget widget) => widget is PodcastShowCard && widget.show.title == title);
+}
+
+Future<void> _openMenuAndSelect(WidgetTester tester, String label) async {
+  await tester.tap(find.byTooltip('Open listening menu'));
+  await tester.pumpAndSettle();
+  expect(find.byType(PodcastNavigationDrawer), findsOneWidget);
+  final drawerScroll = find.descendant(of: find.byType(PodcastNavigationDrawer), matching: find.byType(Scrollable));
+  final destination = find.descendant(of: find.byType(PodcastNavigationDrawer), matching: find.text(label));
+  await tester.scrollUntilVisible(destination, 120, scrollable: drawerScroll);
+  final destinationTile = find.ancestor(of: destination, matching: find.byType(ListTile));
+  for (var attempt = 0; attempt < 8; attempt++) {
+    final viewport = tester.getRect(drawerScroll);
+    final center = tester.getCenter(destinationTile);
+    if (viewport.contains(center)) {
+      break;
+    }
+    await tester.drag(drawerScroll, Offset(0, center.dy > viewport.bottom ? -120 : 120));
+    await tester.pumpAndSettle();
+  }
+  expect(tester.getRect(drawerScroll).contains(tester.getCenter(destinationTile)), isTrue);
+  await tester.tapAt(tester.getCenter(destinationTile));
+  await tester.pumpAndSettle();
+  expect(find.byType(PodcastNavigationDrawer), findsNothing);
 }
 
 Future<void> _pumpPodcast(WidgetTester tester, {Size size = const Size(430, 932), double textScale = 1}) async {

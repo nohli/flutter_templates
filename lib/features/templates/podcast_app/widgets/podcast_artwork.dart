@@ -54,14 +54,14 @@ class PodcastArtwork extends StatelessWidget {
                 bottom: compact ? 8 : 18,
                 right: compact ? 10 : 20,
                 child: Text(
-                  show.title.toUpperCase(),
+                  show.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: compact ? 8 : 18,
                     fontWeight: FontWeight.w800,
-                    letterSpacing: 1.2,
+                    letterSpacing: -0.2,
                   ),
                 ),
               ),

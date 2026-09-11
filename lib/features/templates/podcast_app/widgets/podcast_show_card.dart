@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/podcast_show.dart';
-import '../podcast_app_theme.dart';
 import 'podcast_artwork.dart';
 
 class PodcastShowCard extends StatelessWidget {
@@ -21,13 +20,14 @@ class PodcastShowCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+    final colors = Theme.of(context).colorScheme;
 
     return AnimatedContainer(
       duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 220),
       curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
-        color: isSaved ? const Color(0xFFFFF8F8) : PodcastAppTheme.surface,
-        border: Border.all(color: isSaved ? PodcastAppTheme.blush : Colors.transparent, width: 1.5),
+        color: isSaved ? colors.primaryContainer.withValues(alpha: 0.55) : colors.surface,
+        border: Border.all(color: isSaved ? colors.primary : Colors.transparent, width: 1.5),
         borderRadius: const BorderRadius.all(Radius.circular(26)),
       ),
       clipBehavior: Clip.antiAlias,
@@ -77,16 +77,18 @@ class _ShowDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(show.title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
         const SizedBox(height: 4),
-        Text(show.author, style: const TextStyle(color: PodcastAppTheme.primary, fontSize: 12)),
+        Text(show.author, style: TextStyle(color: colors.primary, fontSize: 12)),
         const SizedBox(height: 7),
-        Text(show.episodeTitle, style: const TextStyle(color: PodcastAppTheme.mutedInk, fontSize: 12, height: 1.35)),
+        Text(show.episodeTitle, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12, height: 1.35)),
         const SizedBox(height: 7),
-        Text(show.durationLabel, style: const TextStyle(color: PodcastAppTheme.mutedInk, fontSize: 11)),
+        Text(show.durationLabel, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 11)),
       ],
     );
   }

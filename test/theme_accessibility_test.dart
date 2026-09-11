@@ -254,7 +254,7 @@ void main() {
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const PodcastHomeScreen());
-    _expectTemplateTheme(tester, find.text('WAVE'), PodcastAppTheme.build());
+    _expectTemplateTheme(tester, find.text('Wave'), PodcastAppTheme.build());
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const SocialHomeScreen());
@@ -327,7 +327,7 @@ void main() {
 
     await _pumpThemedScreen(tester, const PodcastHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
-    expect(find.text('WAVE'), findsOneWidget);
+    expect(find.text('Wave'), findsOneWidget);
 
     await _pumpThemedScreen(tester, const SocialHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);

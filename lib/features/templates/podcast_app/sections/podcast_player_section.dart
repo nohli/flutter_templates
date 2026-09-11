@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/podcast_show.dart';
-import '../podcast_app_theme.dart';
 import '../widgets/podcast_artwork.dart';
 
 class PodcastPlayerSection extends StatelessWidget {
@@ -28,6 +27,8 @@ class PodcastPlayerSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       key: const PageStorageKey<String>('podcast-player'),
       controller: scrollController,
@@ -52,7 +53,7 @@ class PodcastPlayerSection extends StatelessWidget {
         Text(
           show.episodeTitle,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: PodcastAppTheme.mutedInk),
+          style: TextStyle(color: colors.onSurfaceVariant),
         ),
         const SizedBox(height: 22),
         Slider(value: progress, onChanged: onProgressChanged),
@@ -62,10 +63,10 @@ class PodcastPlayerSection extends StatelessWidget {
             children: <Widget>[
               Text(
                 '${(progress * show.durationMinutes).round()} min',
-                style: const TextStyle(color: PodcastAppTheme.mutedInk),
+                style: TextStyle(color: colors.onSurfaceVariant),
               ),
               const Spacer(),
-              Text(show.durationLabel, style: const TextStyle(color: PodcastAppTheme.mutedInk)),
+              Text(show.durationLabel, style: TextStyle(color: colors.onSurfaceVariant)),
             ],
           ),
         ),
@@ -103,10 +104,10 @@ class PodcastPlayerSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        const Text(
+        Text(
           'This template demonstrates local player state and does not stream audio.',
           textAlign: TextAlign.center,
-          style: TextStyle(color: PodcastAppTheme.mutedInk, fontSize: 12),
+          style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12),
         ),
       ],
     );

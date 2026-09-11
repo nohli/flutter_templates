@@ -1,45 +1,38 @@
 import 'package:flutter/material.dart';
 
-import 'app_identity.dart';
-import 'app_theme.dart';
+import '../../app/app_identity.dart';
+import '../../app/app_theme.dart';
 import 'external_actions.dart';
 
-class InviteFriendScreen extends StatefulWidget {
-  const InviteFriendScreen({super.key, this.sharer = shareText});
+class HelpScreen extends StatefulWidget {
+  const HelpScreen({super.key, this.launcher = launchExternalUri});
 
-  final TextSharer sharer;
+  final ExternalUriLauncher launcher;
 
   @override
-  State<InviteFriendScreen> createState() => _InviteFriendScreenState();
+  State<HelpScreen> createState() => _HelpScreenState();
 }
 
-class _InviteFriendScreenState extends State<InviteFriendScreen> {
-  final _shareButtonKey = GlobalKey();
-  var _isSharing = false;
+class _HelpScreenState extends State<HelpScreen> {
+  var _isOpeningEmail = false;
   String? _errorMessage;
 
-  Future<void> _share() async {
-    final renderObject = _shareButtonKey.currentContext?.findRenderObject();
-    if (renderObject is! RenderBox || !renderObject.hasSize) {
-      setState(() => _errorMessage = 'Sharing is temporarily unavailable.');
-      return;
-    }
-    final origin = renderObject.localToGlobal(Offset.zero) & renderObject.size;
+  Future<void> _openSupport() async {
     setState(() {
-      _isSharing = true;
+      _isOpeningEmail = true;
       _errorMessage = null;
     });
+    var launched = false;
     try {
-      await widget.sharer(inviteText, origin);
+      launched = await widget.launcher(supportEmailUri());
     } catch (_) {
-      if (mounted) {
-        setState(() => _errorMessage = 'Sharing is temporarily unavailable.');
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isSharing = false);
-      }
+      launched = false;
     }
+    if (!mounted) return;
+    setState(() {
+      _isOpeningEmail = false;
+      _errorMessage = launched ? null : 'No email app is available. Contact ${AppIdentity.supportEmail}.';
+    });
   }
 
   @override
@@ -64,7 +57,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                           child: AspectRatio(
                             aspectRatio: 1,
                             child: Image.asset(
-                              'assets/images/inviteImage.png',
+                              'assets/images/helpImage.png',
                               fit: BoxFit.contain,
                               excludeFromSemantics: true,
                             ),
@@ -73,13 +66,13 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                       ),
                       const SizedBox(height: 8),
                       const Text(
-                        'Invite Your Friends',
+                        'How can we help you?',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 16),
                       const Text(
-                        'Share ${AppIdentity.name} with friends and fellow developers.',
+                        'Questions or problems with a template? Email us and we will help.',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),
@@ -96,19 +89,17 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                       ],
                       const Spacer(),
                       const SizedBox(height: 24),
-                      FilledButton.icon(
-                        key: _shareButtonKey,
+                      FilledButton(
                         style: FilledButton.styleFrom(
-                          minimumSize: const Size(120, 48),
+                          minimumSize: const Size(140, 48),
                           backgroundColor: AppTheme.actionBlue,
                           foregroundColor: Colors.white,
                           elevation: 8,
                           shadowColor: Colors.grey.withValues(alpha: 0.6),
                           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
                         ),
-                        onPressed: _isSharing ? null : _share,
-                        icon: Icon(_isSharing ? Icons.more_horiz : Icons.share),
-                        label: Text(_isSharing ? 'Opening…' : 'Share'),
+                        onPressed: _isOpeningEmail ? null : _openSupport,
+                        child: Text(_isOpeningEmail ? 'Opening…' : 'Email Us'),
                       ),
                     ],
                   ),

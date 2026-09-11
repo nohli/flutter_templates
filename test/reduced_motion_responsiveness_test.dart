@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:templates/design_course/course_info_screen.dart';
-import 'package:templates/design_course/home_design_course.dart';
-import 'package:templates/design_course/models/category.dart' as course_model;
-import 'package:templates/design_course/models/saved_courses.dart';
-import 'package:templates/fitness_app/fitness_app_home_screen.dart';
-import 'package:templates/fitness_app/my_diary/meals_list_view.dart';
-import 'package:templates/fitness_app/ui_view/area_list_view.dart';
-import 'package:templates/fitness_app/ui_view/wave_view.dart';
-import 'package:templates/home_screen.dart';
-import 'package:templates/hotel_booking/calendar_popup_view.dart';
-import 'package:templates/hotel_booking/hotel_home_screen.dart';
+import 'package:templates/features/templates/design_course/course_info_screen.dart';
+import 'package:templates/features/templates/design_course/home_design_course.dart';
+import 'package:templates/features/templates/design_course/models/category.dart' as course_model;
+import 'package:templates/features/templates/design_course/models/saved_courses.dart';
+import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
+import 'package:templates/features/templates/fitness_app/my_diary/meals_list_view.dart';
+import 'package:templates/features/templates/fitness_app/ui_view/area_list_view.dart';
+import 'package:templates/features/templates/fitness_app/ui_view/wave_view.dart';
+import 'package:templates/features/gallery/home_screen.dart';
+import 'package:templates/features/templates/hotel_booking/calendar_popup_view.dart';
+import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 
 void main() {
   testWidgets('reduced motion settles gallery, course, hotel, and calendar entrances', (WidgetTester tester) async {

@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:templates/app_identity.dart';
+import 'package:templates/app/app_identity.dart';
 import 'package:yaml/yaml.dart';
 
 void main() {
@@ -328,6 +328,16 @@ void main() {
     expect(dependencySteps.map((YamlMap step) => step['uses']), contains('actions/dependency-review-action@v4'));
   });
 
+  test('source files follow the feature-based application structure', () {
+    expect(_entryNames('lib'), <String>{'app', 'features', 'main.dart'});
+    expect(_entryNames('lib/features'), <String>{'gallery', 'support', 'templates'});
+    expect(_entryNames('lib/features/templates'), <String>{
+      'design_course',
+      'fitness_app',
+      'hotel_booking',
+    });
+  });
+
   test('bundled font licenses preserve their exact upstream notices', () {
     final pubspec = File('pubspec.yaml').readAsStringSync();
     final workSansLicense = File('assets/fonts/WorkSans-LICENSE.txt').readAsStringSync();
@@ -413,6 +423,11 @@ void main() {
     expect(webManifest.containsKey('orientation'), isFalse);
   });
 }
+
+Set<String> _entryNames(String directory) => Directory(directory)
+    .listSync()
+    .map((FileSystemEntity entry) => entry.uri.pathSegments.where((String segment) => segment.isNotEmpty).last)
+    .toSet();
 
 YamlMap _loadYamlMap(String fileName) => _asYamlMap(loadYaml(File(fileName).readAsStringSync()));
 

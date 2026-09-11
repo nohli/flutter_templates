@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../motion_preferences.dart';
+import '../../../app/motion_preferences.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
 import 'my_diary/my_diary_screen.dart';

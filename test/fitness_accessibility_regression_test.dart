@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderParagraph;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:templates/fitness_app/fitness_app_theme.dart';
-import 'package:templates/fitness_app/models/meals_list_data.dart';
-import 'package:templates/fitness_app/my_diary/meals_list_view.dart';
-import 'package:templates/fitness_app/my_diary/water_view.dart';
-import 'package:templates/fitness_app/training/training_screen.dart';
-import 'package:templates/fitness_app/ui_view/area_list_view.dart';
-import 'package:templates/fitness_app/ui_view/body_measurement.dart';
-import 'package:templates/fitness_app/ui_view/fitness_section_scaffold.dart';
-import 'package:templates/fitness_app/ui_view/mediterranean_diet_view.dart';
-import 'package:templates/fitness_app/ui_view/sample_date_header.dart';
-import 'package:templates/fitness_app/ui_view/wave_view.dart';
+import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
+import 'package:templates/features/templates/fitness_app/models/meals_list_data.dart';
+import 'package:templates/features/templates/fitness_app/my_diary/meals_list_view.dart';
+import 'package:templates/features/templates/fitness_app/my_diary/water_view.dart';
+import 'package:templates/features/templates/fitness_app/training/training_screen.dart';
+import 'package:templates/features/templates/fitness_app/ui_view/area_list_view.dart';
+import 'package:templates/features/templates/fitness_app/ui_view/body_measurement.dart';
+import 'package:templates/features/templates/fitness_app/ui_view/fitness_section_scaffold.dart';
+import 'package:templates/features/templates/fitness_app/ui_view/mediterranean_diet_view.dart';
+import 'package:templates/features/templates/fitness_app/ui_view/sample_date_header.dart';
+import 'package:templates/features/templates/fitness_app/ui_view/wave_view.dart';
 
 void main() {
   testWidgets('sample date header fits the original phone composition', (WidgetTester tester) async {

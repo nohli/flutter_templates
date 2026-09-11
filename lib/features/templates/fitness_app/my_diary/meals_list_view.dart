@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../motion_preferences.dart';
+import '../../../../app/motion_preferences.dart';
 import '../fitness_app_theme.dart';
 import '../models/meals_list_data.dart';
 

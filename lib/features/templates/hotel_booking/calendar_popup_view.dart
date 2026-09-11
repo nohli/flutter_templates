@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../motion_preferences.dart';
+import '../../../app/motion_preferences.dart';
 import 'custom_calendar.dart';
 import 'hotel_app_theme.dart';
 

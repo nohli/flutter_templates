@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../motion_preferences.dart';
+import '../../../../app/motion_preferences.dart';
 
 class AreaListView extends StatefulWidget {
   const AreaListView({required this.mainScreenAnimation, super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/rendering.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'app_identity.dart';
+import '../../app/app_identity.dart';
 
 typedef ExternalUriLauncher = Future<bool> Function(Uri uri);
 typedef TextSharer = Future<void> Function(String text, Rect origin);

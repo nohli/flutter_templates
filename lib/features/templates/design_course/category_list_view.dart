@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
 
-import '../motion_preferences.dart';
+import '../../../app/motion_preferences.dart';
 import 'design_course_app_theme.dart';
 import 'models/category.dart';
 
-class PopularCourseListView extends StatefulWidget {
-  const PopularCourseListView({required this.courses, required this.onSelected, super.key});
+const _baseListHeight = 134;
+const _baseCardWidth = 280;
+const _baseArtworkSize = 86;
+const _maximumArtworkSize = 120;
+const _baseContentInset = 72;
 
-  final List<Category> courses;
+double _textScaleGrowth(BuildContext context) {
+  final textScale = MediaQuery.textScalerOf(context).scale(1);
+
+  return (textScale - 1).clamp(0.0, 2.2).toDouble();
+}
+
+class CategoryListView extends StatefulWidget {
+  const CategoryListView({required this.categories, required this.onSelected, super.key});
+
+  final List<Category> categories;
   final ValueChanged<Category> onSelected;
 
   @override
-  State<PopularCourseListView> createState() => _PopularCourseListViewState();
+  State<CategoryListView> createState() => _CategoryListViewState();
 }
 
-class _PopularCourseListViewState extends State<PopularCourseListView> with SingleTickerProviderStateMixin {
+class _CategoryListViewState extends State<CategoryListView> with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   @override
   void initState() {
@@ -36,53 +48,40 @@ class _PopularCourseListViewState extends State<PopularCourseListView> with Sing
 
   @override
   Widget build(BuildContext context) {
-    final textScale = MediaQuery.textScalerOf(context).scale(1);
-    final useSingleColumn = textScale >= 2;
-    final usesNormalGeometry = textScale <= 1;
-    final itemHeight = 280 + (textScale - 1).clamp(0.0, 2.2).toDouble() * 150;
-    final gridDelegate = usesNormalGeometry
-        ? const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 32,
-            crossAxisSpacing: 32,
-            childAspectRatio: 0.8,
-          )
-        : SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: useSingleColumn ? 1 : 2,
-            mainAxisSpacing: 32,
-            crossAxisSpacing: 32,
-            mainAxisExtent: itemHeight,
-          );
+    final scaleGrowth = _textScaleGrowth(context);
+    final listHeight = _baseListHeight + scaleGrowth * 150;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: GridView(
-        padding: const EdgeInsets.all(8),
-        primary: false,
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        gridDelegate: gridDelegate,
-        children: List<Widget>.generate(widget.courses.length, (int index) {
-          final count = widget.courses.length;
-          final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-              parent: _animationController,
-              curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
-            ),
-          );
-          return _PopularCourseCard(
-            callback: () => widget.onSelected(widget.courses[index]),
-            category: widget.courses[index],
-            animation: animation,
-          );
-        }),
+      padding: const EdgeInsets.only(top: 16, bottom: 16),
+      child: SizedBox(
+        height: listHeight,
+        width: double.infinity,
+        child: ListView.builder(
+          padding: const EdgeInsets.only(right: 16, left: 16),
+          itemCount: widget.categories.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (BuildContext context, int index) {
+            final count = widget.categories.length > 10 ? 10 : widget.categories.length;
+            final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                parent: _animationController,
+                curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
+              ),
+            );
+            return _CategoryCourseCard(
+              category: widget.categories[index],
+              animation: animation,
+              callback: () => widget.onSelected(widget.categories[index]),
+            );
+          },
+        ),
       ),
     );
   }
 }
 
-class _PopularCourseCard extends StatelessWidget {
-  const _PopularCourseCard({required this.category, required this.animation, required this.callback});
+class _CategoryCourseCard extends StatelessWidget {
+  const _CategoryCourseCard({required this.category, required this.animation, required this.callback});
 
   final VoidCallback callback;
   final Category category;
@@ -91,13 +90,18 @@ class _PopularCourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final scaleGrowth = _textScaleGrowth(context);
+    final cardWidth = _baseCardWidth + scaleGrowth * 64;
+    final artworkSize = (_baseArtworkSize + scaleGrowth * 16).clamp(_baseArtworkSize, _maximumArtworkSize).toDouble();
+    final contentInset = _baseContentInset + artworkSize - _baseArtworkSize;
+
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, _) {
         return FadeTransition(
           opacity: animation,
           child: Transform(
-            transform: Matrix4.translationValues(0.0, 50 * (1.0 - animation.value), 0.0),
+            transform: Matrix4.translationValues(100 * (1.0 - animation.value), 0.0, 0.0),
             child: Semantics(
               button: true,
               label: category.accessibilityLabel,
@@ -109,25 +113,27 @@ class _PopularCourseCard extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                   excludeFromSemantics: true,
                   onTap: callback,
-                  child: SizedBox.expand(
+                  child: SizedBox(
+                    width: cardWidth,
                     child: Stack(
-                      alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
-                        Column(
+                        Row(
                           children: <Widget>[
+                            const SizedBox(width: 48),
                             Expanded(
-                              child: Ink(
+                              child: Container(
                                 decoration: const BoxDecoration(
                                   color: DesignCourseAppTheme.cardBackground,
                                   borderRadius: BorderRadius.all(Radius.circular(16.0)),
                                 ),
-                                child: Column(
+                                child: Row(
                                   children: <Widget>[
+                                    SizedBox(width: contentInset),
                                     Expanded(
                                       child: Column(
                                         children: <Widget>[
                                           Padding(
-                                            padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                                            padding: const EdgeInsets.only(top: 16),
                                             child: Text(
                                               category.title,
                                               textAlign: TextAlign.left,
@@ -141,8 +147,9 @@ class _PopularCourseCard extends StatelessWidget {
                                               ),
                                             ),
                                           ),
+                                          const Expanded(child: SizedBox()),
                                           Padding(
-                                            padding: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 8),
+                                            padding: const EdgeInsets.only(right: 16, bottom: 8),
                                             child: Wrap(
                                               alignment: WrapAlignment.spaceBetween,
                                               crossAxisAlignment: WrapCrossAlignment.center,
@@ -178,30 +185,59 @@ class _PopularCourseCard extends StatelessWidget {
                                               ],
                                             ),
                                           ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 10, right: 16),
+                                            child: Wrap(
+                                              alignment: WrapAlignment.spaceBetween,
+                                              crossAxisAlignment: WrapCrossAlignment.start,
+                                              spacing: 8,
+                                              runSpacing: 4,
+                                              children: <Widget>[
+                                                Text(
+                                                  '\$${category.money}',
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 18,
+                                                    letterSpacing: 0.27,
+                                                    color: colors.primary,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color: colors.primary,
+                                                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                                                  ),
+                                                  child: const Padding(
+                                                    padding: EdgeInsets.all(4.0),
+                                                    child: Icon(Icons.add, color: DesignCourseAppTheme.nearlyWhite),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(width: 48),
                                   ],
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 48),
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 24, right: 16, left: 16),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(color: colors.shadow.withValues(alpha: 0.2), blurRadius: 6.0),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                              child: AspectRatio(aspectRatio: 1.28, child: Image.asset(category.imagePath)),
-                            ),
+                          padding: const EdgeInsets.only(top: 24, bottom: 24, left: 16),
+                          child: Row(
+                            children: <Widget>[
+                              ClipRRect(
+                                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                child: SizedBox(
+                                  width: artworkSize,
+                                  height: artworkSize,
+                                  child: Image.asset(category.imagePath, fit: BoxFit.cover),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

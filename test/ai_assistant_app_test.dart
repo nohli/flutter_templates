@@ -6,7 +6,6 @@ import 'package:templates/features/templates/ai_assistant_app/models/assistant_m
 import 'package:templates/features/templates/ai_assistant_app/widgets/assistant_gallery_preview.dart';
 import 'package:templates/features/templates/ai_assistant_app/widgets/assistant_message_bubble.dart';
 import 'package:templates/features/templates/ai_assistant_app/widgets/assistant_navigation_drawer.dart';
-import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('assistant messages expose stable roles and welcome copy', () {
@@ -61,6 +60,7 @@ void main() {
   });
 
   testWidgets('assistant gallery preview uses its own aurora workspace composition', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
         home: Center(child: SizedBox(width: 214, height: 143, child: AssistantGalleryPreview())),
@@ -69,8 +69,9 @@ void main() {
 
     expect(find.text('Nova'), findsOneWidget);
     expect(find.text('Message Nova'), findsOneWidget);
-    expect(find.byType(TemplatePreviewDevice), findsNothing);
+    expect(find.bySemanticsLabel('Nova assistant workspace preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('assistant remains usable at compact maximum text size', (WidgetTester tester) async {

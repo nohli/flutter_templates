@@ -13,6 +13,8 @@ import 'package:templates/features/support/feedback_screen.dart';
 import 'package:templates/features/support/help_screen.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
 import 'package:templates/features/gallery/home_screen.dart';
+import 'package:templates/features/gallery/models/template_gallery_item.dart';
+import 'package:templates/features/gallery/template_gallery_artwork.dart';
 import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/design_course/course_info_screen.dart';
@@ -453,6 +455,32 @@ void main() {
           .crossAxisCount,
       1,
     );
+  });
+
+  testWidgets('gallery artwork safely handles original templates without preview assets', (WidgetTester tester) async {
+    for (final destination in <TemplateGalleryDestination>[
+      TemplateGalleryDestination.hotelBooking,
+      TemplateGalleryDestination.fitness,
+      TemplateGalleryDestination.designCourse,
+    ]) {
+      await _pumpScreen(
+        tester,
+        TemplateGalleryArtwork(
+          item: TemplateGalleryItem(title: 'Missing preview', destination: destination),
+        ),
+      );
+
+      expect(
+        find.descendant(
+          of: find.byType(TemplateGalleryArtwork),
+          matching: find.byWidgetPredicate(
+            (Widget widget) => widget is SizedBox && widget.width == 0 && widget.height == 0,
+          ),
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    }
   });
 
   testWidgets('every gallery card opens its declared template at the original text scale', (WidgetTester tester) async {

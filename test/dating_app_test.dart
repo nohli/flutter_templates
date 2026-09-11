@@ -4,7 +4,6 @@ import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/dating_app/models/dating_profile.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_gallery_preview.dart';
-import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('dating profiles have stable identities and complete prompts', () {
@@ -51,6 +50,7 @@ void main() {
   });
 
   testWidgets('dating gallery preview has its own editorial portrait composition', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
         home: Center(child: SizedBox(width: 214, height: 143, child: DatingGalleryPreview())),
@@ -59,8 +59,9 @@ void main() {
 
     expect(find.text('Sway'), findsOneWidget);
     expect(find.text('Mina, 29'), findsOneWidget);
-    expect(find.byType(TemplatePreviewDevice), findsNothing);
+    expect(find.bySemanticsLabel('Sway dating profile preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('dating profile content remains reachable at compact maximum text size', (WidgetTester tester) async {

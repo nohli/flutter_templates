@@ -8,7 +8,6 @@ import 'package:templates/features/templates/finance_app/widgets/finance_bottom_
 import 'package:templates/features/templates/finance_app/widgets/finance_entrance.dart';
 import 'package:templates/features/templates/finance_app/widgets/finance_gallery_preview.dart';
 import 'package:templates/features/templates/finance_app/widgets/spending_overview.dart';
-import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('finance sample models expose stable values and bounded progress', () {
@@ -56,16 +55,18 @@ void main() {
   });
 
   testWidgets('finance gallery preview stays legible at its compact card size', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
         home: Center(child: SizedBox(width: 214, height: 143, child: FinanceGalleryPreview())),
       ),
     );
 
-    expect(find.text('Overview'), findsOneWidget);
-    expect(find.text('Activity'), findsOneWidget);
-    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
+    expect(find.text('ORBIT / LIVE PORTFOLIO'), findsOneWidget);
+    expect(find.text(r'$24,860'), findsOneWidget);
+    expect(find.bySemanticsLabel('Orbit finance market dashboard preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('finance balance privacy and quick actions provide visible feedback', (WidgetTester tester) async {

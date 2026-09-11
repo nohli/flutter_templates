@@ -6,7 +6,6 @@ import 'package:templates/features/templates/podcast_app/podcast_home_screen.dar
 import 'package:templates/features/templates/podcast_app/widgets/podcast_gallery_preview.dart';
 import 'package:templates/features/templates/podcast_app/widgets/podcast_mini_player.dart';
 import 'package:templates/features/templates/podcast_app/widgets/podcast_navigation_drawer.dart';
-import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 import 'package:templates/features/templates/podcast_app/widgets/podcast_show_card.dart';
 
 void main() {
@@ -79,16 +78,18 @@ void main() {
   });
 
   testWidgets('podcast gallery preview remains legible at compact card size', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
         home: Center(child: SizedBox(width: 214, height: 143, child: PodcastGalleryPreview())),
       ),
     );
 
-    expect(find.text('Wave'), findsOneWidget);
-    expect(find.text('Small Wonders'), findsOneWidget);
-    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
+    expect(find.text('WAVE / 072'), findsOneWidget);
+    expect(find.text('LISTEN\nCLOSER.'), findsOneWidget);
+    expect(find.bySemanticsLabel('Wave graphic podcast player preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('podcast remains usable on compact maximum-text layouts', (WidgetTester tester) async {

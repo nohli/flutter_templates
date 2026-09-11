@@ -10,6 +10,7 @@ class DatingGalleryPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      excludeSemantics: true,
       image: true,
       label: 'Sway dating profile preview',
       child: const DecoratedBox(

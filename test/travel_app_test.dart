@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
-import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 import 'package:templates/features/templates/travel_app/models/travel_day.dart';
 import 'package:templates/features/templates/travel_app/travel_home_screen.dart';
 import 'package:templates/features/templates/travel_app/widgets/travel_gallery_preview.dart';
@@ -40,6 +39,7 @@ void main() {
   });
 
   testWidgets('travel gallery preview uses its own map composition', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
         home: Center(child: SizedBox(width: 214, height: 143, child: TravelGalleryPreview())),
@@ -48,8 +48,9 @@ void main() {
 
     expect(find.text('Roam'), findsOneWidget);
     expect(find.byType(TravelGalleryPreview), findsOneWidget);
-    expect(find.byType(TemplatePreviewDevice), findsNothing);
+    expect(find.bySemanticsLabel('Roam travel itinerary preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('travel timeline remains usable at compact maximum text size', (WidgetTester tester) async {

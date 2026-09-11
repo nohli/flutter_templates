@@ -22,14 +22,15 @@ class TemplateGalleryArtwork extends StatelessWidget {
       return Image.asset(imagePath, fit: BoxFit.cover);
     }
 
+    final brightness = Theme.of(context).brightness;
     return switch (item.destination) {
-      TemplateGalleryDestination.personalFinance => const FinanceGalleryPreview(),
-      TemplateGalleryDestination.storefront => const StorefrontGalleryPreview(),
-      TemplateGalleryDestination.planner => const PlannerGalleryPreview(),
+      TemplateGalleryDestination.personalFinance => FinanceGalleryPreview(brightness: brightness),
+      TemplateGalleryDestination.storefront => StorefrontGalleryPreview(brightness: brightness),
+      TemplateGalleryDestination.planner => PlannerGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.aiAssistant => const AssistantGalleryPreview(),
-      TemplateGalleryDestination.foodDelivery => const DeliveryGalleryPreview(),
-      TemplateGalleryDestination.podcast => const PodcastGalleryPreview(),
-      TemplateGalleryDestination.social => const SocialGalleryPreview(),
+      TemplateGalleryDestination.foodDelivery => DeliveryGalleryPreview(brightness: brightness),
+      TemplateGalleryDestination.podcast => PodcastGalleryPreview(brightness: brightness),
+      TemplateGalleryDestination.social => SocialGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.travel => const TravelGalleryPreview(),
       TemplateGalleryDestination.dating => const DatingGalleryPreview(),
       TemplateGalleryDestination.hotelBooking ||

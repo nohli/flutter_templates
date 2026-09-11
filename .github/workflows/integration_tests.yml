@@ -88,9 +88,17 @@ jobs:
           cache: true
       - name: Dependencies
         run: flutter pub get
+      - name: Browser
+        id: browser
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: stable
+          install-chromedriver: true
       - name: Test
+        env:
+          CHROME_EXECUTABLE: ${{ steps.browser.outputs.chrome-path }}
         run: |
-          chromedriver --port=4444 &
+          "${{ steps.browser.outputs.chromedriver-path }}" --port=4444 &
           flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_smoke_test.dart -d web-server
 
   linux:

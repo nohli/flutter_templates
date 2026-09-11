@@ -5,7 +5,6 @@ import 'package:templates/features/templates/storefront_app/models/store_product
 import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
 import 'package:templates/features/templates/storefront_app/widgets/storefront_gallery_preview.dart';
 import 'package:templates/features/templates/storefront_app/widgets/storefront_section_tabs.dart';
-import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('storefront sample products have stable unique identifiers', () {
@@ -61,17 +60,18 @@ void main() {
   });
 
   testWidgets('storefront gallery preview stays legible at compact card size', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
         home: Center(child: SizedBox(width: 214, height: 143, child: StorefrontGalleryPreview())),
       ),
     );
 
-    expect(find.text('Nest'), findsOneWidget);
-    expect(find.text('Calmer spaces.'), findsOneWidget);
-    expect(find.text('Saved'), findsOneWidget);
-    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
+    expect(find.text('NEST / EDIT 04'), findsOneWidget);
+    expect(find.text('Objects\nwith a\npoint of view.'), findsOneWidget);
+    expect(find.bySemanticsLabel('Nest editorial furniture collection preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('storefront remains usable on compact and large-text layouts', (WidgetTester tester) async {

@@ -1,183 +1,151 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/template_gallery_preview.dart';
 import '../planner_app_theme.dart';
 
 class PlannerGalleryPreview extends StatelessWidget {
-  const PlannerGalleryPreview({super.key});
+  const PlannerGalleryPreview({this.brightness = Brightness.light, super.key});
+
+  final Brightness brightness;
 
   @override
   Widget build(BuildContext context) {
-    return const TemplateGalleryPreviewFrame(
-      background: PlannerAppTheme.background,
-      accent: PlannerAppTheme.primary,
-      surface: PlannerAppTheme.surface,
-      primary: _PlannerTodayPreview(),
-      secondary: _PlannerFocusPreview(),
-    );
-  }
-}
+    final dark = brightness == Brightness.dark;
+    final background = dark ? const Color(0xFF101522) : const Color(0xFFF3F0E8);
+    final ink = dark ? const Color(0xFFF1F3FA) : PlannerAppTheme.ink;
 
-class _PlannerTodayPreview extends StatelessWidget {
-  const _PlannerTodayPreview();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(7, 3, 7, 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Daymark', style: TextStyle(fontSize: 6.5, fontWeight: FontWeight.w800, letterSpacing: -0.2)),
-          SizedBox(height: 4),
-          _TodayCard(),
-          SizedBox(height: 4),
-          Text('Today', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800)),
-          SizedBox(height: 3),
-          _PreviewTask(icon: Icons.auto_awesome_rounded, color: PlannerAppTheme.peach, width: 42),
-          SizedBox(height: 3),
-          _PreviewTask(icon: Icons.manage_search_rounded, color: PlannerAppTheme.sky, width: 36),
-          SizedBox(height: 3),
-          _PreviewTask(icon: Icons.edit_note_rounded, color: Color(0xFFE1D8F7), width: 40),
-        ],
-      ),
-    );
-  }
-}
-
-class _PlannerFocusPreview extends StatelessWidget {
-  const _PlannerFocusPreview();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(8, 4, 8, 3),
-      child: Column(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text('Focus', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
-          ),
-          Spacer(),
-          SizedBox.square(
-            dimension: 62,
+    return Semantics(
+      excludeSemantics: true,
+      image: true,
+      label: 'Daymark graphic daily planner preview',
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: SizedBox(
+          width: 300,
+          height: 200,
+          child: ColoredBox(
+            color: background,
             child: Stack(
-              alignment: Alignment.center,
               children: <Widget>[
-                CircularProgressIndicator(
-                  value: 0.72,
-                  strokeWidth: 7,
-                  color: PlannerAppTheme.lime,
-                  backgroundColor: Color(0xFFE6EAF3),
+                Positioned.fill(
+                  child: CustomPaint(painter: _PlannerGridPainter(color: ink)),
                 ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text('18:24', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800)),
-                    Text('Deep work', style: TextStyle(fontSize: 4.5, color: PlannerAppTheme.mutedInk)),
-                  ],
+                const Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: 42,
+                  child: ColoredBox(color: PlannerAppTheme.primary),
+                ),
+                Positioned(
+                  left: 13,
+                  top: 14,
+                  child: RotatedBox(
+                    quarterTurns: 1,
+                    child: Text(
+                      'DAYMARK  /  THURSDAY',
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 6, letterSpacing: 1.4),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 60,
+                  top: 19,
+                  child: Text(
+                    '11',
+                    style: TextStyle(
+                      color: ink,
+                      fontSize: 67,
+                      height: 0.82,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -5,
+                    ),
+                  ),
+                ),
+                Positioned(left: 65, top: 83, child: Container(width: 92, height: 9, color: PlannerAppTheme.lime)),
+                Positioned(
+                  right: 17,
+                  top: 20,
+                  child: Text(
+                    'SEP\n2026',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: ink, fontSize: 8, fontWeight: FontWeight.w700, height: 1.05),
+                  ),
+                ),
+                Positioned(left: 62, right: 18, top: 112, child: _PlanStrip(ink: ink)),
+                Positioned(
+                  left: 62,
+                  right: 18,
+                  top: 143,
+                  child: _PlanStrip(ink: ink, accent: PlannerAppTheme.peach),
+                ),
+                Positioned(
+                  right: 18,
+                  bottom: 14,
+                  child: Text(
+                    '03 / 05 COMPLETE',
+                    style: TextStyle(color: ink.withValues(alpha: 0.55), fontSize: 5, letterSpacing: 1),
+                  ),
                 ),
               ],
             ),
           ),
-          Spacer(),
-          _FocusButton(),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _TodayCard extends StatelessWidget {
-  const _TodayCard();
+class _PlanStrip extends StatelessWidget {
+  const _PlanStrip({required this.ink, this.accent = PlannerAppTheme.sky});
+
+  final Color ink;
+  final Color accent;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 44,
-      width: double.infinity,
-      padding: const EdgeInsets.all(6),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: <Color>[PlannerAppTheme.navy, Color(0xFF334996)]),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: const Row(
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'SEP 11',
-                  maxLines: 1,
-                  style: TextStyle(color: PlannerAppTheme.lime, fontSize: 4, fontWeight: FontWeight.w800),
-                ),
-                Text(
-                  'Focus day',
-                  maxLines: 1,
-                  style: TextStyle(color: Colors.white, fontSize: 6, fontWeight: FontWeight.w800),
-                ),
-                Text('1 / 4 done', maxLines: 1, style: TextStyle(color: Color(0xFFCBD3F5), fontSize: 4)),
-              ],
-            ),
+    return Row(
+      children: <Widget>[
+        Container(
+          width: 20,
+          height: 20,
+          color: accent,
+          alignment: Alignment.center,
+          child: Icon(Icons.check, size: 10, color: ink),
+        ),
+        const SizedBox(width: 9),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(height: 3, color: ink),
+              const SizedBox(height: 5),
+              FractionallySizedBox(widthFactor: 0.56, child: Container(height: 2, color: ink.withValues(alpha: 0.3))),
+            ],
           ),
-          SizedBox(width: 3),
-          SizedBox.square(
-            dimension: 20,
-            child: CircularProgressIndicator(
-              value: 0.25,
-              strokeWidth: 5,
-              color: PlannerAppTheme.lime,
-              backgroundColor: Color(0x33FFFFFF),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
-class _PreviewTask extends StatelessWidget {
-  const _PreviewTask({required this.icon, required this.color, required this.width});
+class _PlannerGridPainter extends CustomPainter {
+  const _PlannerGridPainter({required this.color});
 
-  final IconData icon;
   final Color color;
-  final double width;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(7))),
-      child: Row(
-        children: <Widget>[
-          PreviewIconTile(icon: icon, background: color, foreground: PlannerAppTheme.navy, size: 12),
-          const SizedBox(width: 4),
-          PreviewLine(width: width, height: 2.5, color: PlannerAppTheme.ink),
-        ],
-      ),
-    );
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color.withValues(alpha: 0.08)
+      ..strokeWidth = 0.7;
+    for (var x = 42.0; x < size.width; x += 28) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (var y = 0.0; y < size.height; y += 28) {
+      canvas.drawLine(Offset(42, y), Offset(size.width, y), paint);
+    }
   }
-}
-
-class _FocusButton extends StatelessWidget {
-  const _FocusButton();
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 19,
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: PlannerAppTheme.primary,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      alignment: Alignment.center,
-      child: const Text(
-        'PAUSE',
-        style: TextStyle(color: Colors.white, fontSize: 5, fontWeight: FontWeight.w800),
-      ),
-    );
-  }
+  bool shouldRepaint(covariant _PlannerGridPainter oldDelegate) => oldDelegate.color != color;
 }

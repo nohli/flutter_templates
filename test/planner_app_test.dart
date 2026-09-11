@@ -5,7 +5,6 @@ import 'package:templates/features/templates/planner_app/models/planner_task.dar
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/planner_app/widgets/planner_day_rail.dart';
 import 'package:templates/features/templates/planner_app/widgets/planner_gallery_preview.dart';
-import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('planner tasks copy state without losing stable identity', () {
@@ -61,16 +60,18 @@ void main() {
   });
 
   testWidgets('planner gallery preview remains legible at compact card size', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
         home: Center(child: SizedBox(width: 214, height: 143, child: PlannerGalleryPreview())),
       ),
     );
 
-    expect(find.text('Daymark'), findsOneWidget);
-    expect(find.text('Focus day'), findsOneWidget);
-    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
+    expect(find.text('DAYMARK  /  THURSDAY'), findsOneWidget);
+    expect(find.text('11'), findsOneWidget);
+    expect(find.bySemanticsLabel('Daymark graphic daily planner preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('planner remains usable on compact maximum-text layouts', (WidgetTester tester) async {

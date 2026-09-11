@@ -1,171 +1,179 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
-import '../../shared/template_gallery_preview.dart';
 import '../podcast_app_theme.dart';
 
 class PodcastGalleryPreview extends StatelessWidget {
-  const PodcastGalleryPreview({super.key});
+  const PodcastGalleryPreview({this.brightness = Brightness.light, super.key});
+
+  final Brightness brightness;
 
   @override
   Widget build(BuildContext context) {
-    return const TemplateGalleryPreviewFrame(
-      background: PodcastAppTheme.background,
-      accent: PodcastAppTheme.cobalt,
-      primary: _PodcastDiscoverPreview(),
-      secondary: _PodcastPlayerPreview(),
-    );
-  }
-}
+    final dark = brightness == Brightness.dark;
+    final background = dark ? const Color(0xFF0E0D12) : const Color(0xFFFFF6E7);
+    final ink = dark ? const Color(0xFFFFF8EE) : PodcastAppTheme.ink;
+    final accent = dark ? const Color(0xFFFF6F91) : PodcastAppTheme.primary;
 
-class _PodcastDiscoverPreview extends StatelessWidget {
-  const _PodcastDiscoverPreview();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(7, 3, 7, 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Wave', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, letterSpacing: -0.2)),
-          SizedBox(height: 4),
-          Text('Stories worth', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
-          Text('your time.', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
-          SizedBox(height: 4),
-          _PodcastRow(titleWidth: 37, color: PodcastAppTheme.primary),
-          SizedBox(height: 3),
-          _PodcastRow(titleWidth: 32, color: PodcastAppTheme.cobalt),
-          SizedBox(height: 3),
-          _PodcastRow(titleWidth: 40, color: PodcastAppTheme.sky),
-          SizedBox(height: 3),
-          _PodcastRow(titleWidth: 29, color: PodcastAppTheme.sage),
-        ],
-      ),
-    );
-  }
-}
-
-class _PodcastPlayerPreview extends StatelessWidget {
-  const _PodcastPlayerPreview();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(9, 3, 9, 3),
-      child: Column(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text('Now playing', style: TextStyle(fontSize: 7.5, fontWeight: FontWeight.w800)),
+    return Semantics(
+      excludeSemantics: true,
+      image: true,
+      label: 'Wave graphic podcast player preview',
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: SizedBox(
+          width: 300,
+          height: 200,
+          child: ColoredBox(
+            color: background,
+            child: Stack(
+              children: <Widget>[
+                Positioned(
+                  left: 15,
+                  top: 13,
+                  child: Text(
+                    'WAVE / 072',
+                    style: TextStyle(color: accent, fontSize: 6, fontWeight: FontWeight.w800, letterSpacing: 1.4),
+                  ),
+                ),
+                Positioned(
+                  left: 15,
+                  top: 41,
+                  width: 110,
+                  child: Text(
+                    'LISTEN\nCLOSER.',
+                    style: TextStyle(
+                      color: ink,
+                      fontSize: 27,
+                      height: 0.82,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -1.8,
+                    ),
+                  ),
+                ),
+                Positioned(left: 17, top: 109, right: 128, height: 34, child: _Waveform(color: accent)),
+                Positioned(
+                  left: 17,
+                  bottom: 17,
+                  child: Text(
+                    'SMALL WONDERS  /  MIRA COLE',
+                    style: TextStyle(color: ink.withValues(alpha: 0.62), fontSize: 5.2, letterSpacing: 0.7),
+                  ),
+                ),
+                Positioned(
+                  right: -19,
+                  top: 17,
+                  child: _VinylDisc(ink: ink, accent: accent),
+                ),
+                Positioned(
+                  right: 20,
+                  bottom: 15,
+                  child: _PlayStamp(background: background, ink: ink, accent: accent),
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 5),
-          SizedBox.square(dimension: 45, child: _PodcastCover(color: PodcastAppTheme.primary)),
-          SizedBox(height: 5),
-          Text('Small Wonders', style: TextStyle(fontSize: 6.5, fontWeight: FontWeight.w800)),
-          SizedBox(height: 2),
-          Text('Mira Cole', style: TextStyle(fontSize: 4.5, color: PodcastAppTheme.primary)),
-          Spacer(),
-          _PlaybackProgress(),
-          SizedBox(height: 4),
-          _PlaybackControls(),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _PodcastRow extends StatelessWidget {
-  const _PodcastRow({required this.titleWidth, required this.color});
+class _Waveform extends StatelessWidget {
+  const _Waveform({required this.color});
 
-  final double titleWidth;
   final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    const heights = <double>[9, 19, 13, 29, 18, 11, 25, 16, 31, 12, 20, 8, 24];
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        for (final height in heights) ...<Widget>[
+          Container(width: 3, height: height, color: color),
+          const SizedBox(width: 3),
+        ],
+      ],
+    );
+  }
+}
+
+class _VinylDisc extends StatelessWidget {
+  const _VinylDisc({required this.ink, required this.accent});
+
+  final Color ink;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: 154,
+      child: CustomPaint(
+        painter: _VinylPainter(ink: ink, accent: accent),
+      ),
+    );
+  }
+}
+
+class _PlayStamp extends StatelessWidget {
+  const _PlayStamp({required this.background, required this.ink, required this.accent});
+
+  final Color background;
+  final Color ink;
+  final Color accent;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 20,
-      padding: const EdgeInsets.all(3),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(7)),
-        boxShadow: <BoxShadow>[BoxShadow(color: Color(0x10171C33), blurRadius: 4, offset: Offset(0, 2))],
-      ),
-      child: Row(
-        children: <Widget>[
-          SizedBox.square(dimension: 14, child: _PodcastCover(color: color)),
-          const SizedBox(width: 4),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                PreviewLine(width: titleWidth, height: 2.5, color: PodcastAppTheme.ink),
-                const SizedBox(height: 3),
-                PreviewLine(width: titleWidth * 0.7, height: 2, color: PodcastAppTheme.divider),
-              ],
-            ),
-          ),
-          const Icon(Icons.play_circle_fill_rounded, size: 9, color: PodcastAppTheme.primary),
-        ],
-      ),
-    );
-  }
-}
-
-class _PodcastCover extends StatelessWidget {
-  const _PodcastCover({required this.color});
-
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
+      width: 42,
+      height: 42,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[color, Color.lerp(color, Colors.black, 0.24)!],
-        ),
-        borderRadius: const BorderRadius.all(Radius.circular(9)),
+        color: accent,
+        shape: BoxShape.circle,
+        border: Border.all(color: ink, width: 1.2),
       ),
-      child: const Center(child: Icon(Icons.graphic_eq_rounded, color: Colors.white, size: 18)),
+      child: Icon(Icons.play_arrow_rounded, color: background, size: 24),
     );
   }
 }
 
-class _PlaybackProgress extends StatelessWidget {
-  const _PlaybackProgress();
+class _VinylPainter extends CustomPainter {
+  const _VinylPainter({required this.ink, required this.accent});
+
+  final Color ink;
+  final Color accent;
 
   @override
-  Widget build(BuildContext context) {
-    return const Stack(
-      alignment: Alignment.centerLeft,
-      children: <Widget>[
-        PreviewLine(width: 78, height: 3, color: PodcastAppTheme.divider),
-        PreviewLine(width: 34, height: 3, color: PodcastAppTheme.cobalt),
-      ],
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.shortestSide / 2;
+    canvas.drawCircle(center, radius, Paint()..color = ink);
+    for (var ring = 0.18; ring < 0.95; ring += 0.1) {
+      canvas.drawCircle(
+        center,
+        radius * ring,
+        Paint()
+          ..color = ring == 0.18 ? accent : Colors.black.withValues(alpha: 0.26)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = ring == 0.18 ? 8 : 1,
+      );
+    }
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius * 0.72),
+      -math.pi * 0.9,
+      math.pi * 0.55,
+      false,
+      Paint()
+        ..color = accent
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 4
+        ..strokeCap = StrokeCap.round,
     );
+    canvas.drawCircle(center, 5, Paint()..color = accent);
   }
-}
-
-class _PlaybackControls extends StatelessWidget {
-  const _PlaybackControls();
 
   @override
-  Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(Icons.replay_10_rounded, size: 9, color: PodcastAppTheme.ink),
-        SizedBox(width: 7),
-        CircleAvatar(
-          radius: 8,
-          backgroundColor: PodcastAppTheme.cobalt,
-          child: Icon(Icons.pause_rounded, color: Colors.white, size: 9),
-        ),
-        SizedBox(width: 7),
-        Icon(Icons.forward_30_rounded, size: 9, color: PodcastAppTheme.ink),
-      ],
-    );
-  }
+  bool shouldRepaint(covariant _VinylPainter oldDelegate) => oldDelegate.ink != ink || oldDelegate.accent != accent;
 }

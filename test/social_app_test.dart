@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
-import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 import 'package:templates/features/templates/social_app/models/social_post.dart';
 import 'package:templates/features/templates/social_app/social_home_screen.dart';
 import 'package:templates/features/templates/social_app/widgets/social_action_bar.dart';
@@ -52,17 +51,19 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('social gallery preview uses a polished two-device composition', (WidgetTester tester) async {
+  testWidgets('social gallery preview uses an expressive collage composition', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
         home: Center(child: SizedBox(width: 214, height: 143, child: SocialGalleryPreview())),
       ),
     );
 
-    expect(find.text('Mingle'), findsOneWidget);
-    expect(find.text('Ana Rivera'), findsOneWidget);
-    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
+    expect(find.text('MINGLE!'), findsOneWidget);
+    expect(find.text('GOOD PEOPLE / GOOD ENERGY'), findsOneWidget);
+    expect(find.bySemanticsLabel('Mingle expressive social collage preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('social community remains usable at compact maximum text size', (WidgetTester tester) async {

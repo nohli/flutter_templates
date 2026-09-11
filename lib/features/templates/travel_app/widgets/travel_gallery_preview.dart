@@ -8,6 +8,7 @@ class TravelGalleryPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      excludeSemantics: true,
       image: true,
       label: 'Roam travel itinerary preview',
       child: const DecoratedBox(

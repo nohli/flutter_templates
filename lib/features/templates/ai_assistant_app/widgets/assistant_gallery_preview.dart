@@ -8,6 +8,7 @@ class AssistantGalleryPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      excludeSemantics: true,
       image: true,
       label: 'Nova assistant workspace preview',
       child: const DecoratedBox(

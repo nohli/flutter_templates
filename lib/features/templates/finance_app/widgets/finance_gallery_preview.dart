@@ -1,193 +1,268 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/template_gallery_preview.dart';
 import '../finance_app_theme.dart';
 
 class FinanceGalleryPreview extends StatelessWidget {
-  const FinanceGalleryPreview({super.key});
+  const FinanceGalleryPreview({this.brightness = Brightness.light, super.key});
+
+  final Brightness brightness;
 
   @override
   Widget build(BuildContext context) {
-    return const TemplateGalleryPreviewFrame(
-      background: FinanceAppTheme.background,
-      accent: FinanceAppTheme.primary,
-      surface: FinanceAppTheme.surface,
-      primary: _FinanceOverviewPreview(),
-      secondary: _FinanceActivityPreview(),
-    );
-  }
-}
+    final dark = brightness == Brightness.dark;
+    final background = dark ? const Color(0xFF070A0F) : const Color(0xFF11162A);
+    final ink = dark ? const Color(0xFFF8FAFF) : Colors.white;
+    final muted = ink.withValues(alpha: 0.55);
 
-class _FinanceOverviewPreview extends StatelessWidget {
-  const _FinanceOverviewPreview();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(7, 3, 7, 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const Row(
-            children: <Widget>[
-              Expanded(
-                child: Text('Overview', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800)),
-              ),
-              CircleAvatar(
-                radius: 6,
-                backgroundColor: FinanceAppTheme.lavender,
-                child: Text('AR', style: TextStyle(fontSize: 4, fontWeight: FontWeight.w800)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 5),
-          Container(
-            height: 56,
-            width: double.infinity,
-            padding: const EdgeInsets.all(7),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: <Color>[FinanceAppTheme.primaryDark, FinanceAppTheme.primary]),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Semantics(
+      excludeSemantics: true,
+      image: true,
+      label: 'Orbit finance market dashboard preview',
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: SizedBox(
+          width: 300,
+          height: 200,
+          child: ColoredBox(
+            color: background,
+            child: Stack(
               children: <Widget>[
-                Text('TOTAL BALANCE', style: TextStyle(color: Color(0xFFCFD4FF), fontSize: 4, letterSpacing: 0.4)),
-                SizedBox(height: 2),
-                Text(
-                  r'$24,860',
-                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w800),
+                Positioned.fill(
+                  child: CustomPaint(painter: _TerminalGridPainter(color: ink)),
                 ),
-                Spacer(),
-                Row(
-                  children: <Widget>[
-                    PreviewLine(width: 24, color: FinanceAppTheme.mint),
-                    SizedBox(width: 4),
-                    PreviewLine(width: 17, color: FinanceAppTheme.coral),
-                  ],
+                const Positioned(
+                  left: 16,
+                  top: 14,
+                  child: Text(
+                    'ORBIT / LIVE PORTFOLIO',
+                    style: TextStyle(
+                      color: FinanceAppTheme.mint,
+                      fontFamily: FinanceAppTheme.fontName,
+                      fontSize: 6,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 16,
+                  top: 43,
+                  child: Text(
+                    r'$24,860',
+                    style: TextStyle(
+                      color: ink,
+                      fontFamily: FinanceAppTheme.fontName,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -1.8,
+                      height: 0.9,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 18,
+                  top: 76,
+                  child: Text(
+                    '+12.4%  /  THIS MONTH',
+                    style: TextStyle(
+                      color: muted,
+                      fontFamily: FinanceAppTheme.fontName,
+                      fontSize: 5.5,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ),
+                const Positioned(left: 12, right: 92, top: 101, bottom: 34, child: _MarketChart()),
+                const Positioned(right: 18, top: 31, child: _AssetOrbit()),
+                Positioned(
+                  left: 14,
+                  right: 14,
+                  bottom: 10,
+                  child: _Ticker(ink: ink, muted: muted),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 6),
-          const Text('Spending', style: TextStyle(fontSize: 6, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 3),
-          const Expanded(child: _MiniBarChart()),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _FinanceActivityPreview extends StatelessWidget {
-  const _FinanceActivityPreview();
+class _MarketChart extends StatelessWidget {
+  const _MarketChart();
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(8, 3, 8, 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return const CustomPaint(painter: _MarketChartPainter());
+  }
+}
+
+class _AssetOrbit extends StatelessWidget {
+  const _AssetOrbit();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox.square(
+      dimension: 74,
+      child: Stack(
+        alignment: Alignment.center,
         children: <Widget>[
-          Text('Activity', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
-          SizedBox(height: 3),
-          Text('September', style: TextStyle(color: FinanceAppTheme.mutedInk, fontSize: 5)),
-          SizedBox(height: 8),
-          _PreviewTransaction(icon: Icons.shopping_bag_rounded, color: FinanceAppTheme.coral, width: 42),
-          SizedBox(height: 8),
-          _PreviewTransaction(icon: Icons.coffee_rounded, color: FinanceAppTheme.amber, width: 32),
-          SizedBox(height: 8),
-          _PreviewTransaction(icon: Icons.train_rounded, color: FinanceAppTheme.mint, width: 38),
-          Spacer(),
-          _MiniBalancePill(),
+          CircularProgressIndicator(
+            value: 0.78,
+            strokeWidth: 9,
+            color: FinanceAppTheme.primary,
+            backgroundColor: Color(0xFF252B40),
+          ),
+          CircularProgressIndicator(
+            value: 0.34,
+            strokeWidth: 3,
+            color: FinanceAppTheme.mint,
+            backgroundColor: Colors.transparent,
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'BTC',
+                style: TextStyle(color: Colors.white, fontSize: 7, fontWeight: FontWeight.w800),
+              ),
+              Text(
+                '42%',
+                style: TextStyle(color: FinanceAppTheme.mint, fontSize: 11, fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 }
 
-class _PreviewTransaction extends StatelessWidget {
-  const _PreviewTransaction({required this.icon, required this.color, required this.width});
+class _Ticker extends StatelessWidget {
+  const _Ticker({required this.ink, required this.muted});
 
-  final IconData icon;
+  final Color ink;
+  final Color muted;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 22,
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: ink.withValues(alpha: 0.18))),
+      ),
+      child: Row(
+        children: <Widget>[
+          _TickerValue(symbol: 'BTC', value: '+3.8%', color: FinanceAppTheme.amber, ink: ink),
+          const Spacer(),
+          _TickerValue(symbol: 'ETH', value: '+1.2%', color: FinanceAppTheme.primary, ink: ink),
+          const Spacer(),
+          _TickerValue(symbol: 'SOL', value: '−0.4%', color: FinanceAppTheme.mint, ink: ink),
+          const Spacer(),
+          Text('17:42 UTC', style: TextStyle(color: muted, fontSize: 5, letterSpacing: 0.6)),
+        ],
+      ),
+    );
+  }
+}
+
+class _TickerValue extends StatelessWidget {
+  const _TickerValue({required this.symbol, required this.value, required this.color, required this.ink});
+
+  final String symbol;
+  final String value;
   final Color color;
-  final double width;
+  final Color ink;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        PreviewIconTile(
-          icon: icon,
-          background: color.withValues(alpha: 0.24),
-          foreground: FinanceAppTheme.ink,
-          size: 17,
+        Container(width: 5, height: 5, color: color),
+        const SizedBox(width: 4),
+        Text(
+          symbol,
+          style: TextStyle(color: ink, fontSize: 5.5, fontWeight: FontWeight.w800),
         ),
-        const SizedBox(width: 5),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            PreviewLine(width: width, color: FinanceAppTheme.ink),
-            const SizedBox(height: 3),
-            PreviewLine(width: width * 0.72, height: 2, color: FinanceAppTheme.divider),
-          ],
+        const SizedBox(width: 3),
+        Text(
+          value,
+          style: TextStyle(color: color, fontSize: 5.5, fontWeight: FontWeight.w700),
         ),
       ],
     );
   }
 }
 
-class _MiniBarChart extends StatelessWidget {
-  const _MiniBarChart();
+class _TerminalGridPainter extends CustomPainter {
+  const _TerminalGridPainter({required this.color});
+
+  final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return const Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        _PreviewBar(height: 12),
-        _PreviewBar(height: 20),
-        _PreviewBar(height: 16),
-        _PreviewBar(height: 26, highlighted: true),
-        _PreviewBar(height: 19),
-      ],
-    );
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color.withValues(alpha: 0.05)
+      ..strokeWidth = 0.6;
+    for (var x = 0.0; x < size.width; x += 24) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (var y = 0.0; y < size.height; y += 24) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
   }
+
+  @override
+  bool shouldRepaint(covariant _TerminalGridPainter oldDelegate) => oldDelegate.color != color;
 }
 
-class _PreviewBar extends StatelessWidget {
-  const _PreviewBar({required this.height, this.highlighted = false});
-
-  final double height;
-  final bool highlighted;
+class _MarketChartPainter extends CustomPainter {
+  const _MarketChartPainter();
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 6,
-      height: height,
-      decoration: BoxDecoration(
-        color: highlighted ? FinanceAppTheme.primary : FinanceAppTheme.lavender,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-      ),
+  void paint(Canvas canvas, Size size) {
+    final path = Path()
+      ..moveTo(0, size.height * 0.82)
+      ..cubicTo(
+        size.width * 0.18,
+        size.height,
+        size.width * 0.23,
+        size.height * 0.3,
+        size.width * 0.4,
+        size.height * 0.48,
+      )
+      ..cubicTo(
+        size.width * 0.58,
+        size.height * 0.68,
+        size.width * 0.68,
+        size.height * 0.05,
+        size.width,
+        size.height * 0.16,
+      );
+    final area = Path.from(path)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+    canvas.drawPath(
+      area,
+      Paint()
+        ..shader = const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[Color(0x5563D7B0), Color(0x0063D7B0)],
+        ).createShader(Offset.zero & size),
+    );
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = FinanceAppTheme.mint
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.5
+        ..strokeCap = StrokeCap.square,
     );
   }
-}
-
-class _MiniBalancePill extends StatelessWidget {
-  const _MiniBalancePill();
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 6),
-      decoration: const BoxDecoration(
-        color: FinanceAppTheme.lavender,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      child: const Text(r'+ $1,860 this month', style: TextStyle(fontSize: 5, fontWeight: FontWeight.w700)),
-    );
-  }
+  bool shouldRepaint(covariant _MarketChartPainter oldDelegate) => false;
 }

@@ -1,164 +1,140 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/template_gallery_preview.dart';
 import '../models/store_product.dart';
 import '../storefront_app_theme.dart';
 import 'storefront_product_art.dart';
 
 class StorefrontGalleryPreview extends StatelessWidget {
-  const StorefrontGalleryPreview({super.key});
+  const StorefrontGalleryPreview({this.brightness = Brightness.light, super.key});
+
+  final Brightness brightness;
 
   @override
   Widget build(BuildContext context) {
-    return const TemplateGalleryPreviewFrame(
-      background: StorefrontAppTheme.background,
-      accent: StorefrontAppTheme.primary,
-      surface: StorefrontAppTheme.surface,
-      primary: _StorefrontHomePreview(),
-      secondary: _StorefrontProductPreview(),
-    );
-  }
-}
+    final dark = brightness == Brightness.dark;
+    final paper = dark ? StorefrontAppTheme.darkBackground : const Color(0xFFF2E7D6);
+    final ink = dark ? StorefrontAppTheme.darkInk : StorefrontAppTheme.ink;
+    final panel = dark ? StorefrontAppTheme.darkSurface : StorefrontAppTheme.surface;
 
-class _StorefrontHomePreview extends StatelessWidget {
-  const _StorefrontHomePreview();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(7, 3, 7, 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Text('Nest', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w700)),
-              ),
-              Icon(Icons.shopping_bag_outlined, size: 8),
-            ],
-          ),
-          SizedBox(height: 5),
-          Text('Calmer spaces.', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
-          SizedBox(height: 5),
-          _PreviewSearch(),
-          SizedBox(height: 5),
-          Expanded(
-            child: Row(
+    return Semantics(
+      excludeSemantics: true,
+      image: true,
+      label: 'Nest editorial furniture collection preview',
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: SizedBox(
+          width: 300,
+          height: 200,
+          child: ColoredBox(
+            color: paper,
+            child: Stack(
               children: <Widget>[
-                Expanded(
-                  child: _MiniProduct(kind: StoreProductKind.chair, label: 'Nest chair'),
+                const Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: 9,
+                  child: ColoredBox(color: StorefrontAppTheme.primary),
                 ),
-                SizedBox(width: 4),
-                Expanded(
-                  child: _MiniProduct(kind: StoreProductKind.headphones, label: 'Quiet one'),
+                Positioned(
+                  left: 24,
+                  top: 17,
+                  child: Text(
+                    'NEST / EDIT 04',
+                    style: TextStyle(color: ink, fontSize: 6, fontWeight: FontWeight.w700, letterSpacing: 1.6),
+                  ),
                 ),
+                Positioned(
+                  left: 22,
+                  top: 48,
+                  width: 120,
+                  child: Text(
+                    'Objects\nwith a\npoint of view.',
+                    style: TextStyle(
+                      color: ink,
+                      fontSize: 21,
+                      height: 0.9,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: -1,
+                    ),
+                  ),
+                ),
+                Positioned(left: 24, bottom: 20, child: _PriceStamp(ink: ink)),
+                Positioned(
+                  right: 18,
+                  top: 16,
+                  bottom: 16,
+                  width: 126,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: panel,
+                      border: Border.all(color: ink.withValues(alpha: 0.18)),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(12, 18, 12, 8),
+                      child: StorefrontProductArt(kind: StoreProductKind.chair, compact: true),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 4,
+                  top: 60,
+                  child: RotatedBox(
+                    quarterTurns: 1,
+                    child: Text(
+                      'FORM / FUNCTION / FEELING',
+                      style: TextStyle(color: ink.withValues(alpha: 0.55), fontSize: 5, letterSpacing: 1.2),
+                    ),
+                  ),
+                ),
+                const Positioned(right: 105, top: 26, child: _ObjectNumber()),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _StorefrontProductPreview extends StatelessWidget {
-  const _StorefrontProductPreview();
+class _PriceStamp extends StatelessWidget {
+  const _PriceStamp({required this.ink});
+
+  final Color ink;
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Text('Saved', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
-              ),
-              Icon(Icons.favorite_rounded, size: 9, color: StorefrontAppTheme.primary),
-            ],
-          ),
-          SizedBox(height: 6),
-          Expanded(child: StorefrontProductArt(kind: StoreProductKind.watch, compact: true)),
-          SizedBox(height: 6),
-          Text('Still Watch', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800)),
-          SizedBox(height: 2),
-          Text('Quietly considered.', style: TextStyle(fontSize: 4.5, color: StorefrontAppTheme.mutedInk)),
-          SizedBox(height: 5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                r'$129',
-                style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, color: StorefrontAppTheme.primary),
-              ),
-              CircleAvatar(
-                radius: 8,
-                backgroundColor: StorefrontAppTheme.primary,
-                child: Icon(Icons.add_rounded, size: 10, color: Colors.white),
-              ),
-            ],
-          ),
-        ],
+    return Transform.rotate(
+      angle: -0.07,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        decoration: BoxDecoration(
+          color: StorefrontAppTheme.sage,
+          border: Border.all(color: ink, width: 1.2),
+          borderRadius: const BorderRadius.all(Radius.circular(99)),
+        ),
+        child: Text(
+          r'NEST CHAIR  ·  $249',
+          style: TextStyle(color: ink, fontSize: 6, fontWeight: FontWeight.w800),
+        ),
       ),
     );
   }
 }
 
-class _PreviewSearch extends StatelessWidget {
-  const _PreviewSearch();
+class _ObjectNumber extends StatelessWidget {
+  const _ObjectNumber();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 15,
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: const BoxDecoration(color: Color(0xFFF5EFE5), borderRadius: BorderRadius.all(Radius.circular(7))),
-      child: const Row(
-        children: <Widget>[
-          Icon(Icons.search_rounded, size: 7, color: StorefrontAppTheme.mutedInk),
-          SizedBox(width: 3),
-          Expanded(
-            child: Text(
-              'Search collection',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 4.5, color: StorefrontAppTheme.mutedInk),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _MiniProduct extends StatelessWidget {
-  const _MiniProduct({required this.kind, required this.label});
-
-  final StoreProductKind kind;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        boxShadow: <BoxShadow>[BoxShadow(color: Color(0x1425231F), blurRadius: 5, offset: Offset(0, 2))],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(child: StorefrontProductArt(kind: kind, compact: true)),
-            const SizedBox(height: 3),
-            Text(label, maxLines: 1, style: const TextStyle(fontSize: 4.5, fontWeight: FontWeight.w700)),
-          ],
-        ),
+      width: 34,
+      height: 34,
+      color: StorefrontAppTheme.primary,
+      alignment: Alignment.center,
+      child: const Text(
+        '01',
+        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w800),
       ),
     );
   }

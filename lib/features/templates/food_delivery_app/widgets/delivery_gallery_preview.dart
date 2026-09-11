@@ -1,219 +1,182 @@
 import 'package:flutter/material.dart';
 
-import '../../shared/template_gallery_preview.dart';
 import '../food_delivery_app_theme.dart';
 import '../models/meal.dart';
 import 'meal_art.dart';
 
 class DeliveryGalleryPreview extends StatelessWidget {
-  const DeliveryGalleryPreview({super.key});
+  const DeliveryGalleryPreview({this.brightness = Brightness.light, super.key});
+
+  final Brightness brightness;
 
   @override
   Widget build(BuildContext context) {
-    return const TemplateGalleryPreviewFrame(
-      background: FoodDeliveryAppTheme.background,
-      accent: FoodDeliveryAppTheme.primary,
-      primary: _DeliveryDiscoverPreview(),
-      secondary: _DeliveryOrderPreview(),
-    );
-  }
-}
+    final dark = brightness == Brightness.dark;
+    final background = dark ? const Color(0xFF17120E) : const Color(0xFFF04D2F);
+    final paper = dark ? const Color(0xFF2B211A) : const Color(0xFFFFF2D5);
+    final ink = dark ? const Color(0xFFFFF4E9) : FoodDeliveryAppTheme.ink;
+    final titleColor = dark ? ink : paper;
 
-class _DeliveryDiscoverPreview extends StatelessWidget {
-  const _DeliveryDiscoverPreview();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(7, 3, 7, 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Text('Savor', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, letterSpacing: -0.2)),
-              ),
-              Icon(Icons.location_on_rounded, size: 8, color: FoodDeliveryAppTheme.primary),
-            ],
-          ),
-          SizedBox(height: 5),
-          Text('Good food,', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
-          Text('right on time.', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
-          SizedBox(height: 5),
-          _PreviewSearch(),
-          SizedBox(height: 6),
-          Expanded(child: _PreviewMeal()),
-        ],
-      ),
-    );
-  }
-}
-
-class _DeliveryOrderPreview extends StatelessWidget {
-  const _DeliveryOrderPreview();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Your order', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
-          SizedBox(height: 3),
-          Text('Arrives in 12 min', style: TextStyle(fontSize: 5, color: FoodDeliveryAppTheme.mutedInk)),
-          SizedBox(height: 7),
-          Expanded(child: _RouteMap()),
-          SizedBox(height: 7),
-          _CourierCard(),
-        ],
-      ),
-    );
-  }
-}
-
-class _PreviewSearch extends StatelessWidget {
-  const _PreviewSearch();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 15,
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: const BoxDecoration(color: Color(0xFFFFF4E3), borderRadius: BorderRadius.all(Radius.circular(8))),
-      child: const Row(
-        children: <Widget>[
-          Icon(Icons.search_rounded, size: 7, color: FoodDeliveryAppTheme.green),
-          SizedBox(width: 3),
-          Expanded(
-            child: Text(
-              'Search meals',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 4.5, color: FoodDeliveryAppTheme.mutedInk),
+    return Semantics(
+      excludeSemantics: true,
+      image: true,
+      label: 'Savor illustrated food delivery menu preview',
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: SizedBox(
+          width: 300,
+          height: 200,
+          child: ColoredBox(
+            color: background,
+            child: Stack(
+              children: <Widget>[
+                Positioned.fill(
+                  child: CustomPaint(painter: _PicnicPainter(color: paper)),
+                ),
+                Positioned(
+                  left: 14,
+                  top: 13,
+                  child: Text(
+                    'SAVOR!',
+                    style: TextStyle(
+                      color: titleColor,
+                      fontFamily: FoodDeliveryAppTheme.fontName,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -1,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 17,
+                  top: 46,
+                  width: 78,
+                  child: Text(
+                    'A VERY GOOD\nLUNCH IS\nCOMING.',
+                    style: TextStyle(
+                      color: titleColor,
+                      fontSize: 7,
+                      fontWeight: FontWeight.w800,
+                      height: 1.25,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 102,
+                  top: 14,
+                  bottom: 14,
+                  width: 142,
+                  child: Transform.rotate(
+                    angle: -0.045,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: paper,
+                        border: Border.all(color: ink, width: 1.2),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.fromLTRB(18, 12, 18, 22),
+                        child: MealArt(kind: MealKind.bowl, compact: true),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(right: 28, bottom: 22, child: _MealCaption(ink: ink)),
+                Positioned(right: 17, top: 19, child: _DeliveryStamp(ink: ink)),
+                Positioned(
+                  left: 18,
+                  bottom: 18,
+                  child: _TimeTicket(paper: paper, ink: ink),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PreviewMeal extends StatelessWidget {
-  const _PreviewMeal();
-
-  @override
-  Widget build(BuildContext context) {
-    return const DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(9)),
-        boxShadow: <BoxShadow>[BoxShadow(color: Color(0x1425352D), blurRadius: 5, offset: Offset(0, 2))],
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(child: MealArt(kind: MealKind.bowl, compact: true)),
-            SizedBox(height: 3),
-            Text('Sunset bowl', style: TextStyle(fontSize: 5, fontWeight: FontWeight.w800)),
-            SizedBox(height: 1),
-            Text('Fresh Fork · 18 min', style: TextStyle(fontSize: 3.8, color: FoodDeliveryAppTheme.mutedInk)),
-          ],
         ),
       ),
     );
   }
 }
 
-class _RouteMap extends StatelessWidget {
-  const _RouteMap();
+class _MealCaption extends StatelessWidget {
+  const _MealCaption({required this.ink});
+
+  final Color ink;
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: FoodDeliveryAppTheme.mint,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Stack(
-        children: <Widget>[
-          const Positioned(left: 10, top: 18, child: _MapStreet(width: 64, angle: -0.3)),
-          const Positioned(left: 23, top: 42, child: _MapStreet(width: 50, angle: 0.45)),
-          const Positioned(
-            left: 16,
-            bottom: 16,
-            child: Icon(Icons.home_rounded, size: 13, color: FoodDeliveryAppTheme.green),
-          ),
-          const Positioned(
-            right: 15,
-            top: 16,
-            child: Icon(Icons.storefront_rounded, size: 13, color: FoodDeliveryAppTheme.primary),
-          ),
-          Center(
-            child: Container(
-              width: 42,
-              height: 3,
-              decoration: const BoxDecoration(
-                color: FoodDeliveryAppTheme.primary,
-                borderRadius: BorderRadius.all(Radius.circular(2)),
-              ),
-            ),
-          ),
-          const Center(child: Icon(Icons.delivery_dining_rounded, size: 18, color: FoodDeliveryAppTheme.deepOrange)),
-        ],
-      ),
+    return Text(
+      r'SUNSET BOWL  ·  $14',
+      style: TextStyle(color: ink, fontSize: 6, fontWeight: FontWeight.w900, letterSpacing: 0.5),
     );
   }
 }
 
-class _MapStreet extends StatelessWidget {
-  const _MapStreet({required this.width, required this.angle});
+class _DeliveryStamp extends StatelessWidget {
+  const _DeliveryStamp({required this.ink});
 
-  final double width;
-  final double angle;
+  final Color ink;
 
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
-      angle: angle,
-      child: Container(width: width, height: 2, color: Colors.white.withValues(alpha: 0.8)),
+      angle: 0.12,
+      child: Container(
+        width: 43,
+        height: 43,
+        decoration: BoxDecoration(
+          color: FoodDeliveryAppTheme.yellow,
+          shape: BoxShape.circle,
+          border: Border.all(color: ink),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          'FRESH\n& FAST',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: ink, fontSize: 5, fontWeight: FontWeight.w900, height: 1.05),
+        ),
+      ),
     );
   }
 }
 
-class _CourierCard extends StatelessWidget {
-  const _CourierCard();
+class _TimeTicket extends StatelessWidget {
+  const _TimeTicket({required this.paper, required this.ink});
+
+  final Color paper;
+  final Color ink;
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      children: <Widget>[
-        CircleAvatar(
-          radius: 8,
-          backgroundColor: FoodDeliveryAppTheme.peach,
-          child: Icon(Icons.person_rounded, size: 9, color: FoodDeliveryAppTheme.deepOrange),
-        ),
-        SizedBox(width: 5),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text('Kai is nearby', style: TextStyle(fontSize: 5.5, fontWeight: FontWeight.w800)),
-              SizedBox(height: 2),
-              PreviewLine(width: 43, height: 2, color: FoodDeliveryAppTheme.divider),
-            ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      color: paper,
+      child: Row(
+        children: <Widget>[
+          Icon(Icons.delivery_dining_rounded, size: 11, color: ink),
+          const SizedBox(width: 5),
+          Text(
+            '18 MIN',
+            style: TextStyle(color: ink, fontSize: 6, fontWeight: FontWeight.w900),
           ),
-        ),
-        PreviewIconTile(
-          icon: Icons.chat_bubble_outline_rounded,
-          background: FoodDeliveryAppTheme.peach,
-          foreground: FoodDeliveryAppTheme.primary,
-          size: 17,
-        ),
-      ],
+        ],
+      ),
     );
   }
+}
+
+class _PicnicPainter extends CustomPainter {
+  const _PicnicPainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color.withValues(alpha: 0.09);
+    for (var x = -size.height; x < size.width; x += 26) {
+      canvas.drawRect(Rect.fromLTWH(x, 0, 12, size.height), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _PicnicPainter oldDelegate) => oldDelegate.color != color;
 }

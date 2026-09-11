@@ -7,7 +7,6 @@ import 'package:templates/features/templates/food_delivery_app/sections/delivery
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_action_dock.dart';
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_basket_item.dart';
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_gallery_preview.dart';
-import 'package:templates/features/templates/shared/template_gallery_preview.dart';
 
 void main() {
   test('delivery sample meals expose unique identifiers and valid values', () {
@@ -80,17 +79,18 @@ void main() {
   });
 
   testWidgets('delivery gallery preview remains legible at compact card size', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     await tester.pumpWidget(
       const MaterialApp(
         home: Center(child: SizedBox(width: 214, height: 143, child: DeliveryGalleryPreview())),
       ),
     );
 
-    expect(find.text('Savor'), findsOneWidget);
-    expect(find.text('Good food,'), findsOneWidget);
-    expect(find.text('right on time.'), findsOneWidget);
-    expect(find.byType(TemplatePreviewDevice), findsNWidgets(2));
+    expect(find.text('SAVOR!'), findsOneWidget);
+    expect(find.text('18 MIN'), findsOneWidget);
+    expect(find.bySemanticsLabel('Savor illustrated food delivery menu preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    semantics.dispose();
   });
 
   testWidgets('delivery remains usable on compact maximum-text layouts', (WidgetTester tester) async {

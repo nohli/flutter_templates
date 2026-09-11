@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import '../shared/template_theme.dart';
 
 abstract final class DatingAppTheme {
-  static const background = Color(0xFF130F1A);
-  static const surface = Color(0xFF211A2B);
-  static const raisedSurface = Color(0xFF2B2238);
-  static const ink = Color(0xFFFFF7FA);
-  static const mutedInk = Color(0xFFC9BCCB);
-  static const primary = Color(0xFFFF8AB3);
-  static const lavender = Color(0xFFBFA6FF);
-  static const mint = Color(0xFF7DE2D1);
-  static const coral = Color(0xFFFF826D);
-  static const sun = Color(0xFFFFD36B);
+  static const background = Color(0xFF0B090D);
+  static const surface = Color(0xFF1D181F);
+  static const raisedSurface = Color(0xFF2A222D);
+  static const ink = Color(0xFFFFF6ED);
+  static const mutedInk = Color(0xFFCBBEC8);
+  static const primary = Color(0xFFFF668F);
+  static const lavender = Color(0xFFC6A7FF);
+  static const mint = Color(0xFF76E6D1);
+  static const coral = Color(0xFFFF7B61);
+  static const sun = Color(0xFFFFD449);
   static const fontName = 'WorkSans';
 
   static ThemeData build([Brightness brightness = Brightness.dark]) {
@@ -35,7 +35,7 @@ abstract final class DatingAppTheme {
             outlineVariant: Color(0xFF4D4054),
           )
         : const ColorScheme.light(
-            primary: Color(0xFFA13A63),
+            primary: Color(0xFFB52C5B),
             onPrimary: Colors.white,
             primaryContainer: Color(0xFFFFD9E4),
             onPrimaryContainer: Color(0xFF3F001E),
@@ -43,8 +43,8 @@ abstract final class DatingAppTheme {
             onSecondary: Colors.white,
             secondaryContainer: Color(0xFFE8DEFF),
             onSecondaryContainer: Color(0xFF1D0061),
-            surface: Color(0xFFFFFBFF),
-            onSurface: Color(0xFF21191F),
+            surface: Color(0xFFFFFAF2),
+            onSurface: Color(0xFF21181D),
             error: Color(0xFFBA1A1A),
             onError: Colors.white,
             outline: Color(0xFF7E7078),
@@ -53,7 +53,7 @@ abstract final class DatingAppTheme {
 
     return buildTemplateTheme(
       colors: colors,
-      background: isDark ? background : const Color(0xFFFFF6FA),
+      background: isDark ? background : const Color(0xFFFFF3EA),
       navigationIndicator: isDark ? raisedSurface : const Color(0xFFFFD9E4),
       fontFamily: fontName,
     );

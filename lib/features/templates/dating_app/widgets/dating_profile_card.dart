@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../dating_app_theme.dart';
 import '../models/dating_profile.dart';
 import 'dating_profile_artwork.dart';
 
@@ -11,6 +12,7 @@ class DatingProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final largeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
 
     return Semantics(
       container: true,
@@ -18,58 +20,80 @@ class DatingProfileCard extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: colors.surface,
-          border: Border.all(color: colors.outlineVariant),
-          borderRadius: const BorderRadius.all(Radius.circular(32)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(color: colors.shadow.withValues(alpha: 0.24), blurRadius: 32, offset: const Offset(0, 18)),
-          ],
+          border: Border.all(color: colors.primary, width: 2),
+          boxShadow: <BoxShadow>[BoxShadow(color: colors.primary.withValues(alpha: 0.6), offset: const Offset(7, 7))],
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(31)),
+        child: ClipRect(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               AspectRatio(
-                aspectRatio: 1.08,
+                aspectRatio: largeText ? 1.25 : 0.96,
                 child: Stack(
                   children: <Widget>[
                     Positioned.fill(child: DatingProfileArtwork(palette: profile.palette)),
-                    const Positioned(right: 18, top: 18, child: _MatchBadge()),
+                    const Positioned(right: 14, top: 14, child: _MatchBadge()),
+                    if (!largeText)
+                      Positioned(
+                        left: 14,
+                        right: 14,
+                        bottom: 14,
+                        child: DecoratedBox(
+                          decoration: const BoxDecoration(color: Color(0xD917111E)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text(
+                                    '${profile.name}, ${profile.age}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 27,
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: -0.9,
+                                    ),
+                                  ),
+                                ),
+                                const Icon(Icons.verified_rounded, color: DatingAppTheme.mint, size: 21),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(22, 20, 22, 24),
+                padding: const EdgeInsets.fromLTRB(18, 17, 18, 21),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 6,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          '${profile.name}, ${profile.age}',
-                          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, letterSpacing: -0.8),
-                        ),
-                        Icon(Icons.verified_rounded, color: colors.primary, size: 22),
-                        Text(profile.distance, style: TextStyle(color: colors.onSurfaceVariant)),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
+                    if (largeText) ...<Widget>[
+                      Text(
+                        '${profile.name}, ${profile.age}',
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, letterSpacing: -0.8),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
                     Text(
-                      profile.prompt.toUpperCase(),
+                      'PORTRAIT 01 / ${profile.distance.toUpperCase()}',
+                      style: TextStyle(color: colors.onSurfaceVariant, fontSize: 8, fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      'ASK / ${profile.prompt.toUpperCase()}',
                       style: TextStyle(
                         color: colors.primary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w900,
                         letterSpacing: 1.1,
                       ),
                     ),
                     const SizedBox(height: 7),
                     Text(
                       profile.answer,
-                      style: const TextStyle(fontSize: 18, height: 1.38, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 18, height: 1.3, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 18),
                     Wrap(
@@ -95,9 +119,8 @@ class _MatchBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xFF17111E).withValues(alpha: 0.76),
+        color: const Color(0xE617111E),
         border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
-        borderRadius: const BorderRadius.all(Radius.circular(99)),
       ),
       child: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -129,7 +152,7 @@ class _InterestChip extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.secondaryContainer,
-        borderRadius: const BorderRadius.all(Radius.circular(99)),
+        border: Border.all(color: colors.secondary),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

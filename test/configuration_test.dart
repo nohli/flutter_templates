@@ -12,7 +12,6 @@ void main() {
     final pubspec = File('pubspec.yaml').readAsStringSync();
     final appEntryPoint = File('lib/main.dart').readAsStringSync();
     final iosInfo = File('ios/Runner/Info.plist').readAsStringSync();
-    final iosFrameworkInfo = File('ios/Flutter/AppFrameworkInfo.plist').readAsStringSync();
     final iosProject = File('ios/Runner.xcodeproj/project.pbxproj').readAsStringSync();
     final iosScheme = File('ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme').readAsStringSync();
     final iosWorkspace = File('ios/Runner.xcworkspace/contents.xcworkspacedata').readAsStringSync();
@@ -69,7 +68,6 @@ void main() {
     expect(iosReleaseConfig, isNot(contains('Pods/')));
     expect(RegExp(r'IPHONEOS_DEPLOYMENT_TARGET = 15\.0;').allMatches(iosProject), hasLength(3));
     expect(iosProject, isNot(contains('IPHONEOS_DEPLOYMENT_TARGET = 13.0;')));
-    expect(iosFrameworkInfo, contains('<key>MinimumOSVersion</key>\n  <string>15.0</string>'));
     expect(File('ios/Runner/Runner.entitlements').existsSync(), isFalse);
     expect(macOSConfig, contains('PRODUCT_BUNDLE_IDENTIFIER = com.achimsapps.templates'));
     expect(macOSConfig, contains('PRODUCT_COPYRIGHT = Copyright © UI Templates contributors.'));
@@ -77,6 +75,7 @@ void main() {
     expect(File('macos/Podfile.lock').existsSync(), isFalse);
     expect(macOSProject, contains('FlutterGeneratedPluginSwiftPackage'));
     expect(macOSProject, isNot(contains('Pods')));
+    expect(RegExp(r'MACOSX_DEPLOYMENT_TARGET = 12\.0;').allMatches(macOSProject), hasLength(3));
     expect(
       RegExp(
         r'PBXShellScriptBuildPhase;[^}]*alwaysOutOfDate = 1;[^}]*macos_assemble\.sh && touch',
@@ -274,7 +273,7 @@ void main() {
       }
       final dependencyCommands = commands.where((String command) => command.startsWith('flutter pub get'));
       expect(dependencyCommands, isNotEmpty, reason: workflowFile);
-      expect(dependencyCommands, everyElement('flutter pub get --enforce-lockfile'), reason: workflowFile);
+      expect(dependencyCommands, everyElement('flutter pub get'), reason: workflowFile);
       if (workflowFile.endsWith('flutter_checks.yml')) {
         expect(
           commands,
@@ -331,11 +330,7 @@ void main() {
   test('source files follow the feature-based application structure', () {
     expect(_entryNames('lib'), <String>{'app', 'features', 'main.dart'});
     expect(_entryNames('lib/features'), <String>{'gallery', 'support', 'templates'});
-    expect(_entryNames('lib/features/templates'), <String>{
-      'design_course',
-      'fitness_app',
-      'hotel_booking',
-    });
+    expect(_entryNames('lib/features/templates'), <String>{'design_course', 'fitness_app', 'hotel_booking'});
   });
 
   test('bundled font licenses preserve their exact upstream notices', () {

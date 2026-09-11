@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../models/podcast_show.dart';
-import 'podcast_artwork.dart';
+import '../podcast_app_theme.dart';
+import 'podcast_vinyl.dart';
 
 class PodcastShowCard extends StatelessWidget {
   const PodcastShowCard({
@@ -27,14 +28,13 @@ class PodcastShowCard extends StatelessWidget {
       curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
         color: isSaved ? colors.primaryContainer.withValues(alpha: 0.55) : colors.surface,
-        border: Border.all(color: isSaved ? colors.primary : Colors.transparent, width: 1.5),
-        borderRadius: const BorderRadius.all(Radius.circular(26)),
+        border: Border.all(color: isSaved ? colors.primary : colors.outlineVariant, width: 1.5),
       ),
       clipBehavior: Clip.antiAlias,
       child: Material(
         color: Colors.transparent,
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(12),
           child: usesLargeText ? _largeTextLayout() : _standardLayout(),
         ),
       ),
@@ -44,8 +44,8 @@ class PodcastShowCard extends StatelessWidget {
   Widget _standardLayout() {
     return Row(
       children: <Widget>[
-        SizedBox.square(dimension: 104, child: PodcastArtwork(show: show, compact: true)),
-        const SizedBox(width: 14),
+        SizedBox.square(dimension: 82, child: PodcastVinyl(show: show, compact: true)),
+        const SizedBox(width: 12),
         Expanded(child: _ShowDetails(show: show)),
         const SizedBox(width: 6),
         _ShowActions(show: show, isSaved: isSaved, onPlay: onPlay, onToggleSaved: onToggleSaved),
@@ -57,7 +57,10 @@ class PodcastShowCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        AspectRatio(aspectRatio: 1.6, child: PodcastArtwork(show: show)),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: SizedBox.square(dimension: 150, child: PodcastVinyl(show: show)),
+        ),
         const SizedBox(height: 14),
         _ShowDetails(show: show),
         const SizedBox(height: 10),
@@ -82,16 +85,37 @@ class _ShowDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(show.title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+        Text(
+          _episodeNumber(show),
+          style: TextStyle(color: colors.primary, fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1.2),
+        ),
         const SizedBox(height: 4),
-        Text(show.author, style: TextStyle(color: colors.primary, fontSize: 12)),
+        Text(show.title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900, letterSpacing: -0.5)),
+        const SizedBox(height: 4),
+        Text(
+          show.author.toUpperCase(),
+          style: TextStyle(color: colors.onSurfaceVariant, fontSize: 9, letterSpacing: 0.8),
+        ),
         const SizedBox(height: 7),
         Text(show.episodeTitle, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12, height: 1.35)),
-        const SizedBox(height: 7),
-        Text(show.durationLabel, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 11)),
+        const SizedBox(height: 8),
+        DecoratedBox(
+          decoration: const BoxDecoration(color: PodcastAppTheme.signal),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+            child: Text(show.durationLabel, style: const TextStyle(color: PodcastAppTheme.ink, fontSize: 9)),
+          ),
+        ),
       ],
     );
   }
+
+  String _episodeNumber(PodcastShow show) => switch (show.tone) {
+    PodcastTone.coral => 'EPISODE 01',
+    PodcastTone.cobalt => 'EPISODE 02',
+    PodcastTone.sky => 'EPISODE 03',
+    PodcastTone.sage => 'EPISODE 04',
+  };
 }
 
 class _ShowActions extends StatelessWidget {
@@ -107,7 +131,12 @@ class _ShowActions extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        IconButton.filled(tooltip: 'Play ${show.title}', onPressed: onPlay, icon: const Icon(Icons.play_arrow_rounded)),
+        IconButton.filled(
+          tooltip: 'Play ${show.title}',
+          onPressed: onPlay,
+          style: IconButton.styleFrom(shape: const CircleBorder()),
+          icon: const Icon(Icons.play_arrow_rounded),
+        ),
         IconButton(
           tooltip: isSaved ? 'Remove ${show.title} from library' : 'Save ${show.title} to library',
           onPressed: onToggleSaved,

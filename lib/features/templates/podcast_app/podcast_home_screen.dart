@@ -56,23 +56,55 @@ class _PodcastHomeScreenState extends State<PodcastHomeScreen> {
       appearance: widget.appearance,
       themeBuilder: PodcastAppTheme.build,
       builder: (BuildContext context) {
+        final colors = Theme.of(context).colorScheme;
+        final dark = Theme.of(context).brightness == Brightness.dark;
+        final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+
         return PrimaryScrollController(
           controller: scrollController,
           child: Scaffold(
             appBar: AppBar(
+              backgroundColor: dark ? const Color(0xFF191711) : PodcastAppTheme.ink,
+              foregroundColor: PodcastAppTheme.signal,
               surfaceTintColor: Colors.transparent,
+              toolbarHeight: usesLargeText ? 92 : 72,
               leading: Navigator.of(context).canPop()
                   ? IconButton(
                       tooltip: 'Back to template gallery',
                       onPressed: () => Navigator.of(context).pop(),
+                      style: IconButton.styleFrom(
+                        side: const BorderSide(color: PodcastAppTheme.signal),
+                        shape: const CircleBorder(),
+                      ),
                       icon: const Icon(Icons.arrow_back_rounded),
                     )
                   : null,
-              title: const Text(
-                'Wave',
-                style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700, letterSpacing: -0.7),
-              ),
+              title: usesLargeText
+                  ? const Text('Wave', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                  : const Row(
+                      children: <Widget>[
+                        Text('Wave', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -1)),
+                        SizedBox(width: 8),
+                        Text('/ 072', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1.2)),
+                      ],
+                    ),
               actions: <Widget>[
+                if (!usesLargeText)
+                  Center(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: colors.primary,
+                        borderRadius: const BorderRadius.all(Radius.circular(99)),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+                        child: Text(
+                          'LIVE SIGNAL',
+                          style: TextStyle(color: PodcastAppTheme.ink, fontSize: 8, fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                    ),
+                  ),
                 Builder(
                   builder: (BuildContext context) {
                     return IconButton(

@@ -32,7 +32,7 @@ class PlannerDayRail extends StatelessWidget {
                       'DAYMARK / THURSDAY',
                       maxLines: 1,
                       style: TextStyle(
-                        color: Color(0xBFFFFFFF),
+                        color: Colors.white,
                         fontSize: 8,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.6,

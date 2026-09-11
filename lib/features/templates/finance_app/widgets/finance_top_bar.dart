@@ -83,7 +83,7 @@ class _AnimatedTitle extends StatelessWidget {
           overflow: TextOverflow.fade,
           softWrap: false,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontSize: 9,
             fontWeight: FontWeight.w800,
             letterSpacing: 1.4,

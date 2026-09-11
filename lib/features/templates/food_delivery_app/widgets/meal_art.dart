@@ -17,7 +17,7 @@ class MealArt extends StatelessWidget {
       image: true,
       label: _labelFor(kind),
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(22)),
+        borderRadius: const BorderRadius.all(Radius.circular(3)),
         child: ColoredBox(
           color: palette.background,
           child: Stack(

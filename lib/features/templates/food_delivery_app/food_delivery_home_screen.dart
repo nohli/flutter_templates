@@ -48,25 +48,67 @@ class _FoodDeliveryHomeScreenState extends State<FoodDeliveryHomeScreen> {
       appearance: widget.appearance,
       themeBuilder: FoodDeliveryAppTheme.build,
       builder: (BuildContext context) {
+        final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+
         return PrimaryScrollController(
           controller: scrollController,
           child: Scaffold(
             appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
               surfaceTintColor: Colors.transparent,
+              toolbarHeight: usesLargeText ? 96 : 72,
               leading: Navigator.of(context).canPop()
                   ? IconButton(
                       tooltip: 'Back to template gallery',
                       onPressed: () => Navigator.of(context).pop(),
+                      style: IconButton.styleFrom(
+                        side: BorderSide(color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.4)),
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                      ),
                       icon: const Icon(Icons.arrow_back_rounded),
                     )
                   : null,
-              title: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('Savor', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w800, letterSpacing: -0.8)),
-                  Text('Home · 18 min', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w400)),
-                ],
-              ),
+              title: usesLargeText
+                  ? const Text('Savor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900))
+                  : const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'SAVOR / LOCAL KITCHEN',
+                          style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800, letterSpacing: 1.4),
+                        ),
+                        SizedBox(height: 3),
+                        Text('Savor', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -0.9)),
+                      ],
+                    ),
+              actions: usesLargeText
+                  ? null
+                  : const <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(right: 14),
+                        child: Center(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: FoodDeliveryAppTheme.yellow,
+                              borderRadius: BorderRadius.all(Radius.circular(99)),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                              child: Text(
+                                'OPEN · 18 MIN',
+                                style: TextStyle(
+                                  color: FoodDeliveryAppTheme.deepOrange,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 0.7,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
             ),
             body: TemplateEntrance(
               child: TemplateSectionSwitcher(

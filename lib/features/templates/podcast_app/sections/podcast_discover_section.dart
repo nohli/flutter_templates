@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/podcast_show.dart';
-import '../podcast_app_theme.dart';
 import '../widgets/podcast_show_card.dart';
 
 class PodcastDiscoverSection extends StatelessWidget {
@@ -28,6 +27,8 @@ class PodcastDiscoverSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       key: const PageStorageKey<String>('podcast-discover'),
       controller: scrollController,
@@ -36,16 +37,16 @@ class PodcastDiscoverSection extends StatelessWidget {
       children: <Widget>[
         const Text('Stories worth your time.', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
         const SizedBox(height: 8),
-        const Text('Thoughtful listening for curious days.', style: TextStyle(color: PodcastAppTheme.mutedInk)),
+        Text('Thoughtful listening for curious days.', style: TextStyle(color: colors.onSurfaceVariant)),
         const SizedBox(height: 20),
         TextField(
           onChanged: onQueryChanged,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: 'Search shows or episodes',
-            prefixIcon: Icon(Icons.search_rounded),
+            prefixIcon: const Icon(Icons.search_rounded),
             filled: true,
-            fillColor: PodcastAppTheme.surface,
-            border: OutlineInputBorder(
+            fillColor: colors.surface,
+            border: const OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.all(Radius.circular(18)),
             ),
@@ -73,7 +74,7 @@ class PodcastDiscoverSection extends StatelessWidget {
             const Expanded(
               child: Text('Fresh episodes', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             ),
-            Text('${shows.length} shows', style: const TextStyle(color: PodcastAppTheme.mutedInk)),
+            Text('${shows.length} shows', style: TextStyle(color: colors.onSurfaceVariant)),
           ],
         ),
         const SizedBox(height: 12),
@@ -106,16 +107,18 @@ class _EmptyPodcastState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Material(
-      color: PodcastAppTheme.surface,
-      borderRadius: BorderRadius.all(Radius.circular(24)),
+    final colors = Theme.of(context).colorScheme;
+
+    return Material(
+      color: colors.surface,
+      borderRadius: const BorderRadius.all(Radius.circular(24)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
         child: Column(
           children: <Widget>[
-            Icon(Icons.podcasts_rounded, size: 42, color: PodcastAppTheme.primary),
-            SizedBox(height: 12),
-            Text('No matching shows', style: TextStyle(fontWeight: FontWeight.w700)),
+            Icon(Icons.podcasts_rounded, size: 42, color: colors.primary),
+            const SizedBox(height: 12),
+            const Text('No matching shows', style: TextStyle(fontWeight: FontWeight.w700)),
           ],
         ),
       ),

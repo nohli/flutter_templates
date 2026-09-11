@@ -15,20 +15,47 @@ abstract final class PodcastAppTheme {
   static const divider = Color(0xFFE6E0D7);
   static const fontName = 'WorkSans';
 
-  static ThemeData build() {
-    const colors = ColorScheme.light(
-      primary: primary,
-      onPrimary: Colors.white,
-      secondary: cobalt,
-      onSecondary: Colors.white,
-      surface: surface,
-      onSurface: ink,
-      error: Color(0xFFBA1A1A),
-      onError: Colors.white,
-      outline: mutedInk,
-      outlineVariant: divider,
-    );
+  static ThemeData build([Brightness brightness = Brightness.light]) {
+    final isDark = brightness == Brightness.dark;
+    final colors = isDark
+        ? const ColorScheme.dark(
+            primary: Color(0xFFFFAEB8),
+            onPrimary: Color(0xFF65001E),
+            primaryContainer: Color(0xFF7D2639),
+            onPrimaryContainer: Color(0xFFFFDADD),
+            secondary: Color(0xFFC6BCFF),
+            onSecondary: Color(0xFF2D207C),
+            secondaryContainer: Color(0xFF443795),
+            onSecondaryContainer: Color(0xFFE5DEFF),
+            surface: Color(0xFF201F27),
+            onSurface: Color(0xFFF0EDF5),
+            error: Color(0xFFFFB4AB),
+            onError: Color(0xFF690005),
+            outline: Color(0xFF9B97A5),
+            outlineVariant: Color(0xFF48454F),
+          )
+        : const ColorScheme.light(
+            primary: primary,
+            onPrimary: Colors.white,
+            primaryContainer: blush,
+            onPrimaryContainer: ink,
+            secondary: cobalt,
+            onSecondary: Colors.white,
+            secondaryContainer: Color(0xFFE5DFFF),
+            onSecondaryContainer: ink,
+            surface: surface,
+            onSurface: ink,
+            error: Color(0xFFBA1A1A),
+            onError: Colors.white,
+            outline: mutedInk,
+            outlineVariant: divider,
+          );
 
-    return buildTemplateTheme(colors: colors, background: background, navigationIndicator: blush, fontFamily: fontName);
+    return buildTemplateTheme(
+      colors: colors,
+      background: isDark ? const Color(0xFF14131A) : background,
+      navigationIndicator: isDark ? const Color(0xFF533240) : blush,
+      fontFamily: fontName,
+    );
   }
 }

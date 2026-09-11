@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/podcast_show.dart';
-import '../podcast_app_theme.dart';
 import '../widgets/podcast_show_card.dart';
 
 class PodcastLibrarySection extends StatelessWidget {
@@ -24,6 +23,8 @@ class PodcastLibrarySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return ListView(
       key: const PageStorageKey<String>('podcast-library'),
       controller: scrollController,
@@ -32,7 +33,7 @@ class PodcastLibrarySection extends StatelessWidget {
       children: <Widget>[
         const Text('Your library', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
         const SizedBox(height: 8),
-        const Text('Saved episodes stay local to this sample.', style: TextStyle(color: PodcastAppTheme.mutedInk)),
+        Text('Saved episodes stay local to this sample.', style: TextStyle(color: colors.onSurfaceVariant)),
         const SizedBox(height: 20),
         if (shows.isEmpty)
           const _EmptyLibraryState()
@@ -47,7 +48,7 @@ class PodcastLibrarySection extends StatelessWidget {
                 label: Text(downloadedShowIds.contains(show.id) ? 'Downloaded' : 'Download sample'),
               ),
             ),
-            if (show != shows.last) const Divider(color: PodcastAppTheme.divider),
+            if (show != shows.last) Divider(color: colors.outlineVariant),
           ],
       ],
     );
@@ -59,18 +60,20 @@ class _EmptyLibraryState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Material(
-      color: PodcastAppTheme.surface,
-      borderRadius: BorderRadius.all(Radius.circular(26)),
+    final colors = Theme.of(context).colorScheme;
+
+    return Material(
+      color: colors.surface,
+      borderRadius: const BorderRadius.all(Radius.circular(26)),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 42),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 42),
         child: Column(
           children: <Widget>[
-            Icon(Icons.bookmarks_outlined, size: 44, color: PodcastAppTheme.primary),
-            SizedBox(height: 12),
-            Text('Build your listening queue', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-            SizedBox(height: 6),
-            Text('Save a show in Discover to see it here.', textAlign: TextAlign.center),
+            Icon(Icons.bookmarks_outlined, size: 44, color: colors.primary),
+            const SizedBox(height: 12),
+            const Text('Build your listening queue', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 6),
+            const Text('Save a show in Discover to see it here.', textAlign: TextAlign.center),
           ],
         ),
       ),

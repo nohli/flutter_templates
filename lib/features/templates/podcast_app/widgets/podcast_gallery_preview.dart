@@ -27,7 +27,7 @@ class _PodcastDiscoverPreview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('WAVE', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, letterSpacing: 0.9)),
+          Text('Wave', style: TextStyle(fontSize: 7, fontWeight: FontWeight.w800, letterSpacing: -0.2)),
           SizedBox(height: 4),
           Text('Stories worth', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),
           Text('your time.', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800)),

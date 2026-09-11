@@ -92,6 +92,15 @@ void main() {
 
     expect(Theme.of(tester.element(find.text('Daymark'))).brightness, Brightness.dark);
     expect(find.byTooltip('Appearance: Dark'), findsOneWidget);
+
+    final completedTitle = tester.widget<Text>(find.text('Shape next sprint'));
+    final completedTile = tester.widget<AnimatedContainer>(
+      find.ancestor(of: find.text('Shape next sprint'), matching: find.byType(AnimatedContainer)).first,
+    );
+    final completedDecoration = completedTile.decoration! as BoxDecoration;
+    final colors = Theme.of(tester.element(find.text('Shape next sprint'))).colorScheme;
+    expect(completedDecoration.color, colors.secondary);
+    expect(completedTitle.style?.color, colors.onSecondary);
   });
 }
 

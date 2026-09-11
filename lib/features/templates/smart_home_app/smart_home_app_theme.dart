@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_theme.dart';
+
 abstract final class SmartHomeAppTheme {
   static const background = Color(0xFFF1F5F3);
   static const surface = Color(0xFFFFFFFF);
@@ -28,12 +30,7 @@ abstract final class SmartHomeAppTheme {
       outlineVariant: divider,
     );
 
-    return ThemeData(
-      colorScheme: colors,
-      fontFamily: fontName,
-      scaffoldBackgroundColor: background,
-      useMaterial3: true,
-    );
+    return buildTemplateTheme(colors: colors, background: background, navigationIndicator: mint, fontFamily: fontName);
   }
 
   static const softShadow = <BoxShadow>[BoxShadow(color: Color(0x1218312D), blurRadius: 22, offset: Offset(0, 9))];

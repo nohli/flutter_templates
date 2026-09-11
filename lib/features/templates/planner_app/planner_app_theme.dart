@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_theme.dart';
+
 abstract final class PlannerAppTheme {
   static const background = Color(0xFFF1F4FA);
   static const surface = Color(0xFFFFFFFF);
@@ -27,12 +29,7 @@ abstract final class PlannerAppTheme {
       outlineVariant: divider,
     );
 
-    return ThemeData(
-      colorScheme: colors,
-      fontFamily: fontName,
-      scaffoldBackgroundColor: background,
-      useMaterial3: true,
-    );
+    return buildTemplateTheme(colors: colors, background: background, navigationIndicator: lime, fontFamily: fontName);
   }
 
   static const softShadow = <BoxShadow>[BoxShadow(color: Color(0x1215213D), blurRadius: 20, offset: Offset(0, 8))];

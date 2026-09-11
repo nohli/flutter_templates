@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_motion.dart';
 import 'models/home_scene.dart';
 import 'models/smart_device.dart';
 import 'models/smart_home_section.dart';
@@ -64,44 +65,46 @@ class _SmartHomeScreenState extends State<SmartHomeScreen> {
               const SizedBox(width: 8),
             ],
           ),
-          body: IndexedStack(
-            index: _selectedSection.index,
-            children: <Widget>[
-              SmartHomeOverviewSection(
-                devices: _devices,
-                selectedScene: _selectedScene,
-                scrollController: _scrollControllers[SmartHomeSection.home]!,
-                onSceneSelected: _applyScene,
-                onDeviceChanged: _setDeviceState,
-              ),
-              SmartHomeRoomsSection(
-                devices: _devices,
-                selectedRoom: _selectedRoom,
-                scrollController: _scrollControllers[SmartHomeSection.rooms]!,
-                onRoomSelected: (HomeRoom room) {
-                  setState(() {
-                    _selectedRoom = room;
-                  });
-                },
-                onDeviceChanged: _setDeviceState,
-              ),
-              SmartHomeEnergySection(
-                devices: _devices,
-                monthlyGoal: _monthlyGoal,
-                economyModeIsEnabled: _economyModeIsEnabled,
-                scrollController: _scrollControllers[SmartHomeSection.energy]!,
-                onMonthlyGoalChanged: (double value) {
-                  setState(() {
-                    _monthlyGoal = value;
-                  });
-                },
-                onEconomyModeChanged: (bool value) {
-                  setState(() {
-                    _economyModeIsEnabled = value;
-                  });
-                },
-              ),
-            ],
+          body: TemplateEntrance(
+            child: TemplateSectionSwitcher(
+              selectedIndex: _selectedSection.index,
+              children: <Widget>[
+                SmartHomeOverviewSection(
+                  devices: _devices,
+                  selectedScene: _selectedScene,
+                  scrollController: _scrollControllers[SmartHomeSection.home]!,
+                  onSceneSelected: _applyScene,
+                  onDeviceChanged: _setDeviceState,
+                ),
+                SmartHomeRoomsSection(
+                  devices: _devices,
+                  selectedRoom: _selectedRoom,
+                  scrollController: _scrollControllers[SmartHomeSection.rooms]!,
+                  onRoomSelected: (HomeRoom room) {
+                    setState(() {
+                      _selectedRoom = room;
+                    });
+                  },
+                  onDeviceChanged: _setDeviceState,
+                ),
+                SmartHomeEnergySection(
+                  devices: _devices,
+                  monthlyGoal: _monthlyGoal,
+                  economyModeIsEnabled: _economyModeIsEnabled,
+                  scrollController: _scrollControllers[SmartHomeSection.energy]!,
+                  onMonthlyGoalChanged: (double value) {
+                    setState(() {
+                      _monthlyGoal = value;
+                    });
+                  },
+                  onEconomyModeChanged: (bool value) {
+                    setState(() {
+                      _economyModeIsEnabled = value;
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
           bottomNavigationBar: SmartHomeBottomBar(selectedSection: _selectedSection, onSelected: _selectSection),
         ),

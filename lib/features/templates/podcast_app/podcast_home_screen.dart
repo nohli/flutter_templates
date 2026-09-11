@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_motion.dart';
 import 'models/podcast_section.dart';
 import 'models/podcast_show.dart';
 import 'podcast_app_theme.dart';
@@ -70,54 +71,56 @@ class _PodcastHomeScreenState extends State<PodcastHomeScreen> {
               const SizedBox(width: 8),
             ],
           ),
-          body: IndexedStack(
-            index: _selectedSection.index,
-            children: <Widget>[
-              PodcastDiscoverSection(
-                shows: shows,
-                selectedCategory: _selectedCategory,
-                savedShowIds: _savedShowIds,
-                scrollController: _scrollControllers[PodcastSection.discover]!,
-                onQueryChanged: (String query) {
-                  setState(() {
-                    _query = query.trim().toLowerCase();
-                  });
-                },
-                onCategorySelected: (PodcastCategory category) {
-                  setState(() {
-                    _selectedCategory = category;
-                  });
-                },
-                onPlay: _play,
-                onToggleSaved: _toggleSaved,
-              ),
-              PodcastLibrarySection(
-                shows: savedShows,
-                downloadedShowIds: _downloadedShowIds,
-                scrollController: _scrollControllers[PodcastSection.library]!,
-                onPlay: _play,
-                onRemove: _toggleSaved,
-                onToggleDownloaded: _toggleDownloaded,
-              ),
-              PodcastPlayerSection(
-                show: _currentShow,
-                isPlaying: _isPlaying,
-                progress: _progress,
-                speed: _speed,
-                scrollController: _scrollControllers[PodcastSection.player]!,
-                onTogglePlayback: () {
-                  setState(() {
-                    _isPlaying = !_isPlaying;
-                  });
-                },
-                onProgressChanged: (double value) {
-                  setState(() {
-                    _progress = value;
-                  });
-                },
-                onCycleSpeed: _cycleSpeed,
-              ),
-            ],
+          body: TemplateEntrance(
+            child: TemplateSectionSwitcher(
+              selectedIndex: _selectedSection.index,
+              children: <Widget>[
+                PodcastDiscoverSection(
+                  shows: shows,
+                  selectedCategory: _selectedCategory,
+                  savedShowIds: _savedShowIds,
+                  scrollController: _scrollControllers[PodcastSection.discover]!,
+                  onQueryChanged: (String query) {
+                    setState(() {
+                      _query = query.trim().toLowerCase();
+                    });
+                  },
+                  onCategorySelected: (PodcastCategory category) {
+                    setState(() {
+                      _selectedCategory = category;
+                    });
+                  },
+                  onPlay: _play,
+                  onToggleSaved: _toggleSaved,
+                ),
+                PodcastLibrarySection(
+                  shows: savedShows,
+                  downloadedShowIds: _downloadedShowIds,
+                  scrollController: _scrollControllers[PodcastSection.library]!,
+                  onPlay: _play,
+                  onRemove: _toggleSaved,
+                  onToggleDownloaded: _toggleDownloaded,
+                ),
+                PodcastPlayerSection(
+                  show: _currentShow,
+                  isPlaying: _isPlaying,
+                  progress: _progress,
+                  speed: _speed,
+                  scrollController: _scrollControllers[PodcastSection.player]!,
+                  onTogglePlayback: () {
+                    setState(() {
+                      _isPlaying = !_isPlaying;
+                    });
+                  },
+                  onProgressChanged: (double value) {
+                    setState(() {
+                      _progress = value;
+                    });
+                  },
+                  onCycleSpeed: _cycleSpeed,
+                ),
+              ],
+            ),
           ),
           bottomNavigationBar: PodcastBottomBar(selectedSection: _selectedSection, onSelected: _selectSection),
         ),

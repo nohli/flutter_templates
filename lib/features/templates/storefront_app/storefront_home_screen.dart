@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_motion.dart';
 import 'models/store_product.dart';
 import 'models/storefront_section.dart';
 import 'sections/storefront_bag_section.dart';
@@ -75,40 +76,42 @@ class _StorefrontHomeScreenState extends State<StorefrontHomeScreen> {
               ),
             ],
           ),
-          body: IndexedStack(
-            index: _selectedSection.index,
-            children: <Widget>[
-              StorefrontShopSection(
-                products: matchingProducts,
-                selectedCategory: _selectedCategory,
-                savedProductIds: _savedProductIds,
-                scrollController: _scrollControllers[StorefrontSection.shop]!,
-                onCategorySelected: (StoreCategory category) {
-                  setState(() {
-                    _selectedCategory = category;
-                  });
-                },
-                onQueryChanged: (String query) {
-                  setState(() {
-                    _query = query.trim().toLowerCase();
-                  });
-                },
-                onToggleSaved: _toggleSaved,
-                onAddToBag: _addToBag,
-              ),
-              StorefrontSavedSection(
-                products: savedProducts,
-                scrollController: _scrollControllers[StorefrontSection.saved]!,
-                onToggleSaved: _toggleSaved,
-                onAddToBag: _addToBag,
-              ),
-              StorefrontBagSection(
-                products: bagProducts,
-                scrollController: _scrollControllers[StorefrontSection.bag]!,
-                onRemove: _removeFromBag,
-                onCheckout: () => _showMessage('Checkout is shown as an interface preview.'),
-              ),
-            ],
+          body: TemplateEntrance(
+            child: TemplateSectionSwitcher(
+              selectedIndex: _selectedSection.index,
+              children: <Widget>[
+                StorefrontShopSection(
+                  products: matchingProducts,
+                  selectedCategory: _selectedCategory,
+                  savedProductIds: _savedProductIds,
+                  scrollController: _scrollControllers[StorefrontSection.shop]!,
+                  onCategorySelected: (StoreCategory category) {
+                    setState(() {
+                      _selectedCategory = category;
+                    });
+                  },
+                  onQueryChanged: (String query) {
+                    setState(() {
+                      _query = query.trim().toLowerCase();
+                    });
+                  },
+                  onToggleSaved: _toggleSaved,
+                  onAddToBag: _addToBag,
+                ),
+                StorefrontSavedSection(
+                  products: savedProducts,
+                  scrollController: _scrollControllers[StorefrontSection.saved]!,
+                  onToggleSaved: _toggleSaved,
+                  onAddToBag: _addToBag,
+                ),
+                StorefrontBagSection(
+                  products: bagProducts,
+                  scrollController: _scrollControllers[StorefrontSection.bag]!,
+                  onRemove: _removeFromBag,
+                  onCheckout: () => _showMessage('Checkout is shown as an interface preview.'),
+                ),
+              ],
+            ),
           ),
           bottomNavigationBar: StorefrontBottomBar(
             selectedSection: _selectedSection,

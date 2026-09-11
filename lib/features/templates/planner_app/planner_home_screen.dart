@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_motion.dart';
 import 'models/planner_section.dart';
 import 'models/planner_task.dart';
 import 'planner_app_theme.dart';
@@ -62,27 +63,29 @@ class _PlannerHomeScreenState extends State<PlannerHomeScreen> {
               const SizedBox(width: 8),
             ],
           ),
-          body: IndexedStack(
-            index: _selectedSection.index,
-            children: <Widget>[
-              PlannerTodaySection(
-                tasks: _tasks,
-                scrollController: _scrollControllers[PlannerSection.today]!,
-                taskController: _taskController,
-                onAddTask: _addTask,
-                onToggleTask: _toggleTask,
-              ),
-              PlannerProjectsSection(tasks: _tasks, scrollController: _scrollControllers[PlannerSection.projects]!),
-              PlannerFocusSection(
-                isRunning: _focusIsRunning,
-                scrollController: _scrollControllers[PlannerSection.focus]!,
-                onToggle: () {
-                  setState(() {
-                    _focusIsRunning = !_focusIsRunning;
-                  });
-                },
-              ),
-            ],
+          body: TemplateEntrance(
+            child: TemplateSectionSwitcher(
+              selectedIndex: _selectedSection.index,
+              children: <Widget>[
+                PlannerTodaySection(
+                  tasks: _tasks,
+                  scrollController: _scrollControllers[PlannerSection.today]!,
+                  taskController: _taskController,
+                  onAddTask: _addTask,
+                  onToggleTask: _toggleTask,
+                ),
+                PlannerProjectsSection(tasks: _tasks, scrollController: _scrollControllers[PlannerSection.projects]!),
+                PlannerFocusSection(
+                  isRunning: _focusIsRunning,
+                  scrollController: _scrollControllers[PlannerSection.focus]!,
+                  onToggle: () {
+                    setState(() {
+                      _focusIsRunning = !_focusIsRunning;
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
           bottomNavigationBar: PlannerBottomBar(selectedSection: _selectedSection, onSelected: _selectSection),
         ),

@@ -339,6 +339,7 @@ void main() {
       'messenger_app',
       'planner_app',
       'podcast_app',
+      'shared',
       'smart_home_app',
       'storefront_app',
     });

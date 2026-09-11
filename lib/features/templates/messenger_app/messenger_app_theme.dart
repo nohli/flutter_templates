@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_theme.dart';
+
 abstract final class MessengerAppTheme {
   static const background = Color(0xFFF5F3FA);
   static const surface = Color(0xFFFFFFFF);
@@ -28,11 +30,11 @@ abstract final class MessengerAppTheme {
       outlineVariant: divider,
     );
 
-    return ThemeData(
-      colorScheme: colors,
+    return buildTemplateTheme(
+      colors: colors,
+      background: background,
+      navigationIndicator: lavender,
       fontFamily: fontName,
-      scaffoldBackgroundColor: background,
-      useMaterial3: true,
     );
   }
 

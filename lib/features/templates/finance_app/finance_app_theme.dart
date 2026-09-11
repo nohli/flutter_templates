@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_theme.dart';
+
 abstract final class FinanceAppTheme {
   static const background = Color(0xFFF6F4EE);
   static const surface = Color(0xFFFFFEFA);
@@ -28,11 +30,11 @@ abstract final class FinanceAppTheme {
       outlineVariant: divider,
     );
 
-    return ThemeData(
-      colorScheme: colors,
+    return buildTemplateTheme(
+      colors: colors,
+      background: background,
+      navigationIndicator: lavender,
       fontFamily: fontName,
-      scaffoldBackgroundColor: background,
-      useMaterial3: true,
     );
   }
 

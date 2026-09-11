@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_motion.dart';
 import 'food_delivery_app_theme.dart';
 import 'models/delivery_section.dart';
 import 'models/meal.dart';
@@ -67,42 +68,44 @@ class _FoodDeliveryHomeScreenState extends State<FoodDeliveryHomeScreen> {
               ),
             ],
           ),
-          body: IndexedStack(
-            index: _selectedSection.index,
-            children: <Widget>[
-              DeliveryDiscoverSection(
-                meals: meals,
-                selectedCategory: _selectedCategory,
-                scrollController: _scrollControllers[DeliverySection.discover]!,
-                onQueryChanged: (String query) {
-                  setState(() {
-                    _query = query.trim().toLowerCase();
-                  });
-                },
-                onCategorySelected: (MealCategory category) {
-                  setState(() {
-                    _selectedCategory = category;
-                  });
-                },
-                onAddMeal: _addMeal,
-              ),
-              DeliveryOrderSection(
-                isDelivered: _isDelivered,
-                scrollController: _scrollControllers[DeliverySection.order]!,
-                onToggle: () {
-                  setState(() {
-                    _isDelivered = !_isDelivered;
-                  });
-                },
-              ),
-              DeliveryBasketSection(
-                quantities: _quantities,
-                scrollController: _scrollControllers[DeliverySection.basket]!,
-                onAdd: _addMeal,
-                onRemove: _removeMeal,
-                onCheckout: () => _showMessage('Checkout is shown as an interface preview.'),
-              ),
-            ],
+          body: TemplateEntrance(
+            child: TemplateSectionSwitcher(
+              selectedIndex: _selectedSection.index,
+              children: <Widget>[
+                DeliveryDiscoverSection(
+                  meals: meals,
+                  selectedCategory: _selectedCategory,
+                  scrollController: _scrollControllers[DeliverySection.discover]!,
+                  onQueryChanged: (String query) {
+                    setState(() {
+                      _query = query.trim().toLowerCase();
+                    });
+                  },
+                  onCategorySelected: (MealCategory category) {
+                    setState(() {
+                      _selectedCategory = category;
+                    });
+                  },
+                  onAddMeal: _addMeal,
+                ),
+                DeliveryOrderSection(
+                  isDelivered: _isDelivered,
+                  scrollController: _scrollControllers[DeliverySection.order]!,
+                  onToggle: () {
+                    setState(() {
+                      _isDelivered = !_isDelivered;
+                    });
+                  },
+                ),
+                DeliveryBasketSection(
+                  quantities: _quantities,
+                  scrollController: _scrollControllers[DeliverySection.basket]!,
+                  onAdd: _addMeal,
+                  onRemove: _removeMeal,
+                  onCheckout: () => _showMessage('Checkout is shown as an interface preview.'),
+                ),
+              ],
+            ),
           ),
           bottomNavigationBar: DeliveryBottomBar(
             selectedSection: _selectedSection,

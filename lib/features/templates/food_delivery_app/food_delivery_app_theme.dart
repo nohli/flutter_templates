@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_theme.dart';
+
 abstract final class FoodDeliveryAppTheme {
   static const background = Color(0xFFFFF8EE);
   static const surface = Color(0xFFFFFFFF);
@@ -28,12 +30,7 @@ abstract final class FoodDeliveryAppTheme {
       outlineVariant: divider,
     );
 
-    return ThemeData(
-      colorScheme: colors,
-      fontFamily: fontName,
-      scaffoldBackgroundColor: background,
-      useMaterial3: true,
-    );
+    return buildTemplateTheme(colors: colors, background: background, navigationIndicator: peach, fontFamily: fontName);
   }
 
   static const softShadow = <BoxShadow>[BoxShadow(color: Color(0x1425352D), blurRadius: 20, offset: Offset(0, 8))];

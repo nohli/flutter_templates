@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../shared/template_motion.dart';
 import 'conversation_screen.dart';
 import 'messenger_app_theme.dart';
 import 'models/conversation.dart';
@@ -67,25 +68,27 @@ class _MessengerHomeScreenState extends State<MessengerHomeScreen> {
               const SizedBox(width: 8),
             ],
           ),
-          body: IndexedStack(
-            index: _selectedSection.index,
-            children: <Widget>[
-              MessengerChatsSection(
-                conversations: conversations,
-                scrollController: _scrollControllers[MessengerSection.chats]!,
-                onQueryChanged: (String query) {
-                  setState(() {
-                    _query = query.trim().toLowerCase();
-                  });
-                },
-                onConversationSelected: _openConversation,
-              ),
-              MessengerPeopleSection(
-                scrollController: _scrollControllers[MessengerSection.people]!,
-                onConversationSelected: _openConversation,
-              ),
-              MessengerProfileSection(scrollController: _scrollControllers[MessengerSection.profile]!),
-            ],
+          body: TemplateEntrance(
+            child: TemplateSectionSwitcher(
+              selectedIndex: _selectedSection.index,
+              children: <Widget>[
+                MessengerChatsSection(
+                  conversations: conversations,
+                  scrollController: _scrollControllers[MessengerSection.chats]!,
+                  onQueryChanged: (String query) {
+                    setState(() {
+                      _query = query.trim().toLowerCase();
+                    });
+                  },
+                  onConversationSelected: _openConversation,
+                ),
+                MessengerPeopleSection(
+                  scrollController: _scrollControllers[MessengerSection.people]!,
+                  onConversationSelected: _openConversation,
+                ),
+                MessengerProfileSection(scrollController: _scrollControllers[MessengerSection.profile]!),
+              ],
+            ),
           ),
           bottomNavigationBar: MessengerBottomBar(selectedSection: _selectedSection, onSelected: _selectSection),
         ),

@@ -11,16 +11,15 @@ enum AppAppearance {
     AppAppearance.dark => 'Dark',
   };
 
-  IconData get icon => switch (this) {
-    AppAppearance.system => Icons.brightness_auto_rounded,
-    AppAppearance.light => Icons.light_mode_rounded,
-    AppAppearance.dark => Icons.dark_mode_rounded,
-  };
-
   Brightness resolve(BuildContext context) => switch (this) {
     AppAppearance.system => MediaQuery.platformBrightnessOf(context),
     AppAppearance.light => Brightness.light,
     AppAppearance.dark => Brightness.dark,
+  };
+
+  IconData icon(BuildContext context) => switch (resolve(context)) {
+    Brightness.light => Icons.light_mode_rounded,
+    Brightness.dark => Icons.dark_mode_rounded,
   };
 }
 
@@ -36,14 +35,14 @@ class AppAppearanceButton extends StatelessWidget {
       tooltip: 'Appearance: ${appearance.label}',
       initialValue: appearance,
       onSelected: onChanged,
-      icon: Icon(appearance.icon),
+      icon: Icon(appearance.icon(context)),
       itemBuilder: (BuildContext context) => <PopupMenuEntry<AppAppearance>>[
         for (final option in AppAppearance.values)
           PopupMenuItem<AppAppearance>(
             value: option,
             child: Row(
               children: <Widget>[
-                Icon(option.icon, size: 20),
+                Icon(option.icon(context), size: 20),
                 const SizedBox(width: 12),
                 Expanded(child: Text(option.label)),
                 if (appearance == option) ...<Widget>[

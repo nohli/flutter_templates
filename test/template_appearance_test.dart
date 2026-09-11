@@ -70,6 +70,21 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('system appearance shows the effective sun or moon icon', (WidgetTester tester) async {
+    addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+
+    for (final brightness in Brightness.values) {
+      tester.platformDispatcher.platformBrightnessTestValue = brightness;
+      await tester.pumpWidget(KeyedSubtree(key: ValueKey<Brightness>(brightness), child: const UiTemplatesApp()));
+      await tester.pump();
+
+      final button = tester.widget<PopupMenuButton<AppAppearance>>(find.byType(PopupMenuButton<AppAppearance>));
+      final icon = button.icon! as Icon;
+      expect(icon.icon, brightness == Brightness.light ? Icons.light_mode_rounded : Icons.dark_mode_rounded);
+      expect(find.byIcon(Icons.brightness_auto_rounded), findsNothing);
+    }
+  });
+
   testWidgets('every gallery artwork follows the selected appearance', (WidgetTester tester) async {
     for (final brightness in Brightness.values) {
       await tester.pumpWidget(

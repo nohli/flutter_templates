@@ -8,6 +8,7 @@ import 'package:templates/features/templates/finance_app/models/spending_categor
 import 'package:templates/features/templates/finance_app/widgets/finance_bottom_bar.dart';
 import 'package:templates/features/templates/finance_app/widgets/finance_entrance.dart';
 import 'package:templates/features/templates/finance_app/widgets/finance_gallery_preview.dart';
+import 'package:templates/features/templates/finance_app/widgets/quick_actions.dart';
 import 'package:templates/features/templates/finance_app/widgets/spending_overview.dart';
 
 void main() {
@@ -85,12 +86,52 @@ void main() {
     expect(find.text('••••••'), findsOneWidget);
     expect(find.byTooltip('Show balance'), findsOneWidget);
 
-    await tester.tap(find.text('Send'));
+    await tester.tap(find.bySemanticsLabel('Send'));
     await tester.pump();
 
     expect(find.text('Send is shown as an interface preview.'), findsOneWidget);
     expect(tester.takeException(), isNull);
     semantics.dispose();
+  });
+
+  testWidgets('finance transfer orbit routes every satellite action', (WidgetTester tester) async {
+    await _pumpFinance(tester);
+
+    for (final label in <String>['Add money', 'Request', 'More']) {
+      await tester.tap(find.bySemanticsLabel(label));
+      await tester.pump();
+      expect(find.text('$label is shown as an interface preview.'), findsOneWidget);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('finance actions become a readable list at maximum text size', (WidgetTester tester) async {
+    tester.view
+      ..devicePixelRatio = 1
+      ..physicalSize = const Size(320, 568);
+    addTearDown(tester.view.reset);
+    var selectedAction = '';
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: MediaQuery(
+          data: MediaQueryData.fromView(tester.view).copyWith(textScaler: const TextScaler.linear(3.2)),
+          child: Scaffold(
+            body: FinanceQuickActions(
+              animation: const AlwaysStoppedAnimation<double>(1),
+              onSelected: (String action) {
+                selectedAction = action;
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byType(OutlinedButton), findsNWidgets(4));
+    await tester.tap(find.widgetWithText(OutlinedButton, 'Request'));
+    expect(selectedAction, 'Request');
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('finance renders the externally selected dark theme', (WidgetTester tester) async {

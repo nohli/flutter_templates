@@ -8,7 +8,7 @@ on:
       - main
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -25,13 +25,12 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
   check_formatting:
     name: Check Formatting
@@ -43,13 +42,12 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
       - name: Check Dart formatting
         run: dart format --page-width 120 --output=none --set-exit-if-changed lib test integration_test test_driver
 
@@ -63,13 +61,12 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
       - name: Run Dart analyze
         run: dart analyze --fatal-infos
 
@@ -83,12 +80,26 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics
       - name: Flutter pub get
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
       - name: Flutter test
         run: flutter test --coverage
+      - name: Check coverage
+        run: |
+          awk -F: '
+            /^LF:/ { lines += $2 }
+            /^LH:/ { covered += $2 }
+            END {
+              if (lines == 0) {
+                print "No coverable lines found"
+                exit 1
+              }
+              coverage = 100 * covered / lines
+              printf "Line coverage: %.1f%%\n", coverage
+              if (coverage < 90) exit 1
+            }
+          ' coverage/lcov.info

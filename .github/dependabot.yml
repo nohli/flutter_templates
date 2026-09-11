@@ -8,12 +8,12 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
 
   - package-ecosystem: "pub"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-minor", "version-update:semver-patch"]
@@ -21,4 +21,4 @@ updates:
   - package-ecosystem: "gradle"
     directory: "android"
     schedule:
-      interval: "daily"
+      interval: "weekly"

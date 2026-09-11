@@ -17,7 +17,7 @@ workflows:
       vars:
         BUNDLE_ID: com.achimsapps.templates
         CM_CLONE_UNSHALLOW: 'true'
-      flutter: 3.44.9
+      flutter: stable
       xcode: 26.6
     scripts:
       - name: Get Packages
@@ -82,7 +82,7 @@ workflows:
         - templates_keystore
       vars:
         CM_CLONE_UNSHALLOW: 'true'
-      flutter: 3.44.9
+      flutter: stable
     scripts:
       - name: Get Packages
         script: |

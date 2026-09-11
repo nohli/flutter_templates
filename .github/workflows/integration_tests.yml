@@ -8,7 +8,7 @@ on:
       - main
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -34,11 +34,10 @@ jobs:
       - name: Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -62,11 +61,10 @@ jobs:
       - name: Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
       - name: Simulator
         id: simulator
         uses: futureware-tech/simulator-action@v5
@@ -86,11 +84,10 @@ jobs:
       - name: Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
       - name: Test
         run: |
           chromedriver --port=4444 &
@@ -110,11 +107,10 @@ jobs:
       - name: Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
       - name: Test
         run: xvfb-run -a flutter test integration_test -d linux
 
@@ -128,11 +124,10 @@ jobs:
       - name: Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
       - name: Test
         run: flutter test integration_test -d macos
 
@@ -146,10 +141,9 @@ jobs:
       - name: Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.9'
           channel: stable
           cache: true
       - name: Dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
       - name: Test
         run: flutter test integration_test -d windows

@@ -93,8 +93,8 @@ void main() {
     expect(androidBuild, contains('applicationId = "com.achimsapps.templates"'));
     expect(androidBuild, contains('compileSdk = flutter.compileSdkVersion'));
     expect(androidBuild, contains('targetSdk = flutter.targetSdkVersion'));
-    expect(fvmConfig['flutter'], '3.44.9');
-    expect(RegExp(r'flutter: 3\.44\.9').allMatches(codemagic), hasLength(2));
+    expect(fvmConfig['flutter'], 'stable');
+    expect(RegExp(r'flutter: stable').allMatches(codemagic), hasLength(2));
     expect(androidBuild, contains('releaseTaskRequested && !releaseSigningConfigured'));
     expect(androidActivity, contains('package com.achimsapps.templates'));
     expect(androidManifest, isNot(contains('android.permission.INTERNET')));
@@ -145,7 +145,7 @@ void main() {
       final buildScript = buildStep['script'] as String;
 
       expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
-      expect(environment['flutter'], '3.44.9');
+      expect(environment['flutter'], 'stable');
       expect(variables['CM_CLONE_UNSHALLOW'], 'true');
       expect(_asYamlList(environment['groups']), contains('deployment'));
       expect(scriptNames, isNot(contains('Analyze')));
@@ -255,20 +255,27 @@ void main() {
         _ => <String>{'android', 'ios', 'web', 'linux', 'macos', 'windows'},
       };
       expect(jobs.keys.cast<String>().toSet(), expectedJobs, reason: workflowFile);
+      final commands = jobs.values
+          .expand((Object? jobValue) => _asYamlList(_asYamlMap(jobValue)['steps']))
+          .map(_asYamlMap)
+          .map((YamlMap step) => step['run'])
+          .whereType<String>()
+          .toList();
       for (final Object? jobValue in jobs.values) {
         final steps = _asYamlList(_asYamlMap(jobValue)['steps']);
         expect(steps.map(_asYamlMap).map((YamlMap step) => step['uses']), contains('actions/checkout@v7'));
         final installFlutter = steps
             .map(_asYamlMap)
             .singleWhere((YamlMap step) => step['uses'] == 'subosito/flutter-action@v2');
-        expect(_asYamlMap(installFlutter['with'])['flutter-version'], '3.44.9', reason: workflowFile);
+        final flutterOptions = _asYamlMap(installFlutter['with']);
+        expect(flutterOptions['channel'], 'stable', reason: workflowFile);
+        expect(flutterOptions, isNot(contains('flutter-version')), reason: workflowFile);
+        expect(flutterOptions, isNot(contains('flutter-version-file')), reason: workflowFile);
       }
+      final dependencyCommands = commands.where((String command) => command.startsWith('flutter pub get'));
+      expect(dependencyCommands, isNotEmpty, reason: workflowFile);
+      expect(dependencyCommands, everyElement('flutter pub get --enforce-lockfile'), reason: workflowFile);
       if (workflowFile.endsWith('flutter_checks.yml')) {
-        final commands = jobs.values
-            .expand((Object? jobValue) => _asYamlList(_asYamlMap(jobValue)['steps']))
-            .map(_asYamlMap)
-            .map((YamlMap step) => step['run'])
-            .whereType<String>();
         expect(
           commands,
           contains(
@@ -277,13 +284,9 @@ void main() {
         );
         expect(commands.any((String command) => command.contains('--line-length')), isFalse);
         expect(commands, contains('flutter test --coverage'));
+        expect(commands.any((String command) => command.contains('coverage < 90')), isTrue);
       }
       if (workflowFile.endsWith('integration_tests.yml')) {
-        final commands = jobs.values
-            .expand((Object? jobValue) => _asYamlList(_asYamlMap(jobValue)['steps']))
-            .map(_asYamlMap)
-            .map((YamlMap step) => step['run'])
-            .whereType<String>();
         expect(commands.any((String command) => command.contains('flutter test integration_test -d linux')), isTrue);
         expect(commands.any((String command) => command.contains('flutter test integration_test -d macos')), isTrue);
         expect(commands.any((String command) => command.contains('flutter test integration_test -d windows')), isTrue);
@@ -310,6 +313,19 @@ void main() {
         expect(_asYamlMap(simulator['with']), containsPair('model', 'iPhone 17'));
       }
     }
+
+    final dependencyReview = _loadYamlMap('.github/workflows/dependency_review.yml');
+    final dependencyTriggers = _asYamlMap(dependencyReview['on']);
+    final pullRequest = _asYamlMap(dependencyTriggers['pull_request']);
+    expect(_asYamlList(pullRequest['branches']), <String>['main']);
+    expect(
+      _asYamlList(pullRequest['paths']),
+      containsAll(<String>['pubspec.yaml', 'pubspec.lock', '.github/workflows/**']),
+    );
+    expect(_asYamlMap(dependencyReview['permissions'])['contents'], 'read');
+    final dependencyJobs = _asYamlMap(dependencyReview['jobs']);
+    final dependencySteps = _asYamlList(_asYamlMap(dependencyJobs['review'])['steps']).map(_asYamlMap);
+    expect(dependencySteps.map((YamlMap step) => step['uses']), contains('actions/dependency-review-action@v4'));
   });
 
   test('bundled font licenses preserve their exact upstream notices', () {

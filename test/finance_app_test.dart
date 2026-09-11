@@ -28,9 +28,20 @@ void main() {
 
     expect(find.text('Overview'), findsOneWidget);
     expect(find.text('Good morning, Alex'), findsOneWidget);
+    expect(find.text('Money and crypto, together'), findsOneWidget);
     expect(find.text('Total balance'), findsOneWidget);
     expect(find.text('12.4% this month'), findsOneWidget);
     expect(find.text('Spending'), findsWidgets);
+
+    await tester.scrollUntilVisible(
+      find.text('Crypto'),
+      300,
+      scrollable: find.descendant(of: find.byType(FinanceHomeScreen), matching: find.byType(Scrollable)).first,
+    );
+
+    expect(find.text('Bitcoin'), findsOneWidget);
+    expect(find.text('Ethereum'), findsOneWidget);
+    expect(find.text('Solana'), findsOneWidget);
 
     await tester.scrollUntilVisible(
       find.text('Recent activity'),
@@ -77,6 +88,22 @@ void main() {
     expect(find.text('Send is shown as an interface preview.'), findsOneWidget);
     expect(tester.takeException(), isNull);
     semantics.dispose();
+  });
+
+  testWidgets('finance appearance menu switches between complete light and dark themes', (WidgetTester tester) async {
+    await _pumpFinance(tester);
+
+    expect(Theme.of(tester.element(find.text('Overview'))).brightness, Brightness.light);
+    await tester.tap(find.byTooltip('Appearance: Light'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dark').last);
+    await tester.pumpAndSettle();
+
+    final theme = Theme.of(tester.element(find.text('Overview')));
+    expect(theme.brightness, Brightness.dark);
+    expect(theme.scaffoldBackgroundColor, const Color(0xFF0E1118));
+    expect(find.byTooltip('Appearance: Dark'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('finance content enters progressively and replays when sections change', (WidgetTester tester) async {

@@ -55,6 +55,8 @@ class _QuickAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Semantics(
       button: true,
       label: label,
@@ -62,7 +64,7 @@ class _QuickAction extends StatelessWidget {
       child: ExcludeSemantics(
         child: TextButton(
           style: TextButton.styleFrom(
-            foregroundColor: FinanceAppTheme.primaryDark,
+            foregroundColor: colors.primary,
             padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(18))),
           ),
@@ -72,13 +74,13 @@ class _QuickAction extends StatelessWidget {
               Container(
                 width: 50,
                 height: 50,
-                decoration: const BoxDecoration(
-                  color: FinanceAppTheme.surface,
-                  borderRadius: BorderRadius.all(Radius.circular(17)),
+                decoration: BoxDecoration(
+                  color: colors.surface,
+                  borderRadius: const BorderRadius.all(Radius.circular(17)),
                   boxShadow: FinanceAppTheme.softShadow,
                 ),
                 alignment: Alignment.center,
-                child: Icon(icon, color: FinanceAppTheme.primaryDark, size: 22),
+                child: Icon(icon, color: colors.primary, size: 22),
               ),
               const SizedBox(height: 8),
               Text(
@@ -86,7 +88,7 @@ class _QuickAction extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.fade,
                 softWrap: false,
-                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: FinanceAppTheme.ink),
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: colors.onSurface),
               ),
             ],
           ),

@@ -12,9 +12,9 @@ class FinanceSurface extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: padding,
-      decoration: const BoxDecoration(
-        color: FinanceAppTheme.surface,
-        borderRadius: BorderRadius.all(Radius.circular(26)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.all(Radius.circular(26)),
         boxShadow: FinanceAppTheme.softShadow,
       ),
       child: Material(type: MaterialType.transparency, child: child),

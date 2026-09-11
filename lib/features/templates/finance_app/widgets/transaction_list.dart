@@ -25,9 +25,9 @@ class FinanceTransactionList extends StatelessWidget {
               child: _TransactionTile(transaction: transactions[index], compact: compact),
             ),
             if (index != transactions.length - 1)
-              const Padding(
-                padding: EdgeInsets.only(left: 72),
-                child: Divider(height: 1, color: FinanceAppTheme.divider),
+              Padding(
+                padding: const EdgeInsets.only(left: 72),
+                child: Divider(height: 1, color: Theme.of(context).colorScheme.outlineVariant),
               ),
           ],
         ],
@@ -45,7 +45,7 @@ class _TransactionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final amount = formatCurrency(context, transaction.amount);
-    final amountColor = transaction.isIncome ? const Color(0xFF167A5B) : FinanceAppTheme.ink;
+    final amountColor = transaction.isIncome ? const Color(0xFF167A5B) : Theme.of(context).colorScheme.onSurface;
 
     return Semantics(
       container: true,
@@ -76,7 +76,7 @@ class _TransactionTile extends StatelessWidget {
                       transaction.subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 11, color: FinanceAppTheme.mutedInk),
+                      style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
                     ),
                   ],
                 ),

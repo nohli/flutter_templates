@@ -14,7 +14,7 @@ void main() {
     await _openTemplate(tester, cardLabel: 'Hotel Booking', screenText: 'Explore');
     await _openTemplate(tester, cardLabel: 'Fitness App', screenText: 'My Diary');
     await _openTemplate(tester, cardLabel: 'Design Course', screenText: 'Choose your');
-    await _openTemplate(tester, cardLabel: 'Personal Finance', screenText: 'Your money, at a glance');
+    await _openTemplate(tester, cardLabel: 'Personal Finance', screenText: 'Money and crypto, together');
     await _openTemplate(tester, cardLabel: 'E-commerce Store', screenText: 'Curated objects for calmer spaces.');
     await _openTemplate(tester, cardLabel: 'Project Planner', screenText: 'Make space for what matters.');
     await _openTemplate(tester, cardLabel: 'AI Assistant', screenText: 'What can I help you create?');

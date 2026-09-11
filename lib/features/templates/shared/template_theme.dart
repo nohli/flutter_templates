@@ -4,7 +4,7 @@ ThemeData buildTemplateTheme({
   required ColorScheme colors,
   required Color background,
   required Color navigationIndicator,
-  required String fontFamily,
+  String? fontFamily,
 }) {
   final theme = ThemeData(
     colorScheme: colors,

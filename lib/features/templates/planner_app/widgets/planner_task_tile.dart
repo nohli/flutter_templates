@@ -22,24 +22,35 @@ class PlannerTaskTile extends StatelessWidget {
       child: AnimatedContainer(
         duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 220),
         curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+        padding: const EdgeInsets.fromLTRB(10, 10, 8, 10),
         decoration: BoxDecoration(
           color: isDone ? colorScheme.secondary : colorScheme.surface,
-          border: Border.all(color: isDone ? PlannerAppTheme.lime : Colors.transparent, width: 1.5),
-          borderRadius: const BorderRadius.all(Radius.circular(22)),
-          boxShadow: PlannerAppTheme.softShadow,
+          border: Border.all(color: isDone ? PlannerAppTheme.lime : colorScheme.outlineVariant, width: 1.5),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
         child: Row(
           children: <Widget>[
             Container(
-              width: 44,
-              height: 44,
+              width: 48,
+              height: 48,
               decoration: BoxDecoration(
                 color: colors.background,
-                borderRadius: const BorderRadius.all(Radius.circular(14)),
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
               ),
-              alignment: Alignment.center,
-              child: Icon(_iconFor(task.kind), color: colors.foreground, size: 21),
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Icon(_iconFor(task.kind), color: colors.foreground, size: 21),
+                  Positioned(
+                    left: 4,
+                    top: 3,
+                    child: Text(
+                      _codeFor(task.kind),
+                      style: TextStyle(color: colors.foreground.withValues(alpha: 0.7), fontSize: 6),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -100,5 +111,12 @@ class PlannerTaskTile extends StatelessWidget {
     PlannerTaskKind.research => Icons.travel_explore_rounded,
     PlannerTaskKind.writing => Icons.edit_note_rounded,
     PlannerTaskKind.planning => Icons.view_timeline_rounded,
+  };
+
+  String _codeFor(PlannerTaskKind kind) => switch (kind) {
+    PlannerTaskKind.design => 'DS',
+    PlannerTaskKind.research => 'RS',
+    PlannerTaskKind.writing => 'WR',
+    PlannerTaskKind.planning => 'PL',
   };
 }

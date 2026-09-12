@@ -13,8 +13,10 @@ abstract final class AiAssistantAppTheme {
   static const aqua = Color(0xFF5CF1D4);
   static const pink = Color(0xFFFF70AE);
   static const divider = Color(0xFF30384C);
-  static const fontName = 'SpaceGrotesk';
+  static const fontName = 'WorkSans';
   static const displayFontName = 'Unbounded';
+  static const panelRadius = BorderRadius.all(Radius.circular(28));
+  static const controlRadius = BorderRadius.all(Radius.circular(18));
 
   static ThemeData build([Brightness brightness = Brightness.dark]) {
     final isDark = brightness == Brightness.dark;
@@ -61,5 +63,5 @@ abstract final class AiAssistantAppTheme {
     );
   }
 
-  static const softShadow = <BoxShadow>[BoxShadow(color: Color(0x66000000), blurRadius: 0, offset: Offset(6, 6))];
+  static const softShadow = <BoxShadow>[BoxShadow(color: Color(0x26000000), blurRadius: 28, offset: Offset(0, 12))];
 }

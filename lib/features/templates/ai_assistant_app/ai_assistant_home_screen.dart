@@ -62,7 +62,7 @@ class _AiAssistantHomeScreenState extends State<AiAssistantHomeScreen> {
                       onPressed: () => Navigator.of(context).pop(),
                       style: IconButton.styleFrom(
                         side: const BorderSide(color: AiAssistantAppTheme.aqua),
-                        shape: const RoundedRectangleBorder(),
+                        shape: const CircleBorder(),
                       ),
                       icon: const Icon(Icons.arrow_back_rounded),
                     )
@@ -104,7 +104,7 @@ class _AiAssistantHomeScreenState extends State<AiAssistantHomeScreen> {
                       onPressed: () => Scaffold.of(context).openEndDrawer(),
                       style: IconButton.styleFrom(
                         side: const BorderSide(color: AiAssistantAppTheme.aqua),
-                        shape: const RoundedRectangleBorder(),
+                        shape: const CircleBorder(),
                       ),
                       icon: const Icon(Icons.menu_open_rounded),
                     );

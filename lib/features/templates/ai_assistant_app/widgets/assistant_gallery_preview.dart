@@ -71,11 +71,13 @@ class _IdeaMapPreview extends StatelessWidget {
     final ink = dark ? AiAssistantAppTheme.ink : const Color(0xFF171521);
     final divider = dark ? const Color(0xFF30384C) : const Color(0xFFD9D3E5);
 
-    return DecoratedBox(
+    return Container(
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: surface,
         border: Border.all(color: divider),
-        boxShadow: const <BoxShadow>[BoxShadow(color: Color(0x33000000), offset: Offset(4, 4))],
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+        boxShadow: const <BoxShadow>[BoxShadow(color: Color(0x26000000), blurRadius: 8, offset: Offset(0, 4))],
       ),
       child: Stack(
         children: <Widget>[
@@ -112,6 +114,7 @@ class _IdeaMapPreview extends StatelessWidget {
               decoration: BoxDecoration(
                 color: surface,
                 border: Border.all(color: AiAssistantAppTheme.pink),
+                borderRadius: const BorderRadius.all(Radius.circular(7)),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -165,6 +168,7 @@ class _PreviewComposer extends StatelessWidget {
       decoration: BoxDecoration(
         color: dark ? AiAssistantAppTheme.raisedSurface : Colors.white,
         border: Border.all(color: dark ? AiAssistantAppTheme.divider : const Color(0xFFD9D3E5)),
+        borderRadius: const BorderRadius.all(Radius.circular(9)),
       ),
       child: Row(
         children: <Widget>[
@@ -176,8 +180,8 @@ class _PreviewComposer extends StatelessWidget {
           ),
           const SizedBox.square(
             dimension: 20,
-            child: ColoredBox(
-              color: AiAssistantAppTheme.primary,
+            child: DecoratedBox(
+              decoration: BoxDecoration(color: AiAssistantAppTheme.primary, shape: BoxShape.circle),
               child: Icon(Icons.arrow_upward_rounded, size: 11, color: AiAssistantAppTheme.background),
             ),
           ),

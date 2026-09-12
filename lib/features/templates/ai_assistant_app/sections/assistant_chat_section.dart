@@ -55,7 +55,10 @@ class _AssistantHero extends StatelessWidget {
 
     if (largeText) {
       return const DecoratedBox(
-        decoration: BoxDecoration(color: AiAssistantAppTheme.raisedSurface),
+        decoration: BoxDecoration(
+          color: AiAssistantAppTheme.raisedSurface,
+          borderRadius: AiAssistantAppTheme.panelRadius,
+        ),
         child: Padding(
           padding: EdgeInsets.all(18),
           child: Column(
@@ -87,9 +90,15 @@ class _AssistantHero extends StatelessWidget {
 
     return SizedBox(
       height: 212,
-      child: DecoratedBox(
+      child: Container(
+        clipBehavior: Clip.antiAlias,
         decoration: const BoxDecoration(
-          color: AiAssistantAppTheme.raisedSurface,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[AiAssistantAppTheme.raisedSurface, AiAssistantAppTheme.background],
+          ),
+          borderRadius: AiAssistantAppTheme.panelRadius,
           boxShadow: AiAssistantAppTheme.softShadow,
         ),
         child: Stack(
@@ -201,7 +210,7 @@ class _PromptSuggestions extends StatelessWidget {
               onPressed: () => onSelected(prompt.label),
               backgroundColor: colors.surface,
               side: BorderSide(color: colors.outlineVariant),
-              shape: const RoundedRectangleBorder(),
+              shape: const StadiumBorder(),
             ),
           )
           .toList(growable: false),
@@ -218,6 +227,7 @@ class _Composer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final largeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -230,17 +240,17 @@ class _Composer extends StatelessWidget {
         child: TextField(
           controller: controller,
           minLines: 1,
-          maxLines: 4,
+          maxLines: largeText ? 1 : 4,
           textInputAction: TextInputAction.send,
           onSubmitted: (_) => onSend(),
           decoration: InputDecoration(
             hintText: 'Message Nova',
-            prefixIcon: const Icon(Icons.add_circle_outline_rounded),
-            border: const OutlineInputBorder(borderRadius: BorderRadius.zero),
+            prefixIcon: largeText ? null : const Icon(Icons.add_circle_outline_rounded),
+            border: const OutlineInputBorder(borderRadius: AiAssistantAppTheme.controlRadius),
             suffixIcon: IconButton.filled(
               tooltip: 'Send message',
               onPressed: onSend,
-              style: IconButton.styleFrom(shape: const RoundedRectangleBorder()),
+              style: IconButton.styleFrom(shape: const CircleBorder()),
               icon: const Icon(Icons.arrow_upward_rounded),
             ),
           ),

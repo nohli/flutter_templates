@@ -58,16 +58,20 @@ class _TimelineHeader extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text(
-                'TIME MAP / TODAY',
-                style: TextStyle(
-                  color: colors.onSurface,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.1,
+              Expanded(
+                child: Text(
+                  'TIME MAP / TODAY',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: colors.onSurface,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.1,
+                  ),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 12),
               Text(
                 '09:30 — 17:00',
                 style: TextStyle(color: colors.onSurfaceVariant, fontSize: 10, fontWeight: FontWeight.w700),

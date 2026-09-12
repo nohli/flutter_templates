@@ -12,6 +12,14 @@ import 'package:templates/features/templates/finance_app/widgets/quick_actions.d
 import 'package:templates/features/templates/finance_app/widgets/spending_overview.dart';
 
 void main() {
+  test('finance keeps its market-display face out of body copy', () {
+    final theme = FinanceAppTheme.build();
+
+    expect(theme.textTheme.headlineLarge?.fontFamily, FinanceAppTheme.displayFontName);
+    expect(theme.textTheme.bodyMedium?.fontFamily, FinanceAppTheme.fontName);
+    expect(FinanceAppTheme.fontName, isNot(FinanceAppTheme.displayFontName));
+  });
+
   test('finance sample models expose stable values and bounded progress', () {
     expect(FinanceTransaction.samples.map((FinanceTransaction transaction) => transaction.id).toSet(), hasLength(5));
     expect(FinanceTransaction.samples.first.isIncome, isTrue);

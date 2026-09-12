@@ -18,7 +18,7 @@ abstract final class FinanceAppTheme {
   static const amber = Color(0xFFFFC857);
   static const lavender = Color(0xFFE3E6FF);
   static const divider = Color(0xFFE2E0D8);
-  static const fontName = 'SpaceGrotesk';
+  static const fontName = 'WorkSans';
   static const displayFontName = 'SpaceGrotesk';
 
   static ThemeData build([Brightness brightness = Brightness.light]) {

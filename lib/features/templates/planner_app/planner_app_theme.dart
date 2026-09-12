@@ -13,7 +13,7 @@ abstract final class PlannerAppTheme {
   static const sky = Color(0xFFCBE6FF);
   static const peach = Color(0xFFFFD5C5);
   static const divider = Color(0xFFE2E7F0);
-  static const fontName = 'Syne';
+  static const fontName = 'WorkSans';
   static const displayFontName = 'Syne';
 
   static ThemeData build([Brightness brightness = Brightness.light]) {

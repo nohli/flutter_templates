@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/planner_app/models/planner_task.dart';
+import 'package:templates/features/templates/planner_app/planner_app_theme.dart';
 import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
 import 'package:templates/features/templates/planner_app/widgets/planner_day_rail.dart';
 import 'package:templates/features/templates/planner_app/widgets/planner_gallery_preview.dart';
 
 void main() {
+  test('planner keeps its expressive display face out of body copy', () {
+    final theme = PlannerAppTheme.build();
+
+    expect(theme.textTheme.headlineLarge?.fontFamily, PlannerAppTheme.displayFontName);
+    expect(theme.textTheme.bodyMedium?.fontFamily, PlannerAppTheme.fontName);
+    expect(PlannerAppTheme.fontName, isNot(PlannerAppTheme.displayFontName));
+  });
+
   test('planner tasks copy state without losing stable identity', () {
     final original = PlannerTask.samples.first;
     final completed = original.copyWith(status: PlannerTaskStatus.done);
@@ -19,6 +28,7 @@ void main() {
   testWidgets('planner completes and captures tasks with visible progress', (WidgetTester tester) async {
     await _pumpPlanner(tester);
 
+    expect(find.text('TIME MAP / TODAY'), findsOneWidget);
     expect(find.text('25%'), findsOneWidget);
     await tester.tap(find.byTooltip('Complete Review the launch flow'));
     await tester.pumpAndSettle();

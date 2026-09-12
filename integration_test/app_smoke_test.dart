@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:templates/app/app_identity.dart';
@@ -34,6 +35,29 @@ void main() {
     for (final template in templates) {
       await _openTemplate(tester, cardLabel: template.cardLabel, screenText: template.screenText);
     }
+  });
+
+  testWidgets('opens a Sway conversation and sends a message', (WidgetTester tester) async {
+    app.main();
+    await _finishAnimations(tester);
+
+    final card = find.bySemanticsLabel('Dating & Social');
+    await tester.ensureVisible(card);
+    await tester.tap(card);
+    await _finishAnimations(tester);
+
+    await tester.tap(find.byTooltip('Open conversations'));
+    await _finishAnimations(tester);
+    expect(find.text('Messages'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Open conversation with Ari'));
+    await _finishAnimations(tester);
+    expect(find.text('You and Ari found a little common ground.'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), 'Coffee at six?');
+    await tester.tap(find.byTooltip('Send message'));
+    await _finishAnimations(tester);
+    expect(find.text('Coffee at six?'), findsOneWidget);
   });
 }
 

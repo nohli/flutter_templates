@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
+import 'package:templates/features/templates/food_delivery_app/food_delivery_app_theme.dart';
 import 'package:templates/features/templates/food_delivery_app/food_delivery_home_screen.dart';
 import 'package:templates/features/templates/food_delivery_app/models/meal.dart';
 import 'package:templates/features/templates/food_delivery_app/sections/delivery_basket_section.dart';
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_action_dock.dart';
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_basket_item.dart';
 import 'package:templates/features/templates/food_delivery_app/widgets/delivery_gallery_preview.dart';
+import 'package:templates/features/templates/food_delivery_app/widgets/meal_card.dart';
 
 void main() {
   test('delivery sample meals expose unique identifiers and valid values', () {
@@ -56,6 +58,25 @@ void main() {
     await tester.tap(find.byTooltip('Remove one Sunset bowl'));
     await tester.pump();
     expect(find.text('Your basket is waiting'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('delivery uses soft meal cards and animates basket feedback', (WidgetTester tester) async {
+    await _pumpDelivery(tester, disableAnimations: false);
+
+    final mealCard = find.byType(MealCard).first;
+    final cardMaterial = tester.widget<Material>(find.descendant(of: mealCard, matching: find.byType(Material)).first);
+    expect((cardMaterial.shape! as RoundedRectangleBorder).borderRadius, FoodDeliveryAppTheme.cardRadius);
+
+    await tester.tap(find.byTooltip('Add Sunset bowl to basket'));
+    await tester.pump();
+    final basket = find.byTooltip('Basket, 1 item');
+    final badgeMotion = tester.widget<AnimatedSwitcher>(
+      find.descendant(of: basket, matching: find.byType(AnimatedSwitcher)),
+    );
+    expect(badgeMotion.duration, const Duration(milliseconds: 260));
+    expect(tester.hasRunningAnimations, isTrue);
+    await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
 
@@ -151,12 +172,14 @@ Future<void> _pumpDelivery(
   Size size = const Size(430, 932),
   double textScale = 1,
   AppAppearance appearance = AppAppearance.light,
+  bool disableAnimations = true,
 }) async {
   await _pumpDeliveryScreen(
     tester,
     FoodDeliveryHomeScreen(appearance: appearance),
     size: size,
     textScale: textScale,
+    disableAnimations: disableAnimations,
   );
 }
 
@@ -165,12 +188,15 @@ Future<void> _pumpDeliveryScreen(
   Widget screen, {
   required Size size,
   required double textScale,
+  bool disableAnimations = true,
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
 
-  final mediaQuery = MediaQueryData.fromView(tester.view).copyWith(textScaler: TextScaler.linear(textScale));
+  final mediaQuery = MediaQueryData.fromView(
+    tester.view,
+  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
   await tester.pumpWidget(
     MaterialApp(
       home: MediaQuery(data: mediaQuery, child: screen),

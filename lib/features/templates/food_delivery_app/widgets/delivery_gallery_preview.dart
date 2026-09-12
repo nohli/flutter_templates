@@ -73,6 +73,7 @@ class DeliveryGalleryPreview extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: paper,
                         border: Border.all(color: ink, width: 1.2),
+                        borderRadius: const BorderRadius.all(Radius.circular(18)),
                       ),
                       child: const Padding(
                         padding: EdgeInsets.fromLTRB(18, 12, 18, 22),
@@ -149,7 +150,7 @@ class _TimeTicket extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-      color: paper,
+      decoration: BoxDecoration(color: paper, borderRadius: const BorderRadius.all(Radius.circular(10))),
       child: Row(
         children: <Widget>[
           Icon(Icons.delivery_dining_rounded, size: 11, color: ink),

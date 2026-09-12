@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../food_delivery_app_theme.dart';
 import '../models/delivery_section.dart';
 
 class DeliveryActionDock extends StatelessWidget {
@@ -21,7 +22,13 @@ class DeliveryActionDock extends StatelessWidget {
 
     return Material(
       color: colors.surface,
-      shape: Border(top: BorderSide(color: colors.outlineVariant)),
+      elevation: 8,
+      shadowColor: colors.shadow.withValues(alpha: 0.14),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: colors.outlineVariant),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      clipBehavior: Clip.antiAlias,
       child: SafeArea(
         top: false,
         minimum: const EdgeInsets.fromLTRB(14, 10, 14, 12),
@@ -78,6 +85,7 @@ class _DockIconAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
 
     return Tooltip(
       message: label,
@@ -86,7 +94,7 @@ class _DockIconAction extends StatelessWidget {
         selected: isSelected,
         label: label,
         child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          borderRadius: FoodDeliveryAppTheme.controlRadius,
           onTap: onPressed,
           child: Container(
             constraints: const BoxConstraints(minWidth: 58, minHeight: 54),
@@ -94,15 +102,27 @@ class _DockIconAction extends StatelessWidget {
             decoration: BoxDecoration(
               color: isSelected ? colors.secondaryContainer : Colors.transparent,
               border: Border.all(color: isSelected ? colors.primary : colors.outlineVariant),
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
+              borderRadius: FoodDeliveryAppTheme.controlRadius,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Badge(
-                  isLabelVisible: badgeCount > 0,
-                  label: Text('$badgeCount'),
-                  child: Icon(icon, color: isSelected ? colors.primary : colors.onSurfaceVariant, size: 22),
+                AnimatedSwitcher(
+                  duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 260),
+                  switchInCurve: Curves.easeOutBack,
+                  switchOutCurve: Curves.easeIn,
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: ScaleTransition(scale: animation, child: child),
+                    );
+                  },
+                  child: Badge(
+                    key: ValueKey<int>(badgeCount),
+                    isLabelVisible: badgeCount > 0,
+                    label: Text('$badgeCount'),
+                    child: Icon(icon, color: isSelected ? colors.primary : colors.onSurfaceVariant, size: 22),
+                  ),
                 ),
                 if (!hideLabel) ...<Widget>[
                   const SizedBox(height: 3),
@@ -140,7 +160,7 @@ class _OrderAction extends StatelessWidget {
           minimumSize: const Size.fromHeight(54),
           backgroundColor: isSelected ? colors.secondary : colors.primary,
           foregroundColor: isSelected ? colors.onSecondary : colors.onPrimary,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+          shape: const RoundedRectangleBorder(borderRadius: FoodDeliveryAppTheme.controlRadius),
         ),
         icon: Icon(isSelected ? Icons.route_rounded : Icons.delivery_dining_rounded),
         label: FittedBox(child: Text(isSelected ? 'Track order' : 'Order status')),

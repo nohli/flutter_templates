@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'dating_app_theme.dart';
+import 'dating_chat_screen.dart';
 import 'models/dating_profile.dart';
 import 'widgets/dating_action_bar.dart';
 import 'widgets/dating_swipe_deck.dart';
@@ -23,6 +26,7 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
   var _profileIndex = 0;
   int? _previousProfileIndex;
   String? _decision;
+  var _hasUnreadChat = true;
 
   @override
   void dispose() {
@@ -58,7 +62,7 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
                       padding: const EdgeInsets.fromLTRB(18, 4, 18, 30),
                       sliver: SliverList.list(
                         children: <Widget>[
-                          const _DatingHeader(),
+                          _DatingHeader(hasUnreadChat: _hasUnreadChat, onOpenChat: _openChat),
                           const SizedBox(height: 18),
                           const _DiscoveryIntro(),
                           const SizedBox(height: 12),
@@ -110,10 +114,21 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
       _decision = 'Your last choice was restored.';
     });
   }
+
+  void _openChat() {
+    if (_hasUnreadChat) {
+      setState(() => _hasUnreadChat = false);
+    }
+    final route = MaterialPageRoute<void>(builder: (_) => DatingChatScreen(appearance: widget.appearance));
+    unawaited(Navigator.of(context).push<void>(route));
+  }
 }
 
 class _DatingHeader extends StatelessWidget {
-  const _DatingHeader();
+  const _DatingHeader({required this.hasUnreadChat, required this.onOpenChat});
+
+  final bool hasUnreadChat;
+  final VoidCallback onOpenChat;
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +179,20 @@ class _DatingHeader extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox.square(dimension: 48),
+        IconButton(
+          tooltip: 'Open chat with Ari',
+          onPressed: onOpenChat,
+          style: IconButton.styleFrom(
+            side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+            shape: const RoundedRectangleBorder(),
+          ),
+          icon: Badge(
+            isLabelVisible: hasUnreadChat,
+            smallSize: 8,
+            backgroundColor: DatingAppTheme.primary,
+            child: const Icon(Icons.forum_outlined),
+          ),
+        ),
       ],
     );
   }

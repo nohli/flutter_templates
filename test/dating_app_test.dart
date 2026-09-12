@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
+import 'package:templates/features/templates/dating_app/dating_app_theme.dart';
+import 'package:templates/features/templates/dating_app/dating_chat_screen.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/dating_app/models/dating_profile.dart';
+import 'package:templates/features/templates/dating_app/widgets/dating_action_bar.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_gallery_preview.dart';
 
 void main() {
@@ -34,6 +37,52 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Mina, 29'), findsOneWidget);
     expect(find.text('Your last choice was restored.'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('dating pass action is visible and chat sends a local message', (WidgetTester tester) async {
+    await _pumpDating(tester, disableAnimations: false);
+
+    final passIcon = tester.widget<Icon>(
+      find.descendant(of: find.byType(DatingActionBar), matching: find.byIcon(Icons.close_rounded)),
+    );
+    expect(passIcon.color, DatingAppTheme.coral);
+
+    await tester.tap(find.byTooltip('Open chat with Ari'));
+    await tester.pumpAndSettle();
+    expect(find.byType(DatingChatScreen), findsOneWidget);
+    expect(find.text('Deal. I know exactly the place.'), findsOneWidget);
+    await tester.tap(find.byTooltip('Conversation details'));
+    await tester.pump();
+    expect(find.text('Conversation details are ready to connect.'), findsOneWidget);
+
+    final sendButton = find.byTooltip('Send message');
+    final sendAction = find.ancestor(of: find.byIcon(Icons.arrow_upward_rounded), matching: find.byType(IconButton));
+    expect(tester.widget<IconButton>(sendAction).onPressed, isNull);
+    await tester.enterText(find.byType(TextField), 'Thursday works. See you there.');
+    await tester.pump();
+    expect(tester.widget<IconButton>(sendAction).onPressed, isNotNull);
+    await tester.tap(sendButton);
+    await tester.pump();
+    expect(tester.hasRunningAnimations, isTrue);
+    expect(find.text('Thursday works. See you there.'), findsOneWidget);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Back to discovery'));
+    await tester.pumpAndSettle();
+    expect(find.text('Mina, 29'), findsOneWidget);
+    expect(tester.widget<Badge>(find.byType(Badge)).isLabelVisible, isFalse);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('dating chat remains usable at compact maximum text size', (WidgetTester tester) async {
+    await _pumpDating(tester, size: const Size(320, 568), textScale: 3.2);
+
+    await tester.tap(find.byTooltip('Open chat with Ari'));
+    await tester.pumpAndSettle();
+    expect(find.byType(DatingChatScreen), findsOneWidget);
+    expect(find.byType(TextField), findsOneWidget);
+    expect(tester.getRect(find.byType(TextField)).overlaps(const Rect.fromLTWH(0, 0, 320, 568)), isTrue);
     expect(tester.takeException(), isNull);
   });
 
@@ -81,6 +130,9 @@ void main() {
 
     await _pumpDating(tester, appearance: AppAppearance.light);
     expect(Theme.of(tester.element(find.text('Sway'))).brightness, Brightness.light);
+    await tester.tap(find.byTooltip('Open chat with Ari'));
+    await tester.pumpAndSettle();
+    expect(Theme.of(tester.element(find.text('Ari'))).brightness, Brightness.light);
   });
 
   testWidgets('dating gallery preview has its own editorial portrait composition', (WidgetTester tester) async {

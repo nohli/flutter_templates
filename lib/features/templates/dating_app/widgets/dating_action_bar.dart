@@ -12,22 +12,20 @@ class DatingActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         _DatingAction(
           tooltip: 'Undo last choice',
           icon: Icons.undo_rounded,
-          color: colors.secondary,
+          color: DatingAppTheme.lavender,
           onPressed: onUndo,
         ),
         const SizedBox(width: 12),
         _DatingAction(
           tooltip: 'Pass on profile',
           icon: Icons.close_rounded,
-          color: colors.onSurface,
+          color: DatingAppTheme.coral,
           onPressed: onDismiss,
           prominent: true,
         ),
@@ -42,7 +40,7 @@ class DatingActionBar extends StatelessWidget {
         _DatingAction(
           tooltip: 'Like profile',
           icon: Icons.favorite_rounded,
-          color: colors.primary,
+          color: DatingAppTheme.primary,
           onPressed: onLike,
           prominent: true,
         ),

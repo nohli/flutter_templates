@@ -19,7 +19,7 @@ class AssistantNavigationDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: AiAssistantAppTheme.background,
-      shape: const RoundedRectangleBorder(),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.horizontal(left: Radius.circular(32))),
       child: SafeArea(
         child: ListView(
           primary: false,
@@ -38,7 +38,7 @@ class AssistantNavigationDrawer extends StatelessWidget {
                 minimumSize: const Size.fromHeight(50),
                 backgroundColor: AiAssistantAppTheme.aqua,
                 foregroundColor: AiAssistantAppTheme.background,
-                shape: const RoundedRectangleBorder(),
+                shape: const RoundedRectangleBorder(borderRadius: AiAssistantAppTheme.controlRadius),
               ),
             ),
             const SizedBox(height: 18),
@@ -49,7 +49,7 @@ class AssistantNavigationDrawer extends StatelessWidget {
                 iconColor: AiAssistantAppTheme.aqua,
                 textColor: AiAssistantAppTheme.ink,
                 selectedColor: AiAssistantAppTheme.background,
-                shape: const RoundedRectangleBorder(),
+                shape: const RoundedRectangleBorder(borderRadius: AiAssistantAppTheme.controlRadius),
                 leading: Icon(_iconFor(section)),
                 title: Text(_labelFor(section), style: const TextStyle(fontWeight: FontWeight.w800)),
                 onTap: () {
@@ -122,6 +122,7 @@ class _WorkspaceHeader extends StatelessWidget {
             height: 46,
             decoration: const BoxDecoration(
               color: AiAssistantAppTheme.primary,
+              shape: BoxShape.circle,
               border: Border.fromBorderSide(BorderSide(color: AiAssistantAppTheme.aqua)),
             ),
             child: const Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.background),

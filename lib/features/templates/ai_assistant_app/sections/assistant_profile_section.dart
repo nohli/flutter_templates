@@ -45,7 +45,10 @@ class AssistantProfileSection extends StatelessWidget {
           value: conciseReplies,
           onChanged: onConciseRepliesChanged,
           tileColor: colors.surface,
-          shape: RoundedRectangleBorder(side: BorderSide(color: colors.outlineVariant)),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: colors.outlineVariant),
+            borderRadius: AiAssistantAppTheme.controlRadius,
+          ),
           secondary: const Icon(Icons.short_text_rounded, color: AiAssistantAppTheme.aqua),
           title: const Text('Concise replies', style: TextStyle(fontWeight: FontWeight.w700)),
           subtitle: const Text('Prefer focused answers by default.'),
@@ -70,13 +73,14 @@ class _ProfileHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         border: Border.all(color: colors.outlineVariant),
+        borderRadius: AiAssistantAppTheme.panelRadius,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
           children: <Widget>[
             DecoratedBox(
-              decoration: const BoxDecoration(color: AiAssistantAppTheme.primary),
+              decoration: const BoxDecoration(color: AiAssistantAppTheme.primary, shape: BoxShape.circle),
               child: SizedBox.square(
                 dimension: 70,
                 child: Center(
@@ -125,6 +129,7 @@ class _ProfileMetric extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         border: Border.all(color: colors.outlineVariant),
+        borderRadius: AiAssistantAppTheme.controlRadius,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +159,10 @@ class _PreferenceTile extends StatelessWidget {
 
     return ListTile(
       tileColor: colors.surface,
-      shape: RoundedRectangleBorder(side: BorderSide(color: colors.outlineVariant)),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: colors.outlineVariant),
+        borderRadius: AiAssistantAppTheme.controlRadius,
+      ),
       leading: Icon(icon, color: colors.primary),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
       subtitle: Text(detail),

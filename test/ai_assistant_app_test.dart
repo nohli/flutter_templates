@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
+import 'package:templates/features/templates/ai_assistant_app/ai_assistant_app_theme.dart';
 import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import 'package:templates/features/templates/ai_assistant_app/models/assistant_message.dart';
 import 'package:templates/features/templates/ai_assistant_app/widgets/assistant_gallery_preview.dart';
@@ -8,6 +9,14 @@ import 'package:templates/features/templates/ai_assistant_app/widgets/assistant_
 import 'package:templates/features/templates/ai_assistant_app/widgets/assistant_navigation_drawer.dart';
 
 void main() {
+  test('assistant reserves its geometric font for display copy', () {
+    final theme = AiAssistantAppTheme.build();
+
+    expect(theme.textTheme.headlineLarge?.fontFamily, AiAssistantAppTheme.displayFontName);
+    expect(theme.textTheme.bodyMedium?.fontFamily, AiAssistantAppTheme.fontName);
+    expect(AiAssistantAppTheme.fontName, isNot(AiAssistantAppTheme.displayFontName));
+  });
+
   test('assistant messages expose stable roles and welcome copy', () {
     expect(AssistantMessage.welcome.id, 'welcome');
     expect(AssistantMessage.welcome.role, AssistantMessageRole.assistant);
@@ -17,7 +26,9 @@ void main() {
   testWidgets('assistant suggestions compose and send a local exchange', (WidgetTester tester) async {
     await _pumpAssistant(tester);
 
-    await tester.tap(find.widgetWithText(ActionChip, 'Sketch a launch plan'));
+    final suggestion = find.widgetWithText(ActionChip, 'Sketch a launch plan');
+    expect(tester.widget<ActionChip>(suggestion).shape, isA<StadiumBorder>());
+    await tester.tap(suggestion);
     await tester.pump();
     expect(tester.widget<TextField>(find.byType(TextField)).controller?.text, 'Sketch a launch plan');
 
@@ -32,6 +43,21 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'New conversation'));
     await tester.pumpAndSettle();
     expect(find.byType(AssistantMessageBubble), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('assistant messages arrive with motion when reduced motion is off', (WidgetTester tester) async {
+    await _pumpAssistant(tester, disableAnimations: false);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(ActionChip, 'Sketch a launch plan'));
+    await tester.pump();
+    await tester.tap(find.byTooltip('Send message'));
+    await tester.pump();
+
+    expect(tester.hasRunningAnimations, isTrue);
+    await tester.pumpAndSettle();
+    expect(find.byType(AssistantMessageBubble), findsNWidgets(3));
     expect(tester.takeException(), isNull);
   });
 
@@ -101,10 +127,9 @@ void main() {
     await _pumpAssistant(tester, size: const Size(320, 568), textScale: 3.2);
 
     final chatScroll = find.descendant(of: find.byType(AiAssistantHomeScreen), matching: find.byType(Scrollable)).first;
-    await tester.drag(chatScroll, const Offset(0, -700));
-    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('THOUGHT MAP'), 240, scrollable: chatScroll);
     expect(find.text('THOUGHT MAP'), findsOneWidget);
-    final systemIdea = find.widgetWithText(OutlinedButton, 'SYSTEM — Connect the pieces');
+    final systemIdea = find.ancestor(of: find.text('SYSTEM'), matching: find.byType(OutlinedButton));
     await tester.ensureVisible(systemIdea);
     await tester.pumpAndSettle();
     await tester.tap(systemIdea);
@@ -195,6 +220,7 @@ Future<void> _pumpAssistant(
   Size size = const Size(430, 932),
   double textScale = 1,
   AppAppearance appearance = AppAppearance.dark,
+  bool disableAnimations = true,
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
@@ -202,7 +228,7 @@ Future<void> _pumpAssistant(
 
   final mediaQuery = MediaQueryData.fromView(
     tester.view,
-  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
+  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
   await tester.pumpWidget(
     MaterialApp(
       home: MediaQuery(

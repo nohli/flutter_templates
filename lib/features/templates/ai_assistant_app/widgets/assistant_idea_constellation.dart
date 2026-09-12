@@ -58,11 +58,13 @@ class _AssistantIdeaConstellationState extends State<AssistantIdeaConstellation>
       key: const Key('idea-constellation'),
       container: true,
       label: 'Interactive idea constellation',
-      child: DecoratedBox(
+      child: Container(
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: colors.surface,
           border: Border.all(color: colors.outlineVariant),
-          boxShadow: const <BoxShadow>[BoxShadow(color: Color(0x33000000), offset: Offset(6, 6))],
+          borderRadius: AiAssistantAppTheme.panelRadius,
+          boxShadow: AiAssistantAppTheme.softShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -115,7 +117,11 @@ class _ConstellationHeader extends StatelessWidget {
             style: TextStyle(color: colors.secondary, fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1.2),
           ),
           const Spacer(),
-          Container(width: 7, height: 7, color: selectedColor),
+          Container(
+            width: 7,
+            height: 7,
+            decoration: BoxDecoration(color: selectedColor, shape: BoxShape.circle),
+          ),
           const SizedBox(width: 6),
           Text(
             '${selectedIndex + 1} / $ideaCount',
@@ -194,6 +200,7 @@ class _IdeaFocusCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceContainerHighest,
         border: Border.all(color: data.color, width: 1.5),
+        borderRadius: AiAssistantAppTheme.controlRadius,
         boxShadow: <BoxShadow>[BoxShadow(color: data.color.withValues(alpha: 0.18), blurRadius: 22)],
       ),
       child: Column(
@@ -281,6 +288,7 @@ class _AccessibleIdeaList extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         border: Border.all(color: colors.outlineVariant),
+        borderRadius: AiAssistantAppTheme.panelRadius,
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -293,10 +301,29 @@ class _AccessibleIdeaList extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             for (var index = 0; index < ideas.length; index++) ...<Widget>[
-              OutlinedButton.icon(
+              OutlinedButton(
                 onPressed: () => onSelected(index),
-                icon: Icon(ideas[index].icon, color: ideas[index].color),
-                label: Text('${ideas[index].label} — ${ideas[index].detail}'),
+                style: OutlinedButton.styleFrom(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.all(14),
+                  shape: const RoundedRectangleBorder(borderRadius: AiAssistantAppTheme.controlRadius),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Icon(ideas[index].icon, color: ideas[index].color),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(ideas[index].label, style: const TextStyle(fontWeight: FontWeight.w800)),
+                          const SizedBox(height: 3),
+                          Text(ideas[index].detail, style: TextStyle(color: colors.onSurfaceVariant)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               if (index != ideas.length - 1) const SizedBox(height: 8),
             ],

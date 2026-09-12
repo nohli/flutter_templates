@@ -87,12 +87,13 @@ class _FeaturedAssistant extends StatelessWidget {
       decoration: const BoxDecoration(
         color: AiAssistantAppTheme.raisedSurface,
         border: Border.fromBorderSide(BorderSide(color: AiAssistantAppTheme.aqua)),
+        borderRadius: AiAssistantAppTheme.panelRadius,
         boxShadow: AiAssistantAppTheme.softShadow,
       ),
       child: const Row(
         children: <Widget>[
           DecoratedBox(
-            decoration: BoxDecoration(color: AiAssistantAppTheme.primary),
+            decoration: BoxDecoration(color: AiAssistantAppTheme.primary, shape: BoxShape.circle),
             child: SizedBox.square(
               dimension: 60,
               child: Icon(Icons.auto_awesome_rounded, color: AiAssistantAppTheme.ink, size: 28),
@@ -149,7 +150,11 @@ class _AssistantCard extends StatelessWidget {
 
     return Material(
       color: colors.surface,
-      shape: RoundedRectangleBorder(side: BorderSide(color: colors.outlineVariant)),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: colors.outlineVariant),
+        borderRadius: AiAssistantAppTheme.controlRadius,
+      ),
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Padding(
@@ -160,6 +165,7 @@ class _AssistantCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.2),
                   border: Border.all(color: color),
+                  shape: BoxShape.circle,
                 ),
                 child: SizedBox.square(dimension: 48, child: Icon(icon, color: color)),
               ),

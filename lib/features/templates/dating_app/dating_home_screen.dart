@@ -6,7 +6,7 @@ import '../shared/template_motion.dart';
 import 'dating_app_theme.dart';
 import 'models/dating_profile.dart';
 import 'widgets/dating_action_bar.dart';
-import 'widgets/dating_profile_card.dart';
+import 'widgets/dating_swipe_deck.dart';
 
 class DatingHomeScreen extends StatefulWidget {
   const DatingHomeScreen({this.appearance = AppAppearance.dark, super.key});
@@ -19,13 +19,14 @@ class DatingHomeScreen extends StatefulWidget {
 
 class _DatingHomeScreenState extends State<DatingHomeScreen> {
   final _scrollController = ScrollController();
+  final _swipeController = DatingSwipeController();
   var _profileIndex = 0;
   int? _previousProfileIndex;
-  var _slideFromRight = true;
   String? _decision;
 
   @override
   void dispose() {
+    _swipeController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -43,9 +44,9 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
           child: Scaffold(
             bottomNavigationBar: _DatingActionDock(
               onUndo: _previousProfileIndex == null ? null : _undo,
-              onDismiss: () => _choose(_ProfileDecision.dismiss),
-              onSpark: () => _choose(_ProfileDecision.spark),
-              onLike: () => _choose(_ProfileDecision.like),
+              onDismiss: _swipeController.pass,
+              onSpark: _swipeController.spark,
+              onLike: _swipeController.like,
             ),
             body: SafeArea(
               bottom: false,
@@ -68,29 +69,11 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
                             child: _DecisionNote(key: ValueKey<String?>(_decision), message: _decision),
                           ),
                           const SizedBox(height: 18),
-                          AnimatedSwitcher(
-                            duration: MediaQuery.disableAnimationsOf(context)
-                                ? Duration.zero
-                                : const Duration(milliseconds: 420),
-                            switchInCurve: Curves.easeOutBack,
-                            switchOutCurve: Curves.easeInCubic,
-                            layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) {
-                              return Stack(
-                                alignment: Alignment.topCenter,
-                                children: <Widget>[...previousChildren, ?currentChild],
-                              );
-                            },
-                            transitionBuilder: (Widget child, Animation<double> animation) {
-                              final offset = _slideFromRight ? const Offset(0.16, 0.03) : const Offset(-0.16, 0.03);
-                              return FadeTransition(
-                                opacity: animation,
-                                child: SlideTransition(
-                                  position: Tween<Offset>(begin: offset, end: Offset.zero).animate(animation),
-                                  child: child,
-                                ),
-                              );
-                            },
-                            child: DatingProfileCard(key: ValueKey<String>(profile.id), profile: profile),
+                          DatingSwipeDeck(
+                            profile: profile,
+                            nextProfile: DatingProfile.samples[(_profileIndex + 1) % DatingProfile.samples.length],
+                            controller: _swipeController,
+                            onChoice: _choose,
                           ),
                           const SizedBox(height: 20),
                           const _TonightCard(),
@@ -107,16 +90,15 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
     );
   }
 
-  void _choose(_ProfileDecision decision) {
+  void _choose(DatingProfileChoice decision) {
     final profile = DatingProfile.samples[_profileIndex];
     setState(() {
       _previousProfileIndex = _profileIndex;
       _profileIndex = (_profileIndex + 1) % DatingProfile.samples.length;
-      _slideFromRight = decision == _ProfileDecision.dismiss;
       _decision = switch (decision) {
-        _ProfileDecision.dismiss => 'Passed on ${profile.name}. Your next introduction is ready.',
-        _ProfileDecision.spark => 'A spark was sent to ${profile.name}.',
-        _ProfileDecision.like => 'You liked ${profile.name}. We’ll let you know if it’s mutual.',
+        DatingProfileChoice.pass => 'Passed on ${profile.name}. Your next introduction is ready.',
+        DatingProfileChoice.spark => 'A spark was sent to ${profile.name}.',
+        DatingProfileChoice.like => 'You liked ${profile.name}. We’ll let you know if it’s mutual.',
       };
     });
   }
@@ -125,13 +107,10 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
     setState(() {
       _profileIndex = _previousProfileIndex!;
       _previousProfileIndex = null;
-      _slideFromRight = false;
       _decision = 'Your last choice was restored.';
     });
   }
 }
-
-enum _ProfileDecision { dismiss, spark, like }
 
 class _DatingHeader extends StatelessWidget {
   const _DatingHeader();
@@ -319,7 +298,7 @@ class _DecisionNote extends StatelessWidget {
     return Semantics(
       liveRegion: true,
       child: Text(
-        message ?? 'Choose with intention. Every profile is visible again tomorrow.',
+        message ?? 'Swipe left to pass · right to like. Every profile returns tomorrow.',
         textAlign: TextAlign.center,
         style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, height: 1.35),
       ),

@@ -37,6 +37,40 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('dating profiles follow the drag, commit decisions, and spring back below the threshold', (
+    WidgetTester tester,
+  ) async {
+    await _pumpDating(tester, disableAnimations: false);
+
+    final mina = find.bySemanticsLabel('Swipe Mina left to pass or right to like');
+    final profileName = find.text('Mina, 29');
+    final restingPosition = tester.getTopLeft(profileName);
+    final gesture = await tester.startGesture(tester.getCenter(mina));
+    await gesture.moveBy(const Offset(-24, 0));
+    await tester.pump();
+    await gesture.moveBy(const Offset(-48, 0));
+    await tester.pump();
+    expect(tester.getTopLeft(profileName).dx, lessThan(restingPosition.dx - 30));
+    await gesture.up();
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(profileName), restingPosition);
+    expect(find.text('Mina, 29'), findsOneWidget);
+    expect(find.textContaining('Passed on Mina'), findsNothing);
+
+    await tester.drag(mina, const Offset(-180, 0));
+    await tester.pumpAndSettle();
+    expect(find.text('Noah, 31'), findsOneWidget);
+    expect(find.text('Passed on Mina. Your next introduction is ready.'), findsOneWidget);
+
+    final noah = find.bySemanticsLabel('Swipe Noah left to pass or right to like');
+    await tester.drag(noah, const Offset(180, 0));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Swipe Eli left to pass or right to like'), findsOneWidget);
+    expect(find.text('Eli, 28'), findsOneWidget);
+    expect(find.text('You liked Noah. We’ll let you know if it’s mutual.'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('dating actions report truthful state in host-selected appearances', (WidgetTester tester) async {
     await _pumpDating(tester);
 
@@ -87,6 +121,7 @@ Future<void> _pumpDating(
   Size size = const Size(430, 932),
   double textScale = 1,
   AppAppearance appearance = AppAppearance.dark,
+  bool disableAnimations = true,
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
@@ -94,7 +129,7 @@ Future<void> _pumpDating(
 
   final mediaQuery = MediaQueryData.fromView(
     tester.view,
-  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
+  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
   await tester.pumpWidget(
     MaterialApp(
       home: MediaQuery(
@@ -103,5 +138,9 @@ Future<void> _pumpDating(
       ),
     ),
   );
-  await tester.pump();
+  if (disableAnimations) {
+    await tester.pump();
+  } else {
+    await tester.pumpAndSettle();
+  }
 }

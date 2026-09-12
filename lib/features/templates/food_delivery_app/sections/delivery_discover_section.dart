@@ -44,11 +44,11 @@ class DeliveryDiscoverSection extends StatelessWidget {
             fillColor: colors.surface,
             border: OutlineInputBorder(
               borderSide: BorderSide(color: colors.outlineVariant),
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
+              borderRadius: FoodDeliveryAppTheme.controlRadius,
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: colors.outlineVariant),
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
+              borderRadius: FoodDeliveryAppTheme.controlRadius,
             ),
           ),
         ),
@@ -62,7 +62,7 @@ class DeliveryDiscoverSection extends StatelessWidget {
                   label: Text(_labelFor(category)),
                   selected: selectedCategory == category,
                   showCheckmark: false,
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(3))),
+                  shape: const StadiumBorder(),
                   onSelected: (_) => onCategorySelected(category),
                 ),
                 if (category != MealCategory.values.last) const SizedBox(width: 8),
@@ -127,8 +127,8 @@ class _DeliveryPoster extends StatelessWidget {
     const foreground = Color(0xFFFFF1D1);
 
     if (usesLargeText) {
-      return ColoredBox(
-        color: background,
+      return DecoratedBox(
+        decoration: BoxDecoration(color: background, borderRadius: FoodDeliveryAppTheme.cardRadius),
         child: const Padding(
           padding: EdgeInsets.all(18),
           child: Column(
@@ -156,85 +156,88 @@ class _DeliveryPoster extends StatelessWidget {
 
     return SizedBox(
       height: 174,
-      child: ColoredBox(
-        color: background,
-        child: Stack(
-          children: <Widget>[
-            const Positioned.fill(child: CustomPaint(painter: _PosterStripePainter())),
-            const Positioned(
-              left: 18,
-              top: 18,
-              child: Text(
-                'FRESH / FAST / LOCAL',
-                style: TextStyle(color: foreground, fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1.2),
-              ),
-            ),
-            const Positioned(
-              left: 18,
-              top: 43,
-              width: 200,
-              child: Text(
-                'Good food, right on time.',
-                style: TextStyle(
-                  color: foreground,
-                  fontSize: 27,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -1.2,
-                  height: 0.92,
+      child: ClipRRect(
+        borderRadius: FoodDeliveryAppTheme.cardRadius,
+        child: ColoredBox(
+          color: background,
+          child: Stack(
+            children: <Widget>[
+              const Positioned.fill(child: CustomPaint(painter: _PosterStripePainter())),
+              const Positioned(
+                left: 18,
+                top: 18,
+                child: Text(
+                  'FRESH / FAST / LOCAL',
+                  style: TextStyle(color: foreground, fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1.2),
                 ),
               ),
-            ),
-            const Positioned(
-              left: 18,
-              bottom: 14,
-              width: 190,
-              child: Text(
-                'Fresh local favorites, ready when you are.',
-                style: TextStyle(color: Color(0xD9FFF1D1), fontSize: 11, height: 1.3),
-              ),
-            ),
-            Positioned(
-              right: 17,
-              top: 32,
-              width: 116,
-              height: 128,
-              child: Transform.rotate(
-                angle: 0.055,
-                child: const DecoratedBox(
-                  decoration: BoxDecoration(
+              const Positioned(
+                left: 18,
+                top: 43,
+                width: 200,
+                child: Text(
+                  'Good food, right on time.',
+                  style: TextStyle(
                     color: foreground,
-                    boxShadow: <BoxShadow>[BoxShadow(color: Color(0x29000000), blurRadius: 12, offset: Offset(0, 6))],
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: MealArt(kind: MealKind.bowl, compact: true),
+                    fontSize: 27,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -1.2,
+                    height: 0.92,
                   ),
                 ),
               ),
-            ),
-            const Positioned(
-              right: 10,
-              top: 20,
-              child: DecoratedBox(
-                decoration: BoxDecoration(color: FoodDeliveryAppTheme.yellow, shape: BoxShape.circle),
-                child: SizedBox.square(
-                  dimension: 46,
-                  child: Center(
-                    child: Text(
-                      '18\nMIN',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: FoodDeliveryAppTheme.deepOrange,
-                        fontSize: 8,
-                        fontWeight: FontWeight.w900,
-                        height: 0.9,
+              const Positioned(
+                left: 18,
+                bottom: 14,
+                width: 190,
+                child: Text(
+                  'Fresh local favorites, ready when you are.',
+                  style: TextStyle(color: Color(0xD9FFF1D1), fontSize: 11, height: 1.3),
+                ),
+              ),
+              Positioned(
+                right: 17,
+                top: 32,
+                width: 116,
+                height: 128,
+                child: Transform.rotate(
+                  angle: 0.055,
+                  child: const DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: foreground,
+                      boxShadow: <BoxShadow>[BoxShadow(color: Color(0x29000000), blurRadius: 12, offset: Offset(0, 6))],
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: MealArt(kind: MealKind.bowl, compact: true),
+                    ),
+                  ),
+                ),
+              ),
+              const Positioned(
+                right: 10,
+                top: 20,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: FoodDeliveryAppTheme.yellow, shape: BoxShape.circle),
+                  child: SizedBox.square(
+                    dimension: 46,
+                    child: Center(
+                      child: Text(
+                        '18\nMIN',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: FoodDeliveryAppTheme.deepOrange,
+                          fontSize: 8,
+                          fontWeight: FontWeight.w900,
+                          height: 0.9,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

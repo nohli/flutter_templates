@@ -17,9 +17,11 @@ class MealCard extends StatelessWidget {
 
     return Material(
       color: colors.surface,
+      elevation: 2,
+      shadowColor: colors.shadow.withValues(alpha: 0.16),
       shape: RoundedRectangleBorder(
         side: BorderSide(color: colors.outlineVariant),
-        borderRadius: const BorderRadius.all(Radius.circular(4)),
+        borderRadius: FoodDeliveryAppTheme.cardRadius,
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -79,9 +81,7 @@ class MealCard extends StatelessWidget {
                     IconButton.filled(
                       tooltip: 'Add ${meal.name} to basket',
                       onPressed: onAdd,
-                      style: IconButton.styleFrom(
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-                      ),
+                      style: IconButton.styleFrom(shape: const CircleBorder()),
                       icon: const Icon(Icons.arrow_outward_rounded),
                     ),
                   ],
@@ -102,8 +102,11 @@ class _MealNumber extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: FoodDeliveryAppTheme.primary,
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: FoodDeliveryAppTheme.primary,
+        borderRadius: BorderRadius.only(bottomRight: Radius.circular(14)),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         child: Text(switch (kind) {

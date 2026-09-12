@@ -64,7 +64,7 @@ class _FoodDeliveryHomeScreenState extends State<FoodDeliveryHomeScreen> {
                       onPressed: () => Navigator.of(context).pop(),
                       style: IconButton.styleFrom(
                         side: BorderSide(color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.4)),
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                        shape: const CircleBorder(),
                       ),
                       icon: const Icon(Icons.arrow_back_rounded),
                     )

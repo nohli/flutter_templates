@@ -16,6 +16,8 @@ abstract final class FoodDeliveryAppTheme {
   static const divider = Color(0xFFEDE5D9);
   static const fontName = 'BricolageGrotesque';
   static const displayFontName = 'BricolageGrotesque';
+  static const cardRadius = BorderRadius.all(Radius.circular(22));
+  static const controlRadius = BorderRadius.all(Radius.circular(18));
 
   static ThemeData build([Brightness brightness = Brightness.light]) {
     final isDark = brightness == Brightness.dark;

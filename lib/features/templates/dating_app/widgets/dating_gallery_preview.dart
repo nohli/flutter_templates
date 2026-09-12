@@ -71,9 +71,13 @@ class _PreviewProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DecoratedBox(
-      decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: DatingAppTheme.primary))),
-      child: DatingProfileArtwork(palette: DatingProfilePalette.sunset),
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: const BoxDecoration(
+        border: Border.fromBorderSide(BorderSide(color: DatingAppTheme.primary)),
+        borderRadius: BorderRadius.all(Radius.circular(18)),
+      ),
+      child: const DatingProfileArtwork(palette: DatingProfilePalette.sunset),
     );
   }
 }
@@ -144,7 +148,7 @@ class _PreviewActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        _MiniAction(icon: Icons.close_rounded, color: dark ? DatingAppTheme.ink : const Color(0xFF21181D), dark: dark),
+        _MiniAction(icon: Icons.close_rounded, color: DatingAppTheme.coral, dark: dark),
         const SizedBox(width: 6),
         _MiniAction(icon: Icons.auto_awesome_rounded, color: DatingAppTheme.sun, dark: dark),
         const SizedBox(width: 6),
@@ -164,7 +168,7 @@ class _MiniAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(color: dark ? DatingAppTheme.raisedSurface : Colors.white),
+      decoration: BoxDecoration(color: dark ? DatingAppTheme.raisedSurface : Colors.white, shape: BoxShape.circle),
       child: SizedBox.square(dimension: 22, child: Icon(icon, size: 11, color: color)),
     );
   }

@@ -27,10 +27,24 @@ class DatingMessageBubble extends StatelessWidget {
             decoration: BoxDecoration(
               color: isUser ? colors.primaryContainer : colors.surface,
               border: Border.all(color: isUser ? colors.primary : colors.secondary),
+              borderRadius: isUser
+                  ? const BorderRadius.only(
+                      topLeft: Radius.circular(22),
+                      topRight: Radius.circular(22),
+                      bottomLeft: Radius.circular(22),
+                      bottomRight: Radius.circular(6),
+                    )
+                  : const BorderRadius.only(
+                      topLeft: Radius.circular(22),
+                      topRight: Radius.circular(22),
+                      bottomLeft: Radius.circular(6),
+                      bottomRight: Radius.circular(22),
+                    ),
               boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: (isUser ? colors.primary : colors.secondary).withValues(alpha: 0.18),
-                  offset: const Offset(4, 4),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
                 ),
               ],
             ),

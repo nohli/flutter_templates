@@ -303,6 +303,7 @@ class _ChoiceStamp extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xE617111E),
               border: Border.all(color: color, width: 3),
+              borderRadius: DatingAppTheme.controlRadius,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

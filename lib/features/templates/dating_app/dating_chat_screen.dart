@@ -121,7 +121,7 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () => Navigator.of(context).pop(),
           style: IconButton.styleFrom(
             side: BorderSide(color: colors.outlineVariant),
-            shape: const RoundedRectangleBorder(),
+            shape: const CircleBorder(),
           ),
           icon: const Icon(Icons.arrow_back_rounded),
         ),
@@ -187,12 +187,15 @@ class _ChatAvatar extends StatelessWidget {
     return Semantics(
       image: true,
       label: 'Ari profile portrait',
-      child: SizedBox.square(
-        dimension: 46,
-        child: DecoratedBox(
-          decoration: BoxDecoration(border: Border.all(color: DatingAppTheme.mint, width: 2)),
-          child: const ClipRect(child: DatingProfileArtwork(palette: DatingProfilePalette.lagoon)),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: DatingAppTheme.mint, width: 2),
         ),
+        width: 46,
+        height: 46,
+        child: const DatingProfileArtwork(palette: DatingProfilePalette.lagoon),
       ),
     );
   }
@@ -211,8 +214,9 @@ class _MatchNote extends StatelessWidget {
         decoration: BoxDecoration(
           color: colors.secondaryContainer,
           border: Border.all(color: colors.secondary),
+          borderRadius: DatingAppTheme.cardRadius,
           boxShadow: <BoxShadow>[
-            BoxShadow(color: colors.secondary.withValues(alpha: 0.22), offset: const Offset(6, 6)),
+            BoxShadow(color: colors.secondary.withValues(alpha: 0.2), blurRadius: 22, offset: const Offset(0, 10)),
           ],
         ),
         child: Padding(
@@ -268,6 +272,10 @@ class _MessageComposer extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         border: Border(top: BorderSide(color: colors.primary, width: 2)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(color: colors.shadow.withValues(alpha: 0.14), blurRadius: 20, offset: const Offset(0, -5)),
+        ],
       ),
       child: SafeArea(
         top: false,
@@ -281,10 +289,11 @@ class _MessageComposer extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Message Ari',
             prefixIcon: const Icon(Icons.sentiment_satisfied_alt_rounded),
+            border: const OutlineInputBorder(borderRadius: DatingAppTheme.controlRadius),
             suffixIcon: IconButton.filled(
               tooltip: 'Send message',
               onPressed: canSend ? onSend : null,
-              style: IconButton.styleFrom(shape: const RoundedRectangleBorder()),
+              style: IconButton.styleFrom(shape: const CircleBorder()),
               icon: const Icon(Icons.arrow_upward_rounded),
             ),
           ),

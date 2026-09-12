@@ -103,13 +103,18 @@ class DatingProfileCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 7),
-                  Text(
-                    profile.answer,
-                    style: const TextStyle(
-                      fontFamily: DatingAppTheme.displayFontName,
-                      fontSize: 22,
-                      height: 1.15,
-                      fontWeight: FontWeight.w500,
+                  SizedBox(
+                    height: largeText ? null : 76,
+                    child: Text(
+                      profile.answer,
+                      maxLines: largeText ? null : 3,
+                      overflow: largeText ? TextOverflow.visible : TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontFamily: DatingAppTheme.displayFontName,
+                        fontSize: 22,
+                        height: 1.15,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 18),

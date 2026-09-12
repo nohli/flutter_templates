@@ -178,6 +178,14 @@ void main() {
     expect(tester.getRect(destination).overlaps(const Rect.fromLTWH(0, 0, 320, 568)), isTrue);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('dating profile fits the iPhone 17 viewport in both appearances', (WidgetTester tester) async {
+    for (final appearance in AppAppearance.values) {
+      await _pumpDating(tester, size: const Size(402, 874), appearance: appearance);
+      expect(find.text('Mina, 29'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    }
+  });
 }
 
 Future<void> _pumpDating(

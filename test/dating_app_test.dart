@@ -47,6 +47,10 @@ void main() {
       find.descendant(of: find.byType(DatingActionBar), matching: find.byIcon(Icons.close_rounded)),
     );
     expect(passIcon.color, DatingAppTheme.coral);
+    final passButton = tester.widget<IconButton>(
+      find.ancestor(of: find.byIcon(Icons.close_rounded), matching: find.byType(IconButton)).first,
+    );
+    expect(passButton.style?.shape?.resolve(<WidgetState>{}), isA<CircleBorder>());
 
     await tester.tap(find.byTooltip('Open chat with Ari'));
     await tester.pumpAndSettle();
@@ -145,6 +149,14 @@ void main() {
 
     expect(find.text('Sway'), findsOneWidget);
     expect(find.text('Mina, 29'), findsOneWidget);
+    expect(
+      tester
+          .widget<Icon>(
+            find.descendant(of: find.byType(DatingGalleryPreview), matching: find.byIcon(Icons.close_rounded)),
+          )
+          .color,
+      DatingAppTheme.coral,
+    );
     expect(find.bySemanticsLabel('Sway dating profile preview'), findsOneWidget);
     expect(tester.takeException(), isNull);
     semantics.dispose();

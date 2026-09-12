@@ -75,9 +75,9 @@ class _DatingAction extends StatelessWidget {
         tooltip: tooltip,
         onPressed: onPressed,
         style: IconButton.styleFrom(
-          backgroundColor: DatingAppTheme.raisedSurface,
-          disabledBackgroundColor: DatingAppTheme.raisedSurface.withValues(alpha: 0.38),
-          shape: RoundedRectangleBorder(side: BorderSide(color: color.withValues(alpha: 0.7))),
+          backgroundColor: colors.surfaceContainerHighest,
+          disabledBackgroundColor: colors.surfaceContainerHighest.withValues(alpha: 0.38),
+          shape: CircleBorder(side: BorderSide(color: color.withValues(alpha: 0.7))),
         ),
         icon: Icon(icon, color: onPressed == null ? colors.outline : color, size: prominent ? 30 : 24),
       ),

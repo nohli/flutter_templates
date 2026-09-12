@@ -15,6 +15,8 @@ abstract final class DatingAppTheme {
   static const sun = Color(0xFFFFD449);
   static const fontName = 'BricolageGrotesque';
   static const displayFontName = 'Fraunces';
+  static const cardRadius = BorderRadius.all(Radius.circular(28));
+  static const controlRadius = BorderRadius.all(Radius.circular(18));
 
   static ThemeData build([Brightness brightness = Brightness.dark]) {
     final isDark = brightness == Brightness.dark;

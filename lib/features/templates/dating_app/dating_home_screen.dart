@@ -142,7 +142,7 @@ class _DatingHeader extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
             style: IconButton.styleFrom(
               side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
-              shape: const RoundedRectangleBorder(),
+              shape: const CircleBorder(),
             ),
             icon: const Icon(Icons.arrow_back_rounded),
           )
@@ -184,7 +184,7 @@ class _DatingHeader extends StatelessWidget {
           onPressed: onOpenChat,
           style: IconButton.styleFrom(
             side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
-            shape: const RoundedRectangleBorder(),
+            shape: const CircleBorder(),
           ),
           icon: Badge(
             isLabelVisible: hasUnreadChat,
@@ -274,7 +274,7 @@ class _DiscoveryIntro extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         DecoratedBox(
-          decoration: BoxDecoration(color: colors.primaryContainer),
+          decoration: BoxDecoration(color: colors.primaryContainer, shape: BoxShape.circle),
           child: SizedBox.square(
             dimension: 48,
             child: Center(
@@ -300,10 +300,16 @@ class _DatingActionDock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: DatingAppTheme.background,
-        border: Border(top: BorderSide(color: DatingAppTheme.primary, width: 3)),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        border: const Border(top: BorderSide(color: DatingAppTheme.primary, width: 2)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(color: colors.shadow.withValues(alpha: 0.18), blurRadius: 22, offset: const Offset(0, -6)),
+        ],
       ),
       child: SafeArea(
         top: false,
@@ -345,13 +351,14 @@ class _TonightCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.primaryContainer,
         border: Border.all(color: colors.primary),
+        borderRadius: DatingAppTheme.cardRadius,
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
           children: <Widget>[
             const DecoratedBox(
-              decoration: BoxDecoration(color: DatingAppTheme.sun),
+              decoration: BoxDecoration(color: DatingAppTheme.sun, shape: BoxShape.circle),
               child: SizedBox.square(
                 dimension: 44,
                 child: Icon(Icons.local_bar_outlined, color: DatingAppTheme.background, size: 24),

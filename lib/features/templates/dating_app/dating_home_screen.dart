@@ -6,7 +6,7 @@ import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import '../shared/template_motion.dart';
 import 'dating_app_theme.dart';
-import 'dating_chat_screen.dart';
+import 'dating_inbox_screen.dart';
 import 'models/dating_profile.dart';
 import 'widgets/dating_action_bar.dart';
 import 'widgets/dating_swipe_deck.dart';
@@ -62,7 +62,7 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
                       padding: const EdgeInsets.fromLTRB(18, 4, 18, 30),
                       sliver: SliverList.list(
                         children: <Widget>[
-                          _DatingHeader(hasUnreadChat: _hasUnreadChat, onOpenChat: _openChat),
+                          _DatingHeader(hasUnreadChat: _hasUnreadChat, onOpenInbox: _openInbox),
                           const SizedBox(height: 18),
                           const _DiscoveryIntro(),
                           const SizedBox(height: 12),
@@ -115,20 +115,20 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
     });
   }
 
-  void _openChat() {
+  void _openInbox() {
     if (_hasUnreadChat) {
       setState(() => _hasUnreadChat = false);
     }
-    final route = MaterialPageRoute<void>(builder: (_) => DatingChatScreen(appearance: widget.appearance));
+    final route = MaterialPageRoute<void>(builder: (_) => DatingInboxScreen(appearance: widget.appearance));
     unawaited(Navigator.of(context).push<void>(route));
   }
 }
 
 class _DatingHeader extends StatelessWidget {
-  const _DatingHeader({required this.hasUnreadChat, required this.onOpenChat});
+  const _DatingHeader({required this.hasUnreadChat, required this.onOpenInbox});
 
   final bool hasUnreadChat;
-  final VoidCallback onOpenChat;
+  final VoidCallback onOpenInbox;
 
   @override
   Widget build(BuildContext context) {
@@ -180,8 +180,8 @@ class _DatingHeader extends StatelessWidget {
           ),
         ),
         IconButton(
-          tooltip: 'Open chat with Ari',
-          onPressed: onOpenChat,
+          tooltip: 'Open conversations',
+          onPressed: onOpenInbox,
           style: IconButton.styleFrom(
             side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
             shape: const CircleBorder(),

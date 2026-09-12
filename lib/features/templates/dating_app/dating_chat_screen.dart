@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
 import 'dating_app_theme.dart';
+import 'models/dating_conversation.dart';
 import 'models/dating_message.dart';
-import 'models/dating_profile.dart';
+import 'widgets/dating_conversation_avatar.dart';
 import 'widgets/dating_message_bubble.dart';
-import 'widgets/dating_profile_artwork.dart';
 
 class DatingChatScreen extends StatefulWidget {
-  const DatingChatScreen({required this.appearance, super.key});
+  const DatingChatScreen({required this.appearance, required this.conversation, super.key});
 
   final AppAppearance appearance;
+  final DatingConversation conversation;
 
   @override
   State<DatingChatScreen> createState() => _DatingChatScreenState();
@@ -22,7 +23,7 @@ class DatingChatScreen extends StatefulWidget {
 class _DatingChatScreenState extends State<DatingChatScreen> {
   final _composer = TextEditingController();
   final _scrollController = ScrollController();
-  final _messages = <DatingMessage>[...DatingMessage.conversation];
+  late final _messages = <DatingMessage>[...widget.conversation.messages];
 
   @override
   void initState() {
@@ -46,7 +47,7 @@ class _DatingChatScreenState extends State<DatingChatScreen> {
       themeBuilder: DatingAppTheme.build,
       builder: (BuildContext context) {
         return Scaffold(
-          appBar: const _ChatAppBar(),
+          appBar: _ChatAppBar(conversation: widget.conversation),
           body: Column(
             children: <Widget>[
               Expanded(
@@ -54,14 +55,19 @@ class _DatingChatScreenState extends State<DatingChatScreen> {
                   controller: _scrollController,
                   padding: const EdgeInsets.fromLTRB(18, 18, 18, 24),
                   children: <Widget>[
-                    const _MatchNote(),
+                    _MatchNote(conversation: widget.conversation),
                     const SizedBox(height: 26),
                     for (final message in _messages)
                       DatingMessageBubble(key: ValueKey<String>(message.id), message: message),
                   ],
                 ),
               ),
-              _MessageComposer(controller: _composer, canSend: _composer.text.trim().isNotEmpty, onSend: _send),
+              _MessageComposer(
+                conversationName: widget.conversation.name,
+                controller: _composer,
+                canSend: _composer.text.trim().isNotEmpty,
+                onSend: _send,
+              ),
             ],
           ),
         );
@@ -101,7 +107,9 @@ class _DatingChatScreenState extends State<DatingChatScreen> {
 }
 
 class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const _ChatAppBar();
+  const _ChatAppBar({required this.conversation});
+
+  final DatingConversation conversation;
 
   @override
   Size get preferredSize => const Size.fromHeight(76);
@@ -117,7 +125,7 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: 62,
       leading: Center(
         child: IconButton(
-          tooltip: 'Back to discovery',
+          tooltip: 'Back to conversations',
           onPressed: () => Navigator.of(context).pop(),
           style: IconButton.styleFrom(
             side: BorderSide(color: colors.outlineVariant),
@@ -129,22 +137,22 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: 0,
       title: Row(
         children: <Widget>[
-          const _ChatAvatar(),
+          DatingConversationAvatar(conversation: conversation, size: 46),
           const SizedBox(width: 11),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text(
-                  'Ari',
-                  style: TextStyle(
+                Text(
+                  conversation.name,
+                  style: const TextStyle(
                     fontFamily: DatingAppTheme.displayFontName,
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
-                  'ONLINE / MATCHED TUESDAY',
+                  conversation.status,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -179,37 +187,17 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class _ChatAvatar extends StatelessWidget {
-  const _ChatAvatar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      image: true,
-      label: 'Ari profile portrait',
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: DatingAppTheme.mint, width: 2),
-        ),
-        width: 46,
-        height: 46,
-        child: const DatingProfileArtwork(palette: DatingProfilePalette.lagoon),
-      ),
-    );
-  }
-}
-
 class _MatchNote extends StatelessWidget {
-  const _MatchNote();
+  const _MatchNote({required this.conversation});
+
+  final DatingConversation conversation;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
     return Semantics(
-      label: 'You and Ari matched on Tuesday',
+      label: 'You and ${conversation.name} matched',
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: colors.secondaryContainer,
@@ -235,7 +223,7 @@ class _MatchNote extends StatelessWidget {
               ),
               const SizedBox(height: 9),
               Text(
-                'You and Ari found a little common ground.',
+                'You and ${conversation.name} found a little common ground.',
                 style: TextStyle(
                   color: colors.onSecondaryContainer,
                   fontFamily: DatingAppTheme.displayFontName,
@@ -245,10 +233,7 @@ class _MatchNote extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              Text(
-                'Jazz after dark · ceramics · tiny restaurants',
-                style: TextStyle(color: colors.onSecondaryContainer),
-              ),
+              Text(conversation.connection, style: TextStyle(color: colors.onSecondaryContainer)),
             ],
           ),
         ),
@@ -258,8 +243,14 @@ class _MatchNote extends StatelessWidget {
 }
 
 class _MessageComposer extends StatelessWidget {
-  const _MessageComposer({required this.controller, required this.canSend, required this.onSend});
+  const _MessageComposer({
+    required this.conversationName,
+    required this.controller,
+    required this.canSend,
+    required this.onSend,
+  });
 
+  final String conversationName;
   final TextEditingController controller;
   final bool canSend;
   final VoidCallback onSend;
@@ -267,6 +258,8 @@ class _MessageComposer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final largeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -280,23 +273,80 @@ class _MessageComposer extends StatelessWidget {
       child: SafeArea(
         top: false,
         minimum: const EdgeInsets.fromLTRB(14, 10, 14, 10),
-        child: TextField(
-          controller: controller,
-          minLines: 1,
-          maxLines: 3,
-          textInputAction: TextInputAction.send,
-          onSubmitted: canSend ? (_) => onSend() : null,
-          decoration: InputDecoration(
-            hintText: 'Message Ari',
-            prefixIcon: const Icon(Icons.sentiment_satisfied_alt_rounded),
-            border: const OutlineInputBorder(borderRadius: DatingAppTheme.controlRadius),
-            suffixIcon: IconButton.filled(
-              tooltip: 'Send message',
-              onPressed: canSend ? onSend : null,
-              style: IconButton.styleFrom(shape: const CircleBorder()),
-              icon: const Icon(Icons.arrow_upward_rounded),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            if (!largeText) ...<Widget>[
+              IconButton.outlined(
+                tooltip: 'Add attachment',
+                onPressed: () {
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(const SnackBar(content: Text('Attachments are ready to connect.')));
+                },
+                style: IconButton.styleFrom(
+                  minimumSize: const Size.square(50),
+                  side: BorderSide(color: colors.outlineVariant),
+                  shape: const CircleBorder(),
+                ),
+                icon: const Icon(Icons.add_rounded),
+              ),
+              const SizedBox(width: 9),
+            ],
+            Expanded(
+              child: TextField(
+                controller: controller,
+                minLines: 1,
+                maxLines: largeText ? 1 : 3,
+                textInputAction: TextInputAction.send,
+                onSubmitted: canSend ? (_) => onSend() : null,
+                decoration: InputDecoration(
+                  hintText: 'Message $conversationName',
+                  filled: true,
+                  fillColor: colors.surfaceContainerHighest,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 17, vertical: 14),
+                  border: const OutlineInputBorder(
+                    borderRadius: DatingAppTheme.controlRadius,
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderRadius: DatingAppTheme.controlRadius,
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: DatingAppTheme.controlRadius,
+                    borderSide: BorderSide(color: colors.primary, width: 2),
+                  ),
+                ),
+              ),
             ),
-          ),
+            const SizedBox(width: 9),
+            AnimatedScale(
+              scale: canSend ? 1 : 0.92,
+              duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 180),
+              curve: Curves.easeOutBack,
+              child: IconButton(
+                tooltip: 'Send message',
+                onPressed: canSend ? onSend : null,
+                style: ButtonStyle(
+                  minimumSize: const WidgetStatePropertyAll<Size>(Size.square(50)),
+                  backgroundColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+                    return states.contains(WidgetState.disabled) ? colors.surfaceContainerHighest : colors.primary;
+                  }),
+                  foregroundColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+                    return states.contains(WidgetState.disabled) ? colors.onSurfaceVariant : colors.onPrimary;
+                  }),
+                  side: WidgetStateProperty.resolveWith<BorderSide>((Set<WidgetState> states) {
+                    return BorderSide(
+                      color: states.contains(WidgetState.disabled) ? colors.outlineVariant : colors.primary,
+                    );
+                  }),
+                  shape: const WidgetStatePropertyAll<OutlinedBorder>(CircleBorder()),
+                ),
+                icon: const Icon(Icons.arrow_upward_rounded),
+              ),
+            ),
+          ],
         ),
       ),
     );

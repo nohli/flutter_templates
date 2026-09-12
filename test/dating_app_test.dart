@@ -4,8 +4,11 @@ import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/dating_app/dating_app_theme.dart';
 import 'package:templates/features/templates/dating_app/dating_chat_screen.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
+import 'package:templates/features/templates/dating_app/dating_inbox_screen.dart';
+import 'package:templates/features/templates/dating_app/models/dating_conversation.dart';
 import 'package:templates/features/templates/dating_app/models/dating_profile.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_action_bar.dart';
+import 'package:templates/features/templates/dating_app/widgets/dating_conversation_tile.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_gallery_preview.dart';
 
 void main() {
@@ -22,6 +25,11 @@ void main() {
       ),
       isTrue,
     );
+    expect(DatingConversation.samples, hasLength(4));
+    expect(DatingConversation.samples.every((conversation) => conversation.messages.isNotEmpty), isTrue);
+    expect(DatingConversation.samples.map((conversation) => conversation.id).toSet(), hasLength(4));
+    expect(DatingConversation.samples.first.copyWith().unreadCount, 2);
+    expect(DatingConversation.samples.first.copyWith(unreadCount: 0).unreadCount, 0);
   });
 
   testWidgets('dating choices advance profiles and support one-step undo', (WidgetTester tester) async {
@@ -52,7 +60,11 @@ void main() {
     );
     expect(passButton.style?.shape?.resolve(<WidgetState>{}), isA<CircleBorder>());
 
-    await tester.tap(find.byTooltip('Open chat with Ari'));
+    await tester.tap(find.byTooltip('Open conversations'));
+    await tester.pumpAndSettle();
+    expect(find.byType(DatingInboxScreen), findsOneWidget);
+    expect(find.text('A little closer.'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Open conversation with Ari'));
     await tester.pumpAndSettle();
     expect(find.byType(DatingChatScreen), findsOneWidget);
     expect(find.text('Deal. I know exactly the place.'), findsOneWidget);
@@ -62,7 +74,11 @@ void main() {
 
     final sendButton = find.byTooltip('Send message');
     final sendAction = find.ancestor(of: find.byIcon(Icons.arrow_upward_rounded), matching: find.byType(IconButton));
-    expect(tester.widget<IconButton>(sendAction).onPressed, isNull);
+    expect(find.descendant(of: find.byType(TextField), matching: sendButton), findsNothing);
+    expect(tester.getTopLeft(sendButton).dx, greaterThan(tester.getTopRight(find.byType(TextField)).dx));
+    final disabledSend = tester.widget<IconButton>(sendAction);
+    expect(disabledSend.onPressed, isNull);
+    expect(disabledSend.style?.side?.resolve(<WidgetState>{WidgetState.disabled})?.width, 1);
     await tester.enterText(find.byType(TextField), 'Thursday works. See you there.');
     await tester.pump();
     expect(tester.widget<IconButton>(sendAction).onPressed, isNotNull);
@@ -72,6 +88,11 @@ void main() {
     expect(find.text('Thursday works. See you there.'), findsOneWidget);
     await tester.pumpAndSettle();
 
+    await tester.tap(find.byTooltip('Back to conversations'));
+    await tester.pumpAndSettle();
+    expect(find.byType(DatingInboxScreen), findsOneWidget);
+    final ariConversation = find.widgetWithText(DatingConversationTile, 'Ari');
+    expect(find.descendant(of: ariConversation, matching: find.text('2')), findsNothing);
     await tester.tap(find.byTooltip('Back to discovery'));
     await tester.pumpAndSettle();
     expect(find.text('Mina, 29'), findsOneWidget);
@@ -82,7 +103,9 @@ void main() {
   testWidgets('dating chat remains usable at compact maximum text size', (WidgetTester tester) async {
     await _pumpDating(tester, size: const Size(320, 568), textScale: 3.2);
 
-    await tester.tap(find.byTooltip('Open chat with Ari'));
+    await tester.tap(find.byTooltip('Open conversations'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Open conversation with Ari'));
     await tester.pumpAndSettle();
     expect(find.byType(DatingChatScreen), findsOneWidget);
     expect(find.byType(TextField), findsOneWidget);
@@ -134,9 +157,30 @@ void main() {
 
     await _pumpDating(tester, appearance: AppAppearance.light);
     expect(Theme.of(tester.element(find.text('Sway'))).brightness, Brightness.light);
-    await tester.tap(find.byTooltip('Open chat with Ari'));
+    await tester.tap(find.byTooltip('Open conversations'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Open conversation with Ari'));
     await tester.pumpAndSettle();
     expect(Theme.of(tester.element(find.text('Ari'))).brightness, Brightness.light);
+  });
+
+  testWidgets('dating inbox lets people choose a conversation', (WidgetTester tester) async {
+    await _pumpDating(tester);
+
+    await tester.tap(find.byTooltip('Open conversations'));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Open conversation with Ari'), findsOneWidget);
+    expect(find.bySemanticsLabel('Open conversation with Mina'), findsOneWidget);
+    expect(find.bySemanticsLabel('Open conversation with Noah'), findsOneWidget);
+    expect(find.bySemanticsLabel('Open conversation with Zoë'), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Open conversation with Noah'));
+    await tester.pumpAndSettle();
+    expect(find.byType(DatingChatScreen), findsOneWidget);
+    expect(find.text('Noah'), findsOneWidget);
+    expect(find.text('Save me the weirdest sleeve in the window.'), findsOneWidget);
+    expect(tester.widget<TextField>(find.byType(TextField)).decoration?.hintText, 'Message Noah');
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('dating gallery preview has its own editorial portrait composition', (WidgetTester tester) async {

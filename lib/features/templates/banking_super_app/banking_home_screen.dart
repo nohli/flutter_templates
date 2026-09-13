@@ -65,7 +65,7 @@ class _BankingHomeState extends State<_BankingHome> {
   Future<void> _send() async {
     final recipient = await Navigator.of(
       context,
-    ).push<String>(MaterialPageRoute<String>(builder: (_) => const BankingTransferScreen()));
+    ).push<String>(templatePageRoute<String>(context: context, builder: (_) => const BankingTransferScreen()));
     if (!mounted || recipient == null) {
       return;
     }

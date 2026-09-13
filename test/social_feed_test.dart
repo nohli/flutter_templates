@@ -64,6 +64,12 @@ void main() {
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('PULSE'))).brightness, Brightness.dark);
+
+    await tester.tap(
+      find.text('Small interfaces become memorable when every motion explains where the content came from.'),
+    );
+    await tester.pumpAndSettle();
+    expect(Theme.of(tester.element(find.text('Thread'))).brightness, Brightness.dark);
   });
 }
 

@@ -6,6 +6,7 @@ enum TemplateGalleryDestination {
   dating,
   languageLearning,
   socialFeed,
+  bankingSuperApp,
 }
 
 class TemplateGalleryItem {
@@ -35,5 +36,6 @@ class TemplateGalleryItem {
     TemplateGalleryItem(title: 'Dating & Social', destination: TemplateGalleryDestination.dating),
     TemplateGalleryItem(title: 'Language Learning', destination: TemplateGalleryDestination.languageLearning),
     TemplateGalleryItem(title: 'Public Social Feed', destination: TemplateGalleryDestination.socialFeed),
+    TemplateGalleryItem(title: 'Banking Super-App', destination: TemplateGalleryDestination.bankingSuperApp),
   ];
 }

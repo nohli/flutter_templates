@@ -22,6 +22,7 @@ void main() {
       (cardLabel: 'Language Learning', screenText: 'Order food with confidence'),
       (cardLabel: 'Public Social Feed', screenText: 'PULSE'),
       (cardLabel: 'Banking Super-App', screenText: 'TOTAL BALANCE'),
+      (cardLabel: 'Channel Messenger', screenText: 'Aero'),
     ];
     expect(
       templates.map((template) => template.cardLabel).toSet(),

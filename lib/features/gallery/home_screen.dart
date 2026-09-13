@@ -4,6 +4,7 @@ import '../../app/app_appearance.dart';
 import '../../app/app_identity.dart';
 import '../templates/dating_app/dating_home_screen.dart';
 import '../templates/banking_super_app/banking_home_screen.dart';
+import '../templates/channel_messenger/channel_messenger_home_screen.dart';
 import '../templates/design_course/home_design_course.dart';
 import '../templates/design_course/models/saved_courses.dart';
 import '../templates/finance_app/finance_home_screen.dart';
@@ -134,6 +135,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.languageLearning => LanguageLearningHomeScreen(appearance: widget.appearance),
     TemplateGalleryDestination.socialFeed => SocialFeedHomeScreen(appearance: widget.appearance),
     TemplateGalleryDestination.bankingSuperApp => BankingHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.channelMessenger => ChannelMessengerHomeScreen(appearance: widget.appearance),
   };
 }
 

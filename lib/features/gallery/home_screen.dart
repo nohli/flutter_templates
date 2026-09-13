@@ -11,6 +11,7 @@ import '../templates/finance_app/finance_home_screen.dart';
 import '../templates/fitness_app/fitness_app_home_screen.dart';
 import '../templates/hotel_booking/hotel_home_screen.dart';
 import '../templates/language_learning/language_learning_home_screen.dart';
+import '../templates/private_messenger/private_messenger_home_screen.dart';
 import '../templates/social_feed/social_feed_home_screen.dart';
 import 'models/template_gallery_item.dart';
 import 'template_gallery_artwork.dart';
@@ -136,6 +137,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.socialFeed => SocialFeedHomeScreen(appearance: widget.appearance),
     TemplateGalleryDestination.bankingSuperApp => BankingHomeScreen(appearance: widget.appearance),
     TemplateGalleryDestination.channelMessenger => ChannelMessengerHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.privateMessenger => PrivateMessengerHomeScreen(appearance: widget.appearance),
   };
 }
 

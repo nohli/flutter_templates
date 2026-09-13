@@ -94,6 +94,7 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final animationsAreDisabled = MediaQuery.disableAnimationsOf(context);
     final entrance = animationsAreDisabled
         ? const AlwaysStoppedAnimation<double>(1)
@@ -106,7 +107,7 @@ class _BottomBarViewState extends State<BottomBarView> with TickerProviderStateM
           animation: entrance,
           builder: (BuildContext context, Widget? child) {
             return PhysicalShape(
-              color: FitnessAppTheme.white,
+              color: colors.surface,
               elevation: 16,
               clipper: TabClipper(radius: entrance.value * 38),
               child: SafeArea(
@@ -213,6 +214,7 @@ class _TabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Expanded(
       child: Semantics(
         button: true,
@@ -240,7 +242,13 @@ class _TabButton extends StatelessWidget {
                           curve: const Interval(0.1, 1, curve: Curves.fastOutSlowIn),
                         ),
                       ),
-                      child: Image.asset(isSelected ? destination.selectedAsset : destination.asset),
+                      child: colors.brightness == Brightness.dark
+                          ? Icon(
+                              destination.darkIcon,
+                              color: isSelected ? colors.primary : colors.onSurfaceVariant,
+                              size: 28,
+                            )
+                          : Image.asset(isSelected ? destination.selectedAsset : destination.asset),
                     ),
                     _SelectionDot(
                       animation: selectionAnimation,
@@ -293,6 +301,7 @@ class _SelectionDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Positioned(
       top: top,
       left: left,
@@ -301,8 +310,8 @@ class _SelectionDot extends StatelessWidget {
         scale: CurvedAnimation(parent: animation, curve: interval),
         child: SizedBox.square(
           dimension: size,
-          child: const DecoratedBox(
-            decoration: BoxDecoration(color: FitnessAppTheme.nearlyDarkBlue, shape: BoxShape.circle),
+          child: DecoratedBox(
+            decoration: BoxDecoration(color: colors.primary, shape: BoxShape.circle),
           ),
         ),
       ),
@@ -311,11 +320,17 @@ class _SelectionDot extends StatelessWidget {
 }
 
 class _TabDestination {
-  const _TabDestination({required this.asset, required this.selectedAsset, required this.accessibilityLabel});
+  const _TabDestination({
+    required this.asset,
+    required this.selectedAsset,
+    required this.accessibilityLabel,
+    required this.darkIcon,
+  });
 
   final String asset;
   final String selectedAsset;
   final String accessibilityLabel;
+  final IconData darkIcon;
 }
 
 const _destinations = <_TabDestination>[
@@ -323,21 +338,25 @@ const _destinations = <_TabDestination>[
     asset: 'assets/fitness_app/tab_1.png',
     selectedAsset: 'assets/fitness_app/tab_1s.png',
     accessibilityLabel: 'Diary',
+    darkIcon: Icons.menu_book_outlined,
   ),
   _TabDestination(
     asset: 'assets/fitness_app/tab_2.png',
     selectedAsset: 'assets/fitness_app/tab_2s.png',
     accessibilityLabel: 'Training',
+    darkIcon: Icons.fitness_center,
   ),
   _TabDestination(
     asset: 'assets/fitness_app/tab_3.png',
     selectedAsset: 'assets/fitness_app/tab_3s.png',
     accessibilityLabel: 'Diary',
+    darkIcon: Icons.local_dining_outlined,
   ),
   _TabDestination(
     asset: 'assets/fitness_app/tab_4.png',
     selectedAsset: 'assets/fitness_app/tab_4s.png',
     accessibilityLabel: 'Training',
+    darkIcon: Icons.person_outline,
   ),
 ];
 

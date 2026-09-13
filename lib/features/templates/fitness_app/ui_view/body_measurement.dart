@@ -15,8 +15,8 @@ class BodyMeasurementView extends StatelessWidget {
 
     return AnimatedFitnessCard(
       animation: animation,
-      backgroundColor: FitnessAppTheme.white,
-      shadowColor: FitnessAppTheme.grey,
+      backgroundColor: colors.surface,
+      shadowColor: colors.brightness == Brightness.dark ? colors.shadow : FitnessAppTheme.grey,
       builder: (_) =>
           useLargeTextLayout ? _LargeBodyMeasurements(colors: colors) : _CompactBodyMeasurements(colors: colors),
     );
@@ -37,9 +37,9 @@ class _CompactBodyMeasurements extends StatelessWidget {
           padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 8),
           child: Container(
             height: 2,
-            decoration: const BoxDecoration(
-              color: FitnessAppTheme.background,
-              borderRadius: BorderRadius.all(Radius.circular(4)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
           ),
         ),
@@ -76,8 +76,8 @@ class _CompactWeightSummary extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.only(left: 4, bottom: 8, top: 16),
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 8, top: 16),
             child: Text(
               'Weight',
               textAlign: TextAlign.center,
@@ -86,7 +86,7 @@ class _CompactWeightSummary extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
                 letterSpacing: -0.1,
-                color: FitnessAppTheme.darkText,
+                color: colors.brightness == Brightness.dark ? colors.onSurface : FitnessAppTheme.darkText,
               ),
             ),
           ),
@@ -237,6 +237,7 @@ class _CompactMeasurement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Expanded(
       child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -248,12 +249,12 @@ class _CompactMeasurement extends StatelessWidget {
             Text(
               value,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: FitnessAppTheme.fontName,
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
                 letterSpacing: -0.2,
-                color: FitnessAppTheme.darkText,
+                color: colors.brightness == Brightness.dark ? colors.onSurface : FitnessAppTheme.darkText,
               ),
             ),
             Padding(
@@ -265,7 +266,9 @@ class _CompactMeasurement extends StatelessWidget {
                   fontFamily: FitnessAppTheme.fontName,
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
-                  color: FitnessAppTheme.grey.withValues(alpha: 0.5),
+                  color: colors.brightness == Brightness.dark
+                      ? colors.onSurfaceVariant
+                      : FitnessAppTheme.grey.withValues(alpha: 0.5),
                 ),
               ),
             ),

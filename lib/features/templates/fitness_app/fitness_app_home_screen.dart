@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../../../app/motion_preferences.dart';
 import '../shared/template_motion.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
@@ -8,7 +9,9 @@ import 'my_diary/my_diary_screen.dart';
 import 'training/training_screen.dart';
 
 class FitnessAppHomeScreen extends StatefulWidget {
-  const FitnessAppHomeScreen({super.key});
+  const FitnessAppHomeScreen({this.appearance = AppAppearance.light, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<FitnessAppHomeScreen> createState() => _FitnessAppHomeScreenState();
@@ -38,7 +41,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen> with Single
 
   @override
   Widget build(BuildContext context) {
-    final theme = FitnessAppTheme.build();
+    final theme = FitnessAppTheme.build(widget.appearance.resolve(context));
     final selectedSection = _selectedIndex.isEven ? 0 : 1;
 
     return Theme(

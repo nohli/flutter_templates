@@ -200,7 +200,9 @@ class _WaveLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = FitnessAppTheme.nearlyDarkBlue;
+    final color = Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF4052D6)
+        : FitnessAppTheme.nearlyDarkBlue;
 
     return ClipPath(
       clipper: WaveClipper(verticalOffset: verticalOffset, horizontalOffset: horizontalOffset),

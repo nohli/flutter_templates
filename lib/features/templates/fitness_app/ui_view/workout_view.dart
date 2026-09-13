@@ -10,6 +10,7 @@ class WorkoutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final dark = colors.brightness == Brightness.dark;
     final stackFooter = MediaQuery.textScalerOf(context).scale(1) >= 2;
     final timer = Flex(
       direction: stackFooter ? Axis.vertical : Axis.horizontal,
@@ -36,23 +37,24 @@ class WorkoutView extends StatelessWidget {
         ),
       ],
     );
+    final playButtonColor = dark || stackFooter ? colors.surfaceContainerHighest : FitnessAppTheme.nearlyWhite;
+    final playShadowColor = dark || stackFooter
+        ? colors.shadow.withValues(alpha: 0.4)
+        : FitnessAppTheme.nearlyBlack.withValues(alpha: 0.4);
+    final playIconColor = dark
+        ? colors.primary
+        : stackFooter
+        ? colors.onSurface
+        : const Color(0xFF6F56E8);
     final playButton = Container(
       decoration: BoxDecoration(
-        color: stackFooter ? colors.surfaceContainerHighest : FitnessAppTheme.nearlyWhite,
+        color: playButtonColor,
         shape: BoxShape.circle,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: stackFooter
-                ? colors.shadow.withValues(alpha: 0.4)
-                : FitnessAppTheme.nearlyBlack.withValues(alpha: 0.4),
-            offset: const Offset(8.0, 8.0),
-            blurRadius: 8.0,
-          ),
-        ],
+        boxShadow: <BoxShadow>[BoxShadow(color: playShadowColor, offset: const Offset(8.0, 8.0), blurRadius: 8.0)],
       ),
       child: Padding(
         padding: EdgeInsets.zero,
-        child: Icon(Icons.arrow_right, color: stackFooter ? colors.onSurface : const Color(0xFF6F56E8), size: 44),
+        child: Icon(Icons.arrow_right, color: playIconColor, size: 44),
       ),
     );
     return AnimatedBuilder(
@@ -79,7 +81,7 @@ class WorkoutView extends StatelessWidget {
                   ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: FitnessAppTheme.grey.withValues(alpha: 0.6),
+                      color: dark ? colors.shadow.withValues(alpha: 0.55) : FitnessAppTheme.grey.withValues(alpha: 0.6),
                       offset: const Offset(1.1, 1.1),
                       blurRadius: 10.0,
                     ),

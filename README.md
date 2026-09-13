@@ -11,7 +11,7 @@ fvm flutter run
 
 ## Gallery
 
-Twelve reusable examples with system, light, and dark appearances.
+Five reusable examples with system, light, and dark appearances.
 
 | Light | Dark |
 | :---: | :---: |

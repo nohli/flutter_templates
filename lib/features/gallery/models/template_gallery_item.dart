@@ -1,17 +1,4 @@
-enum TemplateGalleryDestination {
-  hotelBooking,
-  fitness,
-  designCourse,
-  personalFinance,
-  storefront,
-  planner,
-  aiAssistant,
-  foodDelivery,
-  podcast,
-  social,
-  travel,
-  dating,
-}
+enum TemplateGalleryDestination { hotelBooking, fitness, designCourse, personalFinance, dating }
 
 class TemplateGalleryItem {
   const TemplateGalleryItem({required this.title, required this.destination, this.imagePath});
@@ -37,13 +24,6 @@ class TemplateGalleryItem {
       imagePath: 'assets/design_course/design_course.png',
     ),
     TemplateGalleryItem(title: 'Personal Finance', destination: TemplateGalleryDestination.personalFinance),
-    TemplateGalleryItem(title: 'E-commerce Store', destination: TemplateGalleryDestination.storefront),
-    TemplateGalleryItem(title: 'Project Planner', destination: TemplateGalleryDestination.planner),
-    TemplateGalleryItem(title: 'Food Delivery', destination: TemplateGalleryDestination.foodDelivery),
-    TemplateGalleryItem(title: 'Podcast Player', destination: TemplateGalleryDestination.podcast),
-    TemplateGalleryItem(title: 'Social Community', destination: TemplateGalleryDestination.social),
-    TemplateGalleryItem(title: 'Travel Planner', destination: TemplateGalleryDestination.travel),
-    TemplateGalleryItem(title: 'AI Assistant', destination: TemplateGalleryDestination.aiAssistant),
     TemplateGalleryItem(title: 'Dating & Social', destination: TemplateGalleryDestination.dating),
   ];
 }

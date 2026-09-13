@@ -2,19 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_appearance.dart';
 import '../../app/app_identity.dart';
-import '../templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import '../templates/dating_app/dating_home_screen.dart';
 import '../templates/design_course/home_design_course.dart';
 import '../templates/design_course/models/saved_courses.dart';
 import '../templates/finance_app/finance_home_screen.dart';
 import '../templates/fitness_app/fitness_app_home_screen.dart';
-import '../templates/food_delivery_app/food_delivery_home_screen.dart';
 import '../templates/hotel_booking/hotel_home_screen.dart';
-import '../templates/planner_app/planner_home_screen.dart';
-import '../templates/podcast_app/podcast_home_screen.dart';
-import '../templates/social_app/social_home_screen.dart';
-import '../templates/storefront_app/storefront_home_screen.dart';
-import '../templates/travel_app/travel_home_screen.dart';
 import 'models/template_gallery_item.dart';
 import 'template_gallery_artwork.dart';
 
@@ -131,13 +124,6 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.fitness => const FitnessAppHomeScreen(),
     TemplateGalleryDestination.designCourse => DesignCourseHomeScreen(savedCourses: _savedCourses),
     TemplateGalleryDestination.personalFinance => FinanceHomeScreen(appearance: widget.appearance),
-    TemplateGalleryDestination.storefront => StorefrontHomeScreen(appearance: widget.appearance),
-    TemplateGalleryDestination.planner => PlannerHomeScreen(appearance: widget.appearance),
-    TemplateGalleryDestination.aiAssistant => AiAssistantHomeScreen(appearance: widget.appearance),
-    TemplateGalleryDestination.foodDelivery => FoodDeliveryHomeScreen(appearance: widget.appearance),
-    TemplateGalleryDestination.podcast => PodcastHomeScreen(appearance: widget.appearance),
-    TemplateGalleryDestination.social => SocialHomeScreen(appearance: widget.appearance),
-    TemplateGalleryDestination.travel => TravelHomeScreen(appearance: widget.appearance),
     TemplateGalleryDestination.dating => DatingHomeScreen(appearance: widget.appearance),
   };
 }

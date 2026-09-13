@@ -15,30 +15,12 @@ import 'package:templates/features/support/invite_friend_screen.dart';
 const _fontLicenseAssets = <String>[
   'assets/fonts/WorkSans-LICENSE.txt',
   'assets/fonts/Roboto-LICENSE.txt',
-  'assets/fonts/ArchivoBlack-LICENSE.txt',
-  'assets/fonts/Anybody-LICENSE.txt',
   'assets/fonts/BricolageGrotesque-LICENSE.txt',
-  'assets/fonts/DMSerifDisplay-LICENSE.txt',
   'assets/fonts/Fraunces-LICENSE.txt',
-  'assets/fonts/InstrumentSerif-LICENSE.txt',
   'assets/fonts/SpaceGrotesk-LICENSE.txt',
-  'assets/fonts/Syne-LICENSE.txt',
-  'assets/fonts/Unbounded-LICENSE.txt',
 ];
 
-const _fontNames = <String>[
-  'Work Sans',
-  'Roboto',
-  'Archivo Black',
-  'Anybody',
-  'Bricolage Grotesque',
-  'DM Serif Display',
-  'Fraunces',
-  'Instrument Serif',
-  'Space Grotesk',
-  'Syne',
-  'Unbounded',
-];
+const _fontNames = <String>['Work Sans', 'Roboto', 'Bricolage Grotesque', 'Fraunces', 'Space Grotesk'];
 
 void main() {
   test('feedback email preserves spaces and reserved characters', () {

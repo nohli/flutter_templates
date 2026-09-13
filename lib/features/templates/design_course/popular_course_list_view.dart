@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/motion_preferences.dart';
-import 'design_course_app_theme.dart';
 import 'models/category.dart';
 
 class PopularCourseListView extends StatefulWidget {
@@ -117,9 +116,9 @@ class _PopularCourseCard extends StatelessWidget {
                           children: <Widget>[
                             Expanded(
                               child: Ink(
-                                decoration: const BoxDecoration(
-                                  color: DesignCourseAppTheme.cardBackground,
-                                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                                decoration: BoxDecoration(
+                                  color: colors.surfaceContainerLow,
+                                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                                 ),
                                 child: Column(
                                   children: <Widget>[

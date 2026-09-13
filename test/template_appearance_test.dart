@@ -1,9 +1,15 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/gallery/template_gallery_artwork.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_gallery_preview.dart';
+import 'package:templates/features/templates/design_course/course_info_screen.dart';
+import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
+import 'package:templates/features/templates/design_course/home_design_course.dart';
+import 'package:templates/features/templates/design_course/models/category.dart';
 import 'package:templates/features/templates/finance_app/widgets/finance_gallery_preview.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/shared/template_appearance.dart';
@@ -35,6 +41,45 @@ void main() {
       ),
     );
     expect(Theme.of(tester.element(find.text('Preview'))).brightness, Brightness.light);
+  });
+
+  test('Design Course dark palette keeps its cyan identity and accessible semantic colors', () {
+    final theme = DesignCourseAppTheme.build(Brightness.dark);
+    final colors = theme.colorScheme;
+
+    expect(theme.brightness, Brightness.dark);
+    expect(theme.scaffoldBackgroundColor, DesignCourseAppTheme.darkBackground);
+    expect(colors.surface, DesignCourseAppTheme.darkSurface);
+    expect(_contrastRatio(colors.onSurface, colors.surface), greaterThanOrEqualTo(4.5));
+    expect(_contrastRatio(colors.onPrimary, colors.primary), greaterThanOrEqualTo(4.5));
+    expect(_contrastRatio(colors.outline, colors.surface), greaterThanOrEqualTo(3));
+  });
+
+  testWidgets('Design Course home and detail render the selected dark appearance', (WidgetTester tester) async {
+    tester.view
+      ..devicePixelRatio = 1
+      ..physicalSize = const Size(430, 932);
+    addTearDown(tester.view.reset);
+    final mediaQuery = MediaQueryData.fromView(tester.view).copyWith(disableAnimations: true);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: MediaQuery(
+          data: mediaQuery,
+          child: const DesignCourseHomeScreen(appearance: AppAppearance.dark),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(Theme.of(tester.element(find.text('Category'))).brightness, Brightness.dark);
+
+    await tester.tap(find.bySemanticsLabel(Category.categoryList.first.accessibilityLabel));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CourseInfoScreen), findsOneWidget);
+    expect(Theme.of(tester.element(find.text(Category.categoryList.first.title))).brightness, Brightness.dark);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('the gallery owns one appearance control for every new template', (WidgetTester tester) async {
@@ -131,4 +176,10 @@ void main() {
       expect(tester.takeException(), isNull);
     }
   });
+}
+
+double _contrastRatio(Color foreground, Color background) {
+  final lighter = math.max(foreground.computeLuminance(), background.computeLuminance());
+  final darker = math.min(foreground.computeLuminance(), background.computeLuminance());
+  return (lighter + 0.05) / (darker + 0.05);
 }

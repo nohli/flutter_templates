@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import '../shared/template_motion.dart';
 import 'category_list_view.dart';
 import 'course_info_screen.dart';
@@ -9,8 +10,9 @@ import 'models/saved_courses.dart';
 import 'popular_course_list_view.dart';
 
 class DesignCourseHomeScreen extends StatefulWidget {
-  const DesignCourseHomeScreen({this.savedCourses, super.key});
+  const DesignCourseHomeScreen({this.appearance = AppAppearance.light, this.savedCourses, super.key});
 
+  final AppAppearance appearance;
   final SavedCourses? savedCourses;
 
   @override
@@ -33,14 +35,14 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = DesignCourseAppTheme.build();
+    final theme = DesignCourseAppTheme.build(widget.appearance.resolve(context));
     final colors = theme.colorScheme;
     return Theme(
       data: theme,
       child: PrimaryScrollController(
         controller: _scrollController,
         child: Scaffold(
-          backgroundColor: colors.surface,
+          backgroundColor: theme.scaffoldBackgroundColor,
           body: TemplateEntrance(
             child: SingleChildScrollView(
               controller: _scrollController,
@@ -119,7 +121,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (BuildContext context) => MediaQuery.withNoTextScaling(
-          child: CourseInfoScreen(course: course, savedCourses: _savedCourses),
+          child: CourseInfoScreen(appearance: widget.appearance, course: course, savedCourses: _savedCourses),
         ),
       ),
     );
@@ -200,7 +202,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                     letterSpacing: 0.27,
-                    color: isSelected ? DesignCourseAppTheme.nearlyWhite : colors.primary,
+                    color: isSelected ? colors.onPrimary : colors.primary,
                   ),
                 ),
               ),
@@ -226,9 +228,9 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: Container(
-                decoration: const BoxDecoration(
-                  color: DesignCourseAppTheme.cardBackground,
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: colors.surfaceContainerLow,
+                  borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(13.0),
                     bottomLeft: Radius.circular(13.0),
                     topLeft: Radius.circular(13.0),

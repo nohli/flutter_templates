@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../templates/dating_app/widgets/dating_gallery_preview.dart';
 import '../templates/finance_app/widgets/finance_gallery_preview.dart';
+import '../templates/language_learning/widgets/language_learning_gallery_preview.dart';
 import 'models/template_gallery_item.dart';
 
 class TemplateGalleryArtwork extends StatelessWidget {
@@ -19,6 +20,7 @@ class TemplateGalleryArtwork extends StatelessWidget {
     return switch (item.destination) {
       TemplateGalleryDestination.personalFinance => FinanceGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.dating => DatingGalleryPreview(brightness: brightness),
+      TemplateGalleryDestination.languageLearning => LanguageLearningGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.hotelBooking ||
       TemplateGalleryDestination.fitness ||
       TemplateGalleryDestination.designCourse => const SizedBox.shrink(),

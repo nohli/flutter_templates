@@ -8,6 +8,7 @@ import '../templates/design_course/models/saved_courses.dart';
 import '../templates/finance_app/finance_home_screen.dart';
 import '../templates/fitness_app/fitness_app_home_screen.dart';
 import '../templates/hotel_booking/hotel_home_screen.dart';
+import '../templates/language_learning/language_learning_home_screen.dart';
 import 'models/template_gallery_item.dart';
 import 'template_gallery_artwork.dart';
 
@@ -128,6 +129,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     ),
     TemplateGalleryDestination.personalFinance => FinanceHomeScreen(appearance: widget.appearance),
     TemplateGalleryDestination.dating => DatingHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.languageLearning => LanguageLearningHomeScreen(appearance: widget.appearance),
   };
 }
 

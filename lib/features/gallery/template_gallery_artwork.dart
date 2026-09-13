@@ -5,6 +5,7 @@ import '../templates/banking_super_app/widgets/banking_gallery_preview.dart';
 import '../templates/channel_messenger/widgets/channel_messenger_gallery_preview.dart';
 import '../templates/finance_app/widgets/finance_gallery_preview.dart';
 import '../templates/language_learning/widgets/language_learning_gallery_preview.dart';
+import '../templates/private_messenger/widgets/private_messenger_gallery_preview.dart';
 import '../templates/social_feed/widgets/social_feed_gallery_preview.dart';
 import 'models/template_gallery_item.dart';
 
@@ -27,6 +28,7 @@ class TemplateGalleryArtwork extends StatelessWidget {
       TemplateGalleryDestination.socialFeed => SocialFeedGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.bankingSuperApp => BankingGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.channelMessenger => ChannelMessengerGalleryPreview(brightness: brightness),
+      TemplateGalleryDestination.privateMessenger => PrivateMessengerGalleryPreview(brightness: brightness),
       TemplateGalleryDestination.hotelBooking ||
       TemplateGalleryDestination.fitness ||
       TemplateGalleryDestination.designCourse => const SizedBox.shrink(),

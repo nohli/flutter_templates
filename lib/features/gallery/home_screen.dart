@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app_appearance.dart';
 import '../../app/app_identity.dart';
 import '../templates/dating_app/dating_home_screen.dart';
+import '../templates/banking_super_app/banking_home_screen.dart';
 import '../templates/design_course/home_design_course.dart';
 import '../templates/design_course/models/saved_courses.dart';
 import '../templates/finance_app/finance_home_screen.dart';
@@ -132,6 +133,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
     TemplateGalleryDestination.dating => DatingHomeScreen(appearance: widget.appearance),
     TemplateGalleryDestination.languageLearning => LanguageLearningHomeScreen(appearance: widget.appearance),
     TemplateGalleryDestination.socialFeed => SocialFeedHomeScreen(appearance: widget.appearance),
+    TemplateGalleryDestination.bankingSuperApp => BankingHomeScreen(appearance: widget.appearance),
   };
 }
 

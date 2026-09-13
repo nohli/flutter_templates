@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import '../../../app/app_appearance.dart';
 import 'design_course_app_theme.dart';
 import 'models/category.dart';
 import 'models/saved_courses.dart';
 
 class CourseInfoScreen extends StatefulWidget {
-  const CourseInfoScreen({required this.course, required this.savedCourses, super.key});
+  const CourseInfoScreen({
+    required this.course,
+    required this.savedCourses,
+    this.appearance = AppAppearance.light,
+    super.key,
+  });
 
+  final AppAppearance appearance;
   final Category course;
   final SavedCourses savedCourses;
 
@@ -81,53 +89,60 @@ class _CourseInfoScreenState extends State<CourseInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final theme = DesignCourseAppTheme.build();
+    final theme = DesignCourseAppTheme.build(widget.appearance.resolve(context));
     final colors = theme.colorScheme;
     final naturalHeaderHeight = mediaQuery.size.width / 1.2;
     final headerHeight = naturalHeaderHeight.clamp(0, mediaQuery.size.height * 0.55).toDouble();
     final panelTop = headerHeight - 24;
     final opacityDuration = _animationsAreDisabled ? Duration.zero : const Duration(milliseconds: 500);
 
-    return Theme(
-      data: theme,
-      child: Material(
-        color: colors.surface,
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: headerHeight,
-              child: Image.asset(widget.course.imagePath, fit: BoxFit.cover),
-            ),
-            Positioned(
-              top: panelTop,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: _CourseDetailsPanel(
-                course: widget.course,
-                colors: colors,
-                bottomInset: mediaQuery.padding.bottom,
-                opacityDuration: opacityDuration,
-                factsOpacity: _factsOpacity,
-                descriptionOpacity: _descriptionOpacity,
-                noticeOpacity: _noticeOpacity,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: Theme(
+        data: theme,
+        child: Material(
+          color: colors.surface,
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: headerHeight,
+                child: Image.asset(widget.course.imagePath, fit: BoxFit.cover),
               ),
-            ),
-            Positioned(
-              top: panelTop - 35,
-              right: mediaQuery.padding.right + 35,
-              child: _FavoriteButton(colors: colors, isFavorite: _isFavorite, onPressed: _toggleFavorite),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              child: _BackButton(colors: colors, topInset: mediaQuery.padding.top, leftInset: mediaQuery.padding.left),
-            ),
-          ],
+              Positioned(
+                top: panelTop,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: _CourseDetailsPanel(
+                  course: widget.course,
+                  colors: colors,
+                  bottomInset: mediaQuery.padding.bottom,
+                  opacityDuration: opacityDuration,
+                  factsOpacity: _factsOpacity,
+                  descriptionOpacity: _descriptionOpacity,
+                  noticeOpacity: _noticeOpacity,
+                ),
+              ),
+              Positioned(
+                top: panelTop - 35,
+                right: mediaQuery.padding.right + 35,
+                child: _FavoriteButton(colors: colors, isFavorite: _isFavorite, onPressed: _toggleFavorite),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                child: _BackButton(
+                  colors: colors,
+                  topInset: mediaQuery.padding.top,
+                  leftInset: mediaQuery.padding.left,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

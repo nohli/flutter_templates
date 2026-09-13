@@ -10,23 +10,63 @@ abstract final class DesignCourseAppTheme {
   static const lightText = Color(0xFF4A6572);
   static const cardBackground = Color(0xFFF8FAFB);
   static const spacer = Color(0xFFF2F2F2);
+  static const darkBackground = Color(0xFF0B1218);
+  static const darkSurface = Color(0xFF101A21);
   static const fontName = 'WorkSans';
 
-  static ThemeData build() {
-    const colors = ColorScheme.light(
-      primary: nearlyBlue,
-      onPrimary: nearlyBlack,
-      surface: nearlyWhite,
-      onSurface: darkerText,
-      onSurfaceVariant: lightText,
-      outline: grey,
-      outlineVariant: spacer,
-      error: Color(0xFFB00020),
-      onError: nearlyWhite,
+  static ThemeData build([Brightness brightness = Brightness.light]) {
+    final dark = brightness == Brightness.dark;
+    final colors = dark
+        ? const ColorScheme.dark(
+            primary: Color(0xFF56D7FF),
+            onPrimary: Color(0xFF003544),
+            primaryContainer: Color(0xFF004D63),
+            onPrimaryContainer: Color(0xFFC3F0FF),
+            secondary: Color(0xFF93CCFF),
+            onSecondary: Color(0xFF003353),
+            surface: darkSurface,
+            onSurface: Color(0xFFF1F7FA),
+            surfaceDim: darkBackground,
+            surfaceBright: Color(0xFF33414A),
+            surfaceContainerLowest: Color(0xFF070C10),
+            surfaceContainerLow: Color(0xFF16232B),
+            surfaceContainer: Color(0xFF1A2831),
+            surfaceContainerHigh: Color(0xFF22323C),
+            surfaceContainerHighest: Color(0xFF2B3C46),
+            onSurfaceVariant: Color(0xFFB8C9D0),
+            outline: Color(0xFF91A6AE),
+            outlineVariant: Color(0xFF33454E),
+            error: Color(0xFFFFB4AB),
+            onError: Color(0xFF690005),
+          )
+        : const ColorScheme.light(
+            primary: nearlyBlue,
+            onPrimary: nearlyBlack,
+            surface: nearlyWhite,
+            onSurface: darkerText,
+            surfaceContainerLow: cardBackground,
+            onSurfaceVariant: lightText,
+            outline: grey,
+            outlineVariant: spacer,
+            error: Color(0xFFB00020),
+            onError: nearlyWhite,
+          );
+    final themedText = textTheme.copyWith(
+      headlineMedium: display1.copyWith(color: colors.onSurface),
+      headlineSmall: headline.copyWith(color: colors.onSurface),
+      titleLarge: title.copyWith(color: colors.onSurface),
+      titleSmall: subtitle.copyWith(color: colors.onSurface),
+      bodyLarge: body2.copyWith(color: colors.onSurface),
+      bodyMedium: body1.copyWith(color: colors.onSurface),
+      bodySmall: caption.copyWith(color: colors.onSurfaceVariant),
     );
     final base = ThemeData(colorScheme: colors, fontFamily: fontName, useMaterial3: false);
 
-    return base.copyWith(scaffoldBackgroundColor: nearlyWhite, textTheme: base.textTheme.merge(textTheme));
+    return base.copyWith(
+      primaryColor: colors.primary,
+      scaffoldBackgroundColor: dark ? darkBackground : nearlyWhite,
+      textTheme: base.textTheme.merge(themedText),
+    );
   }
 
   static const textTheme = TextTheme(

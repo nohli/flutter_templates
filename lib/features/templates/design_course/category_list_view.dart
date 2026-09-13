@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/motion_preferences.dart';
-import 'design_course_app_theme.dart';
 import 'models/category.dart';
 
 const _baseListHeight = 134;
@@ -122,9 +121,9 @@ class _CategoryCourseCard extends StatelessWidget {
                             const SizedBox(width: 48),
                             Expanded(
                               child: Container(
-                                decoration: const BoxDecoration(
-                                  color: DesignCourseAppTheme.cardBackground,
-                                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                                decoration: BoxDecoration(
+                                  color: colors.surfaceContainerLow,
+                                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                                 ),
                                 child: Row(
                                   children: <Widget>[
@@ -208,9 +207,9 @@ class _CategoryCourseCard extends StatelessWidget {
                                                     color: colors.primary,
                                                     borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                                                   ),
-                                                  child: const Padding(
-                                                    padding: EdgeInsets.all(4.0),
-                                                    child: Icon(Icons.add, color: DesignCourseAppTheme.nearlyWhite),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(4.0),
+                                                    child: Icon(Icons.add, color: colors.onPrimary),
                                                   ),
                                                 ),
                                               ],

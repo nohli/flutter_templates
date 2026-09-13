@@ -120,7 +120,7 @@ class _TemplateGalleryScreenState extends State<TemplateGalleryScreen> with Sing
   }
 
   Widget _screenFor(TemplateGalleryDestination destination) => switch (destination) {
-    TemplateGalleryDestination.hotelBooking => const HotelHomeScreen(),
+    TemplateGalleryDestination.hotelBooking => HotelHomeScreen(appearance: widget.appearance),
     TemplateGalleryDestination.fitness => const FitnessAppHomeScreen(),
     TemplateGalleryDestination.designCourse => DesignCourseHomeScreen(savedCourses: _savedCourses),
     TemplateGalleryDestination.personalFinance => FinanceHomeScreen(appearance: widget.appearance),

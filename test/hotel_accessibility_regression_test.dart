@@ -3,9 +3,12 @@ import 'dart:ui' show SemanticsAction, Tristate;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/hotel_booking/calendar_popup_view.dart';
 import 'package:templates/features/templates/hotel_booking/custom_calendar.dart';
+import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart';
+import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_list_view.dart';
 import 'package:templates/features/templates/hotel_booking/model/hotel_list_data.dart';
 
@@ -18,6 +21,41 @@ void main() {
     expect(colors.secondary, HotelAppTheme.actionColor);
     expect(_contrastRatio(colors.secondary, colors.surface), greaterThanOrEqualTo(4.5));
     expect(_contrastRatio(colors.onPrimary, colors.primary), greaterThanOrEqualTo(4.5));
+  });
+
+  test('Hotel dark theme keeps its mint identity and accessible semantic colors', () {
+    final theme = HotelAppTheme.build(Brightness.dark);
+    final colors = theme.colorScheme;
+
+    expect(theme.brightness, Brightness.dark);
+    expect(theme.scaffoldBackgroundColor, HotelAppTheme.darkBackground);
+    expect(colors.surface, HotelAppTheme.darkSurface);
+    expect(_contrastRatio(colors.onSurface, colors.surface), greaterThanOrEqualTo(4.5));
+    expect(_contrastRatio(colors.onPrimary, colors.primary), greaterThanOrEqualTo(4.5));
+    expect(_contrastRatio(colors.outline, colors.surface), greaterThanOrEqualTo(3));
+  });
+
+  testWidgets('Hotel screens render their complete dark appearance', (WidgetTester tester) async {
+    final now = DateTime.now();
+    final cases = <({Finder content, Widget screen})>[
+      (content: find.text('Explore'), screen: const HotelHomeScreen(appearance: AppAppearance.dark)),
+      (content: find.text('Filters'), screen: const FiltersScreen(appearance: AppAppearance.dark)),
+      (
+        content: find.text('From'),
+        screen: CalendarPopupView(
+          appearance: AppAppearance.dark,
+          initialStartDate: now,
+          initialEndDate: now.add(const Duration(days: 5)),
+          onApplyClick: (_, _) {},
+        ),
+      ),
+    ];
+
+    for (final testCase in cases) {
+      await _pumpHotelWidget(tester, testCase.screen);
+      expect(Theme.of(tester.element(testCase.content)).brightness, Brightness.dark);
+      expect(tester.takeException(), isNull);
+    }
   });
 
   testWidgets('calendar exposes an incomplete draft and cannot apply stale dates', (WidgetTester tester) async {

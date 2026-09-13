@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../app/app_appearance.dart';
 import '../../../app/motion_preferences.dart';
 import 'custom_calendar.dart';
 import 'hotel_app_theme.dart';
@@ -10,6 +11,7 @@ class CalendarPopupView extends StatefulWidget {
     required this.initialStartDate,
     required this.initialEndDate,
     required this.onApplyClick,
+    this.appearance = AppAppearance.light,
     this.minimumDate,
     this.maximumDate,
     super.key,
@@ -17,6 +19,7 @@ class CalendarPopupView extends StatefulWidget {
 
   final DateTime? minimumDate;
   final DateTime? maximumDate;
+  final AppAppearance appearance;
   final DateTime initialStartDate;
   final DateTime initialEndDate;
   final void Function(DateTime, DateTime) onApplyClick;
@@ -50,7 +53,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    final theme = HotelAppTheme.build();
+    final theme = HotelAppTheme.build(widget.appearance.resolve(context));
     final colors = theme.colorScheme;
     final opacityDuration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 100);
     final useStackedLayout = MediaQuery.sizeOf(context).width < 372 || MediaQuery.textScalerOf(context).scale(1) >= 2;

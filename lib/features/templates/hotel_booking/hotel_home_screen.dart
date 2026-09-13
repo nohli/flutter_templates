@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../../../app/app_appearance.dart';
 import '../../../app/motion_preferences.dart';
 import '../shared/template_motion.dart';
 import 'calendar_popup_view.dart';
@@ -12,7 +13,9 @@ import 'model/hotel_filter_settings.dart';
 import 'model/hotel_list_data.dart';
 
 class HotelHomeScreen extends StatefulWidget {
-  const HotelHomeScreen({super.key});
+  const HotelHomeScreen({this.appearance = AppAppearance.light, super.key});
+
+  final AppAppearance appearance;
 
   @override
   State<HotelHomeScreen> createState() => _HotelHomeScreenState();
@@ -51,7 +54,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     final hotels = _visibleHotels;
-    final theme = HotelAppTheme.build();
+    final theme = HotelAppTheme.build(widget.appearance.resolve(context));
     final colors = theme.colorScheme;
     final textScale = MediaQuery.textScalerOf(context).scale(1);
     final stackFilterBar = textScale >= 1.5;
@@ -244,7 +247,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
               tooltip: 'Search sample hotels',
               constraints: const BoxConstraints.tightFor(width: 52, height: 52),
               onPressed: () => FocusScope.of(context).unfocus(),
-              icon: const FaIcon(FontAwesomeIcons.magnifyingGlass, size: 20, color: Colors.white),
+              icon: FaIcon(FontAwesomeIcons.magnifyingGlass, size: 20, color: colors.onPrimary),
             ),
           ),
         ],
@@ -316,6 +319,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
       context: context,
       builder: (BuildContext context) => MediaQuery.withNoTextScaling(
         child: CalendarPopupView(
+          appearance: widget.appearance,
           minimumDate: DateTime.now(),
           initialEndDate: _endDate,
           initialStartDate: _startDate,
@@ -361,6 +365,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
       child: Padding(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 8, right: 8),
         child: Material(
+          color: colors.surface,
           child: stackTitle
               ? Column(
                   mainAxisSize: MainAxisSize.min,
@@ -425,8 +430,9 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
     final settings = await Navigator.push<HotelFilterSettings>(
       context,
       MaterialPageRoute<HotelFilterSettings>(
-        builder: (BuildContext context) =>
-            MediaQuery.withNoTextScaling(child: FiltersScreen(initialSettings: _filterSettings)),
+        builder: (BuildContext context) => MediaQuery.withNoTextScaling(
+          child: FiltersScreen(appearance: widget.appearance, initialSettings: _filterSettings),
+        ),
         fullscreenDialog: true,
       ),
     );

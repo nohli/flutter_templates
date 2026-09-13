@@ -48,6 +48,41 @@ void main() {
     expect(Theme.of(tester.element(find.text('Preview'))).brightness, Brightness.light);
   });
 
+  testWidgets('template detail routes preserve the active template theme', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: TemplateAppearanceShell(
+          appearance: AppAppearance.dark,
+          themeBuilder: (Brightness brightness) => ThemeData(
+            brightness: brightness,
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange, brightness: brightness),
+          ),
+          builder: (BuildContext context) => Scaffold(
+            body: TextButton(
+              onPressed: () => Navigator.of(context).push<void>(
+                templatePageRoute<void>(
+                  context: context,
+                  builder: (_) => const Scaffold(body: Text('Detail')),
+                ),
+              ),
+              child: const Text('Open detail'),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Open detail'));
+    await tester.pumpAndSettle();
+
+    final detailContext = tester.element(find.text('Detail'));
+    expect(Theme.of(detailContext).brightness, Brightness.dark);
+    expect(
+      Theme.of(detailContext).colorScheme.primary,
+      ColorScheme.fromSeed(seedColor: Colors.orange, brightness: Brightness.dark).primary,
+    );
+  });
+
   test('Design Course dark palette keeps its cyan identity and accessible semantic colors', () {
     final theme = DesignCourseAppTheme.build(Brightness.dark);
     final colors = theme.colorScheme;

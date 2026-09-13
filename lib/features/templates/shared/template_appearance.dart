@@ -5,6 +5,10 @@ import '../../../app/app_appearance.dart';
 typedef TemplateThemeBuilder = ThemeData Function(Brightness brightness);
 typedef TemplateContentBuilder = Widget Function(BuildContext context);
 
+MaterialPageRoute<T> templatePageRoute<T>({required BuildContext context, required WidgetBuilder builder}) {
+  return MaterialPageRoute<T>(builder: (_) => InheritedTheme.captureAll(context, Builder(builder: builder)));
+}
+
 class TemplateAppearanceShell extends StatelessWidget {
   const TemplateAppearanceShell({
     required this.appearance,

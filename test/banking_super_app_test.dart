@@ -59,6 +59,10 @@ void main() {
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('TOTAL BALANCE'))).brightness, Brightness.dark);
+
+    await tester.tap(find.text('Send'));
+    await tester.pumpAndSettle();
+    expect(Theme.of(tester.element(find.text('Send money'))).brightness, Brightness.dark);
   });
 }
 

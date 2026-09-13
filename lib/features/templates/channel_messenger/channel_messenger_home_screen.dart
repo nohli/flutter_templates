@@ -91,9 +91,12 @@ class _ChannelMessengerHomeState extends State<_ChannelMessengerHome> {
 
   void _openConversation(ChannelConversation conversation) {
     unawaited(
-      Navigator.of(
-        context,
-      ).push<void>(MaterialPageRoute<void>(builder: (_) => ChannelDetailScreen(conversation: conversation))),
+      Navigator.of(context).push<void>(
+        templatePageRoute<void>(
+          context: context,
+          builder: (_) => ChannelDetailScreen(conversation: conversation),
+        ),
+      ),
     );
   }
 

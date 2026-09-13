@@ -75,7 +75,11 @@ class _LearningHomeState extends State<_LearningHome> {
   }
 
   void _openLesson() {
-    unawaited(Navigator.of(context).push<void>(MaterialPageRoute<void>(builder: (_) => const LanguageLessonScreen())));
+    unawaited(
+      Navigator.of(
+        context,
+      ).push<void>(templatePageRoute<void>(context: context, builder: (_) => const LanguageLessonScreen())),
+    );
   }
 }
 

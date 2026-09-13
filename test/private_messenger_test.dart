@@ -74,6 +74,10 @@ void main() {
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('Clover'))).brightness, Brightness.dark);
+
+    await tester.tap(find.byType(PrivateConversationTile).first);
+    await tester.pumpAndSettle();
+    expect(Theme.of(tester.element(find.text('online'))).brightness, Brightness.dark);
   });
 }
 

@@ -62,6 +62,12 @@ void main() {
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('Aero'))).brightness, Brightness.dark);
+
+    await tester.tap(find.text('Channels'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Design Dispatch'));
+    await tester.pumpAndSettle();
+    expect(Theme.of(tester.element(find.text('12.8K subscribers'))).brightness, Brightness.dark);
   });
 }
 

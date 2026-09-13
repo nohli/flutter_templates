@@ -49,6 +49,10 @@ void main() {
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('Order food with confidence'))).brightness, Brightness.dark);
+
+    await tester.tap(find.byKey(const ValueKey<String>('language-current-lesson')));
+    await tester.pumpAndSettle();
+    expect(Theme.of(tester.element(find.text('Choose the best reply'))).brightness, Brightness.dark);
   });
 }
 

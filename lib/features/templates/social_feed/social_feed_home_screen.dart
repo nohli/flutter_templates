@@ -115,7 +115,7 @@ class _SocialFeedHomeState extends State<_SocialFeedHome> {
   Future<void> _compose() async {
     final post = await Navigator.of(
       context,
-    ).push<String>(MaterialPageRoute<String>(builder: (_) => const SocialComposeScreen()));
+    ).push<String>(templatePageRoute<String>(context: context, builder: (_) => const SocialComposeScreen()));
     if (!mounted || post == null) {
       return;
     }
@@ -124,7 +124,12 @@ class _SocialFeedHomeState extends State<_SocialFeedHome> {
 
   void _openThread(SocialPost post) {
     unawaited(
-      Navigator.of(context).push<void>(MaterialPageRoute<void>(builder: (_) => SocialThreadScreen(post: post))),
+      Navigator.of(context).push<void>(
+        templatePageRoute<void>(
+          context: context,
+          builder: (_) => SocialThreadScreen(post: post),
+        ),
+      ),
     );
   }
 }

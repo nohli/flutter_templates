@@ -7,6 +7,7 @@ enum TemplateGalleryDestination {
   languageLearning,
   socialFeed,
   bankingSuperApp,
+  channelMessenger,
 }
 
 class TemplateGalleryItem {
@@ -37,5 +38,6 @@ class TemplateGalleryItem {
     TemplateGalleryItem(title: 'Language Learning', destination: TemplateGalleryDestination.languageLearning),
     TemplateGalleryItem(title: 'Public Social Feed', destination: TemplateGalleryDestination.socialFeed),
     TemplateGalleryItem(title: 'Banking Super-App', destination: TemplateGalleryDestination.bankingSuperApp),
+    TemplateGalleryItem(title: 'Channel Messenger', destination: TemplateGalleryDestination.channelMessenger),
   ];
 }

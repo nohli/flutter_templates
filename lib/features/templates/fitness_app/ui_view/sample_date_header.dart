@@ -7,34 +7,28 @@ class SampleDateHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final navigationColor = colors.brightness == Brightness.dark ? colors.onSurfaceVariant : FitnessAppTheme.grey;
     final useLargeTextLayout = MediaQuery.textScalerOf(context).scale(1) >= 2;
-    const previousDay = SizedBox(
-      height: 38,
-      width: 38,
-      child: Icon(Icons.keyboard_arrow_left, color: FitnessAppTheme.grey),
-    );
-    const nextDay = SizedBox(
-      height: 38,
-      width: 38,
-      child: Icon(Icons.keyboard_arrow_right, color: FitnessAppTheme.grey),
-    );
+    final previousDay = SizedBox(height: 38, width: 38, child: Icon(Icons.keyboard_arrow_left, color: navigationColor));
+    final nextDay = SizedBox(height: 38, width: 38, child: Icon(Icons.keyboard_arrow_right, color: navigationColor));
     return Semantics(
       label: 'Sample day, 15 May',
       excludeSemantics: true,
       child: useLargeTextLayout
-          ? const Column(
+          ? Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(mainAxisSize: MainAxisSize.min, children: <Widget>[previousDay, nextDay]),
-                _SampleDateLabel(expand: true),
+                const _SampleDateLabel(expand: true),
               ],
             )
-          : const Row(
+          : Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 previousDay,
-                Padding(padding: EdgeInsets.only(left: 8, right: 8), child: _SampleDateLabel()),
+                const Padding(padding: EdgeInsets.only(left: 8, right: 8), child: _SampleDateLabel()),
                 nextDay,
               ],
             ),
@@ -49,7 +43,9 @@ class _SampleDateLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const label = Text(
+    final colors = Theme.of(context).colorScheme;
+    final navigationColor = colors.brightness == Brightness.dark ? colors.onSurfaceVariant : FitnessAppTheme.grey;
+    final label = Text(
       '15 May',
       textAlign: TextAlign.left,
       style: TextStyle(
@@ -57,17 +53,17 @@ class _SampleDateLabel extends StatelessWidget {
         fontWeight: FontWeight.normal,
         fontSize: 18,
         letterSpacing: -0.2,
-        color: FitnessAppTheme.darkerText,
+        color: colors.onSurface,
       ),
     );
     return Row(
       mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
       children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.only(right: 8),
-          child: Icon(Icons.calendar_today, color: FitnessAppTheme.grey, size: 18),
+        Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: Icon(Icons.calendar_today, color: navigationColor, size: 18),
         ),
-        if (expand) const Expanded(child: label) else label,
+        if (expand) Expanded(child: label) else label,
       ],
     );
   }

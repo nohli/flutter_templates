@@ -21,12 +21,12 @@ class TitleView extends StatelessWidget {
             child: Text(
               actionLabel,
               textAlign: TextAlign.left,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: FitnessAppTheme.fontName,
                 fontWeight: FontWeight.normal,
                 fontSize: 16,
                 letterSpacing: 0.5,
-                color: FitnessAppTheme.nearlyDarkBlue,
+                color: colors.primary,
               ),
             ),
           )
@@ -34,18 +34,22 @@ class TitleView extends StatelessWidget {
           Text(
             actionLabel,
             textAlign: TextAlign.left,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: FitnessAppTheme.fontName,
               fontWeight: FontWeight.normal,
               fontSize: 16,
               letterSpacing: 0.5,
-              color: FitnessAppTheme.nearlyDarkBlue,
+              color: colors.primary,
             ),
           ),
-        const SizedBox(
+        SizedBox(
           height: 38,
           width: 26,
-          child: Icon(Icons.arrow_forward, color: FitnessAppTheme.darkText, size: 18),
+          child: Icon(
+            Icons.arrow_forward,
+            color: colors.brightness == Brightness.dark ? colors.onSurface : FitnessAppTheme.darkText,
+            size: 18,
+          ),
         ),
       ],
     );
@@ -53,7 +57,7 @@ class TitleView extends StatelessWidget {
       animation: animation,
       builder: (BuildContext context, _) {
         return Material(
-          color: FitnessAppTheme.background,
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: FadeTransition(
             opacity: animation,
             child: Transform(

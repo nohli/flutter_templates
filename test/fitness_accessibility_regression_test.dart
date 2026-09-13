@@ -1,7 +1,11 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderParagraph;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
+import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
 import 'package:templates/features/templates/fitness_app/models/meals_list_data.dart';
 import 'package:templates/features/templates/fitness_app/my_diary/meals_list_view.dart';
@@ -15,6 +19,37 @@ import 'package:templates/features/templates/fitness_app/ui_view/sample_date_hea
 import 'package:templates/features/templates/fitness_app/ui_view/wave_view.dart';
 
 void main() {
+  test('Fitness dark theme preserves its cobalt identity with accessible semantic colors', () {
+    final theme = FitnessAppTheme.build(Brightness.dark);
+    final colors = theme.colorScheme;
+
+    expect(theme.brightness, Brightness.dark);
+    expect(theme.scaffoldBackgroundColor, FitnessAppTheme.darkBackground);
+    expect(colors.surface, FitnessAppTheme.darkSurface);
+    expect(_contrastRatio(colors.onSurface, colors.surface), greaterThanOrEqualTo(4.5));
+    expect(_contrastRatio(colors.onPrimary, colors.primary), greaterThanOrEqualTo(4.5));
+    expect(_contrastRatio(colors.outline, colors.surface), greaterThanOrEqualTo(3));
+  });
+
+  testWidgets('Fitness diary, training, and navigation render their dark appearance', (WidgetTester tester) async {
+    await _pumpFitnessScreen(
+      tester,
+      const FitnessAppHomeScreen(appearance: AppAppearance.dark),
+      disableAnimations: true,
+      wrapWithTheme: false,
+    );
+
+    expect(Theme.of(tester.element(find.text('My Diary'))).brightness, Brightness.dark);
+    expect(tester.widget<PhysicalShape>(find.byType(PhysicalShape)).color, FitnessAppTheme.darkSurface);
+
+    await tester.tap(find.bySemanticsLabel('Training').first);
+    await tester.pump();
+
+    expect(find.text('Training'), findsOneWidget);
+    expect(Theme.of(tester.element(find.text('Training'))).brightness, Brightness.dark);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('sample date header fits the original phone composition', (WidgetTester tester) async {
     await _pumpFitnessScreen(
       tester,
@@ -377,6 +412,7 @@ Future<void> _pumpFitnessScreen(
   Size size = const Size(430, 932),
   double textScale = 1,
   bool disableAnimations = false,
+  bool wrapWithTheme = true,
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
@@ -390,11 +426,17 @@ Future<void> _pumpFitnessScreen(
       theme: FitnessAppTheme.build(),
       home: MediaQuery(
         data: mediaQuery,
-        child: Scaffold(body: screen),
+        child: wrapWithTheme ? Scaffold(body: screen) : screen,
       ),
     ),
   );
   await tester.pump();
+}
+
+double _contrastRatio(Color foreground, Color background) {
+  final lighter = math.max(foreground.computeLuminance(), background.computeLuminance());
+  final darker = math.min(foreground.computeLuminance(), background.computeLuminance());
+  return (lighter + 0.05) / (darker + 0.05);
 }
 
 void _evictAssets(Iterable<String> assets) {

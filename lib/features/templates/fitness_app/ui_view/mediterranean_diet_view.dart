@@ -19,8 +19,8 @@ class MediterraneanDietView extends StatelessWidget {
 
     return AnimatedFitnessCard(
       animation: animation,
-      backgroundColor: FitnessAppTheme.white,
-      shadowColor: FitnessAppTheme.grey,
+      backgroundColor: colors.surface,
+      shadowColor: colors.brightness == Brightness.dark ? colors.shadow : FitnessAppTheme.grey,
       builder: (_) => useLargeTextLayout
           ? _LargeDietSummary(colors: colors, progress: animation.value)
           : _CompactDietSummary(colors: colors, progress: animation.value, macroProgress: macroAnimation.value),
@@ -44,9 +44,9 @@ class _CompactDietSummary extends StatelessWidget {
           padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 8),
           child: Container(
             height: 2,
-            decoration: const BoxDecoration(
-              color: FitnessAppTheme.background,
-              borderRadius: BorderRadius.all(Radius.circular(4)),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
           ),
         ),
@@ -119,6 +119,7 @@ class _CompactEnergyMetric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Row(
       children: <Widget>[
         Container(
@@ -145,7 +146,9 @@ class _CompactEnergyMetric extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
                     letterSpacing: -0.1,
-                    color: FitnessAppTheme.grey.withValues(alpha: 0.5),
+                    color: colors.brightness == Brightness.dark
+                        ? colors.onSurfaceVariant
+                        : FitnessAppTheme.grey.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -162,11 +165,11 @@ class _CompactEnergyMetric extends StatelessWidget {
                       child: Text(
                         '$value',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: FitnessAppTheme.fontName,
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
-                          color: FitnessAppTheme.darkerText,
+                          color: colors.onSurface,
                         ),
                       ),
                     ),
@@ -180,7 +183,9 @@ class _CompactEnergyMetric extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                           fontSize: 12,
                           letterSpacing: -0.2,
-                          color: FitnessAppTheme.grey.withValues(alpha: 0.5),
+                          color: colors.brightness == Brightness.dark
+                              ? colors.onSurfaceVariant
+                              : FitnessAppTheme.grey.withValues(alpha: 0.5),
                         ),
                       ),
                     ),
@@ -215,7 +220,12 @@ class _CompactCalorieRing extends StatelessWidget {
               decoration: BoxDecoration(
                 color: colors.surface,
                 borderRadius: const BorderRadius.all(Radius.circular(100)),
-                border: Border.all(width: 4, color: FitnessAppTheme.nearlyDarkBlue.withValues(alpha: 0.2)),
+                border: Border.all(
+                  width: 4,
+                  color: colors.brightness == Brightness.dark
+                      ? colors.primaryContainer
+                      : FitnessAppTheme.nearlyDarkBlue.withValues(alpha: 0.2),
+                ),
               ),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
@@ -225,11 +235,11 @@ class _CompactCalorieRing extends StatelessWidget {
                     Text(
                       '${(1503 * progress).toInt()}',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: FitnessAppTheme.fontName,
                         fontWeight: FontWeight.normal,
                         fontSize: 24,
-                        color: FitnessAppTheme.nearlyDarkBlue,
+                        color: colors.primary,
                       ),
                     ),
                     Text(
@@ -239,7 +249,9 @@ class _CompactCalorieRing extends StatelessWidget {
                         fontFamily: FitnessAppTheme.fontName,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
-                        color: FitnessAppTheme.grey.withValues(alpha: 0.5),
+                        color: colors.brightness == Brightness.dark
+                            ? colors.onSurfaceVariant
+                            : FitnessAppTheme.grey.withValues(alpha: 0.5),
                       ),
                     ),
                   ],
@@ -251,10 +263,10 @@ class _CompactCalorieRing extends StatelessWidget {
             padding: const EdgeInsets.all(4),
             child: CustomPaint(
               painter: _CalorieRingPainter(
-                colors: const <Color>[FitnessAppTheme.nearlyDarkBlue, Color(0xFF8A98E8), Color(0xFF8A98E8)],
+                colors: <Color>[colors.primary, const Color(0xFF8A98E8), const Color(0xFF8A98E8)],
                 angle: _ringAngle(progress),
-                shadowColor: FitnessAppTheme.grey,
-                markerColor: FitnessAppTheme.white,
+                shadowColor: colors.brightness == Brightness.dark ? colors.shadow : FitnessAppTheme.grey,
+                markerColor: colors.surface,
               ),
               child: const SizedBox(width: 108, height: 108),
             ),
@@ -341,6 +353,7 @@ class _CompactMacroMetric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -349,12 +362,12 @@ class _CompactMacroMetric extends StatelessWidget {
         Text(
           label,
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: FitnessAppTheme.fontName,
             fontWeight: FontWeight.w500,
             fontSize: 16,
             letterSpacing: -0.2,
-            color: FitnessAppTheme.darkText,
+            color: colors.brightness == Brightness.dark ? colors.onSurface : FitnessAppTheme.darkText,
           ),
         ),
         Padding(
@@ -386,7 +399,9 @@ class _CompactMacroMetric extends StatelessWidget {
               fontFamily: FitnessAppTheme.fontName,
               fontWeight: FontWeight.w600,
               fontSize: 12,
-              color: FitnessAppTheme.grey.withValues(alpha: 0.5),
+              color: colors.brightness == Brightness.dark
+                  ? colors.onSurfaceVariant
+                  : FitnessAppTheme.grey.withValues(alpha: 0.5),
             ),
           ),
         ),

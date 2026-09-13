@@ -20,6 +20,7 @@ void main() {
       (cardLabel: 'Personal Finance', screenText: 'Money and crypto, together'),
       (cardLabel: 'Dating & Social', screenText: 'CURATED CONNECTIONS / TONIGHT'),
       (cardLabel: 'Language Learning', screenText: 'Order food with confidence'),
+      (cardLabel: 'Public Social Feed', screenText: 'PULSE'),
     ];
     expect(
       templates.map((template) => template.cardLabel).toSet(),

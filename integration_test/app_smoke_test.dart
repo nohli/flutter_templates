@@ -18,13 +18,6 @@ void main() {
       (cardLabel: 'Fitness App', screenText: 'My Diary'),
       (cardLabel: 'Design Course', screenText: 'Choose your'),
       (cardLabel: 'Personal Finance', screenText: 'Money and crypto, together'),
-      (cardLabel: 'E-commerce Store', screenText: 'Curated objects for calmer spaces.'),
-      (cardLabel: 'Project Planner', screenText: 'Make space for what matters.'),
-      (cardLabel: 'Food Delivery', screenText: 'Good food, right on time.'),
-      (cardLabel: 'Podcast Player', screenText: 'WAVE RADIO · LIVE'),
-      (cardLabel: 'Social Community', screenText: 'Share what feels alive.'),
-      (cardLabel: 'Travel Planner', screenText: 'FIELD NOTES / ITINERARY'),
-      (cardLabel: 'AI Assistant', screenText: 'What can I help you create?'),
       (cardLabel: 'Dating & Social', screenText: 'CURATED CONNECTIONS / TONIGHT'),
     ];
     expect(

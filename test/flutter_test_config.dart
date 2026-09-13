@@ -20,13 +20,7 @@ Future<void> _loadBundledFonts() async {
 }
 
 const _fonts = <String, List<String>>{
-  'ArchivoBlack': <String>['assets/fonts/ArchivoBlack-Regular.ttf'],
-  'Anybody': <String>['assets/fonts/Anybody.ttf'],
   'BricolageGrotesque': <String>['assets/fonts/BricolageGrotesque.ttf'],
-  'DMSerifDisplay': <String>['assets/fonts/DMSerifDisplay-Regular.ttf'],
   'Fraunces': <String>['assets/fonts/Fraunces.ttf'],
-  'InstrumentSerif': <String>['assets/fonts/InstrumentSerif-Regular.ttf'],
   'SpaceGrotesk': <String>['assets/fonts/SpaceGrotesk.ttf'],
-  'Syne': <String>['assets/fonts/Syne.ttf'],
-  'Unbounded': <String>['assets/fonts/Unbounded.ttf'],
 };

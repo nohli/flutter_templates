@@ -3,11 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/gallery/template_gallery_artwork.dart';
-import 'package:templates/features/templates/ai_assistant_app/widgets/assistant_gallery_preview.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_gallery_preview.dart';
+import 'package:templates/features/templates/finance_app/widgets/finance_gallery_preview.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/shared/template_appearance.dart';
-import 'package:templates/features/templates/travel_app/widgets/travel_gallery_preview.dart';
 import 'package:templates/main.dart';
 
 void main() {
@@ -114,12 +113,7 @@ void main() {
             children: <Widget>[
               Expanded(
                 child: TemplateGalleryArtwork(
-                  item: TemplateGalleryItem(title: 'Travel', destination: TemplateGalleryDestination.travel),
-                ),
-              ),
-              Expanded(
-                child: TemplateGalleryArtwork(
-                  item: TemplateGalleryItem(title: 'Assistant', destination: TemplateGalleryDestination.aiAssistant),
+                  item: TemplateGalleryItem(title: 'Finance', destination: TemplateGalleryDestination.personalFinance),
                 ),
               ),
               Expanded(
@@ -132,8 +126,7 @@ void main() {
         ),
       );
 
-      expect(tester.widget<TravelGalleryPreview>(find.byType(TravelGalleryPreview)).brightness, brightness);
-      expect(tester.widget<AssistantGalleryPreview>(find.byType(AssistantGalleryPreview)).brightness, brightness);
+      expect(tester.widget<FinanceGalleryPreview>(find.byType(FinanceGalleryPreview)).brightness, brightness);
       expect(tester.widget<DatingGalleryPreview>(find.byType(DatingGalleryPreview)).brightness, brightness);
       expect(tester.takeException(), isNull);
     }

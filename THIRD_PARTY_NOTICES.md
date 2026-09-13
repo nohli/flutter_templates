@@ -16,7 +16,7 @@ The bundled Roboto files identify themselves as version 2.137 (2017), copyright 
 
 ## Additional typefaces
 
-Anybody, Archivo Black, Bricolage Grotesque, DM Serif Display, Fraunces, Instrument Serif, Space Grotesk, Syne, and Unbounded are distributed under the SIL Open Font License 1.1. Their complete copyright notices and licenses are preserved beside the font files in [`assets/fonts`](assets/fonts).
+Bricolage Grotesque, Fraunces, and Space Grotesk are distributed under the SIL Open Font License 1.1. Their complete copyright notices and licenses are preserved beside the font files in [`assets/fonts`](assets/fonts).
 
 ## Smooth Star Rating
 

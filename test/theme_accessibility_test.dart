@@ -2,33 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:templates/app/app_appearance.dart';
 import 'package:templates/app/app_theme.dart';
-import 'package:templates/features/templates/ai_assistant_app/ai_assistant_app_theme.dart';
-import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import 'package:templates/features/templates/dating_app/dating_app_theme.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
 import 'package:templates/features/templates/finance_app/finance_app_theme.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
-import 'package:templates/features/templates/food_delivery_app/food_delivery_app_theme.dart';
-import 'package:templates/features/templates/food_delivery_app/food_delivery_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart';
 import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
-import 'package:templates/features/templates/planner_app/planner_app_theme.dart';
-import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
-import 'package:templates/features/templates/podcast_app/podcast_app_theme.dart';
-import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
-import 'package:templates/features/templates/social_app/social_app_theme.dart';
-import 'package:templates/features/templates/social_app/social_home_screen.dart';
-import 'package:templates/features/templates/storefront_app/storefront_app_theme.dart';
-import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
-import 'package:templates/features/templates/travel_app/travel_app_theme.dart';
-import 'package:templates/features/templates/travel_app/travel_home_screen.dart';
 import 'package:templates/main.dart';
 
 void main() {
@@ -97,76 +82,6 @@ void main() {
             brightness: Brightness.light,
           ),
           (
-            name: 'Storefront',
-            font: StorefrontAppTheme.fontName,
-            displayFont: StorefrontAppTheme.displayFontName,
-            build: StorefrontAppTheme.build,
-            primary: StorefrontAppTheme.primary,
-            scaffold: StorefrontAppTheme.background,
-            useMaterial3: true,
-            brightness: Brightness.light,
-          ),
-          (
-            name: 'Planner',
-            font: PlannerAppTheme.fontName,
-            displayFont: PlannerAppTheme.displayFontName,
-            build: PlannerAppTheme.build,
-            primary: PlannerAppTheme.primary,
-            scaffold: PlannerAppTheme.background,
-            useMaterial3: true,
-            brightness: Brightness.light,
-          ),
-          (
-            name: 'AI assistant',
-            font: AiAssistantAppTheme.fontName,
-            displayFont: AiAssistantAppTheme.displayFontName,
-            build: AiAssistantAppTheme.build,
-            primary: AiAssistantAppTheme.primary,
-            scaffold: AiAssistantAppTheme.background,
-            useMaterial3: true,
-            brightness: Brightness.dark,
-          ),
-          (
-            name: 'Food delivery',
-            font: FoodDeliveryAppTheme.fontName,
-            displayFont: FoodDeliveryAppTheme.displayFontName,
-            build: FoodDeliveryAppTheme.build,
-            primary: FoodDeliveryAppTheme.primary,
-            scaffold: FoodDeliveryAppTheme.background,
-            useMaterial3: true,
-            brightness: Brightness.light,
-          ),
-          (
-            name: 'Podcast',
-            font: PodcastAppTheme.fontName,
-            displayFont: PodcastAppTheme.displayFontName,
-            build: PodcastAppTheme.build,
-            primary: PodcastAppTheme.primary,
-            scaffold: PodcastAppTheme.background,
-            useMaterial3: true,
-            brightness: Brightness.light,
-          ),
-          (
-            name: 'Social community',
-            font: SocialAppTheme.fontName,
-            displayFont: SocialAppTheme.displayFontName,
-            build: SocialAppTheme.build,
-            primary: SocialAppTheme.primary,
-            scaffold: SocialAppTheme.background,
-            useMaterial3: true,
-            brightness: Brightness.light,
-          ),
-          (
-            name: 'Travel planner',
-            font: TravelAppTheme.fontName,
-            displayFont: TravelAppTheme.displayFontName,
-            build: TravelAppTheme.build,
-            primary: TravelAppTheme.primary,
-            scaffold: TravelAppTheme.background,
-            useMaterial3: true,
-            brightness: Brightness.light,
-          ),
-          (
             name: 'Dating',
             font: DatingAppTheme.fontName,
             displayFont: DatingAppTheme.displayFontName,
@@ -210,29 +125,12 @@ void main() {
       expect(HotelAppTheme.build().platform, platform);
       expect(FitnessAppTheme.build().platform, platform);
       expect(FinanceAppTheme.build().platform, platform);
-      expect(StorefrontAppTheme.build().platform, platform);
-      expect(PlannerAppTheme.build().platform, platform);
-      expect(AiAssistantAppTheme.build().platform, platform);
-      expect(FoodDeliveryAppTheme.build().platform, platform);
-      expect(PodcastAppTheme.build().platform, platform);
-      expect(SocialAppTheme.build().platform, platform);
-      expect(TravelAppTheme.build().platform, platform);
       expect(DatingAppTheme.build().platform, platform);
     }
   });
 
   test('new templates keep distinct display typography', () {
-    expect(<String>{
-      FinanceAppTheme.displayFontName,
-      StorefrontAppTheme.displayFontName,
-      PlannerAppTheme.displayFontName,
-      AiAssistantAppTheme.displayFontName,
-      FoodDeliveryAppTheme.displayFontName,
-      PodcastAppTheme.displayFontName,
-      SocialAppTheme.displayFontName,
-      TravelAppTheme.displayFontName,
-      DatingAppTheme.displayFontName,
-    }, hasLength(9));
+    expect(<String>{FinanceAppTheme.displayFontName, DatingAppTheme.displayFontName}, hasLength(2));
   });
 
   testWidgets('opened navigation drawer meets text contrast guidelines', (WidgetTester tester) async {
@@ -257,39 +155,6 @@ void main() {
     final galleryTheme = Theme.of(tester.element(find.byTooltip('Appearance: System')));
     expect(galleryTheme.brightness, Brightness.dark);
     expect(galleryTheme.scaffoldBackgroundColor, const Color(0xFF111719));
-  });
-
-  testWidgets('branded dark app bars keep their titles readable in every appearance', (WidgetTester tester) async {
-    final cases = <({Color background, Color foreground, Widget Function(AppAppearance) screen, String title})>[
-      (
-        title: 'Mingle',
-        screen: (AppAppearance appearance) => SocialHomeScreen(appearance: appearance),
-        foreground: SocialAppTheme.amber,
-        background: SocialAppTheme.ink,
-      ),
-      (
-        title: 'Roam',
-        screen: (AppAppearance appearance) => TravelHomeScreen(appearance: appearance),
-        foreground: TravelAppTheme.surface,
-        background: TravelAppTheme.ink,
-      ),
-      (
-        title: 'Nova',
-        screen: (AppAppearance appearance) => AiAssistantHomeScreen(appearance: appearance),
-        foreground: AiAssistantAppTheme.ink,
-        background: AiAssistantAppTheme.background,
-      ),
-    ];
-
-    for (final appearance in <AppAppearance>[AppAppearance.light, AppAppearance.dark]) {
-      for (final themeCase in cases) {
-        await _pumpThemedScreen(tester, themeCase.screen(appearance));
-        final title = find.descendant(of: find.byType(AppBar), matching: find.text(themeCase.title));
-        expect(tester.widget<Text>(title).style?.color, themeCase.foreground, reason: themeCase.title);
-        _expectContrast(themeCase.title, themeCase.foreground, themeCase.background, 4.5);
-        expect(tester.takeException(), isNull, reason: themeCase.title);
-      }
-    }
   });
 
   testWidgets('template surfaces inherit their accessible semantic themes', (WidgetTester tester) async {
@@ -318,38 +183,6 @@ void main() {
 
     await _pumpThemedScreen(tester, const FinanceHomeScreen());
     _expectTemplateTheme(tester, find.text('Overview'), FinanceAppTheme.build());
-    await _expectAccessible(tester);
-
-    await _pumpThemedScreen(tester, const StorefrontHomeScreen());
-    _expectTemplateTheme(tester, find.text('Nest'), StorefrontAppTheme.build());
-    await _expectAccessible(tester);
-
-    await _pumpThemedScreen(tester, const PlannerHomeScreen());
-    _expectTemplateTheme(tester, find.text('Daymark'), PlannerAppTheme.build());
-    await _expectAccessible(tester);
-
-    await _pumpThemedScreen(tester, const AiAssistantHomeScreen());
-    _expectTemplateTheme(
-      tester,
-      find.descendant(of: find.byType(AppBar), matching: find.text('Nova')),
-      AiAssistantAppTheme.build(),
-    );
-    await _expectAccessible(tester);
-
-    await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen());
-    _expectTemplateTheme(tester, find.text('Savor'), FoodDeliveryAppTheme.build());
-    await _expectAccessible(tester);
-
-    await _pumpThemedScreen(tester, const PodcastHomeScreen());
-    _expectTemplateTheme(tester, find.text('Wave'), PodcastAppTheme.build());
-    await _expectAccessible(tester);
-
-    await _pumpThemedScreen(tester, const SocialHomeScreen());
-    _expectTemplateTheme(tester, find.text('Mingle'), SocialAppTheme.build());
-    await _expectAccessible(tester);
-
-    await _pumpThemedScreen(tester, const TravelHomeScreen());
-    _expectTemplateTheme(tester, find.text('Roam'), TravelAppTheme.build());
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const DatingHomeScreen());
@@ -403,34 +236,6 @@ void main() {
     await _pumpThemedScreen(tester, const FinanceHomeScreen(), size: const Size(320, 568), textScale: 3.2);
     _expectNoLayoutException(tester);
     expect(find.text('Overview'), findsOneWidget);
-
-    await _pumpThemedScreen(tester, const StorefrontHomeScreen(), size: const Size(320, 568), textScale: 3.2);
-    _expectNoLayoutException(tester);
-    expect(find.text('Nest'), findsOneWidget);
-
-    await _pumpThemedScreen(tester, const PlannerHomeScreen(), size: const Size(320, 568), textScale: 3.2);
-    _expectNoLayoutException(tester);
-    expect(find.text('Daymark'), findsOneWidget);
-
-    await _pumpThemedScreen(tester, const AiAssistantHomeScreen(), size: const Size(320, 568), textScale: 3.2);
-    _expectNoLayoutException(tester);
-    expect(find.descendant(of: find.byType(AppBar), matching: find.text('Nova')), findsOneWidget);
-
-    await _pumpThemedScreen(tester, const FoodDeliveryHomeScreen(), size: const Size(320, 568), textScale: 3.2);
-    _expectNoLayoutException(tester);
-    expect(find.text('Savor'), findsOneWidget);
-
-    await _pumpThemedScreen(tester, const PodcastHomeScreen(), size: const Size(320, 568), textScale: 3.2);
-    _expectNoLayoutException(tester);
-    expect(find.text('Wave'), findsOneWidget);
-
-    await _pumpThemedScreen(tester, const SocialHomeScreen(), size: const Size(320, 568), textScale: 3.2);
-    _expectNoLayoutException(tester);
-    expect(find.text('Mingle'), findsOneWidget);
-
-    await _pumpThemedScreen(tester, const TravelHomeScreen(), size: const Size(320, 568), textScale: 3.2);
-    _expectNoLayoutException(tester);
-    expect(find.text('Roam'), findsOneWidget);
   });
 
   testWidgets('hotel filters remain readable and operable at compact maximum text size', (WidgetTester tester) async {

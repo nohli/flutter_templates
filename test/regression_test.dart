@@ -15,7 +15,6 @@ import 'package:templates/features/support/invite_friend_screen.dart';
 import 'package:templates/features/gallery/home_screen.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/gallery/template_gallery_artwork.dart';
-import 'package:templates/features/templates/ai_assistant_app/ai_assistant_home_screen.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/design_course/course_info_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
@@ -23,7 +22,6 @@ import 'package:templates/features/templates/design_course/home_design_course.da
 import 'package:templates/features/templates/design_course/models/category.dart';
 import 'package:templates/features/templates/design_course/models/saved_courses.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
-import 'package:templates/features/templates/food_delivery_app/food_delivery_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/bottom_navigation_view/bottom_bar_view.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart';
@@ -41,11 +39,6 @@ import 'package:templates/features/templates/hotel_booking/model/hotel_list_data
 import 'package:templates/features/templates/hotel_booking/range_slider_view.dart';
 import 'package:templates/features/templates/hotel_booking/slider_view.dart';
 import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
-import 'package:templates/features/templates/planner_app/planner_home_screen.dart';
-import 'package:templates/features/templates/podcast_app/podcast_home_screen.dart';
-import 'package:templates/features/templates/social_app/social_home_screen.dart';
-import 'package:templates/features/templates/storefront_app/storefront_home_screen.dart';
-import 'package:templates/features/templates/travel_app/travel_home_screen.dart';
 import 'package:templates/main.dart' as app;
 
 void main() {
@@ -115,13 +108,6 @@ void main() {
     await _expectStatusBarTapScrollsToTop(tester, const FitnessAppHomeScreen());
     await _expectStatusBarTapScrollsToTop(tester, const DesignCourseHomeScreen());
     await _expectStatusBarTapScrollsToTop(tester, const FinanceHomeScreen());
-    await _expectStatusBarTapScrollsToTop(tester, const StorefrontHomeScreen());
-    await _expectStatusBarTapScrollsToTop(tester, const PlannerHomeScreen());
-    await _expectStatusBarTapScrollsToTop(tester, const AiAssistantHomeScreen());
-    await _expectStatusBarTapScrollsToTop(tester, const FoodDeliveryHomeScreen());
-    await _expectStatusBarTapScrollsToTop(tester, const PodcastHomeScreen());
-    await _expectStatusBarTapScrollsToTop(tester, const SocialHomeScreen());
-    await _expectStatusBarTapScrollsToTop(tester, const TravelHomeScreen());
     await _expectStatusBarTapScrollsToTop(tester, const DatingHomeScreen());
   }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
 
@@ -502,13 +488,7 @@ void main() {
       (title: 'Fitness App', destination: FitnessAppHomeScreen),
       (title: 'Design Course', destination: DesignCourseHomeScreen),
       (title: 'Personal Finance', destination: FinanceHomeScreen),
-      (title: 'E-commerce Store', destination: StorefrontHomeScreen),
-      (title: 'Project Planner', destination: PlannerHomeScreen),
-      (title: 'AI Assistant', destination: AiAssistantHomeScreen),
-      (title: 'Food Delivery', destination: FoodDeliveryHomeScreen),
-      (title: 'Podcast Player', destination: PodcastHomeScreen),
-      (title: 'Social Community', destination: SocialHomeScreen),
-      (title: 'Travel Planner', destination: TravelHomeScreen),
+      (title: 'Dating & Social', destination: DatingHomeScreen),
     ]) {
       final card = find.bySemanticsLabel(scenario.title);
       await tester.ensureVisible(card);

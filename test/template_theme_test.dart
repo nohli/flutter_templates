@@ -17,15 +17,15 @@ void main() {
       background: background,
       navigationIndicator: indicator,
       fontFamily: 'WorkSans',
-      displayFontFamily: 'InstrumentSerif',
+      displayFontFamily: 'SpaceGrotesk',
     );
 
     expect(theme.colorScheme, colors);
     expect(theme.scaffoldBackgroundColor, background);
     expect(theme.useMaterial3, isTrue);
     expect(theme.textTheme.bodyMedium?.fontFamily, 'WorkSans');
-    expect(theme.textTheme.headlineMedium?.fontFamily, 'InstrumentSerif');
-    expect(theme.appBarTheme.titleTextStyle?.fontFamily, 'InstrumentSerif');
+    expect(theme.textTheme.headlineMedium?.fontFamily, 'SpaceGrotesk');
+    expect(theme.appBarTheme.titleTextStyle?.fontFamily, 'SpaceGrotesk');
     expect(theme.appBarTheme.surfaceTintColor, Colors.transparent);
     expect(theme.appBarTheme.scrolledUnderElevation, 0);
     expect(theme.cardTheme.margin, EdgeInsets.zero);

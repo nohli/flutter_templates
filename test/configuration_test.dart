@@ -336,19 +336,12 @@ void main() {
     expect(_entryNames('lib'), <String>{'app', 'features', 'main.dart'});
     expect(_entryNames('lib/features'), <String>{'gallery', 'support', 'templates'});
     expect(_entryNames('lib/features/templates'), <String>{
-      'ai_assistant_app',
       'design_course',
       'dating_app',
       'finance_app',
       'fitness_app',
-      'food_delivery_app',
       'hotel_booking',
-      'planner_app',
-      'podcast_app',
       'shared',
-      'social_app',
-      'storefront_app',
-      'travel_app',
     });
   });
 
@@ -372,30 +365,16 @@ void main() {
 
     const additionalFonts = <({String asset, String copyright, String family})>[
       (
-        family: 'ArchivoBlack',
-        asset: 'ArchivoBlack-Regular.ttf',
-        copyright: 'Copyright 2017 The Archivo Black Project Authors',
-      ),
-      (family: 'Anybody', asset: 'Anybody.ttf', copyright: 'Copyright 2020 The Anybody Project Authors'),
-      (
         family: 'BricolageGrotesque',
         asset: 'BricolageGrotesque.ttf',
         copyright: 'Copyright 2022 The Bricolage Grotesque Project Authors',
       ),
-      (family: 'DMSerifDisplay', asset: 'DMSerifDisplay-Regular.ttf', copyright: 'Copyright 2014-2018 Adobe'),
       (family: 'Fraunces', asset: 'Fraunces.ttf', copyright: 'Copyright 2018 The Fraunces Project Authors'),
-      (
-        family: 'InstrumentSerif',
-        asset: 'InstrumentSerif-Regular.ttf',
-        copyright: 'Copyright 2022 The Instrument Serif Project Authors',
-      ),
       (
         family: 'SpaceGrotesk',
         asset: 'SpaceGrotesk.ttf',
         copyright: 'Copyright 2020 The Space Grotesk Project Authors',
       ),
-      (family: 'Syne', asset: 'Syne.ttf', copyright: 'Copyright 2017 The Syne Project Authors'),
-      (family: 'Unbounded', asset: 'Unbounded.ttf', copyright: 'Copyright 2022 The Unbounded Project Authors'),
     ];
 
     for (final font in additionalFonts) {

@@ -68,9 +68,12 @@ class _PrivateMessengerHomeState extends State<_PrivateMessengerHome> {
 
   void _openChat(PrivateConversation conversation) {
     unawaited(
-      Navigator.of(
-        context,
-      ).push<void>(MaterialPageRoute<void>(builder: (_) => PrivateChatScreen(conversation: conversation))),
+      Navigator.of(context).push<void>(
+        templatePageRoute<void>(
+          context: context,
+          builder: (_) => PrivateChatScreen(conversation: conversation),
+        ),
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/app_appearance.dart';
 import 'hotel_app_theme.dart';
 import 'model/hotel_filter_settings.dart';
 import 'range_slider_view.dart';
@@ -9,8 +10,13 @@ const _amenityOptions = <String>['Free Breakfast', 'Free Parking', 'Pool', 'Pet 
 const _accommodationOptions = <String>['All', 'Apartment', 'Home', 'Villa', 'Hotel', 'Resort'];
 
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({this.initialSettings = const HotelFilterSettings(), super.key});
+  const FiltersScreen({
+    this.appearance = AppAppearance.light,
+    this.initialSettings = const HotelFilterSettings(),
+    super.key,
+  });
 
+  final AppAppearance appearance;
   final HotelFilterSettings initialSettings;
 
   @override
@@ -34,7 +40,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = HotelAppTheme.build();
+    final theme = HotelAppTheme.build(widget.appearance.resolve(context));
     final colors = theme.colorScheme;
     return Theme(
       data: theme,

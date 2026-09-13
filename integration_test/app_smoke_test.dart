@@ -8,7 +8,7 @@ import 'package:templates/main.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('opens every bundled template', (WidgetTester tester) async {
+  testWidgets('opens every bundled template in light and dark mode', (WidgetTester tester) async {
     app.main();
     await _finishAnimations(tester);
 
@@ -25,8 +25,19 @@ void main() {
       TemplateGalleryItem.items.map((item) => item.title).toSet(),
     );
 
-    for (final template in templates) {
-      await _openTemplate(tester, cardLabel: template.cardLabel, screenText: template.screenText);
+    for (final appearance in <({Brightness brightness, String label})>[
+      (brightness: Brightness.light, label: 'Light'),
+      (brightness: Brightness.dark, label: 'Dark'),
+    ]) {
+      await _selectAppearance(tester, appearance.label);
+      for (final template in templates) {
+        await _openTemplate(
+          tester,
+          brightness: appearance.brightness,
+          cardLabel: template.cardLabel,
+          screenText: template.screenText,
+        );
+      }
     }
   });
 
@@ -54,17 +65,33 @@ void main() {
   });
 }
 
-Future<void> _openTemplate(WidgetTester tester, {required String cardLabel, required String screenText}) async {
+Future<void> _openTemplate(
+  WidgetTester tester, {
+  required Brightness brightness,
+  required String cardLabel,
+  required String screenText,
+}) async {
   final card = find.bySemanticsLabel(cardLabel);
   await tester.ensureVisible(card);
   await tester.tap(card);
   await _finishAnimations(tester);
 
-  expect(find.text(screenText), findsOneWidget);
+  final screenContent = find.text(screenText);
+  expect(screenContent, findsOneWidget);
+  expect(Theme.of(tester.element(screenContent)).brightness, brightness);
 
   await tester.binding.handlePopRoute();
   await _finishAnimations(tester);
   expect(find.bySemanticsLabel(cardLabel), findsOneWidget);
+}
+
+Future<void> _selectAppearance(WidgetTester tester, String label) async {
+  final appearanceButton = find.byTooltip(RegExp(r'^Appearance: '));
+  await tester.tap(appearanceButton);
+  await _finishAnimations(tester);
+  await tester.tap(find.byKey(ValueKey<String>('appearance-${label.toLowerCase()}')));
+  await _finishAnimations(tester);
+  expect(find.byTooltip('Appearance: $label'), findsOneWidget);
 }
 
 Future<void> _finishAnimations(WidgetTester tester) async {

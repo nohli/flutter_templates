@@ -24,17 +24,21 @@ class FinanceBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usesLargeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
-    final dark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
+    final colors = theme.colorScheme;
 
     return ColoredBox(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: theme.scaffoldBackgroundColor,
       child: SafeArea(
         top: false,
         minimum: const EdgeInsets.fromLTRB(16, 6, 16, 12),
         child: Material(
-          color: dark ? const Color(0xFF0D121C) : FinanceAppTheme.ink,
+          color: colors.surface,
+          elevation: dark ? 0 : 10,
+          shadowColor: FinanceAppTheme.ink.withValues(alpha: 0.12),
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: FinanceAppTheme.mint.withValues(alpha: 0.24)),
+            side: BorderSide(color: dark ? FinanceAppTheme.mint.withValues(alpha: 0.24) : colors.outlineVariant),
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           clipBehavior: Clip.antiAlias,
@@ -91,7 +95,10 @@ class _FinanceDestinationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = isSelected ? FinanceAppTheme.mint : const Color(0xFF8E98AA);
+    final theme = Theme.of(context);
+    final activeColor = isSelected
+        ? (theme.brightness == Brightness.dark ? FinanceAppTheme.mint : theme.colorScheme.primary)
+        : theme.colorScheme.onSurfaceVariant;
 
     return Semantics(
       button: true,
@@ -112,7 +119,7 @@ class _FinanceDestinationButton extends StatelessWidget {
                 child: AnimatedContainer(
                   duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 220),
                   height: 3,
-                  color: isSelected ? FinanceAppTheme.mint : Colors.transparent,
+                  color: isSelected ? activeColor : Colors.transparent,
                 ),
               ),
               Padding(
@@ -159,8 +166,12 @@ class _LargeTextDestination extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foreground = isSelected ? FinanceAppTheme.ink : const Color(0xFFCAD1DE);
-    final background = isSelected ? FinanceAppTheme.mint : Colors.transparent;
+    final theme = Theme.of(context);
+    final dark = theme.brightness == Brightness.dark;
+    final foreground = isSelected
+        ? (dark ? FinanceAppTheme.ink : theme.colorScheme.onPrimary)
+        : theme.colorScheme.onSurfaceVariant;
+    final background = isSelected ? (dark ? FinanceAppTheme.mint : theme.colorScheme.primary) : Colors.transparent;
 
     return TextButton.icon(
       onPressed: onPressed,

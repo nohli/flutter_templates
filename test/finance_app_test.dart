@@ -154,6 +154,18 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('finance navigation matches the selected appearance', (WidgetTester tester) async {
+    for (final appearance in <AppAppearance>[AppAppearance.light, AppAppearance.dark]) {
+      await _pumpFinance(tester, appearance: appearance);
+
+      final context = tester.element(find.byType(FinanceBottomBar));
+      final navigation = tester.widget<Material>(
+        find.descendant(of: find.byType(FinanceBottomBar), matching: find.byType(Material)).first,
+      );
+      expect(navigation.color, Theme.of(context).colorScheme.surface, reason: appearance.name);
+    }
+  });
+
   testWidgets('finance content enters progressively and replays when sections change', (WidgetTester tester) async {
     await _pumpFinance(tester, settle: false);
 

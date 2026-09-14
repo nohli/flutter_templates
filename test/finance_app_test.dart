@@ -37,6 +37,7 @@ void main() {
   ) async {
     await _pumpFinance(tester);
 
+    expect(find.text('PERSONAL FINANCE'), findsOneWidget);
     expect(find.text('Overview'), findsOneWidget);
     expect(find.text('Good morning, Alex'), findsOneWidget);
     expect(find.text('Money and crypto, together'), findsOneWidget);

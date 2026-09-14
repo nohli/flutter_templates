@@ -43,7 +43,7 @@ class _PrivateMessengerHeader extends StatelessWidget {
           const SizedBox(width: 4),
           const Expanded(
             child: Text(
-              'Clover',
+              'Messages',
               style: TextStyle(
                 fontFamily: PrivateMessengerTheme.displayFontName,
                 fontSize: 34,

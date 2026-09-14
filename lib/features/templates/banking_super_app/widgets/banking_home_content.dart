@@ -53,7 +53,7 @@ class _BankingHeader extends StatelessWidget {
         ),
         const SizedBox(width: 7),
         const Text(
-          'arc',
+          'Banking',
           style: TextStyle(
             fontFamily: BankingAppTheme.displayFontName,
             fontSize: 31,

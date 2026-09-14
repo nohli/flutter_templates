@@ -155,7 +155,7 @@ class _DatingHeader extends StatelessWidget {
               children: <Widget>[
                 const Flexible(
                   child: Text(
-                    'Sway',
+                    'Dating',
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     style: TextStyle(

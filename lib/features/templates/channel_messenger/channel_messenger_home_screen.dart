@@ -159,7 +159,7 @@ class _MessengerHeader extends StatelessWidget {
               const SizedBox(width: 4),
               const Expanded(
                 child: Text(
-                  'Aero',
+                  'Channels',
                   style: TextStyle(
                     fontFamily: ChannelMessengerTheme.displayFontName,
                     fontSize: 31,

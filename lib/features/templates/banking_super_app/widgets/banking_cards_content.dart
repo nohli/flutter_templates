@@ -47,7 +47,7 @@ class _BankingCardsContentState extends State<BankingCardsContent> {
                 Row(
                   children: <Widget>[
                     Text(
-                      'arc',
+                      'Debit',
                       style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w800),
                     ),
                     Spacer(),

@@ -78,7 +78,7 @@ class _AnimatedTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          'ORBIT / PERSONAL FINANCE',
+          'PERSONAL FINANCE',
           maxLines: 1,
           overflow: TextOverflow.fade,
           softWrap: false,

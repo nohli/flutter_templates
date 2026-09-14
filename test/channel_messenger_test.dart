@@ -27,7 +27,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Studio Crew'), findsOneWidget);
-    await tester.tap(find.text('Channels'));
+    await tester.tap(find.ancestor(of: find.text('Channels').last, matching: find.byType(InkWell)));
     await tester.pumpAndSettle();
     expect(find.text('Design Dispatch'), findsOneWidget);
     expect(find.text('City Signals'), findsOneWidget);
@@ -61,9 +61,9 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: ChannelMessengerHomeScreen(appearance: AppAppearance.dark)));
     await tester.pump();
 
-    expect(Theme.of(tester.element(find.text('Aero'))).brightness, Brightness.dark);
+    expect(Theme.of(tester.element(find.text('Channels').first)).brightness, Brightness.dark);
 
-    await tester.tap(find.text('Channels'));
+    await tester.tap(find.ancestor(of: find.text('Channels').last, matching: find.byType(InkWell)));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Design Dispatch'));
     await tester.pumpAndSettle();

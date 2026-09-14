@@ -184,7 +184,7 @@ void main() {
     await _expectAccessible(tester);
 
     await _pumpThemedScreen(tester, const DatingHomeScreen());
-    _expectTemplateTheme(tester, find.text('Sway'), DatingAppTheme.build());
+    _expectTemplateTheme(tester, find.text('Dating'), DatingAppTheme.build());
     await _expectAccessible(tester);
     semantics.dispose();
   });

@@ -148,7 +148,11 @@ class _PaymentsHub extends StatelessWidget {
           decoration: InputDecoration(prefixIcon: Icon(Icons.search_rounded), hintText: 'Name, tag, or bank'),
         ),
         const SizedBox(height: 24),
-        const _HubTile(icon: Icons.person_add_alt_rounded, title: 'New recipient', detail: 'Bank, card, or Arc tag'),
+        const _HubTile(
+          icon: Icons.person_add_alt_rounded,
+          title: 'New recipient',
+          detail: 'Bank, card, or payment handle',
+        ),
         const _HubTile(icon: Icons.public_rounded, title: 'International', detail: 'Send in 70+ currencies'),
         const _HubTile(icon: Icons.calendar_month_rounded, title: 'Scheduled', detail: 'Manage recurring transfers'),
       ],

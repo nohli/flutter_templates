@@ -26,6 +26,7 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: BankingHomeScreen()));
     await tester.pumpAndSettle();
 
+    expect(find.text('Banking'), findsOneWidget);
     expect(find.text('€8,942.70'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.tap(find.byTooltip('Hide balance'));

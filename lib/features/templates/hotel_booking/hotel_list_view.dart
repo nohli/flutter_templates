@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../shared/animated_favorite_icon.dart';
 import 'model/hotel_list_data.dart';
 import 'smooth_star_rating.dart';
 
@@ -93,9 +94,7 @@ class HotelListView extends StatelessWidget {
                                     ? 'Remove ${hotelData.title} from favorites'
                                     : 'Favorite ${hotelData.title}',
                                 constraints: const BoxConstraints.tightFor(width: 48, height: 48),
-                                isSelected: isFavorite,
-                                selectedIcon: Icon(Icons.favorite, color: colors.primary),
-                                icon: Icon(Icons.favorite_border, color: colors.primary),
+                                icon: AnimatedFavoriteIcon(isFavorite: isFavorite, inactiveColor: colors.primary),
                                 onPressed: onFavoriteChanged,
                               ),
                             ),

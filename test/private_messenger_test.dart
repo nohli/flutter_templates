@@ -48,6 +48,7 @@ void main() {
   });
 
   testWidgets('private messenger switches between its main destinations', (WidgetTester tester) async {
+    final semantics = tester.ensureSemantics();
     tester.view
       ..devicePixelRatio = 1
       ..physicalSize = const Size(430, 932);
@@ -62,11 +63,23 @@ void main() {
       (label: 'Calls', content: 'Group video'),
       (label: 'Chats', content: 'Jules'),
     ]) {
-      await tester.tap(find.text(destination.label));
+      final destinationTab = find.bySemanticsLabel(destination.label).last;
+      await tester.tap(destinationTab);
       await tester.pumpAndSettle();
       expect(find.textContaining(destination.content), findsWidgets);
+      expect(
+        tester.getSemantics(destinationTab),
+        matchesSemantics(
+          label: destination.label,
+          hasSelectedState: true,
+          isSelected: true,
+          isButton: true,
+          hasTapAction: true,
+        ),
+      );
       expect(tester.takeException(), isNull);
     }
+    semantics.dispose();
   });
 
   testWidgets('private messenger follows its requested dark appearance', (WidgetTester tester) async {

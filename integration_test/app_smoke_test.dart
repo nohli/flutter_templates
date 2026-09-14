@@ -4,6 +4,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:templates/app/app_identity.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/templates/private_messenger/widgets/private_conversation_tile.dart';
+import 'package:templates/features/templates/shared/animated_favorite_icon.dart';
 import 'package:templates/main.dart' as app;
 
 void main() {
@@ -100,6 +101,27 @@ void main() {
     await tester.tap(find.text('Publish'));
     await _finishAnimations(tester);
     expect(find.text('A clear idea from the road.'), findsOneWidget);
+  });
+
+  testWidgets('favorites and unfavorites a hotel', (WidgetTester tester) async {
+    app.main();
+    await _finishAnimations(tester);
+    await _openGalleryTemplate(tester, 'Hotel Booking');
+
+    final favorite = find.byTooltip('Favorite Grand Royal Hotel').first;
+    await tester.tap(favorite);
+    await tester.pump(const Duration(milliseconds: 300));
+
+    final removeFavorite = find.byTooltip('Remove Grand Royal Hotel from favorites').first;
+    expect(removeFavorite, findsOneWidget);
+    expect(
+      tester.widget<Icon>(find.descendant(of: removeFavorite, matching: find.byIcon(Icons.favorite_rounded))),
+      isA<Icon>().having((Icon icon) => icon.color, 'color', AnimatedFavoriteIcon.activeColor),
+    );
+
+    await tester.tap(removeFavorite);
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byTooltip('Favorite Grand Royal Hotel'), findsWidgets);
   });
 
   testWidgets('sends money in the banking template', (WidgetTester tester) async {

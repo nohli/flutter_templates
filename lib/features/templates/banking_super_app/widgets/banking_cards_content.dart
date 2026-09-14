@@ -59,7 +59,7 @@ class _BankingCardsContentState extends State<BankingCardsContent> {
                 SizedBox(height: 18),
                 Text('••••  ••••  ••••  8042', style: TextStyle(color: Colors.white, fontSize: 17, letterSpacing: 2)),
                 SizedBox(height: 8),
-                Text('TOBI N.  ·  08/30', style: TextStyle(color: Colors.white70, fontSize: 11, letterSpacing: 1)),
+                Text('ALEX RIVERA  ·  08/30', style: TextStyle(color: Colors.white70, fontSize: 11, letterSpacing: 1)),
               ],
             ),
           ),

@@ -135,6 +135,17 @@ void main() {
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Private Messenger');
 
+    for (final destination in <({String label, String content})>[
+      (label: 'Updates', content: 'Status updates'),
+      (label: 'Communities', content: 'Neighbourhood Garden'),
+      (label: 'Calls', content: 'Group video'),
+      (label: 'Chats', content: 'The garden table is booked 🌿'),
+    ]) {
+      await tester.tap(find.bySemanticsLabel(destination.label).last);
+      await _finishAnimations(tester);
+      expect(find.textContaining(destination.content), findsWidgets);
+    }
+
     await tester.tap(find.byType(PrivateConversationTile).first);
     await _finishAnimations(tester);
     await tester.enterText(find.byKey(const ValueKey<String>('private-chat-composer')), 'The terrace sounds perfect.');
@@ -181,6 +192,9 @@ Future<void> _selectAppearance(WidgetTester tester, String label) async {
 }
 
 Future<void> _finishAnimations(WidgetTester tester) async {
-  await tester.pump();
-  await tester.pump(const Duration(seconds: 3));
+  for (var frame = 0; frame < 40; frame++) {
+    await tester.pump(const Duration(milliseconds: 25));
+  }
+  await tester.pump(const Duration(seconds: 2));
+  await tester.pump(const Duration(milliseconds: 16));
 }

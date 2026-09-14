@@ -95,40 +95,108 @@ class _PrivateNavigation extends StatelessWidget {
     ];
     return SafeArea(
       top: false,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: colors.surface,
-          border: Border(top: BorderSide(color: colors.outlineVariant)),
-        ),
-        child: SizedBox(
-          height: 66,
-          child: Row(
-            children: <Widget>[
-              for (var index = 0; index < items.length; index++)
-                Expanded(
-                  child: InkWell(
-                    onTap: () => onSelected(index),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(
-                          items[index].icon,
-                          color: selectedIndex == index ? colors.primary : colors.onSurfaceVariant,
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          items[index].label,
-                          style: TextStyle(
-                            color: selectedIndex == index ? colors.primary : colors.onSurfaceVariant,
-                            fontSize: 10,
-                            fontWeight: selectedIndex == index ? FontWeight.w800 : FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+      minimum: const EdgeInsets.only(bottom: 10),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        child: Container(
+          decoration: BoxDecoration(
+            color: colors.surface,
+            borderRadius: const BorderRadius.all(Radius.circular(28)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: colors.shadow.withValues(alpha: 0.18),
+                blurRadius: 24,
+                spreadRadius: -7,
+                offset: const Offset(0, 10),
+              ),
             ],
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(28)),
+            child: Material(
+              color: Colors.transparent,
+              child: SizedBox(
+                height: 68,
+                child: Row(
+                  children: <Widget>[
+                    for (var index = 0; index < items.length; index++)
+                      _PrivateNavigationItem(
+                        label: items[index].label,
+                        icon: items[index].icon,
+                        selected: selectedIndex == index,
+                        onTap: () => onSelected(index),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PrivateNavigationItem extends StatelessWidget {
+  const _PrivateNavigationItem({required this.label, required this.icon, required this.selected, required this.onTap});
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Expanded(
+      child: Semantics(
+        label: label,
+        selected: selected,
+        button: true,
+        onTap: onTap,
+        excludeSemantics: true,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: const BorderRadius.all(Radius.circular(22)),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutCubic,
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: selected ? colors.primary : Colors.transparent,
+              borderRadius: const BorderRadius.all(Radius.circular(22)),
+              boxShadow: selected
+                  ? <BoxShadow>[
+                      BoxShadow(
+                        color: colors.primary.withValues(alpha: 0.28),
+                        blurRadius: 14,
+                        offset: const Offset(0, 5),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                AnimatedScale(
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutBack,
+                  scale: selected ? 1.08 : 1,
+                  child: Icon(icon, size: 21, color: selected ? colors.onPrimary : colors.onSurfaceVariant),
+                ),
+                const SizedBox(height: 3),
+                AnimatedDefaultTextStyle(
+                  duration: const Duration(milliseconds: 180),
+                  style: TextStyle(
+                    color: selected ? colors.onPrimary : colors.onSurfaceVariant,
+                    fontFamily: PrivateMessengerTheme.fontName,
+                    fontSize: 10.5,
+                    fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                  ),
+                  child: Text(label, maxLines: 1, overflow: TextOverflow.fade, softWrap: false),
+                ),
+              ],
+            ),
           ),
         ),
       ),

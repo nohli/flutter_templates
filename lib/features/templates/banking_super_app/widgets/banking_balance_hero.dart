@@ -88,9 +88,15 @@ class BankingBalanceHero extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
-                    '•• 8042',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, letterSpacing: 1),
+                  const Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '•• 8042',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, letterSpacing: 1),
+                      ),
+                    ),
                   ),
                 ],
               ),

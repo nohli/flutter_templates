@@ -79,8 +79,11 @@ class HotelListView extends StatelessWidget {
                         top: 8,
                         right: 8,
                         child: Material(
-                          color: showFullText ? colors.surfaceContainerHigh.withValues(alpha: 0.9) : Colors.transparent,
+                          color: colors.surface.withValues(alpha: 0.9),
                           shape: const CircleBorder(),
+                          clipBehavior: Clip.antiAlias,
+                          elevation: 2,
+                          shadowColor: colors.shadow.withValues(alpha: 0.2),
                           child: Semantics(
                             button: true,
                             toggled: isFavorite,
@@ -94,6 +97,7 @@ class HotelListView extends StatelessWidget {
                                     ? 'Remove ${hotelData.title} from favorites'
                                     : 'Favorite ${hotelData.title}',
                                 constraints: const BoxConstraints.tightFor(width: 48, height: 48),
+                                style: IconButton.styleFrom(shape: const CircleBorder()),
                                 icon: AnimatedFavoriteIcon(isFavorite: isFavorite, inactiveColor: colors.primary),
                                 onPressed: onFavoriteChanged,
                               ),

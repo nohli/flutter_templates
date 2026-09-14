@@ -76,7 +76,7 @@ class _BankingHeader extends StatelessWidget {
           radius: 22,
           backgroundColor: BankingAppTheme.acid,
           foregroundColor: Color(0xFF263000),
-          child: Text('TN', style: TextStyle(fontWeight: FontWeight.w800)),
+          child: Text('AR', style: TextStyle(fontWeight: FontWeight.w800)),
         ),
       ],
     );

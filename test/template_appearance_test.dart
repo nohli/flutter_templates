@@ -5,19 +5,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/gallery/template_gallery_artwork.dart';
-import 'package:templates/features/templates/banking_super_app/widgets/banking_gallery_preview.dart';
-import 'package:templates/features/templates/channel_messenger/widgets/channel_messenger_gallery_preview.dart';
-import 'package:templates/features/templates/dating_app/widgets/dating_gallery_preview.dart';
 import 'package:templates/features/templates/design_course/course_info_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
 import 'package:templates/features/templates/design_course/models/category.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
-import 'package:templates/features/templates/finance_app/widgets/finance_gallery_preview.dart';
-import 'package:templates/features/templates/language_learning/widgets/language_learning_gallery_preview.dart';
-import 'package:templates/features/templates/private_messenger/widgets/private_messenger_gallery_preview.dart';
 import 'package:templates/features/templates/shared/template_appearance.dart';
-import 'package:templates/features/templates/social_feed/widgets/social_feed_gallery_preview.dart';
 import 'package:templates/main.dart';
 
 void main() {
@@ -189,10 +182,8 @@ void main() {
   });
 
   testWidgets('every gallery artwork follows the selected appearance', (WidgetTester tester) async {
-    final generatedItems = TemplateGalleryItem.items.where((TemplateGalleryItem item) => item.imagePath == null);
-
     for (final brightness in Brightness.values) {
-      for (final item in generatedItems) {
+      for (final item in TemplateGalleryItem.items) {
         await tester.pumpWidget(
           MaterialApp(
             theme: ThemeData(brightness: brightness),
@@ -201,35 +192,19 @@ void main() {
           ),
         );
 
-        expect(_galleryPreviewBrightness(tester, item.destination), brightness, reason: item.title);
+        final expectedPath = item.destination.galleryPreviewPath(dark: brightness == Brightness.dark);
+        final artworkImages = tester.widgetList<Image>(
+          find.descendant(of: find.byType(TemplateGalleryArtwork), matching: find.byType(Image)),
+        );
+        final assetPaths = artworkImages.map((image) => (image.image as AssetImage).assetName).toSet();
+
+        expect(artworkImages, hasLength(3), reason: item.title);
+        expect(assetPaths, <String>{expectedPath}, reason: item.title);
         expect(tester.takeException(), isNull);
       }
     }
   });
 }
-
-Brightness _galleryPreviewBrightness(WidgetTester tester, TemplateGalleryDestination destination) =>
-    switch (destination) {
-      TemplateGalleryDestination.personalFinance =>
-        tester.widget<FinanceGalleryPreview>(find.byType(FinanceGalleryPreview)).brightness,
-      TemplateGalleryDestination.dating =>
-        tester.widget<DatingGalleryPreview>(find.byType(DatingGalleryPreview)).brightness,
-      TemplateGalleryDestination.languageLearning =>
-        tester.widget<LanguageLearningGalleryPreview>(find.byType(LanguageLearningGalleryPreview)).brightness,
-      TemplateGalleryDestination.socialFeed =>
-        tester.widget<SocialFeedGalleryPreview>(find.byType(SocialFeedGalleryPreview)).brightness,
-      TemplateGalleryDestination.bankingSuperApp =>
-        tester.widget<BankingGalleryPreview>(find.byType(BankingGalleryPreview)).brightness,
-      TemplateGalleryDestination.channelMessenger =>
-        tester.widget<ChannelMessengerGalleryPreview>(find.byType(ChannelMessengerGalleryPreview)).brightness,
-      TemplateGalleryDestination.privateMessenger =>
-        tester.widget<PrivateMessengerGalleryPreview>(find.byType(PrivateMessengerGalleryPreview)).brightness,
-      TemplateGalleryDestination.hotelBooking ||
-      TemplateGalleryDestination.fitness ||
-      TemplateGalleryDestination.designCourse => throw StateError(
-        'Static artwork does not expose a selected appearance.',
-      ),
-    };
 
 double _contrastRatio(Color foreground, Color background) {
   final lighter = math.max(foreground.computeLuminance(), background.computeLuminance());

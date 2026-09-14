@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
+import 'package:templates/features/gallery/models/template_gallery_item.dart';
+import 'package:templates/features/gallery/template_gallery_artwork.dart';
 import 'package:templates/features/templates/finance_app/finance_app_theme.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/finance_app/models/finance_transaction.dart';
 import 'package:templates/features/templates/finance_app/models/spending_category.dart';
 import 'package:templates/features/templates/finance_app/widgets/finance_bottom_bar.dart';
 import 'package:templates/features/templates/finance_app/widgets/finance_entrance.dart';
-import 'package:templates/features/templates/finance_app/widgets/finance_gallery_preview.dart';
 import 'package:templates/features/templates/finance_app/widgets/quick_actions.dart';
 import 'package:templates/features/templates/finance_app/widgets/spending_overview.dart';
 
@@ -64,22 +65,23 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('finance gallery preview stays legible at its compact card size', (WidgetTester tester) async {
-    final semantics = tester.ensureSemantics();
+  testWidgets('finance gallery artwork uses its real compact dashboard', (WidgetTester tester) async {
+    final item = TemplateGalleryItem.items.singleWhere(
+      (item) => item.destination == TemplateGalleryDestination.personalFinance,
+    );
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Center(child: SizedBox(width: 214, height: 143, child: FinanceGalleryPreview())),
+      MaterialApp(
+        home: Center(
+          child: SizedBox(width: 214, height: 143, child: TemplateGalleryArtwork(item: item)),
+        ),
       ),
     );
 
-    expect(find.text('ORBIT / LIVE PORTFOLIO'), findsOneWidget);
-    expect(find.text(r'$24,860'), findsOneWidget);
-    for (final action in <String>['SEND', 'ADD', 'REQUEST']) {
-      expect(find.text(action), findsOneWidget);
-    }
-    expect(find.bySemanticsLabel('Orbit finance market dashboard preview'), findsOneWidget);
+    final imagePaths = tester
+        .widgetList<Image>(find.descendant(of: find.byType(TemplateGalleryArtwork), matching: find.byType(Image)))
+        .map((image) => (image.image as AssetImage).assetName);
+    expect(imagePaths, everyElement('assets/gallery/personal-finance-screen.png'));
     expect(tester.takeException(), isNull);
-    semantics.dispose();
   });
 
   testWidgets('finance balance privacy and quick actions provide visible feedback', (WidgetTester tester) async {

@@ -15,6 +15,7 @@ import 'package:templates/features/templates/hotel_booking/custom_calendar.dart'
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/features/templates/hotel_booking/model/hotel_list_data.dart';
 import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
+import 'package:templates/features/templates/shared/animated_favorite_icon.dart';
 import 'package:templates/features/gallery/home_screen.dart';
 
 void main() {
@@ -125,6 +126,10 @@ void main() {
     final removeCourse = find.bySemanticsLabel('Remove saved sample course');
     expect(removeCourse, findsOneWidget);
     expect(tester.getSemantics(removeCourse).flagsCollection.isToggled, Tristate.isTrue);
+    expect(
+      tester.widget<Icon>(find.descendant(of: removeCourse, matching: find.byIcon(Icons.favorite_rounded))),
+      isA<Icon>().having((Icon icon) => icon.color, 'color', AnimatedFavoriteIcon.activeColor),
+    );
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
@@ -191,6 +196,10 @@ void main() {
           widget.properties.toggled == true,
     );
     expect(removeFavorite, findsOneWidget);
+    expect(
+      tester.widget<Icon>(find.descendant(of: removeFavorite, matching: find.byIcon(Icons.favorite_rounded))),
+      isA<Icon>().having((Icon icon) => icon.color, 'color', AnimatedFavoriteIcon.activeColor),
+    );
     await tester.tap(removeFavorite);
     await tester.pump();
     expect(

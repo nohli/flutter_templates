@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../app/app_appearance.dart';
+import '../shared/animated_favorite_icon.dart';
 import 'design_course_app_theme.dart';
 import 'models/category.dart';
 import 'models/saved_courses.dart';
@@ -411,9 +412,7 @@ class _FavoriteButton extends StatelessWidget {
               child: IconButton(
                 tooltip: label,
                 constraints: const BoxConstraints.tightFor(width: 48, height: 48),
-                isSelected: isFavorite,
-                selectedIcon: Icon(Icons.favorite, color: colors.onPrimary, size: 28),
-                icon: Icon(Icons.favorite_border, color: colors.onPrimary, size: 28),
+                icon: AnimatedFavoriteIcon(isFavorite: isFavorite, inactiveColor: colors.onPrimary, size: 28),
                 onPressed: onPressed,
               ),
             ),

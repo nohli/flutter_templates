@@ -52,6 +52,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/gallery/
     - assets/images/
     - assets/design_course/
     - assets/fitness_app/

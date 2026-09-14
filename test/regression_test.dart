@@ -13,8 +13,6 @@ import 'package:templates/features/support/feedback_screen.dart';
 import 'package:templates/features/support/help_screen.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
 import 'package:templates/features/gallery/home_screen.dart';
-import 'package:templates/features/gallery/models/template_gallery_item.dart';
-import 'package:templates/features/gallery/template_gallery_artwork.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/design_course/course_info_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
@@ -43,11 +41,6 @@ import 'package:templates/main.dart' as app;
 
 void main() {
   testWidgets('root app uses the adaptive shell', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     app.main();
     await tester.pump();
 
@@ -386,13 +379,7 @@ void main() {
   });
 
   testWidgets('drawer opens every app section', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-      'assets/images/helpImage.png',
-      'assets/images/inviteImage.png',
-    ]);
+    _evictAssets(<String>['assets/images/helpImage.png', 'assets/images/inviteImage.png']);
     await _pumpScreen(tester, const AppShell());
 
     for (final (String destination, String content) in <(String, String)>[
@@ -411,11 +398,6 @@ void main() {
   });
 
   testWidgets('home templates and layout control expose accessible labels', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     await _pumpScreen(tester, const AppShell());
 
     expect(find.bySemanticsLabel('Hotel Booking'), findsOneWidget);
@@ -449,38 +431,7 @@ void main() {
     );
   });
 
-  testWidgets('gallery artwork safely handles original templates without preview assets', (WidgetTester tester) async {
-    for (final destination in <TemplateGalleryDestination>[
-      TemplateGalleryDestination.hotelBooking,
-      TemplateGalleryDestination.fitness,
-      TemplateGalleryDestination.designCourse,
-    ]) {
-      await _pumpScreen(
-        tester,
-        TemplateGalleryArtwork(
-          item: TemplateGalleryItem(title: 'Missing preview', destination: destination),
-        ),
-      );
-
-      expect(
-        find.descendant(
-          of: find.byType(TemplateGalleryArtwork),
-          matching: find.byWidgetPredicate(
-            (Widget widget) => widget is SizedBox && widget.width == 0 && widget.height == 0,
-          ),
-        ),
-        findsOneWidget,
-      );
-      expect(tester.takeException(), isNull);
-    }
-  });
-
   testWidgets('every gallery card opens its declared template at the original text scale', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     await _pumpScreen(tester, _gallery(), textScale: 2, disableAnimations: true);
 
     for (final scenario in <({Type destination, String title})>[
@@ -542,11 +493,6 @@ void main() {
   });
 
   testWidgets('home template grid uses all three columns on tablet widths', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     await _pumpScreen(tester, _gallery(), disableAnimations: true);
 
     expect(
@@ -733,11 +679,6 @@ void main() {
 
   testWidgets('app navigation remains usable at maximum text size', (WidgetTester tester) async {
     final semantics = tester.ensureSemantics();
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     await _pumpScreen(tester, const AppShell(), size: const Size(320, 568), textScale: 3.2, disableAnimations: true);
 
     final galleryTitle = find.descendant(of: find.byType(TemplateGalleryScreen), matching: find.text(AppIdentity.name));
@@ -772,11 +713,6 @@ void main() {
 
   testWidgets('drawer exposes selected semantics and closes on the system back action', (WidgetTester tester) async {
     final semantics = tester.ensureSemantics();
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     await _pumpScreen(tester, const AppShell(), disableAnimations: true);
 
     expect(find.bySemanticsLabel('Hotel Booking'), findsOneWidget);
@@ -800,11 +736,6 @@ void main() {
   });
 
   testWidgets('drawer animation retains the active screen instance', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     await _pumpScreen(tester, const AppShell());
     final shellAnimation = find.byWidgetPredicate(
       (Widget widget) => widget is AnimatedBuilder && widget.child is TemplateGalleryScreen,
@@ -819,11 +750,6 @@ void main() {
   });
 
   testWidgets('drawer releases settle by position and deliberate fling direction', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     await _pumpScreen(tester, const AppShell());
     final dragStart = tester.getBottomLeft(find.byType(AppShell)) + const Offset(24, -100);
     final galleryTitle = find.descendant(of: find.byType(TemplateGalleryScreen), matching: find.text(AppIdentity.name));
@@ -853,11 +779,6 @@ void main() {
   });
 
   testWidgets('reduced motion opens and closes the drawer at its final positions', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     await _pumpScreen(tester, const AppShell(), disableAnimations: true);
     final galleryTitle = find.descendant(of: find.byType(TemplateGalleryScreen), matching: find.text(AppIdentity.name));
     final closedTitleLeft = tester.getTopLeft(galleryTitle).dx;
@@ -880,11 +801,6 @@ void main() {
   testWidgets('enabling reduced motion mid-transition snaps the drawer to its nearest endpoint', (
     WidgetTester tester,
   ) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(430, 932);
     addTearDown(tester.view.reset);
@@ -924,11 +840,6 @@ void main() {
   });
 
   testWidgets('app shell handles landscape safe areas', (WidgetTester tester) async {
-    _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
-    ]);
     await _pumpScreen(
       tester,
       const AppShell(),

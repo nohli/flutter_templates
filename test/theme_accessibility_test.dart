@@ -134,7 +134,6 @@ void main() {
   });
 
   testWidgets('opened navigation drawer meets text contrast guidelines', (WidgetTester tester) async {
-    _evictAssets(_galleryAssets);
     await tester.pumpWidget(const UiTemplatesApp());
     await tester.pump();
 
@@ -146,7 +145,6 @@ void main() {
 
   testWidgets('gallery follows the system appearance until the user chooses a mode', (WidgetTester tester) async {
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
-    _evictAssets(_galleryAssets);
 
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
     await tester.pumpWidget(const UiTemplatesApp());
@@ -339,12 +337,6 @@ void _evictAssets(Iterable<String> assets) {
     rootBundle.evict(asset);
   }
 }
-
-const _galleryAssets = <String>[
-  'assets/hotel/hotel_booking.png',
-  'assets/fitness_app/fitness_app.png',
-  'assets/design_course/design_course.png',
-];
 
 const _designAssets = <String>[
   'assets/design_course/interFace1.png',

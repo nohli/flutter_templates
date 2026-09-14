@@ -64,6 +64,19 @@ void main() {
     await tester.pumpAndSettle();
     expect(Theme.of(tester.element(find.text('Send money'))).brightness, Brightness.dark);
   });
+
+  testWidgets('banking dashboard fits a 390-point phone', (WidgetTester tester) async {
+    tester.view
+      ..devicePixelRatio = 1
+      ..physicalSize = const Size(390, 844);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: BankingHomeScreen()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('€8,942.70'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
 
 double _contrastRatio(Color foreground, Color background) {

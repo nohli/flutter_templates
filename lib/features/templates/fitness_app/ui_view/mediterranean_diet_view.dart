@@ -130,69 +130,71 @@ class _CompactEnergyMetric extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 4, bottom: 2),
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: FitnessAppTheme.fontName,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    letterSpacing: -0.1,
-                    color: colors.brightness == Brightness.dark
-                        ? colors.onSurfaceVariant
-                        : FitnessAppTheme.grey.withValues(alpha: 0.5),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, bottom: 2),
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: FitnessAppTheme.fontName,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      letterSpacing: -0.1,
+                      color: colors.brightness == Brightness.dark
+                          ? colors.onSurfaceVariant
+                          : FitnessAppTheme.grey.withValues(alpha: 0.5),
+                    ),
                   ),
                 ),
-              ),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    SizedBox(width: 28, height: 28, child: Image.asset(imagePath)),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 4, bottom: 3),
-                      child: Text(
-                        '$value',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: FitnessAppTheme.fontName,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: colors.onSurface,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      SizedBox(width: 28, height: 28, child: Image.asset(imagePath)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4, bottom: 3),
+                        child: Text(
+                          '$value',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: FitnessAppTheme.fontName,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            color: colors.onSurface,
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: unitInset, bottom: 3),
-                      child: Text(
-                        'Kcal',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: FitnessAppTheme.fontName,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          letterSpacing: -0.2,
-                          color: colors.brightness == Brightness.dark
-                              ? colors.onSurfaceVariant
-                              : FitnessAppTheme.grey.withValues(alpha: 0.5),
+                      Padding(
+                        padding: EdgeInsets.only(left: unitInset, bottom: 3),
+                        child: Text(
+                          'Kcal',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: FitnessAppTheme.fontName,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            letterSpacing: -0.2,
+                            color: colors.brightness == Brightness.dark
+                                ? colors.onSurfaceVariant
+                                : FitnessAppTheme.grey.withValues(alpha: 0.5),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

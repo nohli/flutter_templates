@@ -115,14 +115,18 @@ void main() {
     addTearDown(controller.dispose);
     _evictAssets(<String>['assets/fitness_app/eaten.png', 'assets/fitness_app/burned.png']);
 
-    for (final textScale in <double>[1, 3.2]) {
+    for (final scenario in const <({Size size, double textScale})>[
+      (size: Size(390, 844), textScale: 1),
+      (size: Size(402, 874), textScale: 1),
+      (size: Size(320, 1200), textScale: 3.2),
+    ]) {
       await _pumpFitnessScreen(
         tester,
         SingleChildScrollView(
           child: MediterraneanDietView(animation: controller, macroAnimation: controller),
         ),
-        size: textScale == 1 ? const Size(402, 874) : const Size(320, 1200),
-        textScale: textScale,
+        size: scenario.size,
+        textScale: scenario.textScale,
         disableAnimations: true,
       );
 

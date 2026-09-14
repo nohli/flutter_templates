@@ -27,7 +27,7 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: PrivateMessengerHomeScreen()));
     await tester.pumpAndSettle();
 
-    expect(find.text('Clover'), findsOneWidget);
+    expect(find.text('Messages'), findsOneWidget);
     expect(find.byIcon(Icons.mic_rounded), findsNothing);
     await tester.tap(find.byType(PrivateConversationTile).first);
     await tester.pumpAndSettle();
@@ -73,7 +73,7 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: PrivateMessengerHomeScreen(appearance: AppAppearance.dark)));
     await tester.pump();
 
-    expect(Theme.of(tester.element(find.text('Clover'))).brightness, Brightness.dark);
+    expect(Theme.of(tester.element(find.text('Messages'))).brightness, Brightness.dark);
 
     await tester.tap(find.byType(PrivateConversationTile).first);
     await tester.pumpAndSettle();

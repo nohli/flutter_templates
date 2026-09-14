@@ -21,10 +21,10 @@ void main() {
       (cardLabel: 'Personal Finance', screenText: 'Money and crypto, together'),
       (cardLabel: 'Dating & Social', screenText: 'CURATED CONNECTIONS / TONIGHT'),
       (cardLabel: 'Language Learning', screenText: 'Order food with confidence'),
-      (cardLabel: 'Public Social Feed', screenText: 'PULSE'),
+      (cardLabel: 'Public Social Feed', screenText: 'SOCIAL FEED'),
       (cardLabel: 'Banking Super-App', screenText: 'TOTAL BALANCE'),
-      (cardLabel: 'Channel Messenger', screenText: 'Aero'),
-      (cardLabel: 'Private Messenger', screenText: 'Clover'),
+      (cardLabel: 'Channel Messenger', screenText: 'Channels'),
+      (cardLabel: 'Private Messenger', screenText: 'Messages'),
     ];
     expect(
       templates.map((template) => template.cardLabel).toSet(),
@@ -47,7 +47,7 @@ void main() {
     }
   });
 
-  testWidgets('opens a Sway conversation and sends a message', (WidgetTester tester) async {
+  testWidgets('opens a dating conversation and sends a message', (WidgetTester tester) async {
     app.main();
     await _finishAnimations(tester);
 
@@ -70,7 +70,7 @@ void main() {
     expect(find.text('Coffee at six?'), findsOneWidget);
   });
 
-  testWidgets('completes a Lingo Trail lesson', (WidgetTester tester) async {
+  testWidgets('completes a language lesson', (WidgetTester tester) async {
     app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Language Learning');
@@ -85,7 +85,7 @@ void main() {
     expect(find.text('Order food with confidence'), findsOneWidget);
   });
 
-  testWidgets('reacts and publishes in Pulse', (WidgetTester tester) async {
+  testWidgets('reacts and publishes in the social feed', (WidgetTester tester) async {
     app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Public Social Feed');
@@ -102,7 +102,7 @@ void main() {
     expect(find.text('A clear idea from the road.'), findsOneWidget);
   });
 
-  testWidgets('sends money in Arc', (WidgetTester tester) async {
+  testWidgets('sends money in the banking template', (WidgetTester tester) async {
     app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Banking Super-App');
@@ -116,7 +116,7 @@ void main() {
     expect(find.text('Money sent to Lea'), findsOneWidget);
   });
 
-  testWidgets('opens and reacts to an Aero channel', (WidgetTester tester) async {
+  testWidgets('opens and reacts to a channel', (WidgetTester tester) async {
     app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Channel Messenger');
@@ -130,7 +130,7 @@ void main() {
     expect(find.text('128'), findsOneWidget);
   });
 
-  testWidgets('opens a Clover chat and sends a message', (WidgetTester tester) async {
+  testWidgets('opens a private chat and sends a message', (WidgetTester tester) async {
     app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Private Messenger');

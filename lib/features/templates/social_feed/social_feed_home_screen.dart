@@ -72,7 +72,7 @@ class _SocialFeedHomeState extends State<_SocialFeedHome> {
                     onPressed: () => Navigator.of(context).pop(),
                     icon: const Icon(Icons.arrow_back_rounded),
                   ),
-                  title: const Text('PULSE', style: TextStyle(fontSize: 19, letterSpacing: 2.8)),
+                  title: const Text('SOCIAL FEED', style: TextStyle(fontSize: 19, letterSpacing: 2.8)),
                   centerTitle: true,
                   actions: <Widget>[
                     IconButton(tooltip: 'Feed settings', onPressed: () {}, icon: const Icon(Icons.tune_rounded)),

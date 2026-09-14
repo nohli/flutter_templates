@@ -151,13 +151,13 @@ void main() {
   testWidgets('dating actions report truthful state in host-selected appearances', (WidgetTester tester) async {
     await _pumpDating(tester);
 
-    expect(Theme.of(tester.element(find.text('Sway'))).brightness, Brightness.dark);
+    expect(Theme.of(tester.element(find.text('Dating'))).brightness, Brightness.dark);
     await tester.tap(find.byTooltip('Send a spark'));
     await tester.pumpAndSettle();
     expect(find.text('A spark was sent to Mina.'), findsOneWidget);
 
     await _pumpDating(tester, appearance: AppAppearance.light);
-    expect(Theme.of(tester.element(find.text('Sway'))).brightness, Brightness.light);
+    expect(Theme.of(tester.element(find.text('Dating'))).brightness, Brightness.light);
     await tester.tap(find.byTooltip('Open conversations'));
     await tester.pumpAndSettle();
     await tester.tap(find.bySemanticsLabel('Open conversation with Ari'));

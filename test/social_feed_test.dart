@@ -63,7 +63,7 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: SocialFeedHomeScreen(appearance: AppAppearance.dark)));
     await tester.pump();
 
-    expect(Theme.of(tester.element(find.text('PULSE'))).brightness, Brightness.dark);
+    expect(Theme.of(tester.element(find.text('SOCIAL FEED'))).brightness, Brightness.dark);
 
     await tester.tap(
       find.text('Small interfaces become memorable when every motion explains where the content came from.'),

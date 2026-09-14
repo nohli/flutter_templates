@@ -96,9 +96,6 @@ void main() {
   testWidgets('gallery preserves saved courses when the template is reopened', (WidgetTester tester) async {
     final semantics = tester.ensureSemantics();
     _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
       'assets/design_course/interFace1.png',
       'assets/design_course/interFace2.png',
       'assets/design_course/interFace3.png',

@@ -17,9 +17,6 @@ import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dar
 void main() {
   testWidgets('reduced motion settles gallery, course, hotel, and calendar entrances', (WidgetTester tester) async {
     _evictAssets(<String>[
-      'assets/hotel/hotel_booking.png',
-      'assets/fitness_app/fitness_app.png',
-      'assets/design_course/design_course.png',
       'assets/design_course/interFace1.png',
       'assets/design_course/interFace2.png',
       'assets/design_course/interFace3.png',

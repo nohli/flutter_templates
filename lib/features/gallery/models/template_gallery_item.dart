@@ -11,29 +11,36 @@ enum TemplateGalleryDestination {
   privateMessenger,
 }
 
+extension TemplateGalleryDestinationArtwork on TemplateGalleryDestination {
+  String galleryPreviewPath({required bool dark}) {
+    final appearanceSuffix = dark ? '-dark' : '';
+    return 'assets/gallery/$assetName$appearanceSuffix.png';
+  }
+
+  String get assetName => switch (this) {
+    TemplateGalleryDestination.hotelBooking => 'hotel-booking-screen',
+    TemplateGalleryDestination.fitness => 'fitness-screen',
+    TemplateGalleryDestination.designCourse => 'design-course-screen',
+    TemplateGalleryDestination.personalFinance => 'personal-finance-screen',
+    TemplateGalleryDestination.dating => 'dating-screen',
+    TemplateGalleryDestination.languageLearning => 'language-learning-screen',
+    TemplateGalleryDestination.socialFeed => 'social-feed-screen',
+    TemplateGalleryDestination.bankingSuperApp => 'banking-screen',
+    TemplateGalleryDestination.channelMessenger => 'channel-messenger-screen',
+    TemplateGalleryDestination.privateMessenger => 'private-messenger-screen',
+  };
+}
+
 class TemplateGalleryItem {
-  const TemplateGalleryItem({required this.title, required this.destination, this.imagePath});
+  const TemplateGalleryItem({required this.title, required this.destination});
 
   final String title;
   final TemplateGalleryDestination destination;
-  final String? imagePath;
 
   static const items = <TemplateGalleryItem>[
-    TemplateGalleryItem(
-      title: 'Hotel Booking',
-      destination: TemplateGalleryDestination.hotelBooking,
-      imagePath: 'assets/hotel/hotel_booking.png',
-    ),
-    TemplateGalleryItem(
-      title: 'Fitness App',
-      destination: TemplateGalleryDestination.fitness,
-      imagePath: 'assets/fitness_app/fitness_app.png',
-    ),
-    TemplateGalleryItem(
-      title: 'Design Course',
-      destination: TemplateGalleryDestination.designCourse,
-      imagePath: 'assets/design_course/design_course.png',
-    ),
+    TemplateGalleryItem(title: 'Hotel Booking', destination: TemplateGalleryDestination.hotelBooking),
+    TemplateGalleryItem(title: 'Fitness App', destination: TemplateGalleryDestination.fitness),
+    TemplateGalleryItem(title: 'Design Course', destination: TemplateGalleryDestination.designCourse),
     TemplateGalleryItem(title: 'Personal Finance', destination: TemplateGalleryDestination.personalFinance),
     TemplateGalleryItem(title: 'Dating & Social', destination: TemplateGalleryDestination.dating),
     TemplateGalleryItem(title: 'Language Learning', destination: TemplateGalleryDestination.languageLearning),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
+import 'package:templates/features/gallery/models/template_gallery_item.dart';
+import 'package:templates/features/gallery/template_gallery_artwork.dart';
 import 'package:templates/features/templates/dating_app/dating_app_theme.dart';
 import 'package:templates/features/templates/dating_app/dating_chat_screen.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
@@ -9,7 +11,6 @@ import 'package:templates/features/templates/dating_app/models/dating_conversati
 import 'package:templates/features/templates/dating_app/models/dating_profile.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_action_bar.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_conversation_tile.dart';
-import 'package:templates/features/templates/dating_app/widgets/dating_gallery_preview.dart';
 
 void main() {
   test('dating profiles have stable identities and complete prompts', () {
@@ -183,27 +184,21 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('dating gallery preview has its own editorial portrait composition', (WidgetTester tester) async {
-    final semantics = tester.ensureSemantics();
+  testWidgets('dating gallery artwork uses its real editorial profile', (WidgetTester tester) async {
+    final item = TemplateGalleryItem.items.singleWhere((item) => item.destination == TemplateGalleryDestination.dating);
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Center(child: SizedBox(width: 214, height: 143, child: DatingGalleryPreview())),
+      MaterialApp(
+        home: Center(
+          child: SizedBox(width: 214, height: 143, child: TemplateGalleryArtwork(item: item)),
+        ),
       ),
     );
 
-    expect(find.text('Sway'), findsOneWidget);
-    expect(find.text('Mina, 29'), findsOneWidget);
-    expect(
-      tester
-          .widget<Icon>(
-            find.descendant(of: find.byType(DatingGalleryPreview), matching: find.byIcon(Icons.close_rounded)),
-          )
-          .color,
-      DatingAppTheme.coral,
-    );
-    expect(find.bySemanticsLabel('Sway dating profile preview'), findsOneWidget);
+    final imagePaths = tester
+        .widgetList<Image>(find.descendant(of: find.byType(TemplateGalleryArtwork), matching: find.byType(Image)))
+        .map((image) => (image.image as AssetImage).assetName);
+    expect(imagePaths, everyElement('assets/gallery/dating-screen.png'));
     expect(tester.takeException(), isNull);
-    semantics.dispose();
   });
 
   testWidgets('dating profile content remains reachable at compact maximum text size', (WidgetTester tester) async {

@@ -48,7 +48,7 @@ jobs:
 
   build_ios:
     name: Build iOS
-    runs-on: macos-latest
+    runs-on: xcode-27
     timeout-minutes: 10
     steps:
       - name: Checkout repository
@@ -109,7 +109,7 @@ jobs:
 
   build_macos:
     name: Build macOS
-    runs-on: macos-latest
+    runs-on: xcode-27
     timeout-minutes: 10
     steps:
       - name: Checkout repository

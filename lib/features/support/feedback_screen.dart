@@ -58,12 +58,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final isDark = colors.brightness == Brightness.dark;
+    final foreground = isDark ? colors.onSurface : AppTheme.darkText;
+    final actionBackground = isDark ? colors.primary : AppTheme.actionBlue;
+    final actionForeground = isDark ? colors.onPrimary : Colors.white;
+
     return ColoredBox(
-      color: const Color(0xFFFEFEFE),
+      color: colors.surface,
       child: SafeArea(
         bottom: false,
         child: DefaultTextStyle.merge(
-          style: const TextStyle(color: Color(0xFF253840)),
+          style: TextStyle(color: foreground),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               return SingleChildScrollView(
@@ -118,10 +124,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         child: FilledButton(
                           style: FilledButton.styleFrom(
                             minimumSize: const Size(120, 48),
-                            backgroundColor: AppTheme.actionBlue,
-                            foregroundColor: Colors.white,
+                            backgroundColor: actionBackground,
+                            foregroundColor: actionForeground,
                             elevation: 8,
-                            shadowColor: Colors.grey.withValues(alpha: 0.6),
+                            shadowColor: (isDark ? colors.shadow : Colors.grey).withValues(alpha: 0.6),
                             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
                           ),
                           onPressed: _isOpeningEmail ? null : _sendFeedback,
@@ -140,11 +146,17 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   }
 
   Widget _buildComposer() {
+    final colors = Theme.of(context).colorScheme;
+    final isDark = colors.brightness == Brightness.dark;
+    final surface = isDark ? colors.surfaceContainerHighest : Colors.white;
+    final foreground = isDark ? colors.onSurface : AppTheme.darkGrey;
+    final hint = isDark ? colors.onSurfaceVariant : AppTheme.lightText;
+
     return Padding(
       padding: const EdgeInsets.only(top: 16, left: 32, right: 32),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: surface,
           borderRadius: BorderRadius.circular(8),
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -159,7 +171,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           child: Container(
             padding: const EdgeInsets.all(4.0),
             constraints: const BoxConstraints(minHeight: 80, maxHeight: 160),
-            color: Colors.white,
+            color: surface,
             child: SingleChildScrollView(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: TextField(
@@ -172,12 +184,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 },
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
-                style: const TextStyle(fontFamily: AppTheme.fontName, fontSize: 16, color: Color(0xFF313A44)),
-                cursorColor: Colors.blue,
-                decoration: const InputDecoration(
+                style: TextStyle(fontFamily: AppTheme.fontName, fontSize: 16, color: foreground),
+                cursorColor: colors.primary,
+                decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Enter your feedback...',
-                  hintStyle: TextStyle(color: Color(0xFF4A6572)),
+                  hintStyle: TextStyle(color: hint),
                 ),
               ),
             ),

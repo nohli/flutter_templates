@@ -36,10 +36,14 @@ class _AboutScreenState extends State<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final linkStyle = TextButton.styleFrom(minimumSize: const Size(0, 48), foregroundColor: AppTheme.actionBlue);
+    final colors = Theme.of(context).colorScheme;
+    final isDark = colors.brightness == Brightness.dark;
+    final foreground = isDark ? colors.onSurface : AppTheme.darkText;
+    final linkForeground = isDark ? colors.primary : AppTheme.actionBlue;
+    final linkStyle = TextButton.styleFrom(minimumSize: const Size(0, 48), foregroundColor: linkForeground);
 
     return ColoredBox(
-      color: const Color(0xFFFEFEFE),
+      color: colors.surface,
       child: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
@@ -48,7 +52,7 @@ class _AboutScreenState extends State<AboutScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 640),
               child: DefaultTextStyle.merge(
-                style: const TextStyle(color: Color(0xFF253840)),
+                style: TextStyle(color: foreground),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[

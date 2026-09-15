@@ -106,7 +106,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    final brightness = _section == AppSection.home ? _appearance.resolve(context) : Brightness.light;
+    final brightness = _appearance.resolve(context);
     final theme = AppTheme.build(brightness);
     final systemUiStyle = SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,

@@ -3,8 +3,13 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
+import 'package:templates/app/app_theme.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/gallery/template_gallery_artwork.dart';
+import 'package:templates/features/support/about_screen.dart';
+import 'package:templates/features/support/feedback_screen.dart';
+import 'package:templates/features/support/help_screen.dart';
+import 'package:templates/features/support/invite_friend_screen.dart';
 import 'package:templates/features/templates/design_course/course_info_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
@@ -161,6 +166,44 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('every app section follows the selected light and dark appearance', (WidgetTester tester) async {
+    tester.view
+      ..devicePixelRatio = 1
+      ..physicalSize = const Size(800, 600);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const UiTemplatesApp());
+    await tester.pump(const Duration(seconds: 2));
+
+    final scenarios = <({String label, Finder screen, String heading})>[
+      (label: 'Help', screen: find.byType(HelpScreen), heading: 'How can we help you?'),
+      (label: 'Feedback', screen: find.byType(FeedbackScreen), heading: 'Your Feedback'),
+      (label: 'Invite friends', screen: find.byType(InviteFriendScreen), heading: 'Invite Your Friends'),
+      (label: 'About', screen: find.byType(AboutScreen), heading: 'UI Templates'),
+    ];
+
+    for (final appearance in <({Brightness brightness, String label})>[
+      (brightness: Brightness.light, label: 'Light'),
+      (brightness: Brightness.dark, label: 'Dark'),
+    ]) {
+      await _selectAppAppearance(tester, appearance.label);
+      for (final scenario in scenarios) {
+        await _openAppSection(tester, scenario.label);
+        final headingContext = tester.element(find.text(scenario.heading));
+        final colors = AppTheme.build(appearance.brightness).colorScheme;
+        final background = tester.widget<ColoredBox>(
+          find.descendant(of: scenario.screen, matching: find.byType(ColoredBox)).first,
+        );
+
+        expect(Theme.of(headingContext).brightness, appearance.brightness, reason: scenario.label);
+        expect(background.color, colors.surface, reason: scenario.label);
+      }
+      await _openAppSection(tester, 'Home');
+    }
+
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('system appearance shows the effective sun or moon icon', (WidgetTester tester) async {
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
 
@@ -210,4 +253,21 @@ double _contrastRatio(Color foreground, Color background) {
   final lighter = math.max(foreground.computeLuminance(), background.computeLuminance());
   final darker = math.min(foreground.computeLuminance(), background.computeLuminance());
   return (lighter + 0.05) / (darker + 0.05);
+}
+
+Future<void> _selectAppAppearance(WidgetTester tester, String label) async {
+  final button = find.descendant(of: find.byType(AppAppearanceButton), matching: find.byType(IconButton));
+  await tester.tap(button.hitTestable());
+  await tester.pumpAndSettle();
+  await tester.tap(find.byKey(ValueKey<String>('appearance-${label.toLowerCase()}')).hitTestable());
+  await tester.pumpAndSettle();
+}
+
+Future<void> _openAppSection(WidgetTester tester, String label) async {
+  await tester.tap(find.byTooltip('Open navigation menu').hitTestable());
+  await tester.pumpAndSettle();
+  final menu = find.bySemanticsLabel('Navigation menu');
+  final destination = find.descendant(of: menu, matching: find.text(label));
+  await tester.tap(destination.hitTestable());
+  await tester.pumpAndSettle();
 }

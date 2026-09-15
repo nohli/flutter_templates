@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/app/app_identity.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/templates/private_messenger/widgets/private_conversation_tile.dart';
@@ -24,8 +25,8 @@ void main() {
       (cardLabel: 'Language Learning', screenText: 'Order food with confidence'),
       (cardLabel: 'Public Social Feed', screenText: 'SOCIAL FEED'),
       (cardLabel: 'Banking Super-App', screenText: 'TOTAL BALANCE'),
-      (cardLabel: 'Channel Messenger', screenText: 'Channels'),
-      (cardLabel: 'Private Messenger', screenText: 'Messages'),
+      (cardLabel: 'Channel Messenger', screenText: 'Archived chats'),
+      (cardLabel: 'Private Messenger', screenText: 'The garden table is booked 🌿'),
     ];
     expect(
       templates.map((template) => template.cardLabel).toSet(),
@@ -36,14 +37,18 @@ void main() {
       (brightness: Brightness.light, label: 'Light'),
       (brightness: Brightness.dark, label: 'Dark'),
     ]) {
+      debugPrint('  Select ${appearance.label.toLowerCase()} appearance...');
       await _selectAppearance(tester, appearance.label);
+      debugPrint('✓ Selected ${appearance.label.toLowerCase()} appearance');
       for (final template in templates) {
+        debugPrint('  Open ${template.cardLabel}...');
         await _openTemplate(
           tester,
           brightness: appearance.brightness,
           cardLabel: template.cardLabel,
           screenText: template.screenText,
         );
+        debugPrint('✓ Opened ${template.cardLabel}');
       }
     }
   });
@@ -143,7 +148,7 @@ void main() {
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Channel Messenger');
 
-    await tester.tap(find.text('Channels'));
+    await tester.tap(find.widgetWithText(InkWell, 'Channels'));
     await _finishAnimations(tester);
     await tester.tap(find.text('Design Dispatch'));
     await _finishAnimations(tester);
@@ -178,9 +183,7 @@ void main() {
 }
 
 Future<void> _openGalleryTemplate(WidgetTester tester, String cardLabel) async {
-  final card = find.bySemanticsLabel(cardLabel);
-  await tester.ensureVisible(card);
-  await tester.tap(card);
+  await _tapGalleryCard(tester, cardLabel);
   await _finishAnimations(tester);
 }
 
@@ -190,9 +193,7 @@ Future<void> _openTemplate(
   required String cardLabel,
   required String screenText,
 }) async {
-  final card = find.bySemanticsLabel(cardLabel);
-  await tester.ensureVisible(card);
-  await tester.tap(card);
+  await _tapGalleryCard(tester, cardLabel);
   await _finishAnimations(tester);
 
   final screenContent = find.text(screenText);
@@ -204,11 +205,31 @@ Future<void> _openTemplate(
   expect(find.bySemanticsLabel(cardLabel), findsOneWidget);
 }
 
+Future<void> _tapGalleryCard(WidgetTester tester, String cardLabel) async {
+  final card = find.bySemanticsLabel(cardLabel);
+  final galleryScroll = find.descendant(of: find.byType(GridView), matching: find.byType(Scrollable)).first;
+  final viewport = tester.getRect(galleryScroll);
+  final cardCenter = tester.getRect(card).center;
+  final isCardOutsideViewport = !viewport.contains(cardCenter);
+
+  if (isCardOutsideViewport) {
+    final scrollStep = cardCenter.dy < viewport.top ? -240.0 : 240.0;
+    await tester.scrollUntilVisible(card, scrollStep, scrollable: galleryScroll);
+    await _finishAnimations(tester);
+  }
+
+  expect(card.hitTestable(), findsOneWidget);
+  await tester.tap(card.hitTestable());
+}
+
 Future<void> _selectAppearance(WidgetTester tester, String label) async {
-  final appearanceButton = find.byTooltip(RegExp(r'^Appearance: '));
-  await tester.tap(appearanceButton);
+  final appearanceButton = find.descendant(of: find.byType(AppAppearanceButton), matching: find.byType(IconButton));
+  expect(appearanceButton.hitTestable(), findsOneWidget);
+  await tester.tap(appearanceButton.hitTestable());
   await _finishAnimations(tester);
-  await tester.tap(find.byKey(ValueKey<String>('appearance-${label.toLowerCase()}')));
+  final option = find.byKey(ValueKey<String>('appearance-${label.toLowerCase()}'));
+  expect(option.hitTestable(), findsOneWidget);
+  await tester.tap(option.hitTestable());
   await _finishAnimations(tester);
   expect(find.byTooltip('Appearance: $label'), findsOneWidget);
 }

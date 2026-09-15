@@ -2,6 +2,14 @@
 
 A free, open-source gallery of Flutter interface examples.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="screenshots/readme-hero-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="screenshots/readme-hero-light.png">
+  <img alt="UI Templates running on macOS, iOS, and Android" src="screenshots/readme-hero-light.png">
+</picture>
+
+The public app has no private backend or telemetry integration; feedback opens a simple support-email draft.
+
 ## Run
 
 ```sh

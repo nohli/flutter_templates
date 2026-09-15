@@ -37,12 +37,18 @@ class _HelpScreenState extends State<HelpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final isDark = colors.brightness == Brightness.dark;
+    final foreground = isDark ? colors.onSurface : AppTheme.darkText;
+    final actionBackground = isDark ? colors.primary : AppTheme.actionBlue;
+    final actionForeground = isDark ? colors.onPrimary : Colors.white;
+
     return ColoredBox(
-      color: const Color(0xFFFEFEFE),
+      color: colors.surface,
       child: SafeArea(
         bottom: false,
         child: DefaultTextStyle.merge(
-          style: const TextStyle(color: Color(0xFF253840)),
+          style: TextStyle(color: foreground),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(24, 16, 24, MediaQuery.paddingOf(context).bottom + 24),
@@ -92,10 +98,10 @@ class _HelpScreenState extends State<HelpScreen> {
                       FilledButton(
                         style: FilledButton.styleFrom(
                           minimumSize: const Size(140, 48),
-                          backgroundColor: AppTheme.actionBlue,
-                          foregroundColor: Colors.white,
+                          backgroundColor: actionBackground,
+                          foregroundColor: actionForeground,
                           elevation: 8,
-                          shadowColor: Colors.grey.withValues(alpha: 0.6),
+                          shadowColor: (isDark ? colors.shadow : Colors.grey).withValues(alpha: 0.6),
                           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
                         ),
                         onPressed: _isOpeningEmail ? null : _openSupport,

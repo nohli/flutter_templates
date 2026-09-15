@@ -79,6 +79,74 @@ void main() {
     );
   });
 
+  testWidgets('support screens use semantic dark surfaces with readable actions', (WidgetTester tester) async {
+    final scenarios = <({Widget screen, String heading, String? imagePath, String? actionLabel})>[
+      (
+        screen: HelpScreen(launcher: (_) async => false),
+        heading: 'How can we help you?',
+        imagePath: 'assets/images/helpImage.png',
+        actionLabel: 'Email Us',
+      ),
+      (
+        screen: FeedbackScreen(launcher: (_) async => false),
+        heading: 'Your Feedback',
+        imagePath: 'assets/images/feedbackImage.png',
+        actionLabel: 'Send',
+      ),
+      (
+        screen: InviteFriendScreen(sharer: (_, _) async {}),
+        heading: 'Invite Your Friends',
+        imagePath: 'assets/images/inviteImage.png',
+        actionLabel: 'Share',
+      ),
+      (screen: const AboutScreen(), heading: AppIdentity.name, imagePath: null, actionLabel: null),
+    ];
+    final colors = AppTheme.build(Brightness.dark).colorScheme;
+
+    for (final scenario in scenarios) {
+      if (scenario.imagePath case final imagePath?) rootBundle.evict(imagePath);
+      await _pumpScreen(tester, scenario.screen, brightness: Brightness.dark);
+
+      final screen = find.byWidget(scenario.screen);
+      final background = tester.widget<ColoredBox>(
+        find.descendant(of: screen, matching: find.byType(ColoredBox)).first,
+      );
+      final headingContext = tester.element(find.text(scenario.heading));
+      final foreground = DefaultTextStyle.of(headingContext).style.color!;
+
+      expect(Theme.of(headingContext).brightness, Brightness.dark);
+      expect(background.color, colors.surface);
+      expect(foreground, colors.onSurface);
+      expect(_contrastRatio(foreground, background.color), greaterThanOrEqualTo(4.5));
+
+      if (scenario.actionLabel case final actionLabel?) {
+        final button = tester.widget<FilledButton>(find.widgetWithText(FilledButton, actionLabel));
+        final enabled = <WidgetState>{};
+        final buttonBackground = button.style!.backgroundColor!.resolve(enabled)!;
+        final buttonForeground = button.style!.foregroundColor!.resolve(enabled)!;
+
+        expect(buttonBackground, colors.primary);
+        expect(buttonForeground, colors.onPrimary);
+        expect(_contrastRatio(buttonForeground, buttonBackground), greaterThanOrEqualTo(4.5));
+      }
+    }
+  });
+
+  testWidgets('feedback composer follows the dark surface palette', (WidgetTester tester) async {
+    rootBundle.evict('assets/images/feedbackImage.png');
+    await _pumpScreen(tester, FeedbackScreen(launcher: (_) async => false), brightness: Brightness.dark);
+    final colors = AppTheme.build(Brightness.dark).colorScheme;
+    final composer = tester.widget<TextField>(find.byType(TextField));
+
+    expect(composer.style?.color, colors.onSurface);
+    expect(composer.cursorColor, colors.primary);
+    expect(composer.decoration?.hintStyle?.color, colors.onSurfaceVariant);
+    expect(
+      find.byWidgetPredicate((Widget widget) => widget is Container && widget.color == colors.surfaceContainerHighest),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('about keeps readable line length and accessible blue links', (WidgetTester tester) async {
     await _pumpScreen(tester, const AboutScreen(), size: const Size(1024, 1366), platform: TargetPlatform.iOS);
 
@@ -199,6 +267,7 @@ Future<void> _pumpScreen(
   Widget screen, {
   Size size = const Size(430, 932),
   TargetPlatform? platform,
+  Brightness brightness = Brightness.light,
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
@@ -206,7 +275,7 @@ Future<void> _pumpScreen(
 
   await tester.pumpWidget(
     MaterialApp(
-      theme: platform == null ? null : ThemeData(platform: platform),
+      theme: AppTheme.build(brightness).copyWith(platform: platform),
       home: Scaffold(body: screen),
     ),
   );

@@ -160,6 +160,7 @@ void main() {
     }
 
     final iosEnvironment = _asYamlMap(_asYamlMap(workflows['templates-ios'])['environment']);
+    expect(iosEnvironment['xcode'], 'latest');
     final iosScripts = _asYamlList(_asYamlMap(workflows['templates-ios'])['scripts']);
     final fetchSigningScript =
         iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Fetch Signing Files')['script']
@@ -260,8 +261,9 @@ void main() {
           .map((YamlMap step) => step['run'])
           .whereType<String>()
           .toList();
-      for (final Object? jobValue in jobs.values) {
-        final steps = _asYamlList(_asYamlMap(jobValue)['steps']);
+      for (final MapEntry<Object?, Object?> jobEntry in jobs.entries) {
+        final job = _asYamlMap(jobEntry.value);
+        final steps = _asYamlList(job['steps']);
         expect(steps.map(_asYamlMap).any((YamlMap step) => _usesAction(step, 'actions/checkout')), isTrue);
         final installFlutter = steps
             .map(_asYamlMap)
@@ -270,6 +272,16 @@ void main() {
         expect(flutterOptions['channel'], 'stable', reason: workflowFile);
         expect(flutterOptions, isNot(contains('flutter-version')), reason: workflowFile);
         expect(flutterOptions, isNot(contains('flutter-version-file')), reason: workflowFile);
+
+        final isAppleJob = <String>{'build_ios', 'build_macos', 'ios', 'macos'}.contains(jobEntry.key);
+
+        if (isAppleJob) {
+          final selectXcode = steps
+              .map(_asYamlMap)
+              .singleWhere((YamlMap step) => step['uses'] == 'maxim-lobanov/setup-xcode@v1');
+          expect(job['runs-on'], 'macos-latest', reason: '$workflowFile:${jobEntry.key}');
+          expect(_asYamlMap(selectXcode['with'])['xcode-version'], 'latest-stable');
+        }
       }
       final dependencyCommands = commands.where((String command) => command.startsWith('flutter pub get'));
       expect(dependencyCommands, isNotEmpty, reason: workflowFile);

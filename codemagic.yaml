@@ -18,7 +18,7 @@ workflows:
         BUNDLE_ID: com.achimsapps.templates
         CM_CLONE_UNSHALLOW: 'true'
       flutter: stable
-      xcode: 26.6
+      xcode: latest
     scripts:
       - name: Get Packages
         script: |

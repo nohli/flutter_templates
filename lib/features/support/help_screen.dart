@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../app/app_identity.dart';
@@ -53,7 +55,9 @@ class _HelpScreenState extends State<HelpScreen> {
             builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(24, 16, 24, MediaQuery.paddingOf(context).bottom + 24),
               child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight - 40),
+                constraints: BoxConstraints(
+                  minHeight: math.max(0, constraints.maxHeight - MediaQuery.paddingOf(context).bottom - 40),
+                ),
                 child: IntrinsicHeight(
                   child: Column(
                     children: <Widget>[

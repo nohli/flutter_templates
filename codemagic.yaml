@@ -109,4 +109,4 @@ workflows:
           set -eu
           : "${CLOUDFLARE_ACCOUNT_ID:?Add CLOUDFLARE_ACCOUNT_ID to the cloudflare_credentials group}"
           : "${CLOUDFLARE_API_TOKEN:?Add CLOUDFLARE_API_TOKEN to the cloudflare_credentials group}"
-          npx --yes wrangler@4.133.0 pages deploy build/web --project-name=templates-achim-io
+          npx --yes wrangler@4.133.0 pages deploy build/web --project-name=fluttertemplates

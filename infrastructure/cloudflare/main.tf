@@ -2,7 +2,7 @@ provider "cloudflare" {}
 
 resource "cloudflare_pages_project" "web" {
   account_id        = var.cloudflare_account_id
-  name              = "templates-achim-io"
+  name              = "fluttertemplates"
   production_branch = "main"
 }
 

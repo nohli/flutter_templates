@@ -146,15 +146,18 @@ void main() {
       expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
       expect(environment['flutter'], 'stable');
       expect(variables['CM_CLONE_UNSHALLOW'], 'true');
-      expect(_asYamlList(environment['groups']), contains('deployment'));
+      expect(
+        _asYamlList(environment['groups']),
+        workflowCase.id == 'templates-ios' ? <String>['appstore_credentials'] : <String>['google_play_credentials'],
+      );
       expect(scriptNames, isNot(contains('Analyze')));
       expect(scriptNames, isNot(contains('Test')));
-      expect(getPackagesScript, contains(r'${CODEMAGIC_NOTIFICATION_EMAIL:?'));
+      expect(getPackagesScript, isNot(contains('CODEMAGIC_NOTIFICATION_EMAIL')));
       expect(buildScript, contains(r'git rev-parse --is-shallow-repository'));
       expect(buildScript, contains(r'build_number="$(git rev-list --count HEAD)"'));
       expect(buildScript, contains(r'--build-number="$build_number"'));
       expect(buildScript, isNot(contains('--build-name')));
-      expect(_asYamlList(email['recipients']), <String>[r'$CODEMAGIC_NOTIFICATION_EMAIL']);
+      expect(_asYamlList(email['recipients']), <String>['codemagic@achim.io']);
       expect(notifications['success'], isFalse);
       expect(notifications['failure'], isTrue);
     }
@@ -165,13 +168,11 @@ void main() {
     final fetchSigningScript =
         iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Fetch Signing Files')['script']
             as String;
-    expect(_asYamlList(iosEnvironment['groups']), <String>['appstore_credentials', 'deployment']);
+    expect(_asYamlList(iosEnvironment['groups']), <String>['appstore_credentials']);
     final iosVariables = _asYamlMap(iosEnvironment['vars']);
-    expect(iosVariables.containsKey('APP_STORE_CONNECT_KEY_IDENTIFIER'), isFalse);
-    expect(iosVariables.containsKey('APP_STORE_CONNECT_ISSUER_ID'), isFalse);
     expect(iosVariables['BUNDLE_ID'], 'com.achimsapps.templates');
-    expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_KEY_IDENTIFIER:?'));
-    expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_ISSUER_ID:?'));
+    expect(fetchSigningScript, isNot(contains('APP_STORE_CONNECT_KEY_IDENTIFIER:?')));
+    expect(fetchSigningScript, isNot(contains('APP_STORE_CONNECT_ISSUER_ID:?')));
     expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_PRIVATE_KEY:?'));
     expect(fetchSigningScript, contains(r'${CERTIFICATE_PRIVATE_KEY:?'));
     final iosPublishing = _asYamlMap(_asYamlMap(workflows['templates-ios'])['publishing']);
@@ -188,7 +189,8 @@ void main() {
         'language': 'en-US',
         'text':
             '• Thanks for testing UI Templates.\n'
-            '• Please explore the whole app and share whatever feedback you have.',
+            '• Please explore the whole app.\n'
+            '• Feel free to send any feedback through the app’s Feedback action.',
       },
     ]);
     expect(File('release_notes_en-US.txt').existsSync(), isFalse);
@@ -238,8 +240,7 @@ void main() {
       if (workflowFile.endsWith('integration_tests.yml')) {
         expect(workflow['name'], 'Integration Tests', reason: workflowFile);
       }
-      expect(triggers.keys, containsAll(<String>['workflow_dispatch', 'pull_request', 'push']), reason: workflowFile);
-      expect(_asYamlList(_asYamlMap(triggers['push'])['branches']), <String>['main'], reason: workflowFile);
+      expect(triggers.keys.cast<String>().toSet(), <String>{'workflow_dispatch', 'pull_request'}, reason: workflowFile);
 
       final jobs = _asYamlMap(workflow['jobs']);
       final expectedJobs = switch (workflowFile) {

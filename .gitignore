@@ -74,6 +74,13 @@ android/app/release/app-release.aab
 *service_account*.json
 *serviceAccount*.json
 
+# Terraform local state and credentials
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+
 # Other
 ios/Flutter/flutter_export_environment.sh
 local.properties

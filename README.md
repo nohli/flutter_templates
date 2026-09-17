@@ -2,6 +2,8 @@
 
 A free, open-source gallery of Flutter interface examples.
 
+[Try the Flutter web app](https://templates.achim.io).
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="screenshots/readme-hero-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="screenshots/readme-hero-light.png">

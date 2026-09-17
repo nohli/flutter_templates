@@ -57,6 +57,7 @@ workflows:
     environment:
       groups:
         - google_play_credentials
+        - cloudflare_credentials
       android_signing:
         - Keystore
       vars:
@@ -74,6 +75,13 @@ workflows:
           [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
           build_number="$(git rev-list --count HEAD)"
           flutter build appbundle --release --build-number="$build_number"
+      - name: Publish Web
+        script: |
+          set -eu
+          : "${CLOUDFLARE_ACCOUNT_ID:?Add CLOUDFLARE_ACCOUNT_ID to the cloudflare_credentials group}"
+          : "${CLOUDFLARE_API_TOKEN:?Add CLOUDFLARE_API_TOKEN to the cloudflare_credentials group}"
+          flutter build web --release
+          npx --yes wrangler@4.133.0 pages deploy build/web --project-name=templates-achim-io
     artifacts:
       - build/app/outputs/bundle/release/*.aab
       - build/app/outputs/mapping/release/mapping.txt

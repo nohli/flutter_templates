@@ -139,17 +139,17 @@ void main() {
       final scriptNames = scripts.map(_asYamlMap).map((YamlMap step) => step['name']).toList();
       final getPackagesScript =
           scripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Get Packages')['script'] as String;
-      final email = _asYamlMap(_asYamlMap(workflow['publishing'])['email']);
-      final notifications = _asYamlMap(email['notify']);
+      final publishing = _asYamlMap(workflow['publishing']);
       final buildScript = buildStep['script'] as String;
 
       expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
       expect(environment['flutter'], 'stable');
       expect(variables['CM_CLONE_UNSHALLOW'], 'true');
-      expect(
-        _asYamlList(environment['groups']),
-        workflowCase.id == 'templates-ios' ? <String>['appstore_credentials'] : <String>['google_play_credentials'],
-      );
+      if (workflowCase.id == 'templates-ios') {
+        expect(environment['groups'], isNull);
+      } else {
+        expect(_asYamlList(environment['groups']), <String>['google_play_credentials']);
+      }
       expect(scriptNames, isNot(contains('Analyze')));
       expect(scriptNames, isNot(contains('Test')));
       expect(getPackagesScript, isNot(contains('CODEMAGIC_NOTIFICATION_EMAIL')));
@@ -157,29 +157,25 @@ void main() {
       expect(buildScript, contains(r'build_number="$(git rev-list --count HEAD)"'));
       expect(buildScript, contains(r'--build-number="$build_number"'));
       expect(buildScript, isNot(contains('--build-name')));
-      expect(_asYamlList(email['recipients']), <String>['codemagic@achim.io']);
-      expect(notifications['success'], isFalse);
-      expect(notifications['failure'], isTrue);
+      expect(publishing, isNot(contains('email')));
     }
 
+    final iosWorkflow = _asYamlMap(workflows['templates-ios']);
+    final iosIntegrations = _asYamlMap(iosWorkflow['integrations']);
     final iosEnvironment = _asYamlMap(_asYamlMap(workflows['templates-ios'])['environment']);
+    final iosSigning = _asYamlMap(iosEnvironment['ios_signing']);
+    expect(iosIntegrations['app_store_connect'], 'Codemagic');
     expect(iosEnvironment['xcode'], 'latest');
+    expect(iosSigning['distribution_type'], 'app_store');
+    expect(iosSigning['bundle_identifier'], 'com.achimsapps.templates');
     final iosScripts = _asYamlList(_asYamlMap(workflows['templates-ios'])['scripts']);
-    final fetchSigningScript =
-        iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Fetch Signing Files')['script']
+    final applySigningScript =
+        iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Apply Signing Profiles')['script']
             as String;
-    expect(_asYamlList(iosEnvironment['groups']), <String>['appstore_credentials']);
-    final iosVariables = _asYamlMap(iosEnvironment['vars']);
-    expect(iosVariables['BUNDLE_ID'], 'com.achimsapps.templates');
-    expect(fetchSigningScript, isNot(contains('APP_STORE_CONNECT_KEY_IDENTIFIER:?')));
-    expect(fetchSigningScript, isNot(contains('APP_STORE_CONNECT_ISSUER_ID:?')));
-    expect(fetchSigningScript, contains(r'${APP_STORE_CONNECT_PRIVATE_KEY:?'));
-    expect(fetchSigningScript, contains(r'${CERTIFICATE_PRIVATE_KEY:?'));
+    expect(applySigningScript, 'xcode-project use-profiles --project ios/Runner.xcodeproj');
     final iosPublishing = _asYamlMap(_asYamlMap(workflows['templates-ios'])['publishing']);
     final appStoreConnect = _asYamlMap(iosPublishing['app_store_connect']);
-    expect(appStoreConnect['api_key'], r'$APP_STORE_CONNECT_PRIVATE_KEY');
-    expect(appStoreConnect['key_id'], r'$APP_STORE_CONNECT_KEY_IDENTIFIER');
-    expect(appStoreConnect['issuer_id'], r'$APP_STORE_CONNECT_ISSUER_ID');
+    expect(appStoreConnect['auth'], 'integration');
     expect(appStoreConnect['submit_to_testflight'], isTrue);
     expect(_asYamlList(appStoreConnect['beta_groups']), <String>['Tester']);
 

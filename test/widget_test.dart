@@ -165,7 +165,7 @@ void main() {
     expect(find.text('Share'), findsOneWidget);
   });
 
-  testWidgets('about exposes iOS source and portfolio links without persistent launch errors', (
+  testWidgets('about exposes product source and portfolio links without persistent launch errors', (
     WidgetTester tester,
   ) async {
     final launchedUris = <Uri>[];
@@ -183,27 +183,21 @@ void main() {
 
     await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -900));
     await tester.pumpAndSettle();
+    expect(find.text('Original open-source project'), findsNothing);
     await tester.tap(find.text('UI Templates source code'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Original open-source project'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Privacy Policy'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Developer portfolio'));
     await tester.pumpAndSettle();
 
-    expect(launchedUris, <Uri>[
-      AppIdentity.sourceUri,
-      AppIdentity.upstreamSourceUri,
-      AppIdentity.privacyPolicyUri,
-      developerPortfolioUri,
-    ]);
+    expect(launchedUris, <Uri>[AppIdentity.sourceUri, AppIdentity.privacyPolicyUri, developerPortfolioUri]);
     expect(find.text(AppIdentity.trademarkDisclaimer), findsOneWidget);
     expect(find.text('The link could not be opened.'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('about hides the upstream source link on Android', (WidgetTester tester) async {
+  testWidgets('about also omits the upstream source link on Android', (WidgetTester tester) async {
     await _pumpScreen(tester, const AboutScreen(), platform: TargetPlatform.android);
 
     expect(find.text('UI Templates source code'), findsOneWidget);

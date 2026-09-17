@@ -117,7 +117,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
       systemNavigationBarIconBrightness: brightness == Brightness.dark ? Brightness.light : Brightness.dark,
     );
 
-    return Theme(
+    final content = Theme(
       data: theme,
       child: Builder(
         builder: (BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
@@ -236,6 +236,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
         ),
       ),
     );
+    return Scaffold(backgroundColor: theme.colorScheme.surface, body: content);
   }
 
   Widget get _screen => switch (_section) {

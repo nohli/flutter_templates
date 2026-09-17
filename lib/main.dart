@@ -32,7 +32,7 @@ class UiTemplatesApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.build(),
       themeMode: ThemeMode.light,
-      home: const Scaffold(body: AppShell()),
+      home: const AppShell(),
     );
   }
 }

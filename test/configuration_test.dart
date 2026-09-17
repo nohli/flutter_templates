@@ -94,6 +94,7 @@ void main() {
     expect(androidBuild, contains('targetSdk = flutter.targetSdkVersion'));
     expect(fvmConfig['flutter'], 'stable');
     expect(RegExp(r'flutter: stable').allMatches(codemagic), hasLength(2));
+    expect(codemagic, contains('android_signing:\n        - Keystore'));
     expect(androidBuild, contains('releaseTaskRequested && !releaseSigningConfigured'));
     expect(androidActivity, contains('package com.achimsapps.templates'));
     expect(androidManifest, isNot(contains('android.permission.INTERNET')));

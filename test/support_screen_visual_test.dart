@@ -85,16 +85,20 @@ void main() {
       FeedbackScreen(launcher: (_) async => false),
       InviteFriendScreen(sharer: (_, _) async {}),
     ];
-    double? actionBottom;
+    for (final viewport in <({Size size, double bottomInset})>[
+      (size: const Size(430, 932), bottomInset: 34),
+      (size: const Size(1600, 1024), bottomInset: 0),
+    ]) {
+      double? actionBottom;
+      for (final screen in scenarios) {
+        await _pumpScreen(tester, screen, size: viewport.size, bottomInset: viewport.bottomInset);
+        final actionBounds = tester.getRect(find.byType(FilledButton));
 
-    for (final screen in scenarios) {
-      await _pumpScreen(tester, screen, bottomInset: 34);
-      final actionBounds = tester.getRect(find.byType(FilledButton));
-
-      expect(actionBounds.center.dx, 215);
-      expect(actionBounds.bottom, 874);
-      actionBottom ??= actionBounds.bottom;
-      expect(actionBounds.bottom, actionBottom);
+        expect(actionBounds.center.dx, viewport.size.width / 2);
+        expect(actionBounds.bottom, viewport.size.height - viewport.bottomInset - 24);
+        actionBottom ??= actionBounds.bottom;
+        expect(actionBounds.bottom, actionBottom);
+      }
     }
 
     await _pumpScreen(tester, FeedbackScreen(launcher: (_) async => false));

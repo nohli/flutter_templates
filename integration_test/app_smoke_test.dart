@@ -40,6 +40,7 @@ void main() {
       debugPrint('  Select ${appearance.label.toLowerCase()} appearance...');
       await _selectAppearance(tester, appearance.label);
       debugPrint('✓ Selected ${appearance.label.toLowerCase()} appearance');
+      await _scrollGalleryToStart(tester, templates.first.cardLabel);
       for (final template in templates) {
         debugPrint('  Open ${template.cardLabel}...');
         await _openTemplate(
@@ -67,13 +68,15 @@ void main() {
       await tester.tap(find.text(destination));
       await _finishAnimations(tester);
 
-      final actionBounds = tester.getRect(find.byType(FilledButton));
-      final viewHeight = tester.view.physicalSize.height / tester.view.devicePixelRatio;
-      final bottomInset = MediaQuery.paddingOf(tester.element(find.byType(FilledButton))).bottom;
+      final action = find.byType(FilledButton);
+      expect(action.hitTestable(), findsOneWidget, reason: destination);
+      final actionBounds = tester.getRect(action);
+      final screen = find.ancestor(of: action, matching: find.byType(ColoredBox));
+      expect(screen, findsOneWidget, reason: destination);
+      final screenBounds = tester.getRect(screen);
       actionBottom ??= actionBounds.bottom;
-      expect(actionBounds.center.dx, tester.view.physicalSize.width / tester.view.devicePixelRatio / 2);
-      expect(actionBounds.bottom, viewHeight - bottomInset - 24);
-      expect(actionBounds.bottom, actionBottom);
+      expect(actionBounds.center.dx, screenBounds.center.dx, reason: destination);
+      expect(actionBounds.bottom, actionBottom, reason: destination);
     }
 
     await tester.tap(find.byTooltip('Open navigation menu'));
@@ -254,18 +257,17 @@ Future<void> _openTemplate(
 Future<void> _tapGalleryCard(WidgetTester tester, String cardLabel) async {
   final card = find.bySemanticsLabel(cardLabel);
   final galleryScroll = find.descendant(of: find.byType(GridView), matching: find.byType(Scrollable)).first;
-  final viewport = tester.getRect(galleryScroll);
-  final cardCenter = tester.getRect(card).center;
-  final isCardOutsideViewport = !viewport.contains(cardCenter);
-
-  if (isCardOutsideViewport) {
-    final scrollStep = cardCenter.dy < viewport.top ? -240.0 : 240.0;
-    await tester.scrollUntilVisible(card, scrollStep, scrollable: galleryScroll);
-    await _finishAnimations(tester);
-  }
+  await tester.scrollUntilVisible(card, 240, scrollable: galleryScroll);
+  await _finishAnimations(tester);
 
   expect(card.hitTestable(), findsOneWidget);
   await tester.tap(card.hitTestable());
+}
+
+Future<void> _scrollGalleryToStart(WidgetTester tester, String firstCardLabel) async {
+  final galleryScroll = find.descendant(of: find.byType(GridView), matching: find.byType(Scrollable)).first;
+  await tester.scrollUntilVisible(find.bySemanticsLabel(firstCardLabel), -240, scrollable: galleryScroll);
+  await _finishAnimations(tester);
 }
 
 Future<void> _selectAppearance(WidgetTester tester, String label) async {

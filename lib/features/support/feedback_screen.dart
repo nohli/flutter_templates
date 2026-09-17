@@ -1,10 +1,9 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../../app/app_identity.dart';
 import '../../app/app_theme.dart';
 import 'external_actions.dart';
+import 'illustrated_support_layout.dart';
 
 Uri feedbackEmailUri(String message) => appEmailUri(subject: '${AppIdentity.name} feedback', body: message);
 
@@ -72,69 +71,42 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         bottom: false,
         child: DefaultTextStyle.merge(
           style: TextStyle(color: foreground),
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              final bottomPadding = MediaQuery.paddingOf(context).bottom + 24;
-              return SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(24, 16, 24, bottomPadding),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: math.max(0, constraints.maxHeight - bottomPadding - 16)),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      children: <Widget>[
-                        Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 600),
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: Image.asset(
-                                'assets/images/feedbackImage.png',
-                                fit: BoxFit.contain,
-                                excludeFromSemantics: true,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text('Your Feedback', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Tell us what you liked or what we could improve.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        _buildComposer(),
-                        if (_errorMessage case final errorMessage?) ...<Widget>[
-                          const SizedBox(height: 8),
-                          Semantics(
-                            liveRegion: true,
-                            child: Text(
-                              errorMessage,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Theme.of(context).colorScheme.error),
-                            ),
-                          ),
-                        ],
-                        const Spacer(),
-                        const SizedBox(height: 24),
-                        FilledButton(
-                          style: FilledButton.styleFrom(
-                            minimumSize: const Size(120, 48),
-                            backgroundColor: actionBackground,
-                            foregroundColor: actionForeground,
-                            elevation: 8,
-                            shadowColor: (isDark ? colors.shadow : Colors.grey).withValues(alpha: 0.6),
-                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-                          ),
-                          onPressed: _isOpeningEmail ? null : _sendFeedback,
-                          child: Text(_isOpeningEmail ? 'Opening…' : 'Send'),
-                        ),
-                      ],
-                    ),
+          child: IllustratedSupportLayout(
+            illustrationPath: 'assets/images/feedbackImage.png',
+            content: <Widget>[
+              const SizedBox(height: 8),
+              const Text('Your Feedback', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 16),
+              const Text(
+                'Tell us what you liked or what we could improve.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+              ),
+              _buildComposer(),
+              if (_errorMessage case final errorMessage?) ...<Widget>[
+                const SizedBox(height: 8),
+                Semantics(
+                  liveRegion: true,
+                  child: Text(
+                    errorMessage,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ),
-              );
-            },
+              ],
+            ],
+            action: FilledButton(
+              style: FilledButton.styleFrom(
+                minimumSize: const Size(120, 48),
+                backgroundColor: actionBackground,
+                foregroundColor: actionForeground,
+                elevation: 8,
+                shadowColor: (isDark ? colors.shadow : Colors.grey).withValues(alpha: 0.6),
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+              ),
+              onPressed: _isOpeningEmail ? null : _sendFeedback,
+              child: Text(_isOpeningEmail ? 'Opening…' : 'Send'),
+            ),
           ),
         ),
       ),

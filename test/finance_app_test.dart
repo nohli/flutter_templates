@@ -169,6 +169,36 @@ void main() {
     }
   });
 
+  testWidgets('finance navigation centers larger icons without sequence numbers or splashes', (
+    WidgetTester tester,
+  ) async {
+    await _pumpFinance(tester);
+
+    final navigation = find.byType(FinanceBottomBar);
+    for (final number in <String>['01', '02', '03', '04']) {
+      expect(find.descendant(of: navigation, matching: find.text(number)), findsNothing);
+    }
+
+    const icons = <IconData>[
+      Icons.home_rounded,
+      Icons.swap_horiz_rounded,
+      Icons.credit_card_rounded,
+      Icons.person_rounded,
+    ];
+    final destinations = find.descendant(of: navigation, matching: find.byType(InkWell));
+    expect(destinations, findsNWidgets(4));
+    for (final destination in tester.widgetList<InkWell>(destinations)) {
+      expect(destination.splashFactory, same(NoSplash.splashFactory));
+    }
+    for (final iconData in icons) {
+      final icon = find.descendant(of: navigation, matching: find.byIcon(iconData));
+      final destination = find.ancestor(of: icon, matching: find.byType(InkWell));
+      expect(icon, findsOneWidget);
+      expect(tester.widget<Icon>(icon).size, 22);
+      expect(tester.getCenter(icon).dx, closeTo(tester.getCenter(destination).dx, 0.01));
+    }
+  });
+
   testWidgets('finance content enters progressively and replays when sections change', (WidgetTester tester) async {
     await _pumpFinance(tester, settle: false);
 
@@ -278,6 +308,12 @@ void main() {
 
   testWidgets('finance template remains usable at compact maximum text size', (WidgetTester tester) async {
     await _pumpFinance(tester, size: const Size(320, 568), textScale: 3.2);
+
+    final navigationButtons = find.descendant(of: find.byType(FinanceBottomBar), matching: find.byType(TextButton));
+    expect(navigationButtons, findsNWidgets(4));
+    for (final button in tester.widgetList<TextButton>(navigationButtons)) {
+      expect(button.style?.splashFactory, same(NoSplash.splashFactory));
+    }
 
     const destinations = <String, String>{
       'Activity': 'A clear view of every sample transaction.',

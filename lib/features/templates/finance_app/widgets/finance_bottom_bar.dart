@@ -7,15 +7,10 @@ class FinanceBottomBar extends StatelessWidget {
   const FinanceBottomBar({required this.selectedSection, required this.onSelected, super.key});
 
   static const _destinations = <_FinanceDestination>[
-    _FinanceDestination(section: FinanceSection.overview, number: '01', label: 'Home', icon: Icons.home_rounded),
-    _FinanceDestination(
-      section: FinanceSection.activity,
-      number: '02',
-      label: 'Activity',
-      icon: Icons.swap_horiz_rounded,
-    ),
-    _FinanceDestination(section: FinanceSection.cards, number: '03', label: 'Cards', icon: Icons.credit_card_rounded),
-    _FinanceDestination(section: FinanceSection.profile, number: '04', label: 'Profile', icon: Icons.person_rounded),
+    _FinanceDestination(section: FinanceSection.overview, label: 'Home', icon: Icons.home_rounded),
+    _FinanceDestination(section: FinanceSection.activity, label: 'Activity', icon: Icons.swap_horiz_rounded),
+    _FinanceDestination(section: FinanceSection.cards, label: 'Cards', icon: Icons.credit_card_rounded),
+    _FinanceDestination(section: FinanceSection.profile, label: 'Profile', icon: Icons.person_rounded),
   ];
 
   final FinanceSection selectedSection;
@@ -107,6 +102,7 @@ class _FinanceDestinationButton extends StatelessWidget {
       child: ExcludeSemantics(
         child: InkWell(
           onTap: onPressed,
+          splashFactory: NoSplash.splashFactory,
           child: Stack(
             alignment: Alignment.center,
             children: <Widget>[
@@ -127,17 +123,7 @@ class _FinanceDestinationButton extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          destination.number,
-                          style: TextStyle(color: activeColor.withValues(alpha: 0.7), fontSize: 8, letterSpacing: 0.7),
-                        ),
-                        const SizedBox(width: 5),
-                        Icon(destination.icon, size: 17, color: activeColor),
-                      ],
-                    ),
+                    Icon(destination.icon, size: 22, color: activeColor),
                     const SizedBox(height: 4),
                     Text(
                       destination.label,
@@ -178,19 +164,19 @@ class _LargeTextDestination extends StatelessWidget {
       style: TextButton.styleFrom(
         foregroundColor: foreground,
         backgroundColor: background,
+        splashFactory: NoSplash.splashFactory,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(7))),
       ),
-      icon: Icon(destination.icon),
+      icon: Icon(destination.icon, size: 22),
       label: Text(destination.label),
     );
   }
 }
 
 class _FinanceDestination {
-  const _FinanceDestination({required this.section, required this.number, required this.label, required this.icon});
+  const _FinanceDestination({required this.section, required this.label, required this.icon});
 
   final FinanceSection section;
-  final String number;
   final String label;
   final IconData icon;
 }

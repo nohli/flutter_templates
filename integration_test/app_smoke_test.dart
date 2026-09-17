@@ -53,7 +53,9 @@ void main() {
     }
   });
 
-  testWidgets('keeps support actions aligned and the dark feedback composer visible', (WidgetTester tester) async {
+  testWidgets('keeps support actions aligned and dark feedback keyboard surroundings themed', (
+    WidgetTester tester,
+  ) async {
     app.main();
     await _finishAnimations(tester);
     await _selectAppearance(tester, 'Dark');
@@ -78,8 +80,11 @@ void main() {
     await _finishAnimations(tester);
     await tester.tap(find.text('Feedback'));
     await _finishAnimations(tester);
+    await tester.tap(find.byType(TextField));
+    await _finishAnimations(tester);
 
     final colors = Theme.of(tester.element(find.byType(TextField))).colorScheme;
+    final scaffold = tester.widget<Scaffold>(find.byType(Scaffold).first);
     final composerSurface = Color.alphaBlend(colors.onSurface.withValues(alpha: 0.16), colors.surface);
     final elevatedComposer = find.byWidgetPredicate((Widget widget) {
       if (widget is! Container) return false;
@@ -89,6 +94,7 @@ void main() {
           decoration.border == null &&
           decoration.boxShadow?.isNotEmpty == true;
     });
+    expect(scaffold.backgroundColor, colors.surface);
     expect(elevatedComposer, findsOneWidget);
     expect(find.text('Tell us what you liked or what we could improve.'), findsOneWidget);
   });

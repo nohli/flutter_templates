@@ -204,6 +204,27 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('focused feedback keeps the selected surface behind the iOS keyboard', (WidgetTester tester) async {
+    tester.view
+      ..devicePixelRatio = 1
+      ..physicalSize = const Size(430, 932);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const UiTemplatesApp());
+    await tester.pump(const Duration(seconds: 2));
+
+    await _selectAppAppearance(tester, 'Dark');
+    await _openAppSection(tester, 'Feedback');
+    await tester.tap(find.byType(TextField));
+    await tester.pump();
+
+    final scaffold = tester.widget<Scaffold>(find.byType(Scaffold).first);
+    final colors = AppTheme.build(Brightness.dark).colorScheme;
+
+    expect(Theme.of(tester.element(find.byType(TextField))).brightness, Brightness.dark);
+    expect(scaffold.backgroundColor, colors.surface);
+  });
+
   testWidgets('system appearance shows the effective sun or moon icon', (WidgetTester tester) async {
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
 

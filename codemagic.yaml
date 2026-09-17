@@ -58,7 +58,7 @@ workflows:
       groups:
         - google_play_credentials
       android_signing:
-        - templates_keystore
+        - Keystore
       vars:
         CM_CLONE_UNSHALLOW: 'true'
       flutter: stable

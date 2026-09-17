@@ -1,6 +1,8 @@
 workflows:
   templates-ios:
     name: UI Templates iOS
+    integrations:
+      app_store_connect: Codemagic
     instance_type: mac_mini_m2
     max_build_duration: 45
     triggering:
@@ -11,10 +13,10 @@ workflows:
           include: true
           source: true
     environment:
-      groups:
-        - appstore_credentials
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.achimsapps.templates
       vars:
-        BUNDLE_ID: com.achimsapps.templates
         CM_CLONE_UNSHALLOW: 'true'
       flutter: stable
       xcode: latest
@@ -23,16 +25,6 @@ workflows:
         script: |
           set -eu
           flutter pub get
-      - name: Initialize Signing Keychain
-        script: keychain initialize
-      - name: Fetch Signing Files
-        script: |
-          set -eu
-          : "${APP_STORE_CONNECT_PRIVATE_KEY:?APP_STORE_CONNECT_PRIVATE_KEY must be configured in appstore_credentials}"
-          : "${CERTIFICATE_PRIVATE_KEY:?CERTIFICATE_PRIVATE_KEY must be configured in appstore_credentials}"
-          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
-      - name: Add Signing Certificates
-        script: keychain add-certificates
       - name: Apply Signing Profiles
         script: xcode-project use-profiles --project ios/Runner.xcodeproj
       - name: Build IPA
@@ -46,9 +38,7 @@ workflows:
       - build/ios/ipa/*.ipa
     publishing:
       app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        auth: integration
         submit_to_testflight: true
         beta_groups:
           - Tester

@@ -37,6 +37,7 @@ workflows:
           flutter build ipa --release --build-number="$build_number"
     artifacts:
       - build/ios/ipa/*.ipa
+      - build/ios/archive/*.xcarchive/dSYMs/**/*.dSYM
     publishing:
       app_store_connect:
         auth: integration
@@ -113,6 +114,8 @@ workflows:
           : "${CLOUDFLARE_ACCOUNT_ID:?Add CLOUDFLARE_ACCOUNT_ID to the cloudflare_credentials group}"
           : "${CLOUDFLARE_API_TOKEN:?Add CLOUDFLARE_API_TOKEN to the cloudflare_credentials group}"
           npx --yes wrangler@4.133.0 pages deploy build/web --project-name=fluttertemplates
+    artifacts:
+      - build/web/**
     publishing:
       slack:
         channel: '#codemagic-builds'

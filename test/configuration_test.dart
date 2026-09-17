@@ -159,6 +159,7 @@ void main() {
       expect(buildScript, contains(r'--build-number="$build_number"'));
       expect(buildScript, isNot(contains('--build-name')));
       expect(publishing, isNot(contains('email')));
+      _expectFailureOnlySlackPublishing(publishing);
     }
 
     final iosWorkflow = _asYamlMap(workflows['templates-ios']);
@@ -215,7 +216,9 @@ void main() {
       webScripts.singleWhere((YamlMap step) => step['name'] == 'Build Web')['script'],
       'flutter build web --release',
     );
-    expect(webWorkflow['publishing'], isNull);
+    final webPublishing = _asYamlMap(webWorkflow['publishing']);
+    expect(webPublishing, isNot(contains('email')));
+    _expectFailureOnlySlackPublishing(webPublishing);
 
     final codemagicSource = File('codemagic.yaml').readAsStringSync();
     expect(codemagicSource, isNot(contains('FCI_CLONE_UNSHALLOW')));
@@ -525,6 +528,14 @@ YamlList _asYamlList(Object? value) {
 bool _usesAction(YamlMap step, String action) {
   final reference = step['uses'];
   return reference is String && RegExp('^${RegExp.escape(action)}@\\S+\$').hasMatch(reference);
+}
+
+void _expectFailureOnlySlackPublishing(YamlMap publishing) {
+  final slack = _asYamlMap(publishing['slack']);
+
+  expect(slack['channel'], '#codemagic-builds');
+  expect(slack['notify_on_build_start'], isFalse);
+  expect(_asYamlMap(slack['notify']), <String, bool>{'success': false, 'failure': true});
 }
 
 ({int bitDepth, int colorType, int height, int width}) _readPngHeader(String fileName) {

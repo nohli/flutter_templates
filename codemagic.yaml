@@ -52,12 +52,6 @@ workflows:
         submit_to_testflight: true
         beta_groups:
           - Tester
-      email:
-        recipients:
-          - codemagic@achim.io
-        notify:
-          success: false
-          failure: true
 
   templates-android:
     name: UI Templates Android
@@ -97,9 +91,3 @@ workflows:
       google_play:
         credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
         track: internal
-      email:
-        recipients:
-          - codemagic@achim.io
-        notify:
-          success: false
-          failure: true

@@ -42,6 +42,12 @@ workflows:
         submit_to_testflight: true
         beta_groups:
           - Tester
+      slack:
+        channel: '#codemagic-builds'
+        notify_on_build_start: false
+        notify:
+          success: false
+          failure: true
 
   templates-android:
     name: UI Templates Android
@@ -74,6 +80,12 @@ workflows:
       google_play:
         credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
         track: internal
+      slack:
+        channel: '#codemagic-builds'
+        notify_on_build_start: false
+        notify:
+          success: false
+          failure: true
 
   templates-web:
     name: UI Templates Web
@@ -96,3 +108,10 @@ workflows:
           : "${CLOUDFLARE_ACCOUNT_ID:?Add CLOUDFLARE_ACCOUNT_ID to the cloudflare_credentials group}"
           : "${CLOUDFLARE_API_TOKEN:?Add CLOUDFLARE_API_TOKEN to the cloudflare_credentials group}"
           npx --yes wrangler@4.133.0 pages deploy build/web --project-name=fluttertemplates
+    publishing:
+      slack:
+        channel: '#codemagic-builds'
+        notify_on_build_start: false
+        notify:
+          success: false
+          failure: true

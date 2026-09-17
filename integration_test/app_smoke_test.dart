@@ -53,6 +53,46 @@ void main() {
     }
   });
 
+  testWidgets('keeps support actions aligned and the dark feedback composer visible', (WidgetTester tester) async {
+    app.main();
+    await _finishAnimations(tester);
+    await _selectAppearance(tester, 'Dark');
+
+    double? actionBottom;
+    for (final destination in <String>['Help', 'Feedback', 'Invite friends']) {
+      await tester.tap(find.byTooltip('Open navigation menu'));
+      await _finishAnimations(tester);
+      await tester.tap(find.text(destination));
+      await _finishAnimations(tester);
+
+      final actionBounds = tester.getRect(find.byType(FilledButton));
+      final viewHeight = tester.view.physicalSize.height / tester.view.devicePixelRatio;
+      final bottomInset = MediaQuery.paddingOf(tester.element(find.byType(FilledButton))).bottom;
+      actionBottom ??= actionBounds.bottom;
+      expect(actionBounds.center.dx, tester.view.physicalSize.width / tester.view.devicePixelRatio / 2);
+      expect(actionBounds.bottom, viewHeight - bottomInset - 24);
+      expect(actionBounds.bottom, actionBottom);
+    }
+
+    await tester.tap(find.byTooltip('Open navigation menu'));
+    await _finishAnimations(tester);
+    await tester.tap(find.text('Feedback'));
+    await _finishAnimations(tester);
+
+    final colors = Theme.of(tester.element(find.byType(TextField))).colorScheme;
+    final composerSurface = Color.alphaBlend(colors.onSurface.withValues(alpha: 0.16), colors.surface);
+    final elevatedComposer = find.byWidgetPredicate((Widget widget) {
+      if (widget is! Container) return false;
+      final decoration = widget.decoration;
+      return decoration is BoxDecoration &&
+          decoration.color == composerSurface &&
+          decoration.border == null &&
+          decoration.boxShadow?.isNotEmpty == true;
+    });
+    expect(elevatedComposer, findsOneWidget);
+    expect(find.text('Tell us what you liked or what we could improve.'), findsOneWidget);
+  });
+
   testWidgets('opens a dating conversation and sends a message', (WidgetTester tester) async {
     app.main();
     await _finishAnimations(tester);

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../app/app_identity.dart';
@@ -72,15 +74,15 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           style: TextStyle(color: foreground),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
+              final bottomPadding = MediaQuery.paddingOf(context).bottom + 24;
               return SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(24, 16, 24, bottomPadding),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                        child: Center(
+                  constraints: BoxConstraints(minHeight: math.max(0, constraints.maxHeight - bottomPadding - 16)),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: <Widget>[
+                        Center(
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 600),
                             child: AspectRatio(
@@ -93,24 +95,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: const Text('Your Feedback', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: const Text(
+                        const SizedBox(height: 8),
+                        const Text('Your Feedback', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 16),
+                        const Text(
                           'Tell us what you liked or what we could improve.',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 16),
                         ),
-                      ),
-                      _buildComposer(),
-                      if (_errorMessage case final errorMessage?)
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(32, 8, 32, 0),
-                          child: Semantics(
+                        _buildComposer(),
+                        if (_errorMessage case final errorMessage?) ...<Widget>[
+                          const SizedBox(height: 8),
+                          Semantics(
                             liveRegion: true,
                             child: Text(
                               errorMessage,
@@ -118,10 +114,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               style: TextStyle(color: Theme.of(context).colorScheme.error),
                             ),
                           ),
-                        ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(16, 16, 16, MediaQuery.paddingOf(context).bottom + 24),
-                        child: FilledButton(
+                        ],
+                        const Spacer(),
+                        const SizedBox(height: 24),
+                        FilledButton(
                           style: FilledButton.styleFrom(
                             minimumSize: const Size(120, 48),
                             backgroundColor: actionBackground,
@@ -133,8 +129,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           onPressed: _isOpeningEmail ? null : _sendFeedback,
                           child: Text(_isOpeningEmail ? 'Opening…' : 'Send'),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -148,7 +144,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Widget _buildComposer() {
     final colors = Theme.of(context).colorScheme;
     final isDark = colors.brightness == Brightness.dark;
-    final surface = isDark ? colors.surfaceContainerHighest : Colors.white;
+    final surface = isDark ? Color.alphaBlend(colors.onSurface.withValues(alpha: 0.16), colors.surface) : Colors.white;
     final foreground = isDark ? colors.onSurface : AppTheme.darkGrey;
     final hint = isDark ? colors.onSurfaceVariant : AppTheme.lightText;
 

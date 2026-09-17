@@ -6,6 +6,7 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 45
     triggering:
+      cancel_previous_builds: true
       events:
         - push
       branch_patterns:
@@ -53,6 +54,8 @@ workflows:
     name: UI Templates Android
     instance_type: mac_mini_m2
     max_build_duration: 45
+    triggering:
+      cancel_previous_builds: true
     environment:
       groups:
         - google_play_credentials
@@ -91,6 +94,8 @@ workflows:
     name: UI Templates Web
     instance_type: mac_mini_m2
     max_build_duration: 30
+    triggering:
+      cancel_previous_builds: true
     environment:
       groups:
         - cloudflare_credentials

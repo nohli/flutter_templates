@@ -36,7 +36,6 @@ class _AboutScreenState extends State<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final showUpstreamSource = Theme.of(context).platform != TargetPlatform.android;
     final linkStyle = TextButton.styleFrom(minimumSize: const Size(0, 48), foregroundColor: AppTheme.actionBlue);
 
     return ColoredBox(
@@ -85,13 +84,6 @@ class _AboutScreenState extends State<AboutScreen> {
                       icon: const Icon(Icons.code),
                       label: const Text('UI Templates source code'),
                     ),
-                    if (showUpstreamSource)
-                      TextButton.icon(
-                        style: linkStyle,
-                        onPressed: _isOpeningLink ? null : () => _open(AppIdentity.upstreamSourceUri),
-                        icon: const Icon(Icons.history),
-                        label: const Text('Original open-source project'),
-                      ),
                     TextButton.icon(
                       style: linkStyle,
                       onPressed: () => showLicensePage(context: context, applicationName: AppIdentity.name),

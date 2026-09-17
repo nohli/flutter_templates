@@ -79,6 +79,31 @@ void main() {
     );
   });
 
+  testWidgets('support copy and actions keep consistent safe spacing', (WidgetTester tester) async {
+    final scenarios = <Widget>[
+      HelpScreen(launcher: (_) async => false),
+      FeedbackScreen(launcher: (_) async => false),
+      InviteFriendScreen(sharer: (_, _) async {}),
+    ];
+    double? actionBottom;
+
+    for (final screen in scenarios) {
+      await _pumpScreen(tester, screen, bottomInset: 34);
+      final actionBounds = tester.getRect(find.byType(FilledButton));
+
+      expect(actionBounds.center.dx, 215);
+      expect(actionBounds.bottom, 874);
+      actionBottom ??= actionBounds.bottom;
+      expect(actionBounds.bottom, actionBottom);
+    }
+
+    await _pumpScreen(tester, FeedbackScreen(launcher: (_) async => false));
+    final descriptionBounds = tester.getRect(find.text('Tell us what you liked or what we could improve.'));
+
+    expect(descriptionBounds.left, greaterThanOrEqualTo(24));
+    expect(descriptionBounds.right, lessThanOrEqualTo(406));
+  });
+
   testWidgets('support screens use semantic dark surfaces with readable actions', (WidgetTester tester) async {
     final scenarios = <({Widget screen, String heading, String? imagePath, String? actionLabel})>[
       (
@@ -137,14 +162,29 @@ void main() {
     await _pumpScreen(tester, FeedbackScreen(launcher: (_) async => false), brightness: Brightness.dark);
     final colors = AppTheme.build(Brightness.dark).colorScheme;
     final composer = tester.widget<TextField>(find.byType(TextField));
+    final composerSurface = Color.alphaBlend(colors.onSurface.withValues(alpha: 0.16), colors.surface);
 
     expect(composer.style?.color, colors.onSurface);
     expect(composer.cursorColor, colors.primary);
     expect(composer.decoration?.hintStyle?.color, colors.onSurfaceVariant);
     expect(
-      find.byWidgetPredicate((Widget widget) => widget is Container && widget.color == colors.surfaceContainerHighest),
+      find.byWidgetPredicate((Widget widget) => widget is Container && widget.color == composerSurface),
       findsOneWidget,
     );
+    final elevatedComposer = tester.widget<Container>(
+      find.byWidgetPredicate((Widget widget) {
+        if (widget is! Container) return false;
+        final decoration = widget.decoration;
+        return decoration is BoxDecoration &&
+            decoration.color == composerSurface &&
+            decoration.border == null &&
+            decoration.boxShadow?.isNotEmpty == true;
+      }),
+    );
+    final decoration = elevatedComposer.decoration! as BoxDecoration;
+
+    expect(decoration.border, isNull);
+    expect(_contrastRatio(composerSurface, colors.surface), greaterThan(1.4));
   });
 
   testWidgets('about keeps readable line length and accessible blue links', (WidgetTester tester) async {
@@ -268,15 +308,24 @@ Future<void> _pumpScreen(
   Size size = const Size(430, 932),
   TargetPlatform? platform,
   Brightness brightness = Brightness.light,
+  double bottomInset = 0,
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
 
+  Widget home = Scaffold(body: screen);
+  if (bottomInset > 0) {
+    home = MediaQuery(
+      data: MediaQueryData(padding: EdgeInsets.only(bottom: bottomInset)),
+      child: home,
+    );
+  }
+
   await tester.pumpWidget(
     MaterialApp(
       theme: AppTheme.build(brightness).copyWith(platform: platform),
-      home: Scaffold(body: screen),
+      home: home,
     ),
   );
   await tester.pumpAndSettle();

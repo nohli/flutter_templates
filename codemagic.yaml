@@ -47,13 +47,6 @@ workflows:
     name: UI Templates Android
     instance_type: mac_mini_m2
     max_build_duration: 45
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: main
-          include: true
-          source: true
     environment:
       groups:
         - google_play_credentials
@@ -86,13 +79,6 @@ workflows:
     name: UI Templates Web
     instance_type: mac_mini_m2
     max_build_duration: 30
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: main
-          include: true
-          source: true
     environment:
       groups:
         - cloudflare_credentials

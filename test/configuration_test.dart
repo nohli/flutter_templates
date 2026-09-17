@@ -93,7 +93,7 @@ void main() {
     expect(androidBuild, contains('compileSdk = flutter.compileSdkVersion'));
     expect(androidBuild, contains('targetSdk = flutter.targetSdkVersion'));
     expect(fvmConfig['flutter'], 'stable');
-    expect(RegExp(r'flutter: stable').allMatches(codemagic), hasLength(2));
+    expect(RegExp(r'flutter: stable').allMatches(codemagic), hasLength(3));
     expect(codemagic, contains('android_signing:\n        - Keystore'));
     expect(androidBuild, contains('releaseTaskRequested && !releaseSigningConfigured'));
     expect(androidActivity, contains('package com.achimsapps.templates'));
@@ -125,8 +125,8 @@ void main() {
   test('release workflows are deterministic and keep secrets external', () {
     final codemagic = _loadYamlMap('codemagic.yaml');
     final workflows = _asYamlMap(codemagic['workflows']);
-    expect(workflows.keys, containsAll(<String>['templates-ios', 'templates-android']));
-    expect(workflows, hasLength(2));
+    expect(workflows.keys, containsAll(<String>['templates-ios', 'templates-android', 'templates-web']));
+    expect(workflows, hasLength(3));
 
     for (final workflowCase in <({String buildStep, String id, String platform})>[
       (id: 'templates-ios', platform: 'iOS', buildStep: 'Build IPA'),
@@ -199,6 +199,23 @@ void main() {
     final googlePlay = _asYamlMap(androidPublishing['google_play']);
     expect(googlePlay['credentials'], r'$GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS');
     expect(googlePlay['track'], 'internal');
+
+    final webWorkflow = _asYamlMap(workflows['templates-web']);
+    final webEnvironment = _asYamlMap(webWorkflow['environment']);
+    final webScripts = _asYamlList(webWorkflow['scripts']).map(_asYamlMap).toList();
+    expect(webWorkflow['name'], '${AppIdentity.name} Web');
+    expect(webEnvironment['flutter'], 'stable');
+    expect(_asYamlList(webEnvironment['groups']), <String>['cloudflare_credentials']);
+    expect(webScripts.map((YamlMap step) => step['name']), <String>['Get Packages', 'Build Web', 'Publish Web']);
+    expect(
+      webScripts.singleWhere((YamlMap step) => step['name'] == 'Get Packages')['script'],
+      contains('flutter pub get'),
+    );
+    expect(
+      webScripts.singleWhere((YamlMap step) => step['name'] == 'Build Web')['script'],
+      'flutter build web --release',
+    );
+    expect(webWorkflow['publishing'], isNull);
 
     final codemagicSource = File('codemagic.yaml').readAsStringSync();
     expect(codemagicSource, isNot(contains('FCI_CLONE_UNSHALLOW')));
@@ -340,6 +357,24 @@ void main() {
     final dependencyJobs = _asYamlMap(dependencyReview['jobs']);
     final dependencySteps = _asYamlList(_asYamlMap(dependencyJobs['review'])['steps']).map(_asYamlMap);
     expect(dependencySteps.any((YamlMap step) => _usesAction(step, 'actions/dependency-review-action')), isTrue);
+  });
+
+  test('web deployment uses one Cloudflare project and public domain', () {
+    const pagesProject = 'fluttertemplates';
+    const publicDomain = 'templates.achim.io';
+    final codemagic = _loadYamlMap('codemagic.yaml');
+    final webWorkflow = _asYamlMap(_asYamlMap(codemagic['workflows'])['templates-web']);
+    final webScripts = _asYamlList(webWorkflow['scripts']).map(_asYamlMap);
+    final publishScript = webScripts.singleWhere((YamlMap step) => step['name'] == 'Publish Web')['script'] as String;
+    final cloudflareConfig = File('infrastructure/cloudflare/main.tf').readAsStringSync();
+    final cloudflareDocumentation = File('infrastructure/cloudflare/README.md').readAsStringSync();
+    final projectReadme = File('README.md').readAsStringSync();
+
+    expect(publishScript, contains('--project-name=$pagesProject'));
+    expect(cloudflareConfig, contains('name              = "$pagesProject"'));
+    expect(cloudflareConfig, contains('name         = "$publicDomain"'));
+    expect(cloudflareDocumentation, contains('$pagesProject.pages.dev'));
+    expect(projectReadme, contains('https://$publicDomain'));
   });
 
   test('source files follow the feature-based application structure', () {

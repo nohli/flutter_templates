@@ -125,12 +125,12 @@ void main() {
   test('release workflows are deterministic and keep secrets external', () {
     final codemagic = _loadYamlMap('codemagic.yaml');
     final workflows = _asYamlMap(codemagic['workflows']);
-    expect(workflows.keys, containsAll(<String>['templates-ios', 'templates-android', 'templates-web']));
+    expect(workflows.keys, unorderedEquals(<String>['ios', 'android', 'web']));
     expect(workflows, hasLength(3));
 
-    for (final workflowCase in <({String buildStep, String id, String platform})>[
-      (id: 'templates-ios', platform: 'iOS', buildStep: 'Build IPA'),
-      (id: 'templates-android', platform: 'Android', buildStep: 'Build App Bundle'),
+    for (final workflowCase in <({String buildStep, String id})>[
+      (id: 'ios', buildStep: 'Build IPA'),
+      (id: 'android', buildStep: 'Build App Bundle'),
     ]) {
       final workflow = _asYamlMap(workflows[workflowCase.id]);
       final environment = _asYamlMap(workflow['environment']);
@@ -143,10 +143,10 @@ void main() {
       final publishing = _asYamlMap(workflow['publishing']);
       final buildScript = buildStep['script'] as String;
 
-      expect(workflow['name'], '${AppIdentity.name} ${workflowCase.platform}');
+      expect(workflow['name'], workflowCase.id);
       expect(environment['flutter'], 'stable');
       expect(variables['CM_CLONE_UNSHALLOW'], 'true');
-      if (workflowCase.id == 'templates-ios') {
+      if (workflowCase.id == 'ios') {
         expect(environment['groups'], isNull);
       } else {
         expect(_asYamlList(environment['groups']), <String>['google_play_credentials']);
@@ -162,20 +162,20 @@ void main() {
       _expectFailureOnlySlackPublishing(publishing);
     }
 
-    final iosWorkflow = _asYamlMap(workflows['templates-ios']);
+    final iosWorkflow = _asYamlMap(workflows['ios']);
     final iosIntegrations = _asYamlMap(iosWorkflow['integrations']);
-    final iosEnvironment = _asYamlMap(_asYamlMap(workflows['templates-ios'])['environment']);
+    final iosEnvironment = _asYamlMap(_asYamlMap(workflows['ios'])['environment']);
     final iosSigning = _asYamlMap(iosEnvironment['ios_signing']);
     expect(iosIntegrations['app_store_connect'], 'Codemagic');
     expect(iosEnvironment['xcode'], 'latest');
     expect(iosSigning['distribution_type'], 'app_store');
     expect(iosSigning['bundle_identifier'], 'com.achimsapps.templates');
-    final iosScripts = _asYamlList(_asYamlMap(workflows['templates-ios'])['scripts']);
+    final iosScripts = _asYamlList(_asYamlMap(workflows['ios'])['scripts']);
     final applySigningScript =
         iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Apply Signing Profiles')['script']
             as String;
     expect(applySigningScript, 'xcode-project use-profiles --project ios/Runner.xcodeproj');
-    final iosPublishing = _asYamlMap(_asYamlMap(workflows['templates-ios'])['publishing']);
+    final iosPublishing = _asYamlMap(_asYamlMap(workflows['ios'])['publishing']);
     final appStoreConnect = _asYamlMap(iosPublishing['app_store_connect']);
     expect(appStoreConnect['auth'], 'integration');
     expect(appStoreConnect['submit_to_testflight'], isTrue);
@@ -193,7 +193,7 @@ void main() {
     ]);
     expect(File('release_notes_en-US.txt').existsSync(), isFalse);
 
-    final androidWorkflow = _asYamlMap(workflows['templates-android']);
+    final androidWorkflow = _asYamlMap(workflows['android']);
     final androidEnvironment = _asYamlMap(androidWorkflow['environment']);
     expect(_asYamlList(androidEnvironment['groups']), contains('google_play_credentials'));
     final androidPublishing = _asYamlMap(androidWorkflow['publishing']);
@@ -201,10 +201,10 @@ void main() {
     expect(googlePlay['credentials'], r'$GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS');
     expect(googlePlay['track'], 'internal');
 
-    final webWorkflow = _asYamlMap(workflows['templates-web']);
+    final webWorkflow = _asYamlMap(workflows['web']);
     final webEnvironment = _asYamlMap(webWorkflow['environment']);
     final webScripts = _asYamlList(webWorkflow['scripts']).map(_asYamlMap).toList();
-    expect(webWorkflow['name'], '${AppIdentity.name} Web');
+    expect(webWorkflow['name'], 'web');
     expect(webEnvironment['flutter'], 'stable');
     expect(_asYamlList(webEnvironment['groups']), <String>['cloudflare_credentials']);
     expect(webScripts.map((YamlMap step) => step['name']), <String>['Get Packages', 'Build Web', 'Publish Web']);
@@ -366,7 +366,7 @@ void main() {
     const pagesProject = 'fluttertemplates';
     const publicDomain = 'templates.achim.io';
     final codemagic = _loadYamlMap('codemagic.yaml');
-    final webWorkflow = _asYamlMap(_asYamlMap(codemagic['workflows'])['templates-web']);
+    final webWorkflow = _asYamlMap(_asYamlMap(codemagic['workflows'])['web']);
     final webScripts = _asYamlList(webWorkflow['scripts']).map(_asYamlMap);
     final publishScript = webScripts.singleWhere((YamlMap step) => step['name'] == 'Publish Web')['script'] as String;
     final cloudflareConfig = File('infrastructure/cloudflare/main.tf').readAsStringSync();

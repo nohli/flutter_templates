@@ -193,6 +193,9 @@ void main() {
         iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Apply Signing Profiles')['script']
             as String;
     expect(applySigningScript, 'xcode-project use-profiles --project ios/Runner.xcodeproj');
+    final buildIpaScript =
+        iosScripts.map(_asYamlMap).singleWhere((YamlMap step) => step['name'] == 'Build IPA')['script'] as String;
+    expect(buildIpaScript, contains('--export-options-plist=/Users/builder/export_options.plist'));
     final iosPublishing = _asYamlMap(_asYamlMap(workflows['ios'])['publishing']);
     final appStoreConnect = _asYamlMap(iosPublishing['app_store_connect']);
     expect(appStoreConnect['auth'], 'integration');

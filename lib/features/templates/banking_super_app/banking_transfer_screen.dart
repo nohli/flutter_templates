@@ -26,86 +26,99 @@ class _BankingTransferScreenState extends State<BankingTransferScreen> {
       appBar: AppBar(title: const Text('Send money')),
       body: SafeArea(
         top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Text(
-                'Recent people',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  for (final person in const <({String name, Color color})>[
-                    (name: 'Mina', color: BankingAppTheme.coral),
-                    (name: 'Lea', color: BankingAppTheme.acid),
-                    (name: 'Sam', color: BankingAppTheme.ice),
-                    (name: 'Alex', color: Color(0xFFC9B6FF)),
-                  ])
-                    _Recipient(
-                      name: person.name,
-                      color: person.color,
-                      selected: _recipient == person.name,
-                      onTap: () => setState(() => _recipient = person.name),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 46),
-              Text(
-                'You send',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: colors.onSurfaceVariant, fontWeight: FontWeight.w700),
-              ),
-              TextField(
-                key: const ValueKey<String>('banking-transfer-amount'),
-                controller: _controller,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontFamily: BankingAppTheme.displayFontName,
-                  fontSize: 56,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -2,
-                ),
-                decoration: const InputDecoration(prefixText: '€', filled: false, border: InputBorder.none),
-              ),
-              Text(
-                'Balance after transfer · €8,894.70',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: colors.onSurfaceVariant),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: colors.surface,
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                ),
-                child: Row(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    const Icon(Icons.bolt_rounded, color: BankingAppTheme.violet),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        '$_recipient receives it instantly',
-                        style: const TextStyle(fontWeight: FontWeight.w700),
-                      ),
+                    Text(
+                      'Recent people',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
                     ),
-                    const Text('Free'),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        for (final person in const <({String name, Color color})>[
+                          (name: 'Mina', color: BankingAppTheme.coral),
+                          (name: 'Lea', color: BankingAppTheme.acid),
+                          (name: 'Sam', color: BankingAppTheme.ice),
+                          (name: 'Alex', color: Color(0xFFC9B6FF)),
+                        ])
+                          _Recipient(
+                            name: person.name,
+                            color: person.color,
+                            selected: _recipient == person.name,
+                            onTap: () => setState(() => _recipient = person.name),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 46),
+                    Text(
+                      'You send',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: colors.onSurfaceVariant, fontWeight: FontWeight.w700),
+                    ),
+                    TextField(
+                      key: const ValueKey<String>('banking-transfer-amount'),
+                      controller: _controller,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: BankingAppTheme.displayFontName,
+                        fontSize: 56,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -2,
+                      ),
+                      decoration: const InputDecoration(prefixText: '€', filled: false, border: InputBorder.none),
+                    ),
+                    Text(
+                      'Balance after transfer · €8,894.70',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: colors.onSurfaceVariant),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 14),
-              FilledButton(
-                onPressed: () => Navigator.of(context).pop(_recipient),
-                style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(58)),
-                child: Text('Send to $_recipient'),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: colors.surface,
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        const Icon(Icons.bolt_rounded, color: BankingAppTheme.violet),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            '$_recipient receives it instantly',
+                            style: const TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        const Text('Free'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  FilledButton(
+                    onPressed: () => Navigator.of(context).pop(_recipient),
+                    style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(58)),
+                    child: Text('Send to $_recipient'),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

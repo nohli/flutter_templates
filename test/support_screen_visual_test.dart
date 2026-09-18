@@ -204,7 +204,15 @@ void main() {
 
     final enabled = <WidgetState>{};
     final links = tester.widgetList<TextButton>(find.byType(TextButton));
-    expect(links, hasLength(5));
+    expect(links, hasLength(4));
+    for (final label in <String>[
+      'UI Templates source code',
+      'Open-source licenses',
+      'Privacy Policy',
+      'Developer portfolio',
+    ]) {
+      expect(find.widgetWithText(TextButton, label), findsOneWidget);
+    }
     for (final link in links) {
       expect(link.style?.foregroundColor?.resolve(enabled), AppTheme.actionBlue);
       expect(link.style?.minimumSize?.resolve(enabled)?.height, 48);

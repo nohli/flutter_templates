@@ -78,6 +78,24 @@ void main() {
     expect(find.text('€8,942.70'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('banking transfer stays usable above the keyboard', (WidgetTester tester) async {
+    tester.view
+      ..devicePixelRatio = 1
+      ..physicalSize = const Size(402, 874)
+      ..viewInsets = const FakeViewPadding(bottom: 350);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: BankingTransferScreen()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Lea'));
+    await tester.enterText(find.byKey(const ValueKey<String>('banking-transfer-amount')), '25');
+    final sendButton = find.widgetWithText(FilledButton, 'Send to Lea');
+
+    expect(sendButton.hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
 
 double _contrastRatio(Color foreground, Color background) {

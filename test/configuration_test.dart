@@ -128,6 +128,24 @@ void main() {
     expect(workflows.keys, unorderedEquals(<String>['ios', 'android', 'web']));
     expect(workflows, hasLength(3));
 
+    for (final MapEntry<Object?, Object?> workflowEntry in workflows.entries) {
+      final workflow = _asYamlMap(workflowEntry.value);
+      final triggering = _asYamlMap(workflow['triggering']);
+
+      expect(triggering['cancel_previous_builds'], isTrue, reason: '${workflowEntry.key}');
+      if (workflowEntry.key == 'ios') {
+        final branchPatterns = _asYamlList(triggering['branch_patterns']).map(_asYamlMap).toList();
+        expect(_asYamlList(triggering['events']), <String>['push']);
+        expect(branchPatterns, hasLength(1));
+        expect(branchPatterns.single['pattern'], 'main');
+        expect(branchPatterns.single['include'], isTrue);
+        expect(branchPatterns.single['source'], isTrue);
+      } else {
+        expect(triggering['events'], isNull, reason: '${workflowEntry.key} must be manual-only');
+        expect(triggering['branch_patterns'], isNull, reason: '${workflowEntry.key} must be manual-only');
+      }
+    }
+
     for (final workflowCase in <({String buildStep, String id})>[
       (id: 'ios', buildStep: 'Build IPA'),
       (id: 'android', buildStep: 'Build App Bundle'),

@@ -349,21 +349,27 @@ void main() {
           allOf(containsPair('chrome-version', 'stable'), containsPair('install-chromedriver', true)),
         );
         final webTest = webSteps.singleWhere((YamlMap step) => step['name'] == 'Test');
-        expect(
-          _asYamlMap(webTest['env']),
-          containsPair('CHROME_EXECUTABLE', r'${{ steps.browser.outputs.chrome-path }}'),
-        );
         final webCommand = webTest['run'] as String;
         expect(webCommand, contains(r'"${{ steps.browser.outputs.chromedriver-path }}" --port=4444'));
         expect(webCommand, contains('flutter drive --driver=test_driver/integration_test.dart'));
         expect(webCommand, contains('-d web-server'));
+        expect(webCommand, contains(r'--chrome-binary="${{ steps.browser.outputs.chrome-path }}"'));
         expect(
           webSteps.map((YamlMap step) => step['run']).whereType<String>().join('\n'),
           isNot(contains('@puppeteer/browsers')),
         );
         final android = _asYamlMap(jobs['android']);
         final androidMatrix = _asYamlMap(_asYamlMap(android['strategy'])['matrix']);
-        expect(_asYamlList(androidMatrix['api-level']), <Object?>[24, 30, 35]);
+        expect(_asYamlList(androidMatrix['include']), <Object?>[
+          <Object?, Object?>{'api-level': 24, 'target': 'default'},
+          <Object?, Object?>{'api-level': 30, 'target': 'aosp_atd'},
+          <Object?, Object?>{'api-level': 35, 'target': 'aosp_atd'},
+        ]);
+        final androidSteps = _asYamlList(android['steps']).map(_asYamlMap);
+        final androidTest = androidSteps.singleWhere(
+          (YamlMap step) => _usesAction(step, 'reactivecircus/android-emulator-runner'),
+        );
+        expect(_asYamlMap(androidTest['with']), containsPair('target', r'${{ matrix.target }}'));
         final iosSteps = _asYamlList(_asYamlMap(jobs['ios'])['steps']).map(_asYamlMap);
         final simulator = iosSteps.singleWhere((YamlMap step) => _usesAction(step, 'futureware-tech/simulator-action'));
         expect(_asYamlMap(simulator['with']), containsPair('os_version', '26.2'));

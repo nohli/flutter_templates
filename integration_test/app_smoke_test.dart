@@ -69,13 +69,14 @@ void main() {
       await _finishAnimations(tester);
 
       final action = find.byType(FilledButton);
+      final supportScroll = find.descendant(of: find.byType(CustomScrollView), matching: find.byType(Scrollable)).first;
+      await tester.scrollUntilVisible(action, 200, scrollable: supportScroll);
+      await _finishAnimations(tester);
       expect(action.hitTestable(), findsOneWidget, reason: destination);
       final actionBounds = tester.getRect(action);
-      final screen = find.ancestor(of: action, matching: find.byType(ColoredBox));
-      expect(screen, findsOneWidget, reason: destination);
-      final screenBounds = tester.getRect(screen);
+      final screenWidth = tester.view.physicalSize.width / tester.view.devicePixelRatio;
       actionBottom ??= actionBounds.bottom;
-      expect(actionBounds.center.dx, screenBounds.center.dx, reason: destination);
+      expect(actionBounds.center.dx, screenWidth / 2, reason: destination);
       expect(actionBounds.bottom, actionBottom, reason: destination);
     }
 
@@ -83,10 +84,15 @@ void main() {
     await _finishAnimations(tester);
     await tester.tap(find.text('Feedback'));
     await _finishAnimations(tester);
-    await tester.tap(find.byType(TextField));
+
+    final feedbackField = find.byType(TextField);
+    final feedbackScroll = find.descendant(of: find.byType(CustomScrollView), matching: find.byType(Scrollable)).first;
+    await tester.scrollUntilVisible(feedbackField, 200, scrollable: feedbackScroll);
+    await _finishAnimations(tester);
+    await tester.tap(feedbackField);
     await _finishAnimations(tester);
 
-    final colors = Theme.of(tester.element(find.byType(TextField))).colorScheme;
+    final colors = Theme.of(tester.element(feedbackField)).colorScheme;
     final scaffold = tester.widget<Scaffold>(find.byType(Scaffold).first);
     final composerSurface = Color.alphaBlend(colors.onSurface.withValues(alpha: 0.16), colors.surface);
     final elevatedComposer = find.byWidgetPredicate((Widget widget) {

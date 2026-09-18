@@ -16,7 +16,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [24, 30, 35]
+        include:
+          - api-level: 24
+            target: default
+          - api-level: 30
+            target: aosp_atd
+          - api-level: 35
+            target: aosp_atd
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -41,6 +47,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           profile: medium_phone
           arch: x86_64
           script: flutter test integration_test
@@ -93,11 +100,9 @@ jobs:
           chrome-version: stable
           install-chromedriver: true
       - name: Test
-        env:
-          CHROME_EXECUTABLE: ${{ steps.browser.outputs.chrome-path }}
         run: |
           "${{ steps.browser.outputs.chromedriver-path }}" --port=4444 &
-          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_smoke_test.dart -d web-server
+          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_smoke_test.dart -d web-server --chrome-binary="${{ steps.browser.outputs.chrome-path }}"
 
   linux:
     name: Linux

@@ -453,12 +453,19 @@ void main() {
     final launcherConfig = _asYamlMap(_loadYamlMap('pubspec.yaml')['flutter_launcher_icons']);
     final webIconConfig = _asYamlMap(launcherConfig['web']);
     final androidColors = File('android/app/src/main/res/values/colors.xml').readAsStringSync();
+    final webIndex = File('web/index.html').readAsStringSync();
     final webManifest = jsonDecode(File('web/manifest.json').readAsStringSync()) as Map<String, dynamic>;
+    final favicon = _readPngHeader('web/favicon.png');
 
     expect(launcherConfig['image_path'], 'icon/app_icon.png');
     expect(launcherConfig['adaptive_icon_foreground'], 'icon/adaptive_foreground.png');
     expect(androidColors, contains(launcherConfig['adaptive_icon_background']));
     expect(webIconConfig['image_path'], 'icon/app_icon.png');
+    expect(webIndex, contains('<link rel="icon" type="image/png" href="favicon.png"/>'));
+    expect(favicon.width, 32);
+    expect(favicon.height, 32);
+    expect(favicon.bitDepth, 8);
+    expect(favicon.colorType, anyOf(2, 6));
     expect(webManifest['background_color'], webIconConfig['background_color']);
     expect(_asYamlMap(launcherConfig['windows'])['image_path'], 'icon/app_icon.png');
     expect(_asYamlMap(launcherConfig['macos'])['image_path'], 'icon/app_icon.png');

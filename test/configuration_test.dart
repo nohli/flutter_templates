@@ -371,13 +371,7 @@ void main() {
         );
         final androidTestOptions = _asYamlMap(androidTest['with']);
         expect(androidTestOptions, containsPair('target', r'${{ matrix.target }}'));
-        expect(
-          androidTestOptions,
-          containsPair(
-            'emulator-options',
-            '-no-window -gpu swiftshader -feature -Vulkan -no-snapshot -noaudio -no-boot-anim',
-          ),
-        );
+        expect(androidTestOptions.containsKey('emulator-options'), isFalse);
         final iosSteps = _asYamlList(_asYamlMap(jobs['ios'])['steps']).map(_asYamlMap);
         final simulator = iosSteps.singleWhere((YamlMap step) => _usesAction(step, 'futureware-tech/simulator-action'));
         expect(_asYamlMap(simulator['with']), containsPair('os_version', '26.2'));

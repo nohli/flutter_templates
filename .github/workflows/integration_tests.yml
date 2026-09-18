@@ -50,7 +50,6 @@ jobs:
           target: ${{ matrix.target }}
           profile: medium_phone
           arch: x86_64
-          emulator-options: -no-window -gpu swiftshader -feature -Vulkan -no-snapshot -noaudio -no-boot-anim
           script: flutter test integration_test
 
   ios:

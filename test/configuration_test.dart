@@ -360,17 +360,13 @@ void main() {
         );
         final android = _asYamlMap(jobs['android']);
         final androidMatrix = _asYamlMap(_asYamlMap(android['strategy'])['matrix']);
-        expect(_asYamlList(androidMatrix['include']), <Object?>[
-          <Object?, Object?>{'api-level': 24, 'target': 'default'},
-          <Object?, Object?>{'api-level': 30, 'target': 'aosp_atd'},
-          <Object?, Object?>{'api-level': 35, 'target': 'aosp_atd'},
-        ]);
+        expect(_asYamlList(androidMatrix['api-level']), <Object?>[24, 30, 35]);
         final androidSteps = _asYamlList(android['steps']).map(_asYamlMap);
         final androidTest = androidSteps.singleWhere(
           (YamlMap step) => _usesAction(step, 'reactivecircus/android-emulator-runner'),
         );
         final androidTestOptions = _asYamlMap(androidTest['with']);
-        expect(androidTestOptions, containsPair('target', r'${{ matrix.target }}'));
+        expect(androidTestOptions.containsKey('target'), isFalse);
         expect(androidTestOptions.containsKey('emulator-options'), isFalse);
         final iosSteps = _asYamlList(_asYamlMap(jobs['ios'])['steps']).map(_asYamlMap);
         final simulator = iosSteps.singleWhere((YamlMap step) => _usesAction(step, 'futureware-tech/simulator-action'));

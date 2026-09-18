@@ -16,13 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - api-level: 24
-            target: default
-          - api-level: 30
-            target: aosp_atd
-          - api-level: 35
-            target: aosp_atd
+        api-level: [24, 30, 35]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -47,7 +41,6 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
           profile: medium_phone
           arch: x86_64
           script: flutter test integration_test

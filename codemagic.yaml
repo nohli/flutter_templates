@@ -1,6 +1,6 @@
 workflows:
-  templates-ios:
-    name: UI Templates iOS
+  ios:
+    name: ios
     integrations:
       app_store_connect: Codemagic
     instance_type: mac_mini_m2
@@ -51,8 +51,8 @@ workflows:
           success: false
           failure: true
 
-  templates-android:
-    name: UI Templates Android
+  android:
+    name: android
     instance_type: mac_mini_m2
     max_build_duration: 45
     triggering:
@@ -91,8 +91,8 @@ workflows:
           success: false
           failure: true
 
-  templates-web:
-    name: UI Templates Web
+  web:
+    name: web
     instance_type: mac_mini_m2
     max_build_duration: 30
     triggering:

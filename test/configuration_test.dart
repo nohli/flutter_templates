@@ -143,7 +143,7 @@ void main() {
       final publishing = _asYamlMap(workflow['publishing']);
       final buildScript = buildStep['script'] as String;
 
-      expect(workflow.containsKey('name'), isFalse);
+      expect(workflow['name'], workflowCase.id);
       expect(environment['flutter'], 'stable');
       expect(variables['CM_CLONE_UNSHALLOW'], 'true');
       if (workflowCase.id == 'ios') {
@@ -204,7 +204,7 @@ void main() {
     final webWorkflow = _asYamlMap(workflows['web']);
     final webEnvironment = _asYamlMap(webWorkflow['environment']);
     final webScripts = _asYamlList(webWorkflow['scripts']).map(_asYamlMap).toList();
-    expect(webWorkflow.containsKey('name'), isFalse);
+    expect(webWorkflow['name'], 'web');
     expect(webEnvironment['flutter'], 'stable');
     expect(_asYamlList(webEnvironment['groups']), <String>['cloudflare_credentials']);
     expect(webScripts.map((YamlMap step) => step['name']), <String>['Get Packages', 'Build Web', 'Publish Web']);

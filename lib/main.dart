@@ -30,8 +30,9 @@ class UiTemplatesApp extends StatelessWidget {
     return MaterialApp(
       title: AppIdentity.name,
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.build(),
-      themeMode: ThemeMode.light,
+      theme: AppTheme.build(Brightness.light),
+      darkTheme: AppTheme.build(Brightness.dark),
+      themeMode: ThemeMode.system,
       home: const AppShell(),
     );
   }

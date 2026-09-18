@@ -366,13 +366,18 @@ void main() {
           <Object?, Object?>{'api-level': 35, 'target': 'aosp_atd'},
         ]);
         final androidSteps = _asYamlList(android['steps']).map(_asYamlMap);
-        final androidBuild = androidSteps.singleWhere((YamlMap step) => step['name'] == 'Build Test App');
-        expect(androidBuild['run'], 'flutter build apk --debug --target=integration_test/app_smoke_test.dart');
         final androidTest = androidSteps.singleWhere(
           (YamlMap step) => _usesAction(step, 'reactivecircus/android-emulator-runner'),
         );
-        expect(_asYamlMap(androidTest['with']), containsPair('target', r'${{ matrix.target }}'));
-        expect(_asYamlMap(androidTest['with']), containsPair('emulator-build', 14214601));
+        final androidTestOptions = _asYamlMap(androidTest['with']);
+        expect(androidTestOptions, containsPair('target', r'${{ matrix.target }}'));
+        expect(
+          androidTestOptions,
+          containsPair(
+            'emulator-options',
+            '-no-window -gpu swiftshader -feature -Vulkan -no-snapshot -noaudio -no-boot-anim',
+          ),
+        );
         final iosSteps = _asYamlList(_asYamlMap(jobs['ios'])['steps']).map(_asYamlMap);
         final simulator = iosSteps.singleWhere((YamlMap step) => _usesAction(step, 'futureware-tech/simulator-action'));
         expect(_asYamlMap(simulator['with']), containsPair('os_version', '26.2'));

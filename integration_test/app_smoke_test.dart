@@ -291,9 +291,8 @@ Future<void> _selectAppearance(WidgetTester tester, String label) async {
 }
 
 Future<void> _finishAnimations(WidgetTester tester) async {
-  for (var frame = 0; frame < 40; frame++) {
-    await tester.pump(const Duration(milliseconds: 25));
+  for (var frame = 0; frame < 8; frame++) {
+    await tester.pump(const Duration(milliseconds: 125));
   }
-  await tester.pump(const Duration(seconds: 2));
   await tester.pump(const Duration(milliseconds: 16));
 }

@@ -193,8 +193,10 @@ void main() {
     await _finishAnimations(tester);
     await tester.tap(find.text('Lea'));
     await tester.enterText(find.byKey(const ValueKey<String>('banking-transfer-amount')), '25');
-    await tester.tap(find.text('Send to Lea'));
-    await _finishAnimations(tester);
+    final sendButton = find.widgetWithText(FilledButton, 'Send to Lea').hitTestable();
+    expect(sendButton, findsOneWidget);
+    await tester.tap(sendButton);
+    await tester.pumpAndSettle();
     expect(find.text('Money sent to Lea'), findsOneWidget);
   });
 

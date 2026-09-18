@@ -38,6 +38,8 @@ jobs:
           cache: true
       - name: Dependencies
         run: flutter pub get
+      - name: Build Test App
+        run: flutter build apk --debug --target=integration_test/app_smoke_test.dart
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -50,6 +52,8 @@ jobs:
           target: ${{ matrix.target }}
           profile: medium_phone
           arch: x86_64
+          # Known-stable Linux emulator build used by FlutterFire E2E.
+          emulator-build: 14214601
           script: flutter test integration_test
 
   ios:

@@ -19,6 +19,18 @@ import 'package:templates/features/templates/shared/template_appearance.dart';
 import 'package:templates/main.dart';
 
 void main() {
+  testWidgets('root app surface follows the system brightness before the gallery paints', (WidgetTester tester) async {
+    addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+    tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
+
+    await tester.pumpWidget(const UiTemplatesApp());
+
+    final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
+    expect(app.themeMode, ThemeMode.system);
+    expect(app.theme?.scaffoldBackgroundColor, AppTheme.build(Brightness.light).scaffoldBackgroundColor);
+    expect(app.darkTheme?.scaffoldBackgroundColor, AppTheme.build(Brightness.dark).scaffoldBackgroundColor);
+  });
+
   testWidgets('controlled template appearance follows the selected mode', (WidgetTester tester) async {
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;

@@ -1,5 +1,6 @@
 workflows:
   ios:
+    name: ios
     integrations:
       app_store_connect: Codemagic
     instance_type: mac_mini_m2
@@ -51,6 +52,7 @@ workflows:
           failure: true
 
   android:
+    name: android
     instance_type: mac_mini_m2
     max_build_duration: 45
     triggering:
@@ -90,6 +92,7 @@ workflows:
           failure: true
 
   web:
+    name: web
     instance_type: mac_mini_m2
     max_build_duration: 30
     triggering:

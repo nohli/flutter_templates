@@ -484,7 +484,7 @@ void main() {
     expect(File('windows/runner/resources/app_icon.ico').existsSync(), isTrue);
   });
 
-  test('startup surfaces keep adaptive iOS launch surfaces and fixed-light non-iOS shells', () {
+  test('startup surfaces keep adaptive iOS and web launch surfaces', () {
     final launchStoryboard = File('ios/Runner/Base.lproj/LaunchScreen.storyboard').readAsStringSync();
     final mainStoryboard = File('ios/Runner/Base.lproj/Main.storyboard').readAsStringSync();
     final iosInfo = File('ios/Runner/Info.plist').readAsStringSync();
@@ -507,9 +507,12 @@ void main() {
     expect(androidModernLaunch, contains('@android:color/white'));
     expect(RegExp(r'parent="@android:style/Theme.Light.NoTitleBar"').allMatches(androidNightStyles), hasLength(2));
     expect(androidNightStyles, isNot(contains('Theme.Black')));
-    expect(webIndex, contains('name="color-scheme" content="light"'));
-    expect(webIndex, contains('name="theme-color" content="#FEFEFE"'));
-    expect(webIndex, isNot(contains('prefers-color-scheme')));
+    expect(webIndex, contains('name="color-scheme" content="light dark"'));
+    expect(webIndex, contains('name="theme-color" content="#FEFEFE" media="(prefers-color-scheme: light)"'));
+    expect(webIndex, contains('name="theme-color" content="#111719" media="(prefers-color-scheme: dark)"'));
+    expect(webIndex, contains('@media (prefers-color-scheme: dark)'));
+    expect(webIndex, contains('background-color: #FEFEFE;'));
+    expect(webIndex, contains('background-color: #111719;'));
     expect(webManifest['background_color'], '#F8F2E8');
     expect(webManifest.containsKey('orientation'), isFalse);
   });

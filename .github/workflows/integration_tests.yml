@@ -16,7 +16,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [24, 30, 35]
+        include:
+          - api-level: 24
+            target: default
+          - api-level: 30
+            target: aosp_atd
+          - api-level: 35
+            target: aosp_atd
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -41,6 +47,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
           profile: medium_phone
           arch: x86_64
           script: flutter test integration_test
@@ -65,7 +72,7 @@ jobs:
         run: flutter pub get
       - name: Simulator
         id: simulator
-        uses: futureware-tech/simulator-action@v5
+        uses: futureware-tech/simulator-action@c4f8bc4ae273e764e91bcb66db8ae7acd408e436 # main
         with:
           os_version: '26.2'
           model: 'iPhone 17'

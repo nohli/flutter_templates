@@ -360,16 +360,29 @@ void main() {
         );
         final android = _asYamlMap(jobs['android']);
         final androidMatrix = _asYamlMap(_asYamlMap(android['strategy'])['matrix']);
-        expect(_asYamlList(androidMatrix['api-level']), <Object?>[24, 30, 35]);
+        expect(android['runs-on'], 'ubuntu-latest');
+        expect(
+          _asYamlList(androidMatrix['include']).map(_asYamlMap).map((YamlMap entry) => entry.cast<String, Object?>()),
+          <Map<String, Object?>>[
+            <String, Object?>{'api-level': 24, 'target': 'default'},
+            <String, Object?>{'api-level': 30, 'target': 'aosp_atd'},
+            <String, Object?>{'api-level': 35, 'target': 'aosp_atd'},
+          ],
+        );
         final androidSteps = _asYamlList(android['steps']).map(_asYamlMap);
+        final enableKvm = androidSteps.singleWhere((YamlMap step) => step['name'] == 'Enable KVM');
+        expect(enableKvm['if'], isNull);
         final androidTest = androidSteps.singleWhere(
           (YamlMap step) => _usesAction(step, 'reactivecircus/android-emulator-runner'),
         );
         final androidTestOptions = _asYamlMap(androidTest['with']);
-        expect(androidTestOptions.containsKey('target'), isFalse);
+        expect(androidTestOptions['target'], r'${{ matrix.target }}');
+        expect(androidTestOptions['arch'], 'x86_64');
+        expect(androidTestOptions.containsKey('emulator-build'), isFalse);
         expect(androidTestOptions.containsKey('emulator-options'), isFalse);
         final iosSteps = _asYamlList(_asYamlMap(jobs['ios'])['steps']).map(_asYamlMap);
         final simulator = iosSteps.singleWhere((YamlMap step) => _usesAction(step, 'futureware-tech/simulator-action'));
+        expect(simulator['uses'], 'futureware-tech/simulator-action@c4f8bc4ae273e764e91bcb66db8ae7acd408e436');
         expect(_asYamlMap(simulator['with']), containsPair('os_version', '26.2'));
         expect(_asYamlMap(simulator['with']), containsPair('model', 'iPhone 17'));
       }

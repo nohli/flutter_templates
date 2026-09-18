@@ -2,16 +2,7 @@ name: Dependency Review
 
 on:
   pull_request:
-    branches:
-      - main
-    paths:
-      - pubspec.yaml
-      - pubspec.lock
-      - .github/workflows/**
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  push:
 
 permissions:
   contents: read
@@ -24,5 +15,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-      - name: Review dependencies
+      - name: Review pull request dependencies
+        if: github.event_name == 'pull_request'
         uses: actions/dependency-review-action@v5
+      - name: Review pushed dependencies
+        if: github.event_name == 'push'
+        uses: actions/dependency-review-action@v5
+        with:
+          base-ref: ${{ github.event.created && github.event.repository.default_branch || github.event.before }}
+          head-ref: ${{ github.sha }}

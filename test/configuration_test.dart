@@ -128,6 +128,24 @@ void main() {
     expect(workflows.keys, unorderedEquals(<String>['ios', 'android', 'web']));
     expect(workflows, hasLength(3));
 
+    for (final MapEntry<Object?, Object?> workflowEntry in workflows.entries) {
+      final workflow = _asYamlMap(workflowEntry.value);
+      final triggering = _asYamlMap(workflow['triggering']);
+
+      expect(triggering['cancel_previous_builds'], isTrue, reason: '${workflowEntry.key}');
+      if (workflowEntry.key == 'ios') {
+        final branchPatterns = _asYamlList(triggering['branch_patterns']).map(_asYamlMap).toList();
+        expect(_asYamlList(triggering['events']), <String>['push']);
+        expect(branchPatterns, hasLength(1));
+        expect(branchPatterns.single['pattern'], 'main');
+        expect(branchPatterns.single['include'], isTrue);
+        expect(branchPatterns.single['source'], isTrue);
+      } else {
+        expect(triggering['events'], isNull, reason: '${workflowEntry.key} must be manual-only');
+        expect(triggering['branch_patterns'], isNull, reason: '${workflowEntry.key} must be manual-only');
+      }
+    }
+
     for (final workflowCase in <({String buildStep, String id})>[
       (id: 'ios', buildStep: 'Build IPA'),
       (id: 'android', buildStep: 'Build App Bundle'),
@@ -257,7 +275,12 @@ void main() {
       if (workflowFile.endsWith('integration_tests.yml')) {
         expect(workflow['name'], 'Integration Tests', reason: workflowFile);
       }
-      expect(triggers.keys.cast<String>().toSet(), <String>{'workflow_dispatch', 'pull_request'}, reason: workflowFile);
+      expect(triggers.keys.cast<String>().toSet(), <String>{
+        'workflow_dispatch',
+        'pull_request',
+        'push',
+      }, reason: workflowFile);
+      expect(workflow['concurrency'], isNull, reason: workflowFile);
 
       final jobs = _asYamlMap(workflow['jobs']);
       final expectedJobs = switch (workflowFile) {
@@ -350,15 +373,20 @@ void main() {
 
     final dependencyReview = _loadYamlMap('.github/workflows/dependency_review.yml');
     final dependencyTriggers = _asYamlMap(dependencyReview['on']);
-    final pullRequest = _asYamlMap(dependencyTriggers['pull_request']);
-    expect(_asYamlList(pullRequest['branches']), <String>['main']);
+    expect(dependencyTriggers.keys.cast<String>().toSet(), <String>{'pull_request', 'push'});
+    expect(dependencyReview['concurrency'], isNull);
+    final dependencySteps = _asYamlList(
+      _asYamlMap(_asYamlMap(dependencyReview['jobs'])['review'])['steps'],
+    ).map(_asYamlMap);
     expect(
-      _asYamlList(pullRequest['paths']),
-      containsAll(<String>['pubspec.yaml', 'pubspec.lock', '.github/workflows/**']),
+      dependencySteps.where((YamlMap step) => step['uses'] == 'actions/dependency-review-action@v5'),
+      hasLength(2),
     );
+    final pushReview = dependencySteps.singleWhere((YamlMap step) => step['name'] == 'Review pushed dependencies');
+    expect(pushReview['if'], "github.event_name == 'push'");
+    expect(_asYamlMap(pushReview['with'])['base-ref'], contains('github.event.before'));
+    expect(_asYamlMap(pushReview['with'])['head-ref'], r'${{ github.sha }}');
     expect(_asYamlMap(dependencyReview['permissions'])['contents'], 'read');
-    final dependencyJobs = _asYamlMap(dependencyReview['jobs']);
-    final dependencySteps = _asYamlList(_asYamlMap(dependencyJobs['review'])['steps']).map(_asYamlMap);
     expect(dependencySteps.any((YamlMap step) => _usesAction(step, 'actions/dependency-review-action')), isTrue);
   });
 

@@ -43,7 +43,12 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86_64
-          script: flutter test integration_test --no-enable-impeller
+          script: |
+            if [ "${{ matrix.api-level }}" = 24 ]; then
+              flutter test integration_test
+            else
+              flutter test integration_test --no-enable-impeller
+            fi
 
   ios:
     name: iOS

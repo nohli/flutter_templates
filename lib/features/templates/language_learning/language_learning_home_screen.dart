@@ -104,10 +104,19 @@ class _LearningHeader extends StatelessWidget {
           ),
           child: const Text('FR  🇫🇷', style: TextStyle(fontWeight: FontWeight.w800)),
         ),
-        const Spacer(),
-        const _Score(icon: Icons.local_fire_department_rounded, color: LanguageLearningTheme.coral, value: '12'),
-        const SizedBox(width: 14),
-        const _Score(icon: Icons.diamond_rounded, color: LanguageLearningTheme.sky, value: '860'),
+        const Expanded(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerRight,
+            child: Row(
+              children: <Widget>[
+                _Score(icon: Icons.local_fire_department_rounded, color: LanguageLearningTheme.coral, value: '12'),
+                SizedBox(width: 14),
+                _Score(icon: Icons.diamond_rounded, color: LanguageLearningTheme.sky, value: '860'),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

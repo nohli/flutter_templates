@@ -43,9 +43,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86_64
-          profile: pixel_7_pro
-          force-avd-creation: false
-          script: flutter test integration_test
+          script: flutter test integration_test --no-enable-impeller
 
   ios:
     name: iOS

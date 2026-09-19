@@ -45,7 +45,7 @@ class _DatingSwipeDeckState extends State<DatingSwipeDeck> with SingleTickerProv
   static const _snapDuration = Duration(milliseconds: 360);
   static const _decisionDuration = Duration(milliseconds: 260);
 
-  late final _motionController = AnimationController(vsync: this)..addListener(_followAnimation);
+  late final AnimationController _motionController;
   Animation<Offset> _motion = const AlwaysStoppedAnimation<Offset>(Offset.zero);
   var _offset = Offset.zero;
   var _cardWidth = 1.0;
@@ -55,6 +55,7 @@ class _DatingSwipeDeckState extends State<DatingSwipeDeck> with SingleTickerProv
   @override
   void initState() {
     super.initState();
+    _motionController = AnimationController(vsync: this)..addListener(_followAnimation);
     widget.controller._state = this;
   }
 

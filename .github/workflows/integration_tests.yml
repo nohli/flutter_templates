@@ -11,7 +11,7 @@ permissions:
 jobs:
   android:
     name: Android ${{ matrix.api-level }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
       fail-fast: false
@@ -43,9 +43,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86_64
-          profile: pixel_7_pro
-          force-avd-creation: false
-          script: flutter test integration_test --no-enable-impeller
+          script: flutter test integration_test
 
   ios:
     name: iOS
@@ -67,9 +65,8 @@ jobs:
         run: flutter pub get
       - name: Simulator
         id: simulator
-        uses: futureware-tech/simulator-action@c4f8bc4ae273e764e91bcb66db8ae7acd408e436 # main
+        uses: futureware-tech/simulator-action@v5
         with:
-          os_version: '26.2'
           model: 'iPhone 17'
       - name: Test
         run: flutter test integration_test -d "${{ steps.simulator.outputs.udid }}"

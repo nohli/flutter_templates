@@ -38,8 +38,14 @@ void main() {
 
     await tester.enterText(find.byKey(const ValueKey<String>('private-chat-composer')), 'I’ll see you at seven.');
     await tester.pump();
+    tester.view.viewInsets = const FakeViewPadding(bottom: 350);
+    await tester.pumpAndSettle();
+
+    final sendButton = find.byTooltip('Send message');
     expect(find.byIcon(Icons.send_rounded), findsOneWidget);
-    await tester.tap(find.byTooltip('Send message'));
+    expect(sendButton.hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.tap(sendButton);
     await tester.pumpAndSettle();
 
     expect(find.text('I’ll see you at seven.'), findsOneWidget);

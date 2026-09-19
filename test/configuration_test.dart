@@ -360,15 +360,8 @@ void main() {
         );
         final android = _asYamlMap(jobs['android']);
         final androidMatrix = _asYamlMap(_asYamlMap(android['strategy'])['matrix']);
-        expect(android['runs-on'], 'ubuntu-latest');
-        expect(
-          _asYamlList(androidMatrix['include']).map(_asYamlMap).map((YamlMap entry) => entry.cast<String, Object?>()),
-          <Map<String, Object?>>[
-            <String, Object?>{'api-level': 24, 'target': 'default'},
-            <String, Object?>{'api-level': 30, 'target': 'aosp_atd'},
-            <String, Object?>{'api-level': 35, 'target': 'aosp_atd'},
-          ],
-        );
+        expect(android['runs-on'], 'ubuntu-24.04');
+        expect(_asYamlList(androidMatrix['api-level']), <int>[24, 29, 32, 36]);
         final androidSteps = _asYamlList(android['steps']).map(_asYamlMap);
         final enableKvm = androidSteps.singleWhere((YamlMap step) => step['name'] == 'Enable KVM');
         expect(enableKvm['if'], isNull);
@@ -376,10 +369,13 @@ void main() {
           (YamlMap step) => _usesAction(step, 'reactivecircus/android-emulator-runner'),
         );
         final androidTestOptions = _asYamlMap(androidTest['with']);
-        expect(androidTestOptions['target'], r'${{ matrix.target }}');
+        expect(androidTestOptions['target'], 'google_apis');
         expect(androidTestOptions['arch'], 'x86_64');
+        expect(androidTestOptions['profile'], 'pixel_7_pro');
+        expect(androidTestOptions['force-avd-creation'], isFalse);
         expect(androidTestOptions.containsKey('emulator-build'), isFalse);
         expect(androidTestOptions.containsKey('emulator-options'), isFalse);
+        expect(androidTestOptions['script'], 'flutter test integration_test --no-enable-impeller');
         final iosSteps = _asYamlList(_asYamlMap(jobs['ios'])['steps']).map(_asYamlMap);
         final simulator = iosSteps.singleWhere((YamlMap step) => _usesAction(step, 'futureware-tech/simulator-action'));
         expect(simulator['uses'], 'futureware-tech/simulator-action@c4f8bc4ae273e764e91bcb66db8ae7acd408e436');

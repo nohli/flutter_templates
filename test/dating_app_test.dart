@@ -33,6 +33,15 @@ void main() {
     expect(DatingConversation.samples.first.copyWith(unreadCount: 0).unreadCount, 0);
   });
 
+  testWidgets('dating screen can close before the first swipe', (WidgetTester tester) async {
+    await _pumpDating(tester);
+    expect(find.text('Mina, 29'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('dating choices advance profiles and support one-step undo', (WidgetTester tester) async {
     await _pumpDating(tester);
 

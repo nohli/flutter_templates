@@ -64,66 +64,68 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
       body: Stack(
         children: <Widget>[
           Positioned.fill(child: CustomPaint(painter: _ChatWallpaperPainter(colors.outlineVariant))),
-          Column(
-            children: <Widget>[
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(16, 18, 16, 14),
-                  children: <Widget>[
-                    const _DayMarker(),
-                    const SizedBox(height: 18),
-                    const _MessageBubble(
-                      message: 'Still good for dinner on the garden terrace?',
-                      mine: false,
-                      time: '18:30',
-                    ),
-                    const _MessageBubble(message: 'Absolutely. Seven?', mine: true, time: '18:32'),
-                    const _MessageBubble(message: 'The garden table is booked 🌿', mine: false, time: '18:36'),
-                    for (final message in _messages) _MessageBubble(message: message, mine: true, time: 'Now'),
-                  ],
-                ),
-              ),
-              SafeArea(
-                top: false,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 7, 10, 9),
-                  child: Row(
+          Positioned.fill(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 18, 16, 14),
                     children: <Widget>[
-                      Expanded(
-                        child: TextField(
-                          key: const ValueKey<String>('private-chat-composer'),
-                          controller: _controller,
-                          minLines: 1,
-                          maxLines: 5,
-                          decoration: InputDecoration(
-                            hintText: 'Message',
-                            prefixIcon: IconButton(
-                              tooltip: 'Add attachment',
-                              onPressed: () {},
-                              icon: const Icon(Icons.add_rounded),
-                            ),
-                            suffixIcon: IconButton(
-                              tooltip: 'Add emoji',
-                              onPressed: () {},
-                              icon: const Icon(Icons.sentiment_satisfied_alt_rounded),
-                            ),
-                          ),
-                        ),
+                      const _DayMarker(),
+                      const SizedBox(height: 18),
+                      const _MessageBubble(
+                        message: 'Still good for dinner on the garden terrace?',
+                        mine: false,
+                        time: '18:30',
                       ),
-                      const SizedBox(width: 8),
-                      ValueListenableBuilder<TextEditingValue>(
-                        valueListenable: _controller,
-                        builder: (BuildContext context, TextEditingValue value, Widget? child) => IconButton.filled(
-                          tooltip: 'Send message',
-                          onPressed: _send,
-                          icon: Icon(value.text.trim().isEmpty ? Icons.mic_rounded : Icons.send_rounded),
-                        ),
-                      ),
+                      const _MessageBubble(message: 'Absolutely. Seven?', mine: true, time: '18:32'),
+                      const _MessageBubble(message: 'The garden table is booked 🌿', mine: false, time: '18:36'),
+                      for (final message in _messages) _MessageBubble(message: message, mine: true, time: 'Now'),
                     ],
                   ),
                 ),
-              ),
-            ],
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 7, 10, 9),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            key: const ValueKey<String>('private-chat-composer'),
+                            controller: _controller,
+                            minLines: 1,
+                            maxLines: 5,
+                            decoration: InputDecoration(
+                              hintText: 'Message',
+                              prefixIcon: IconButton(
+                                tooltip: 'Add attachment',
+                                onPressed: () {},
+                                icon: const Icon(Icons.add_rounded),
+                              ),
+                              suffixIcon: IconButton(
+                                tooltip: 'Add emoji',
+                                onPressed: () {},
+                                icon: const Icon(Icons.sentiment_satisfied_alt_rounded),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        ValueListenableBuilder<TextEditingValue>(
+                          valueListenable: _controller,
+                          builder: (BuildContext context, TextEditingValue value, Widget? child) => IconButton.filled(
+                            tooltip: 'Send message',
+                            onPressed: _send,
+                            icon: Icon(value.text.trim().isEmpty ? Icons.mic_rounded : Icons.send_rounded),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

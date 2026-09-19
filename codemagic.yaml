@@ -7,12 +7,6 @@ workflows:
     max_build_duration: 45
     triggering:
       cancel_previous_builds: true
-      events:
-        - push
-      branch_patterns:
-        - pattern: main
-          include: true
-          source: true
     environment:
       ios_signing:
         distribution_type: app_store

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../app/motion_preferences.dart';
@@ -39,43 +41,46 @@ class _PopularCourseListViewState extends State<PopularCourseListView> with Sing
     final useSingleColumn = textScale >= 2;
     final usesNormalGeometry = textScale <= 1;
     final itemHeight = 280 + (textScale - 1).clamp(0.0, 2.2).toDouble() * 150;
-    final gridDelegate = usesNormalGeometry
-        ? const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 32,
-            crossAxisSpacing: 32,
-            childAspectRatio: 0.8,
-          )
-        : SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: useSingleColumn ? 1 : 2,
-            mainAxisSpacing: 32,
-            crossAxisSpacing: 32,
-            mainAxisExtent: itemHeight,
-          );
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        const spacing = 32.0;
+        const gridPadding = 8.0;
+        const cardAspectRatio = 0.8;
+        const minimumCardHeight = 180.0;
+        final cardWidth = (constraints.maxWidth - 2 * gridPadding - spacing) / 2;
+        final normalHeight = math.max(cardWidth / cardAspectRatio, minimumCardHeight);
+        final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: useSingleColumn ? 1 : 2,
+          mainAxisSpacing: spacing,
+          crossAxisSpacing: spacing,
+          mainAxisExtent: usesNormalGeometry ? normalHeight : itemHeight,
+        );
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: GridView(
-        padding: const EdgeInsets.all(8),
-        primary: false,
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        gridDelegate: gridDelegate,
-        children: List<Widget>.generate(widget.courses.length, (int index) {
-          final count = widget.courses.length;
-          final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-              parent: _animationController,
-              curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
-            ),
-          );
-          return _PopularCourseCard(
-            callback: () => widget.onSelected(widget.courses[index]),
-            category: widget.courses[index],
-            animation: animation,
-          );
-        }),
-      ),
+        return Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: GridView(
+            padding: const EdgeInsets.all(gridPadding),
+            primary: false,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate: gridDelegate,
+            children: List<Widget>.generate(widget.courses.length, (int index) {
+              final count = widget.courses.length;
+              final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                  parent: _animationController,
+                  curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
+                ),
+              );
+              return _PopularCourseCard(
+                callback: () => widget.onSelected(widget.courses[index]),
+                category: widget.courses[index],
+                animation: animation,
+              );
+            }),
+          ),
+        );
+      },
     );
   }
 }

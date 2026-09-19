@@ -558,6 +558,13 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('popular course cards fit a narrow phone viewport', (WidgetTester tester) async {
+    await _pumpScreen(tester, const DesignCourseHomeScreen(), size: const Size(320, 640), disableAnimations: true);
+
+    expect(find.text('App Design Course'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('fitness templates preserve the original normal-size composition', (WidgetTester tester) async {
     _evictAssets(<String>[
       'assets/fitness_app/eaten.png',

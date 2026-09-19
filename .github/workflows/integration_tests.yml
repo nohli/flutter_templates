@@ -24,7 +24,7 @@ jobs:
           - api-level: 32
             command: flutter test integration_test --no-enable-impeller
           - api-level: 36
-            command: flutter test integration_test
+            command: flutter test integration_test --no-enable-impeller
     steps:
       - name: Checkout
         uses: actions/checkout@v7

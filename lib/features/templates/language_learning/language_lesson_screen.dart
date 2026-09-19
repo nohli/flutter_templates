@@ -46,45 +46,53 @@ class _LanguageLessonScreenState extends State<LanguageLessonScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(
-                'Choose the best reply',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 26),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: colors.surface,
-                  borderRadius: const BorderRadius.all(Radius.circular(28)),
-                ),
-                child: const Row(
-                  children: <Widget>[
-                    CircleAvatar(radius: 25, child: Text('☕', style: TextStyle(fontSize: 25))),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: Text(
-                        'Bonjour! What would you like?',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text(
+                        'Choose the best reply',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 26),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: colors.surface,
+                          borderRadius: const BorderRadius.all(Radius.circular(28)),
+                        ),
+                        child: const Row(
+                          children: <Widget>[
+                            CircleAvatar(radius: 25, child: Text('☕', style: TextStyle(fontSize: 25))),
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                'Bonjour! What would you like?',
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      for (final answer in const <String>[
+                        'Un café, s’il vous plaît.',
+                        'Où est la gare?',
+                        'Bonne nuit!',
+                      ]) ...<Widget>[
+                        _AnswerTile(
+                          answer: answer,
+                          selected: _answer == answer,
+                          correct: _answer != null && answer == 'Un café, s’il vous plaît.',
+                          onTap: () => setState(() => _answer = answer),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 30),
-              for (final answer in const <String>[
-                'Un café, s’il vous plaît.',
-                'Où est la gare?',
-                'Bonne nuit!',
-              ]) ...<Widget>[
-                _AnswerTile(
-                  answer: answer,
-                  selected: _answer == answer,
-                  correct: _answer != null && answer == 'Un café, s’il vous plaît.',
-                  onTap: () => setState(() => _answer = answer),
-                ),
-                const SizedBox(height: 12),
-              ],
-              const Spacer(),
               if (_answer != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 14),

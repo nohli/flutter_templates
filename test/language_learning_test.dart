@@ -44,6 +44,23 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('lesson feedback fits a compact phone', (WidgetTester tester) async {
+    tester.view
+      ..devicePixelRatio = 1
+      ..physicalSize = const Size(320, 640);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: LanguageLearningHomeScreen()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey<String>('language-current-lesson')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Un café, s’il vous plaît.'));
+    await tester.pump();
+
+    expect(find.text('Perfect — that’s a polite way to order.'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('language template follows its requested dark appearance', (WidgetTester tester) async {
     await tester.pumpWidget(const MaterialApp(home: LanguageLearningHomeScreen(appearance: AppAppearance.dark)));
     await tester.pump();

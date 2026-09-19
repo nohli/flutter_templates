@@ -201,7 +201,11 @@ void main() {
     await _finishAnimations(tester);
     await tester.tap(find.text('Design Dispatch'));
     await _finishAnimations(tester);
-    await tester.tap(find.widgetWithText(ActionChip, '127'));
+    final reaction = find.widgetWithText(ActionChip, '127');
+    await tester.ensureVisible(reaction);
+    await _finishAnimations(tester);
+    expect(reaction.hitTestable(), findsOneWidget);
+    await tester.tap(reaction.hitTestable());
     await tester.pump();
     expect(find.text('128'), findsOneWidget);
   });

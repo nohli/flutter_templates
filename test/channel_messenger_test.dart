@@ -20,7 +20,7 @@ void main() {
   testWidgets('channel messenger filters folders and opens an interactive channel', (WidgetTester tester) async {
     tester.view
       ..devicePixelRatio = 1
-      ..physicalSize = const Size(430, 932);
+      ..physicalSize = const Size(320, 640);
     addTearDown(tester.view.reset);
 
     await tester.pumpWidget(const MaterialApp(home: ChannelMessengerHomeScreen()));
@@ -37,7 +37,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ChannelDetailScreen), findsOneWidget);
     expect(find.text('127'), findsOneWidget);
-    await tester.tap(find.widgetWithText(ActionChip, '127'));
+    final reaction = find.widgetWithText(ActionChip, '127');
+    await tester.ensureVisible(reaction);
+    await tester.pumpAndSettle();
+    expect(reaction.hitTestable(), findsOneWidget);
+    await tester.tap(reaction.hitTestable());
     await tester.pump();
     expect(find.text('128'), findsOneWidget);
     await tester.tap(find.text('Subscribed'));

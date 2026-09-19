@@ -16,7 +16,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [24, 29, 32, 36]
+        include:
+          - api-level: 24
+            command: flutter test integration_test
+          - api-level: 29
+            command: flutter test integration_test --no-enable-impeller
+          - api-level: 32
+            command: flutter test integration_test --no-enable-impeller
+          - api-level: 36
+            command: flutter test integration_test --no-enable-impeller
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -43,12 +51,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86_64
-          script: |
-            if [ "${{ matrix.api-level }}" = 24 ]; then
-              flutter test integration_test
-            else
-              flutter test integration_test --no-enable-impeller
-            fi
+          script: ${{ matrix.command }}
 
   ios:
     name: iOS

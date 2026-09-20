@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [24, 30, 35]
+        api-level: [24, 29, 32, 36]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -41,9 +41,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          profile: medium_phone
+          target: google_apis
           arch: x86_64
-          script: flutter test integration_test
+          script: flutter test integration_test --no-enable-impeller
 
   ios:
     name: iOS
@@ -67,7 +67,6 @@ jobs:
         id: simulator
         uses: futureware-tech/simulator-action@v5
         with:
-          os_version: '26.2'
           model: 'iPhone 17'
       - name: Test
         run: flutter test integration_test -d "${{ steps.simulator.outputs.udid }}"
@@ -93,11 +92,9 @@ jobs:
           chrome-version: stable
           install-chromedriver: true
       - name: Test
-        env:
-          CHROME_EXECUTABLE: ${{ steps.browser.outputs.chrome-path }}
         run: |
           "${{ steps.browser.outputs.chromedriver-path }}" --port=4444 &
-          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_smoke_test.dart -d web-server
+          flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_smoke_test.dart -d web-server --chrome-binary="${{ steps.browser.outputs.chrome-path }}"
 
   linux:
     name: Linux

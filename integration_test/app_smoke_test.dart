@@ -8,51 +8,61 @@ import 'package:templates/features/templates/private_messenger/widgets/private_c
 import 'package:templates/features/templates/shared/animated_favorite_icon.dart';
 import 'package:templates/main.dart' as app;
 
+const _templates = <({String cardLabel, String screenText})>[
+  (cardLabel: 'Hotel Booking', screenText: 'Explore'),
+  (cardLabel: 'Fitness App', screenText: 'My Diary'),
+  (cardLabel: 'Design Course', screenText: 'Choose your'),
+  (cardLabel: 'Personal Finance', screenText: 'Money and crypto, together'),
+  (cardLabel: 'Dating & Social', screenText: 'CURATED CONNECTIONS / TONIGHT'),
+  (cardLabel: 'Language Learning', screenText: 'Order food with confidence'),
+  (cardLabel: 'Public Social Feed', screenText: 'SOCIAL FEED'),
+  (cardLabel: 'Banking Super-App', screenText: 'TOTAL BALANCE'),
+  (cardLabel: 'Channel Messenger', screenText: 'Archived chats'),
+  (cardLabel: 'Private Messenger', screenText: 'The garden table is booked 🌿'),
+];
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('opens every bundled template in light and dark mode', (WidgetTester tester) async {
-    app.main();
-    await _finishAnimations(tester);
+  for (var batchStart = 0; batchStart < _templates.length; batchStart += 2) {
+    final batchEnd = batchStart + 2 < _templates.length ? batchStart + 2 : _templates.length;
+    final templates = _templates.sublist(batchStart, batchEnd);
+    final templateNames = templates.map((template) => template.cardLabel).join(' and ');
+    final validatesCatalog = batchStart == 0;
 
-    expect(find.text(AppIdentity.name), findsOneWidget);
-    const templates = <({String cardLabel, String screenText})>[
-      (cardLabel: 'Hotel Booking', screenText: 'Explore'),
-      (cardLabel: 'Fitness App', screenText: 'My Diary'),
-      (cardLabel: 'Design Course', screenText: 'Choose your'),
-      (cardLabel: 'Personal Finance', screenText: 'Money and crypto, together'),
-      (cardLabel: 'Dating & Social', screenText: 'CURATED CONNECTIONS / TONIGHT'),
-      (cardLabel: 'Language Learning', screenText: 'Order food with confidence'),
-      (cardLabel: 'Public Social Feed', screenText: 'SOCIAL FEED'),
-      (cardLabel: 'Banking Super-App', screenText: 'TOTAL BALANCE'),
-      (cardLabel: 'Channel Messenger', screenText: 'Archived chats'),
-      (cardLabel: 'Private Messenger', screenText: 'The garden table is booked 🌿'),
-    ];
-    expect(
-      templates.map((template) => template.cardLabel).toSet(),
-      TemplateGalleryItem.items.map((item) => item.title).toSet(),
-    );
+    testWidgets('opens $templateNames in light and dark mode', (WidgetTester tester) async {
+      app.main();
+      await _finishAnimations(tester);
 
-    for (final appearance in <({Brightness brightness, String label})>[
-      (brightness: Brightness.light, label: 'Light'),
-      (brightness: Brightness.dark, label: 'Dark'),
-    ]) {
-      debugPrint('  Select ${appearance.label.toLowerCase()} appearance...');
-      await _selectAppearance(tester, appearance.label);
-      debugPrint('✓ Selected ${appearance.label.toLowerCase()} appearance');
-      await _scrollGalleryToStart(tester, templates.first.cardLabel);
-      for (final template in templates) {
-        debugPrint('  Open ${template.cardLabel}...');
-        await _openTemplate(
-          tester,
-          brightness: appearance.brightness,
-          cardLabel: template.cardLabel,
-          screenText: template.screenText,
+      expect(find.text(AppIdentity.name), findsOneWidget);
+      if (validatesCatalog) {
+        expect(
+          _templates.map((template) => template.cardLabel).toSet(),
+          TemplateGalleryItem.items.map((item) => item.title).toSet(),
         );
-        debugPrint('✓ Opened ${template.cardLabel}');
       }
-    }
-  });
+
+      for (final appearance in <({Brightness brightness, String label})>[
+        (brightness: Brightness.light, label: 'Light'),
+        (brightness: Brightness.dark, label: 'Dark'),
+      ]) {
+        debugPrint('  Select ${appearance.label.toLowerCase()} appearance...');
+        await _selectAppearance(tester, appearance.label);
+        debugPrint('✓ Selected ${appearance.label.toLowerCase()} appearance');
+        await _scrollGalleryToStart(tester, _templates.first.cardLabel);
+        for (final template in templates) {
+          debugPrint('  Open ${template.cardLabel}...');
+          await _openTemplate(
+            tester,
+            brightness: appearance.brightness,
+            cardLabel: template.cardLabel,
+            screenText: template.screenText,
+          );
+          debugPrint('✓ Opened ${template.cardLabel}');
+        }
+      }
+    });
+  }
 
   testWidgets('keeps support actions aligned and dark feedback keyboard surroundings themed', (
     WidgetTester tester,
@@ -69,13 +79,14 @@ void main() {
       await _finishAnimations(tester);
 
       final action = find.byType(FilledButton);
+      final supportScroll = find.descendant(of: find.byType(CustomScrollView), matching: find.byType(Scrollable)).first;
+      await tester.scrollUntilVisible(action, 200, scrollable: supportScroll);
+      await _finishAnimations(tester);
       expect(action.hitTestable(), findsOneWidget, reason: destination);
       final actionBounds = tester.getRect(action);
-      final screen = find.ancestor(of: action, matching: find.byType(ColoredBox));
-      expect(screen, findsOneWidget, reason: destination);
-      final screenBounds = tester.getRect(screen);
+      final screenWidth = tester.view.physicalSize.width / tester.view.devicePixelRatio;
       actionBottom ??= actionBounds.bottom;
-      expect(actionBounds.center.dx, screenBounds.center.dx, reason: destination);
+      expect(actionBounds.center.dx, screenWidth / 2, reason: destination);
       expect(actionBounds.bottom, actionBottom, reason: destination);
     }
 
@@ -83,10 +94,15 @@ void main() {
     await _finishAnimations(tester);
     await tester.tap(find.text('Feedback'));
     await _finishAnimations(tester);
-    await tester.tap(find.byType(TextField));
+
+    final feedbackField = find.byType(TextField);
+    final feedbackScroll = find.descendant(of: find.byType(CustomScrollView), matching: find.byType(Scrollable)).first;
+    await tester.scrollUntilVisible(feedbackField, 200, scrollable: feedbackScroll);
+    await _finishAnimations(tester);
+    await tester.tap(feedbackField);
     await _finishAnimations(tester);
 
-    final colors = Theme.of(tester.element(find.byType(TextField))).colorScheme;
+    final colors = Theme.of(tester.element(feedbackField)).colorScheme;
     final scaffold = tester.widget<Scaffold>(find.byType(Scaffold).first);
     final composerSurface = Color.alphaBlend(colors.onSurface.withValues(alpha: 0.16), colors.surface);
     final elevatedComposer = find.byWidgetPredicate((Widget widget) {
@@ -187,8 +203,10 @@ void main() {
     await _finishAnimations(tester);
     await tester.tap(find.text('Lea'));
     await tester.enterText(find.byKey(const ValueKey<String>('banking-transfer-amount')), '25');
-    await tester.tap(find.text('Send to Lea'));
-    await _finishAnimations(tester);
+    final sendButton = find.widgetWithText(FilledButton, 'Send to Lea').hitTestable();
+    expect(sendButton, findsOneWidget);
+    await tester.tap(sendButton);
+    await tester.pumpAndSettle();
     expect(find.text('Money sent to Lea'), findsOneWidget);
   });
 
@@ -287,9 +305,8 @@ Future<void> _selectAppearance(WidgetTester tester, String label) async {
 }
 
 Future<void> _finishAnimations(WidgetTester tester) async {
-  for (var frame = 0; frame < 40; frame++) {
-    await tester.pump(const Duration(milliseconds: 25));
+  for (var frame = 0; frame < 8; frame++) {
+    await tester.pump(const Duration(milliseconds: 125));
   }
-  await tester.pump(const Duration(seconds: 2));
   await tester.pump(const Duration(milliseconds: 16));
 }

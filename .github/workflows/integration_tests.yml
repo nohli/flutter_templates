@@ -3,7 +3,27 @@ name: Integration Tests
 on:
   workflow_dispatch:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - '.github/dependabot.yml'
+      - '.github/workflows/dependency_review.yml'
+      - '.github/workflows/flutter_build.yml'
+      - '.github/workflows/flutter_checks.yml'
+      - 'analysis_options.yaml'
+      - 'test/**'
   push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - '.github/dependabot.yml'
+      - '.github/workflows/dependency_review.yml'
+      - '.github/workflows/flutter_build.yml'
+      - '.github/workflows/flutter_checks.yml'
+      - 'analysis_options.yaml'
+      - 'test/**'
 
 permissions:
   contents: read

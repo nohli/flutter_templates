@@ -59,6 +59,9 @@ ios/Runner.ipa
 ios/Runner.app.dSYM.zip
 android/app/release/app-release.aab
 
+# Local Code Push configuration
+/shorebird.yaml
+
 # Local credentials and signing material
 .env
 .env.*

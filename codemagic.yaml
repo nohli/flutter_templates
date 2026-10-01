@@ -1,6 +1,8 @@
 workflows:
   ios:
     name: ios
+    labels:
+      - ios
     integrations:
       app_store_connect: Codemagic
     instance_type: mac_mini_m2
@@ -14,7 +16,7 @@ workflows:
           include: true
           source: true
     environment:
-      ios_signing:
+      ios_signing: &ios_signing
         distribution_type: app_store
         bundle_identifier: com.achimsapps.templates
       vars:
@@ -22,11 +24,13 @@ workflows:
       flutter: stable
       xcode: latest
     scripts:
-      - name: Get Packages
+      - &get_packages
+        name: Get Packages
         script: |
           set -eu
           flutter pub get
-      - name: Apply Signing Profiles
+      - &apply_signing
+        name: Apply Signing Profiles
         script: xcode-project use-profiles --project ios/Runner.xcodeproj
       - name: Build IPA
         script: |
@@ -51,7 +55,7 @@ workflows:
         submit_to_testflight: true
         beta_groups:
           - Tester
-      slack:
+      slack: &failure_notifications
         channel: '#codemagic-builds'
         notify_on_build_start: false
         notify:
@@ -60,6 +64,8 @@ workflows:
 
   android:
     name: android
+    labels:
+      - android
     instance_type: mac_mini_m2
     max_build_duration: 45
     triggering:
@@ -130,3 +136,198 @@ workflows:
         notify:
           success: false
           failure: true
+
+  ios_shorebird:
+    name: ios shorebird
+    labels:
+      - ios shorebird
+    integrations:
+      app_store_connect: Codemagic
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    triggering:
+      cancel_previous_builds: true
+    environment:
+      groups:
+        - shorebird
+      ios_signing: *ios_signing
+      vars:
+        CM_CLONE_UNSHALLOW: 'true'
+      flutter: stable
+      xcode: latest
+    scripts:
+      - &prepare_shorebird
+        name: Prepare Shorebird Configuration
+        script: ruby tool/prepare_shorebird.rb
+      - &install_shorebird
+        name: Install Shorebird
+        script: |
+          set -eu
+          : "${SHOREBIRD_TOKEN:?Add SHOREBIRD_TOKEN to the shorebird group for this application}"
+          shorebird_root="$HOME/.shorebird"
+          if [ ! -d "$shorebird_root" ]; then
+            git clone -b stable https://github.com/shorebirdtech/shorebird.git "$shorebird_root"
+          fi
+          "$shorebird_root/bin/shorebird" --version
+          echo "PATH=$shorebird_root/bin:$PATH" >> "$CM_ENV"
+      - *get_packages
+      - *apply_signing
+      - name: Build IPA
+        script: |
+          set -eu
+          shallow_repository="$(git rev-parse --is-shallow-repository)"
+          [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
+          build_number="$(git rev-list --count HEAD)"
+          shorebird release ios --flutter-version=latest \
+            --build-number="$build_number" \
+            --export-options-plist=/Users/builder/export_options.plist
+      - name: Verify IPA
+        script: |
+          set -eu
+          ipa_path="$(find build/ios/ipa -maxdepth 1 -type f -name '*.ipa' -print -quit)"
+          [ -n "$ipa_path" ] || { echo "The iOS build did not produce an IPA" >&2; exit 1; }
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/archive/*.xcarchive/dSYMs/**/*.dSYM
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        beta_groups:
+          - Tester
+      slack: *failure_notifications
+
+  android_shorebird:
+    name: android shorebird
+    labels:
+      - android shorebird
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    triggering:
+      cancel_previous_builds: true
+    environment:
+      groups:
+        - google_play_credentials
+        - shorebird
+      android_signing:
+        - Keystore
+      vars:
+        CM_CLONE_UNSHALLOW: 'true'
+      flutter: stable
+    scripts:
+      - *prepare_shorebird
+      - *install_shorebird
+      - name: Get Packages
+        script: |
+          set -eu
+          flutter pub get
+      - name: Build App Bundle
+        script: |
+          set -eu
+          shallow_repository="$(git rev-parse --is-shallow-repository)"
+          [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
+          build_number="$(git rev-list --count HEAD)"
+          shorebird release android --flutter-version=latest --build-number="$build_number"
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+      - build/app/outputs/mapping/release/mapping.txt
+    publishing:
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+      slack:
+        channel: '#codemagic-builds'
+        notify_on_build_start: false
+        notify:
+          success: false
+          failure: true
+
+  ios_shorebird_patch:
+    name: ios shorebird patch
+    labels:
+      - ios shorebird patch
+    integrations:
+      app_store_connect: Codemagic
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    triggering:
+      cancel_previous_builds: true
+    inputs: &patch_inputs
+      release_version:
+        description: Exact installed build to fix, such as 1.0.0+1.2.3
+        type: string
+        default: ''
+      dry_run:
+        description: Dry-run - validate without uploading a patch
+        type: boolean
+        default: false
+    environment:
+      groups:
+        - shorebird
+      ios_signing: *ios_signing
+      flutter: stable
+      xcode: latest
+    scripts:
+      - &validate_patch
+        name: Validate Patch Inputs
+        script: |
+          set -eu
+          export SHOREBIRD_RELEASE_VERSION="${{ inputs.release_version }}"
+          ruby -e 'abort "Enter an exact app version and build, such as 1.0.0+123" unless ENV.fetch("SHOREBIRD_RELEASE_VERSION", "").match?(/\A[0-9]+(?:\.[0-9]+){1,2}\+[0-9]+\z/)'
+          case "${{ inputs.dry_run }}" in
+            true|false) ;;
+            *) echo "dry_run must be true or false" >&2; exit 1 ;;
+          esac
+          : "${CM_ENV:?Codemagic must provide its environment file}"
+          printf 'SHOREBIRD_RELEASE_VERSION=%s\n' "$SHOREBIRD_RELEASE_VERSION" >> "$CM_ENV"
+      - *prepare_shorebird
+      - *install_shorebird
+      - *get_packages
+      - *apply_signing
+      - name: Publish iOS Patch
+        script: |
+          set -eu
+          set -- ios "--release-version=$SHOREBIRD_RELEASE_VERSION" --track=staging --export-options-plist=/Users/builder/export_options.plist
+          if [ "${{ inputs.dry_run }}" = true ]; then
+            set -- "$@" --dry-run
+          fi
+          shorebird patch "$@"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/archive/*.xcarchive/dSYMs/**/*.dSYM
+    publishing:
+      slack: *failure_notifications
+
+  android_shorebird_patch:
+    name: android shorebird patch
+    labels:
+      - android shorebird patch
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    triggering:
+      cancel_previous_builds: true
+    inputs: *patch_inputs
+    environment:
+      groups:
+        - shorebird
+      android_signing:
+        - Keystore
+      flutter: stable
+    scripts:
+      - *validate_patch
+      - *prepare_shorebird
+      - *install_shorebird
+      - *get_packages
+      - name: Publish Android Patch
+        script: |
+          set -eu
+          set -- android "--release-version=$SHOREBIRD_RELEASE_VERSION" --track=staging
+          if [ "${{ inputs.dry_run }}" = true ]; then
+            set -- "$@" --dry-run
+          fi
+          shorebird patch "$@"
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+      - build/app/outputs/mapping/release/mapping.txt
+    publishing:
+      slack: *failure_notifications

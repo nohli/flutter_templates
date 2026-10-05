@@ -5,8 +5,8 @@ abstract final class AppIdentity {
       'All names, prices, ratings, reviews, activity values, balances, transactions, and other content inside the gallery are fictional examples.';
   static const trademarkDisclaimer =
       'Flutter and the related logo are trademarks of Google LLC. Flutter UI Templates is not affiliated with or otherwise sponsored by Google LLC. The app is now named UI Templates.';
-  static const privacyPolicyUrl = 'https://achim.io/privacy';
-  static const supportUrl = 'https://achim.io';
+  static const privacyPolicyUrl = 'https://achim.ai/privacy';
+  static const supportUrl = 'https://achim.ai';
   static const supportEmail = 'flutter-ui-templates@achim.io';
   static const sourceUrl = 'https://github.com/nohli/flutter_templates';
   static final privacyPolicyUri = Uri.parse(privacyPolicyUrl);

@@ -44,12 +44,20 @@ workflows:
       - name: Verify IPA
         script: |
           set -eu
-          ipa_path="$(find build/ios/ipa -maxdepth 1 -type f -name '*.ipa' -print -quit)"
-          [ -n "$ipa_path" ] || { echo "The iOS build did not produce an IPA" >&2; exit 1; }
+          : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
+          set -- "$CM_BUILD_DIR/build/ios/ipa/"*.ipa
+          for artifact in "$@"; do
+            [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty IPA artifact: $artifact" >&2; exit 1; }
+          done
     artifacts:
       - build/ios/ipa/*.ipa
       - build/ios/archive/*.xcarchive/dSYMs/**/*.dSYM
     publishing:
+      scripts:
+        - name: Verify Collected IPA
+          script: |
+            set -eu
+            ruby -rjson -e 'artifacts = JSON.parse(ENV.fetch("CM_ARTIFACT_LINKS", "[]")); abort "Codemagic collected no .ipa artifact; publishing cannot succeed" unless artifacts.any? { |artifact| File.extname(artifact.fetch("name", "")) == ".ipa" }'
       app_store_connect:
         auth: integration
         submit_to_testflight: true
@@ -90,10 +98,23 @@ workflows:
           [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
           build_number="$(git rev-list --count HEAD)"
           flutter build appbundle --release --build-number="$build_number"
+      - name: Verify App Bundle
+        script: |
+          set -eu
+          : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
+          set -- "$CM_BUILD_DIR/build/app/outputs/bundle/release/"*.aab
+          for artifact in "$@"; do
+            [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty App Bundle artifact: $artifact" >&2; exit 1; }
+          done
     artifacts:
       - build/app/outputs/bundle/release/*.aab
       - build/app/outputs/mapping/release/mapping.txt
     publishing:
+      scripts:
+        - name: Verify Collected App Bundle
+          script: |
+            set -eu
+            ruby -rjson -e 'artifacts = JSON.parse(ENV.fetch("CM_ARTIFACT_LINKS", "[]")); abort "Codemagic collected no .aab artifact; publishing cannot succeed" unless artifacts.any? { |artifact| File.extname(artifact.fetch("name", "")) == ".aab" }'
       google_play:
         credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
         track: internal
@@ -130,6 +151,11 @@ workflows:
     artifacts:
       - build/web/**
     publishing:
+      scripts:
+        - name: Verify Collected Web
+          script: |
+            set -eu
+            ruby -rjson -e 'artifacts = JSON.parse(ENV.fetch("CM_ARTIFACT_LINKS", "[]")); abort "Codemagic collected no web artifacts" if artifacts.empty?'
       slack:
         channel: '#codemagic-builds'
         notify_on_build_start: false
@@ -184,12 +210,20 @@ workflows:
       - name: Verify IPA
         script: |
           set -eu
-          ipa_path="$(find build/ios/ipa -maxdepth 1 -type f -name '*.ipa' -print -quit)"
-          [ -n "$ipa_path" ] || { echo "The iOS build did not produce an IPA" >&2; exit 1; }
+          : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
+          set -- "$CM_BUILD_DIR/build/ios/ipa/"*.ipa
+          for artifact in "$@"; do
+            [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty IPA artifact: $artifact" >&2; exit 1; }
+          done
     artifacts:
       - build/ios/ipa/*.ipa
       - build/ios/archive/*.xcarchive/dSYMs/**/*.dSYM
     publishing:
+      scripts:
+        - name: Verify Collected IPA
+          script: |
+            set -eu
+            ruby -rjson -e 'artifacts = JSON.parse(ENV.fetch("CM_ARTIFACT_LINKS", "[]")); abort "Codemagic collected no .ipa artifact; publishing cannot succeed" unless artifacts.any? { |artifact| File.extname(artifact.fetch("name", "")) == ".ipa" }'
       app_store_connect:
         auth: integration
         submit_to_testflight: true
@@ -228,10 +262,23 @@ workflows:
           [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
           build_number="$(git rev-list --count HEAD)"
           shorebird release android --flutter-version=latest --build-number="$build_number"
+      - name: Verify App Bundle
+        script: |
+          set -eu
+          : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
+          set -- "$CM_BUILD_DIR/build/app/outputs/bundle/release/"*.aab
+          for artifact in "$@"; do
+            [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty App Bundle artifact: $artifact" >&2; exit 1; }
+          done
     artifacts:
       - build/app/outputs/bundle/release/*.aab
       - build/app/outputs/mapping/release/mapping.txt
     publishing:
+      scripts:
+        - name: Verify Collected App Bundle
+          script: |
+            set -eu
+            ruby -rjson -e 'artifacts = JSON.parse(ENV.fetch("CM_ARTIFACT_LINKS", "[]")); abort "Codemagic collected no .aab artifact; publishing cannot succeed" unless artifacts.any? { |artifact| File.extname(artifact.fetch("name", "")) == ".aab" }'
       google_play:
         credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
         track: internal

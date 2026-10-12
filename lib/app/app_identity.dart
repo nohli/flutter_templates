@@ -5,9 +5,12 @@ abstract final class AppIdentity {
       'All names, prices, ratings, reviews, activity values, balances, transactions, and other content inside the gallery are fictional examples.';
   static const trademarkDisclaimer =
       'Flutter and the related logo are trademarks of Google LLC. Flutter UI Templates is not affiliated with or otherwise sponsored by Google LLC. The app is now named UI Templates.';
-  static const privacyPolicyUrl = 'https://achim.ai/privacy';
-  static const supportUrl = 'https://achim.ai';
-  static const supportEmail = 'flutter-ui-templates@achim.io';
+  static const privacyPolicyUrl = String.fromEnvironment(
+    'PRIVACY_POLICY_URL',
+    defaultValue: 'https://example.com/privacy',
+  );
+  static const supportUrl = String.fromEnvironment('SUPPORT_URL', defaultValue: 'https://example.com');
+  static const supportEmail = String.fromEnvironment('SUPPORT_EMAIL', defaultValue: 'support@example.com');
   static const sourceUrl = 'https://github.com/nohli/flutter_templates';
   static final privacyPolicyUri = Uri.parse(privacyPolicyUrl);
   static final supportUri = Uri.parse(supportUrl);

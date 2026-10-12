@@ -23,6 +23,17 @@ const _fontLicenseAssets = <String>[
 const _fontNames = <String>['Work Sans', 'Roboto', 'Bricolage Grotesque', 'Fraunces', 'Space Grotesk'];
 
 void main() {
+  test('contact settings use generic defaults or supplied build values', () {
+    const isContactFixture = bool.fromEnvironment('IS_CONTACT_FIXTURE');
+
+    expect(AppIdentity.supportEmail, isContactFixture ? 'support@sample.test' : 'support@example.com');
+    expect(
+      AppIdentity.privacyPolicyUri,
+      Uri.parse(isContactFixture ? 'https://sample.test/privacy' : 'https://example.com/privacy'),
+    );
+    expect(developerPortfolioUri, Uri.parse(isContactFixture ? 'https://sample.test' : 'https://example.com'));
+  });
+
   test('feedback email preserves spaces and reserved characters', () {
     final uri = feedbackEmailUri('Hotel & fitness + course? Yes.');
 
@@ -89,7 +100,7 @@ void main() {
     await tester.tap(find.text('Send'));
     await tester.pumpAndSettle();
 
-    expect(find.text('No email app is available. Contact flutter-ui-templates@achim.io.'), findsOneWidget);
+    expect(find.text('No email app is available. Contact ${AppIdentity.supportEmail}.'), findsOneWidget);
     expect(find.text('Please keep this draft.'), findsOneWidget);
   });
 
@@ -119,7 +130,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(launchedUri, supportEmailUri());
-    expect(find.text('No email app is available. Contact flutter-ui-templates@achim.io.'), findsOneWidget);
+    expect(find.text('No email app is available. Contact ${AppIdentity.supportEmail}.'), findsOneWidget);
   });
 
   testWidgets('invite sends one native share request with a nonempty origin', (WidgetTester tester) async {

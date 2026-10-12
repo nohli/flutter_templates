@@ -26,6 +26,13 @@ workflows:
       flutter: stable
       xcode: latest
     scripts:
+      - &check_app_settings
+        name: Check Release Contact Settings
+        script: |
+          set -eu
+          : "${SUPPORT_EMAIL:?Add SUPPORT_EMAIL to the release_config group}"
+          : "${PRIVACY_POLICY_URL:?Add PRIVACY_POLICY_URL to the release_config group}"
+          : "${SUPPORT_URL:?Add SUPPORT_URL to the release_config group}"
       - &get_packages
         name: Get Packages
         script: |
@@ -42,7 +49,10 @@ workflows:
           build_number="$(git rev-list --count HEAD)"
           flutter build ipa --release \
             --build-number="$build_number" \
-            --export-options-plist=/Users/builder/export_options.plist
+            --export-options-plist=/Users/builder/export_options.plist \
+            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+            --dart-define="SUPPORT_URL=$SUPPORT_URL"
       - name: Verify IPA
         script: |
           set -eu
@@ -90,6 +100,7 @@ workflows:
         CM_CLONE_UNSHALLOW: 'true'
       flutter: stable
     scripts:
+      - *check_app_settings
       - name: Get Packages
         script: |
           set -eu
@@ -100,7 +111,10 @@ workflows:
           shallow_repository="$(git rev-parse --is-shallow-repository)"
           [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
           build_number="$(git rev-list --count HEAD)"
-          flutter build appbundle --release --build-number="$build_number"
+          flutter build appbundle --release --build-number="$build_number" \
+            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+            --dart-define="SUPPORT_URL=$SUPPORT_URL"
       - name: Verify App Bundle
         script: |
           set -eu
@@ -140,12 +154,17 @@ workflows:
         - release_config
       flutter: stable
     scripts:
+      - *check_app_settings
       - name: Get Packages
         script: |
           set -eu
           flutter pub get
       - name: Build Web
-        script: flutter build web --release
+        script: |
+          flutter build web --release \
+            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+            --dart-define="SUPPORT_URL=$SUPPORT_URL"
       - name: Publish Web
         script: |
           set -eu
@@ -188,6 +207,7 @@ workflows:
       flutter: stable
       xcode: latest
     scripts:
+      - *check_app_settings
       - &prepare_shorebird
         name: Prepare Shorebird Configuration
         script: ruby tool/prepare_shorebird.rb
@@ -212,7 +232,11 @@ workflows:
           build_number="$(git rev-list --count HEAD)"
           shorebird release ios --flutter-version=latest \
             --build-number="$build_number" \
-            --export-options-plist=/Users/builder/export_options.plist
+            --export-options-plist=/Users/builder/export_options.plist \
+            -- \
+            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+            --dart-define="SUPPORT_URL=$SUPPORT_URL"
       - name: Verify IPA
         script: |
           set -eu
@@ -256,6 +280,7 @@ workflows:
         CM_CLONE_UNSHALLOW: 'true'
       flutter: stable
     scripts:
+      - *check_app_settings
       - *prepare_shorebird
       - *install_shorebird
       - name: Get Packages
@@ -268,7 +293,10 @@ workflows:
           shallow_repository="$(git rev-parse --is-shallow-repository)"
           [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
           build_number="$(git rev-list --count HEAD)"
-          shorebird release android --flutter-version=latest --build-number="$build_number"
+          shorebird release android --flutter-version=latest --build-number="$build_number" -- \
+            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+            --dart-define="SUPPORT_URL=$SUPPORT_URL"
       - name: Verify App Bundle
         script: |
           set -eu
@@ -335,6 +363,7 @@ workflows:
           esac
           : "${CM_ENV:?Codemagic must provide its environment file}"
           printf 'SHOREBIRD_RELEASE_VERSION=%s\n' "$SHOREBIRD_RELEASE_VERSION" >> "$CM_ENV"
+      - *check_app_settings
       - *prepare_shorebird
       - *install_shorebird
       - *get_packages
@@ -346,7 +375,10 @@ workflows:
           if [ "${{ inputs.dry_run }}" = true ]; then
             set -- "$@" --dry-run
           fi
-          shorebird patch "$@"
+          shorebird patch "$@" -- \
+            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+            --dart-define="SUPPORT_URL=$SUPPORT_URL"
     artifacts:
       - build/ios/ipa/*.ipa
       - build/ios/archive/*.xcarchive/dSYMs/**/*.dSYM
@@ -371,6 +403,7 @@ workflows:
       flutter: stable
     scripts:
       - *validate_patch
+      - *check_app_settings
       - *prepare_shorebird
       - *install_shorebird
       - *get_packages
@@ -381,7 +414,10 @@ workflows:
           if [ "${{ inputs.dry_run }}" = true ]; then
             set -- "$@" --dry-run
           fi
-          shorebird patch "$@"
+          shorebird patch "$@" -- \
+            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+            --dart-define="SUPPORT_URL=$SUPPORT_URL"
     artifacts:
       - build/app/outputs/bundle/release/*.aab
       - build/app/outputs/mapping/release/mapping.txt

@@ -33,22 +33,30 @@ The examples use sample content and need no backend or hosting account to run.
 
 ## Forking and optional releases
 
-Local development requires only Flutter and the dependencies above. The bundle/package ID and public contact links
-belong to this published gallery; before distributing a fork, choose your own identifiers in the platform projects
-and iOS signing configuration, and update `lib/app/app_identity.dart` with your contact links.
+Local development requires only Flutter and the dependencies above. The bundle/package ID belongs to this published
+gallery; before distributing a fork, choose your own identifiers in the platform projects and iOS signing configuration.
 Select your own signing team in Xcode for physical-device builds. Codemagic applies the team from your signing profiles.
+
+Contact settings have generic defaults in `lib/app/app_identity.dart`. Plain `fvm flutter run` uses these defaults;
+there is no environment file to create or load. Optional `--dart-define` arguments can override
+`SUPPORT_EMAIL`, `PRIVACY_POLICY_URL` and `SUPPORT_URL` at build time.
+These values are public and compiled into the app; never pass passwords, API tokens or signing keys this way.
 
 `codemagic.yaml` is an optional release template. Configure your own accounts and signing files in
 [Codemagic](https://codemagic.io/apps), then add these app-level environment groups:
 
 | Group | Variables | Used by |
 |---|---|---|
-| `release_config` | `APP_STORE_CONNECT_INTEGRATION` (integration name), `ANDROID_KEYSTORE_REFERENCE` (uploaded keystore reference), `TESTFLIGHT_BETA_GROUP` (tester group name), `SLACK_CHANNEL` (notification channel) | Set the values used by your selected workflows |
+| `release_config` | `SUPPORT_EMAIL`, `PRIVACY_POLICY_URL`, `SUPPORT_URL` (public app contacts), `APP_STORE_CONNECT_INTEGRATION` (integration name), `ANDROID_KEYSTORE_REFERENCE` (uploaded keystore reference), `TESTFLIGHT_BETA_GROUP` (tester group name), `SLACK_CHANNEL` (notification channel) | Public contacts for every release and patch, plus the selected workflow's account references |
 | `google_play_credentials` | `GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS` (secret service-account JSON) | Android store releases |
 | `cloudflare_credentials` | `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN` (secret), `CLOUDFLARE_PAGES_PROJECT` | Optional web publishing to your own existing Pages project |
 | `shorebird` | `SHOREBIRD_APP_ID`, `SHOREBIRD_TOKEN` (secret) | Optional mobile Code Push |
 
 Account references and deployment destinations have no checked-in owner-specific defaults.
+Codemagic passes the contact values from `release_config` directly to Flutter and stops if a release contact value is missing or empty.
+`APP_STORE_CONNECT_INTEGRATION` selects a saved Apple API key by its integration name for iOS signing and uploads.
+You may replace its environment reference with that exact saved name; keeping the variable lets forks choose their own.
+See [Codemagic's Apple integration configuration](https://docs.codemagic.io/yaml-quick-start/building-a-native-ios-app/).
 Only iOS releases trigger automatically on `main`; Android, web, and Shorebird workflows are manual.
 Publishing requires the selected workflow's account configuration; for a web build without publishing, run
 `fvm flutter build web --release`. Optional [Terraform hosting configuration](infrastructure/cloudflare/README.md)

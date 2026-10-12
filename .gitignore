@@ -65,7 +65,6 @@ android/app/release/app-release.aab
 # Local credentials and signing material
 .env
 .env.*
-!.env.example
 *.jks
 *.keystore
 *.key

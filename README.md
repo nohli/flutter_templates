@@ -19,6 +19,43 @@ fvm flutter pub get
 fvm flutter run
 ```
 
+The first run needs no environment file, extra build flags, account or hosting setup.
+
+## Architecture
+
+- `lib/app/` owns the app shell, appearance, identity, and shared styling.
+- `lib/features/gallery/` lists and opens the examples.
+- `lib/features/templates/` keeps each example's screens, widgets, and sample models together; `shared/` holds reusable theme and motion helpers.
+- `lib/features/support/` owns help, feedback, invitations, and About.
+- `assets/` contains bundled artwork and fonts; `test/` and `integration_test/` cover app behavior.
+
+The examples use sample content and need no backend or hosting account to run.
+
+## Forking and optional releases
+
+Local development requires only Flutter and the dependencies above. The bundle/package ID and public contact links
+belong to this published gallery; before distributing a fork, choose your own identifiers in the platform projects
+and iOS signing configuration, and update `lib/app/app_identity.dart` with your contact links.
+Select your own signing team in Xcode for physical-device builds. Codemagic applies the team from your signing profiles.
+
+`codemagic.yaml` is an optional release template. Configure your own accounts and signing files in
+[Codemagic](https://codemagic.io/apps), then add these app-level environment groups:
+
+| Group | Variables | Used by |
+|---|---|---|
+| `release_config` | `APP_STORE_CONNECT_INTEGRATION` (integration name), `ANDROID_KEYSTORE_REFERENCE` (uploaded keystore reference), `TESTFLIGHT_BETA_GROUP` (tester group name), `SLACK_CHANNEL` (notification channel) | Set the values used by your selected workflows |
+| `google_play_credentials` | `GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS` (secret service-account JSON) | Android store releases |
+| `cloudflare_credentials` | `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN` (secret), `CLOUDFLARE_PAGES_PROJECT` | Optional web publishing to your own existing Pages project |
+| `shorebird` | `SHOREBIRD_APP_ID`, `SHOREBIRD_TOKEN` (secret) | Optional mobile Code Push |
+
+Account references and deployment destinations have no checked-in owner-specific defaults.
+Only iOS releases trigger automatically on `main`; Android, web, and Shorebird workflows are manual.
+Publishing requires the selected workflow's account configuration; for a web build without publishing, run
+`fvm flutter build web --release`. Optional [Terraform hosting configuration](infrastructure/cloudflare/README.md)
+provisions your own Pages project and custom domain.
+See [Codemagic's iOS signing](https://docs.codemagic.io/yaml-code-signing/signing-ios/) and
+[Android signing](https://docs.codemagic.io/yaml-code-signing/signing-android/) guides for the required signing files.
+
 ## Mobile Code Push
 
 Ordinary debug builds need no Shorebird account, CLI, or environment variables.

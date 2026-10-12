@@ -4,7 +4,7 @@ workflows:
     labels:
       - iOS
     integrations:
-      app_store_connect: Codemagic
+      app_store_connect: $APP_STORE_CONNECT_INTEGRATION
     instance_type: mac_mini_m2
     max_build_duration: 45
     triggering:
@@ -16,6 +16,8 @@ workflows:
           include: true
           source: true
     environment:
+      groups:
+        - release_config
       ios_signing: &ios_signing
         distribution_type: app_store
         bundle_identifier: com.achimsapps.templates
@@ -62,9 +64,9 @@ workflows:
         auth: integration
         submit_to_testflight: true
         beta_groups:
-          - Tester
+          - $TESTFLIGHT_BETA_GROUP
       slack: &failure_notifications
-        channel: '#codemagic-builds'
+        channel: $SLACK_CHANNEL
         notify_on_build_start: false
         notify:
           success: false
@@ -81,8 +83,9 @@ workflows:
     environment:
       groups:
         - google_play_credentials
+        - release_config
       android_signing:
-        - Keystore
+        - $ANDROID_KEYSTORE_REFERENCE
       vars:
         CM_CLONE_UNSHALLOW: 'true'
       flutter: stable
@@ -119,7 +122,7 @@ workflows:
         credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
         track: internal
       slack:
-        channel: '#codemagic-builds'
+        channel: $SLACK_CHANNEL
         notify_on_build_start: false
         notify:
           success: false
@@ -134,6 +137,7 @@ workflows:
     environment:
       groups:
         - cloudflare_credentials
+        - release_config
       flutter: stable
     scripts:
       - name: Get Packages
@@ -147,7 +151,8 @@ workflows:
           set -eu
           : "${CLOUDFLARE_ACCOUNT_ID:?Add CLOUDFLARE_ACCOUNT_ID to the cloudflare_credentials group}"
           : "${CLOUDFLARE_API_TOKEN:?Add CLOUDFLARE_API_TOKEN to the cloudflare_credentials group}"
-          npx --yes wrangler@4.133.0 pages deploy build/web --project-name=fluttertemplates
+          : "${CLOUDFLARE_PAGES_PROJECT:?Add CLOUDFLARE_PAGES_PROJECT to the cloudflare_credentials group}"
+          npx --yes wrangler@4.133.0 pages deploy build/web --project-name="$CLOUDFLARE_PAGES_PROJECT"
     artifacts:
       - build/web/**
     publishing:
@@ -157,7 +162,7 @@ workflows:
             set -eu
             ruby -rjson -e 'artifacts = JSON.parse(ENV.fetch("CM_ARTIFACT_LINKS", "[]")); abort "Codemagic collected no web artifacts" if artifacts.empty?'
       slack:
-        channel: '#codemagic-builds'
+        channel: $SLACK_CHANNEL
         notify_on_build_start: false
         notify:
           success: false
@@ -168,7 +173,7 @@ workflows:
     labels:
       - iOS Shorebird
     integrations:
-      app_store_connect: Codemagic
+      app_store_connect: $APP_STORE_CONNECT_INTEGRATION
     instance_type: mac_mini_m2
     max_build_duration: 45
     triggering:
@@ -176,6 +181,7 @@ workflows:
     environment:
       groups:
         - shorebird
+        - release_config
       ios_signing: *ios_signing
       vars:
         CM_CLONE_UNSHALLOW: 'true'
@@ -228,7 +234,7 @@ workflows:
         auth: integration
         submit_to_testflight: true
         beta_groups:
-          - Tester
+          - $TESTFLIGHT_BETA_GROUP
       slack: *failure_notifications
 
   android_shorebird:
@@ -243,8 +249,9 @@ workflows:
       groups:
         - google_play_credentials
         - shorebird
+        - release_config
       android_signing:
-        - Keystore
+        - $ANDROID_KEYSTORE_REFERENCE
       vars:
         CM_CLONE_UNSHALLOW: 'true'
       flutter: stable
@@ -283,7 +290,7 @@ workflows:
         credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
         track: internal
       slack:
-        channel: '#codemagic-builds'
+        channel: $SLACK_CHANNEL
         notify_on_build_start: false
         notify:
           success: false
@@ -294,7 +301,7 @@ workflows:
     labels:
       - iOS Shorebird Patch
     integrations:
-      app_store_connect: Codemagic
+      app_store_connect: $APP_STORE_CONNECT_INTEGRATION
     instance_type: mac_mini_m2
     max_build_duration: 45
     triggering:
@@ -311,6 +318,7 @@ workflows:
     environment:
       groups:
         - shorebird
+        - release_config
       ios_signing: *ios_signing
       flutter: stable
       xcode: latest
@@ -357,8 +365,9 @@ workflows:
     environment:
       groups:
         - shorebird
+        - release_config
       android_signing:
-        - Keystore
+        - $ANDROID_KEYSTORE_REFERENCE
       flutter: stable
     scripts:
       - *validate_patch

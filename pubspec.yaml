@@ -9,13 +9,13 @@ environment:
   flutter: '>=3.44.0'
 
 dependencies:
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^2.0.0
   flutter:
     sdk: flutter
   font_awesome_flutter: ^11.0.0
   intl: ^0.20.0
-  share_plus: ^13.3.0
-  url_launcher: ^6.3.0
+  share_plus: ^13.3.1
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.4

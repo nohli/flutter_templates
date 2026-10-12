@@ -85,7 +85,7 @@ jobs:
         run: flutter pub get
       - name: Simulator
         id: simulator
-        uses: futureware-tech/simulator-action@v5
+        uses: futureware-tech/simulator-action@v6
         with:
           model: 'iPhone 17'
       - name: Test

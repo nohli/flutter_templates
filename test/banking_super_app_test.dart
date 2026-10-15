@@ -96,6 +96,30 @@ void main() {
     expect(sendButton.hitTestable(), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('banking transfer stays usable when the keyboard opens after amount entry', (WidgetTester tester) async {
+    tester.view
+      ..devicePixelRatio = 1
+      ..physicalSize = const Size(402, 874);
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(const MaterialApp(home: BankingHomeScreen()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Send'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Lea'));
+    await tester.enterText(find.byKey(const ValueKey<String>('banking-transfer-amount')), '25');
+    tester.view.viewInsets = const FakeViewPadding(bottom: 350);
+    await tester.pumpAndSettle();
+
+    final sendButton = find.widgetWithText(FilledButton, 'Send to Lea');
+    expect(sendButton.hitTestable(), findsOneWidget);
+    expect(tester.getRect(sendButton).bottom, lessThanOrEqualTo(874 - 350));
+    await tester.tap(sendButton);
+    await tester.pumpAndSettle();
+    expect(find.text('Money sent to Lea'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
 
 double _contrastRatio(Color foreground, Color background) {

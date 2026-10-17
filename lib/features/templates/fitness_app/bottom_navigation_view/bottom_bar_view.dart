@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
+import '../../../../l10n/localizations.dart';
 
 class BottomBarView extends StatefulWidget {
   const BottomBarView({required this.selectedIndex, required this.onDestinationSelected, super.key});
@@ -219,7 +220,7 @@ class _TabButton extends StatelessWidget {
       child: Semantics(
         button: true,
         selected: isSelected,
-        label: destination.accessibilityLabel,
+        label: destination.isDiary ? context.l10n.diary : context.l10n.training,
         onTap: onPressed,
         child: ExcludeSemantics(
           child: Center(
@@ -323,13 +324,13 @@ class _TabDestination {
   const _TabDestination({
     required this.asset,
     required this.selectedAsset,
-    required this.accessibilityLabel,
+    required this.isDiary,
     required this.darkIcon,
   });
 
   final String asset;
   final String selectedAsset;
-  final String accessibilityLabel;
+  final bool isDiary;
   final IconData darkIcon;
 }
 
@@ -337,25 +338,25 @@ const _destinations = <_TabDestination>[
   _TabDestination(
     asset: 'assets/fitness_app/tab_1.png',
     selectedAsset: 'assets/fitness_app/tab_1s.png',
-    accessibilityLabel: 'Diary',
+    isDiary: true,
     darkIcon: Icons.menu_book_outlined,
   ),
   _TabDestination(
     asset: 'assets/fitness_app/tab_2.png',
     selectedAsset: 'assets/fitness_app/tab_2s.png',
-    accessibilityLabel: 'Training',
+    isDiary: false,
     darkIcon: Icons.fitness_center,
   ),
   _TabDestination(
     asset: 'assets/fitness_app/tab_3.png',
     selectedAsset: 'assets/fitness_app/tab_3s.png',
-    accessibilityLabel: 'Diary',
+    isDiary: true,
     darkIcon: Icons.local_dining_outlined,
   ),
   _TabDestination(
     asset: 'assets/fitness_app/tab_4.png',
     selectedAsset: 'assets/fitness_app/tab_4s.png',
-    accessibilityLabel: 'Training',
+    isDiary: false,
     darkIcon: Icons.person_outline,
   ),
 ];

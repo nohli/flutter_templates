@@ -4,18 +4,20 @@ import '../finance_app_theme.dart';
 import '../finance_formatters.dart';
 import '../models/spending_category.dart';
 import 'finance_surface.dart';
+import '../../../../l10n/localizations.dart';
 
 class SpendingOverview extends StatelessWidget {
   const SpendingOverview({required this.animation, super.key});
 
   static const _dailySpending = <double>[0.38, 0.62, 0.46, 0.88, 0.55, 0.72, 0.42];
-  static const _dayLabels = <String>['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final categories = SpendingCategory.samples(context.l10n);
+    final weekdays = MaterialLocalizations.of(context).narrowWeekdays;
 
     return FinanceSurface(
       padding: const EdgeInsets.all(20),
@@ -29,9 +31,9 @@ class SpendingOverview extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text('Spending', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                    Text(context.l10n.spending, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 3),
-                    Text('This month', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
+                    Text(context.l10n.thisMonth, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 12)),
                   ],
                 ),
               ),
@@ -52,7 +54,7 @@ class SpendingOverview extends StatelessWidget {
                 return Expanded(
                   child: _SpendingBar(
                     animation: animation,
-                    day: _dayLabels[index],
+                    day: weekdays[(index + 1) % DateTime.daysPerWeek],
                     fraction: fraction,
                     color: isCurrentDay ? colors.primary : colors.primaryContainer,
                   ),
@@ -63,9 +65,9 @@ class SpendingOverview extends StatelessWidget {
           const SizedBox(height: 22),
           Divider(height: 1, color: colors.outlineVariant),
           const SizedBox(height: 18),
-          for (final category in SpendingCategory.samples) ...<Widget>[
+          for (final category in categories) ...<Widget>[
             _CategoryProgress(animation: animation, category: category),
-            if (category != SpendingCategory.samples.last) const SizedBox(height: 16),
+            if (category != categories.last) const SizedBox(height: 16),
           ],
         ],
       ),
@@ -88,7 +90,7 @@ class _SpendingBar extends StatelessWidget {
       curve: const Interval(0.28, 0.88, curve: Curves.easeOutCubic),
     );
     return Semantics(
-      label: '$day spending ${formatPercentage(context, fraction)} of the daily maximum',
+      label: context.l10n.valueSpendingValueOfTheDailyMaximum(day, formatPercentage(context, fraction)),
       child: ExcludeSemantics(
         child: AnimatedBuilder(
           animation: growth,
@@ -135,7 +137,12 @@ class _CategoryProgress extends StatelessWidget {
     final budget = formatCurrency(context, category.budget, decimalDigits: 0);
 
     return Semantics(
-      label: '${category.label}: $spent spent of $budget, ${formatPercentage(context, category.progress)}',
+      label: context.l10n.valueValueSpentOfValueValue(
+        category.label,
+        spent,
+        budget,
+        formatPercentage(context, category.progress),
+      ),
       child: ExcludeSemantics(
         child: Row(
           children: <Widget>[
@@ -159,7 +166,7 @@ class _CategoryProgress extends StatelessWidget {
                         child: Text(category.label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                       ),
                       Text(
-                        '$spent of $budget',
+                        context.l10n.valueOfValue(spent, budget),
                         style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ],

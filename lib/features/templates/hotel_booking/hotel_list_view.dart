@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../shared/animated_favorite_icon.dart';
 import 'model/hotel_list_data.dart';
 import 'smooth_star_rating.dart';
+import '../../../l10n/localizations.dart';
 
 class HotelListView extends StatelessWidget {
   const HotelListView({
@@ -88,14 +89,14 @@ class HotelListView extends StatelessWidget {
                             button: true,
                             toggled: isFavorite,
                             label: isFavorite
-                                ? 'Remove ${hotelData.title} from favorites'
-                                : 'Favorite ${hotelData.title}',
+                                ? context.l10n.removeValueFromFavorites(hotelData.title)
+                                : context.l10n.favoriteValue(hotelData.title),
                             onTap: onFavoriteChanged,
                             child: ExcludeSemantics(
                               child: IconButton(
                                 tooltip: isFavorite
-                                    ? 'Remove ${hotelData.title} from favorites'
-                                    : 'Favorite ${hotelData.title}',
+                                    ? context.l10n.removeValueFromFavorites(hotelData.title)
+                                    : context.l10n.favoriteValue(hotelData.title),
                                 constraints: const BoxConstraints.tightFor(width: 48, height: 48),
                                 style: IconButton.styleFrom(shape: const CircleBorder()),
                                 icon: AnimatedFavoriteIcon(isFavorite: isFavorite, inactiveColor: colors.primary),
@@ -146,7 +147,10 @@ class _HotelDetails extends StatelessWidget {
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
-                    '${hotelData.location} · ${hotelData.distanceKm.toStringAsFixed(1)} km to city',
+                    context.l10n.valueValueKmToCity(
+                      hotelData.location,
+                      context.l10n.number(hotelData.distanceKm, decimalDigits: 1),
+                    ),
                     maxLines: null,
                     overflow: TextOverflow.visible,
                     style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
@@ -165,7 +169,7 @@ class _HotelDetails extends StatelessWidget {
                   const SizedBox(width: 4),
                   FaIcon(FontAwesomeIcons.locationDot, size: 12, color: colors.primary),
                   Text(
-                    '${hotelData.distanceKm.toStringAsFixed(1)} km to city',
+                    context.l10n.valueKmToCity(context.l10n.number(hotelData.distanceKm, decimalDigits: 1)),
                     style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
                   ),
                 ],
@@ -184,7 +188,7 @@ class _HotelDetails extends StatelessWidget {
                 if (showFullText)
                   Expanded(
                     child: Text(
-                      ' ${hotelData.reviews} Reviews',
+                      context.l10n.valueReviews(hotelData.reviews),
                       maxLines: null,
                       overflow: TextOverflow.visible,
                       style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
@@ -196,7 +200,7 @@ class _HotelDetails extends StatelessWidget {
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        ' ${hotelData.reviews} Reviews',
+                        context.l10n.valueReviews(hotelData.reviews),
                         style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant),
                       ),
                     ),
@@ -226,11 +230,11 @@ class _HotelPrice extends StatelessWidget {
         crossAxisAlignment: alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '\$${hotelData.nightlyPrice}',
+            context.l10n.money(hotelData.nightlyPrice, 'USD', decimalDigits: 0),
             textAlign: TextAlign.left,
             style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
           ),
-          Text('/per night', style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant)),
+          Text(context.l10n.perNight, style: TextStyle(fontSize: 14, color: colors.onSurfaceVariant)),
         ],
       ),
     );

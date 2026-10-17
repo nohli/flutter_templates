@@ -17,6 +17,7 @@ import 'package:templates/features/templates/hotel_booking/model/hotel_list_data
 import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
 import 'package:templates/features/templates/shared/animated_favorite_icon.dart';
 import 'package:templates/features/gallery/home_screen.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('course lesson labels use correct singular and plural grammar', () {
@@ -29,12 +30,12 @@ void main() {
       rating: 0,
     );
 
-    expect(singleLesson.lessonLabel, '1 lesson');
-    expect(Category.categoryList.first.lessonLabel, '24 lessons');
+    expect(singleLesson.lessonLabel(english), '1 lesson');
+    expect(Category.categoryList(english).first.lessonLabel(english), '24 lessons');
   });
 
   test('hotel samples use stable unique identities', () {
-    final hotels = HotelListData.samples;
+    final hotels = HotelListData.samples(english);
     final ids = hotels.map((HotelListData hotel) => hotel.id).toSet();
 
     expect(ids, hasLength(hotels.length));
@@ -241,7 +242,7 @@ void main() {
     await tester.tap(find.text('Apply'));
     await tester.pumpAndSettle();
 
-    expect(find.text('1 sample hotels'), findsOneWidget);
+    expect(find.text('1 sample hotel'), findsOneWidget);
     expect(find.text('Grand Royal Hotel'), findsOneWidget);
     expect(find.text('Queen Hotel'), findsNothing);
 
@@ -292,7 +293,8 @@ void main() {
       await tester.tap(find.text('Apply'));
       await tester.pumpAndSettle();
 
-      expect(find.text('${scenario.expectedCount} sample hotels'), findsOneWidget, reason: scenario.name);
+      final countLabel = scenario.expectedCount == 1 ? '1 sample hotel' : '${scenario.expectedCount} sample hotels';
+      expect(find.text(countLabel), findsOneWidget, reason: scenario.name);
     }
   });
 
@@ -326,19 +328,33 @@ void main() {
     final nextMonth = find.byTooltip('Next month');
     expect(tester.getRect(previousMonth).shortestSide, greaterThanOrEqualTo(48));
     expect(tester.getRect(nextMonth).shortestSide, greaterThanOrEqualTo(48));
-    expect(tester.widget<IconButton>(find.widgetWithIcon(IconButton, Icons.keyboard_arrow_left)).onPressed, isNull);
-    expect(tester.widget<IconButton>(find.widgetWithIcon(IconButton, Icons.keyboard_arrow_right)).onPressed, isNull);
+    expect(
+      tester
+          .widget<IconButton>(
+            find.byWidgetPredicate((widget) => widget is IconButton && widget.tooltip == 'Previous month'),
+          )
+          .onPressed,
+      isNull,
+    );
+    expect(
+      tester
+          .widget<IconButton>(
+            find.byWidgetPredicate((widget) => widget is IconButton && widget.tooltip == 'Next month'),
+          )
+          .onPressed,
+      isNull,
+    );
 
-    final selectedStart = find.bySemanticsLabel(DateFormat('EEEE, d MMMM yyyy').format(start));
+    final selectedStart = find.bySemanticsLabel(DateFormat.yMMMMEEEEd('en').format(start));
     expect(tester.getSemantics(selectedStart).flagsCollection.isSelected, Tristate.isTrue);
     final unavailableDate = DateTime(now.year, now.month, 25);
-    final unavailable = find.bySemanticsLabel(DateFormat('EEEE, d MMMM yyyy').format(unavailableDate));
+    final unavailable = find.bySemanticsLabel(DateFormat.yMMMMEEEEd('en').format(unavailableDate));
     expect(tester.getSemantics(unavailable).flagsCollection.isEnabled, Tristate.isFalse);
     expect(tester.getSemantics(unavailable).getSemanticsData().hasAction(SemanticsAction.tap), isFalse);
 
     await tester.tap(find.descendant(of: selectedStart, matching: find.text('${start.day}')));
     await tester.pump();
-    expect(find.text(DateFormat('MMMM, yyyy').format(now)), findsOneWidget);
+    expect(find.text(DateFormat.yMMMM('en').format(now)), findsOneWidget);
 
     final rating = tester.getSemantics(find.bySemanticsLabel('Rating').first);
     expect(rating.value, '4.5 out of 5');
@@ -562,7 +578,7 @@ Future<void> _pumpScreen(WidgetTester tester, Widget screen, {Size size = const 
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
 
-  await tester.pumpWidget(MaterialApp(home: Scaffold(body: screen)));
+  await tester.pumpWidget(LocalizedTestApp(home: Scaffold(body: screen)));
   await tester.pump();
 }
 

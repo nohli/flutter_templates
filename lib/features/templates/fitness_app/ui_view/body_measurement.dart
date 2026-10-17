@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
 import 'animated_fitness_card.dart';
+import '../../../../l10n/localizations.dart';
 
 class BodyMeasurementView extends StatelessWidget {
   const BodyMeasurementView({required this.animation, super.key});
@@ -43,15 +44,19 @@ class _CompactBodyMeasurements extends StatelessWidget {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 16),
+        Padding(
+          padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 16),
           child: Row(
             children: <Widget>[
-              _CompactMeasurement(value: '185 cm', label: 'Height', alignment: Alignment.centerLeft),
-              _CompactMeasurement(value: '27.3 BMI', label: 'Overweight'),
               _CompactMeasurement(
-                value: '20%',
-                label: 'Body fat',
+                value: context.l10n.sample185Cm,
+                label: context.l10n.height,
+                alignment: Alignment.centerLeft,
+              ),
+              _CompactMeasurement(value: context.l10n.sample273Bmi, label: context.l10n.overweight),
+              _CompactMeasurement(
+                value: context.l10n.percent(0.2),
+                label: context.l10n.bodyFat,
                 alignment: Alignment.centerRight,
                 crossAxisAlignment: CrossAxisAlignment.end,
               ),
@@ -79,7 +84,7 @@ class _CompactWeightSummary extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 4, bottom: 8, top: 16),
             child: Text(
-              'Weight',
+              context.l10n.weight,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: FitnessAppTheme.fontName,
@@ -93,7 +98,7 @@ class _CompactWeightSummary extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              const Expanded(
+              Expanded(
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.centerLeft,
@@ -102,11 +107,11 @@ class _CompactWeightSummary extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(left: 4, bottom: 3),
+                        padding: const EdgeInsets.only(left: 4, bottom: 3),
                         child: Text(
-                          '206.8',
+                          context.l10n.number(206.8),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: FitnessAppTheme.fontName,
                             fontWeight: FontWeight.w600,
                             fontSize: 32,
@@ -115,11 +120,11 @@ class _CompactWeightSummary extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 8, bottom: 8),
+                        padding: const EdgeInsets.only(left: 8, bottom: 8),
                         child: Text(
-                          'lbs',
+                          context.l10n.lbs,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: FitnessAppTheme.fontName,
                             fontWeight: FontWeight.w500,
                             fontSize: 18,
@@ -151,7 +156,7 @@ class _MeasurementMetadata extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timestampText = Text(
-      'Today 8:26 AM',
+      context.l10n.today826Am,
       textAlign: compact ? TextAlign.center : TextAlign.start,
       style: TextStyle(
         fontFamily: FitnessAppTheme.fontName,
@@ -181,7 +186,7 @@ class _MeasurementMetadata extends StatelessWidget {
           timestamp,
           const SizedBox(height: 8),
           Text(
-            'Connected smart scale',
+            context.l10n.connectedSmartScale,
             style: TextStyle(
               fontFamily: FitnessAppTheme.fontName,
               fontWeight: FontWeight.w500,
@@ -205,7 +210,7 @@ class _MeasurementMetadata extends StatelessWidget {
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerRight,
             child: Text(
-              'Connected smart scale',
+              context.l10n.connectedSmartScale,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: FitnessAppTheme.fontName,
@@ -292,7 +297,7 @@ class _LargeBodyMeasurements extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text(
-            'Weight',
+            context.l10n.weight,
             style: TextStyle(
               fontFamily: FitnessAppTheme.fontName,
               fontWeight: FontWeight.w500,
@@ -307,7 +312,7 @@ class _LargeBodyMeasurements extends StatelessWidget {
             runSpacing: 4,
             children: <Widget>[
               Text(
-                '206.8',
+                context.l10n.number(206.8),
                 style: TextStyle(
                   fontFamily: FitnessAppTheme.fontName,
                   fontWeight: FontWeight.w600,
@@ -316,7 +321,7 @@ class _LargeBodyMeasurements extends StatelessWidget {
                 ),
               ),
               Text(
-                'lbs',
+                context.l10n.lbs,
                 style: TextStyle(
                   fontFamily: FitnessAppTheme.fontName,
                   fontWeight: FontWeight.w500,
@@ -332,11 +337,11 @@ class _LargeBodyMeasurements extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Divider(color: colors.outlineVariant),
           ),
-          _MeasurementMetric(value: '185 cm', label: 'Height', colors: colors),
+          _MeasurementMetric(value: context.l10n.sample185Cm, label: context.l10n.height, colors: colors),
           const SizedBox(height: 16),
-          _MeasurementMetric(value: '27.3 BMI', label: 'Overweight', colors: colors),
+          _MeasurementMetric(value: context.l10n.sample273Bmi, label: context.l10n.overweight, colors: colors),
           const SizedBox(height: 16),
-          _MeasurementMetric(value: '20%', label: 'Body fat', colors: colors),
+          _MeasurementMetric(value: context.l10n.percent(0.2), label: context.l10n.bodyFat, colors: colors),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'banking_app_theme.dart';
+import '../../../l10n/localizations.dart';
 
 class BankingTransferScreen extends StatefulWidget {
   const BankingTransferScreen({super.key});
@@ -23,7 +24,7 @@ class _BankingTransferScreenState extends State<BankingTransferScreen> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Send money')),
+      appBar: AppBar(title: Text(context.l10n.sendMoney)),
       body: SafeArea(
         top: false,
         child: Column(
@@ -35,7 +36,7 @@ class _BankingTransferScreenState extends State<BankingTransferScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Text(
-                      'Recent people',
+                      context.l10n.recentPeople,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 16),
@@ -58,7 +59,7 @@ class _BankingTransferScreenState extends State<BankingTransferScreen> {
                     ),
                     const SizedBox(height: 46),
                     Text(
-                      'You send',
+                      context.l10n.youSend,
                       textAlign: TextAlign.center,
                       style: TextStyle(color: colors.onSurfaceVariant, fontWeight: FontWeight.w700),
                     ),
@@ -76,7 +77,7 @@ class _BankingTransferScreenState extends State<BankingTransferScreen> {
                       decoration: const InputDecoration(prefixText: '€', filled: false, border: InputBorder.none),
                     ),
                     Text(
-                      'Balance after transfer · €8,894.70',
+                      context.l10n.balanceAfterTransfer889470,
                       textAlign: TextAlign.center,
                       style: TextStyle(color: colors.onSurfaceVariant),
                     ),
@@ -101,11 +102,11 @@ class _BankingTransferScreenState extends State<BankingTransferScreen> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            '$_recipient receives it instantly',
+                            context.l10n.valueReceivesItInstantly(_recipient),
                             style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                         ),
-                        const Text('Free'),
+                        Text(context.l10n.free),
                       ],
                     ),
                   ),
@@ -113,7 +114,7 @@ class _BankingTransferScreenState extends State<BankingTransferScreen> {
                   FilledButton(
                     onPressed: () => Navigator.of(context).pop(_recipient),
                     style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(58)),
-                    child: Text('Send to $_recipient'),
+                    child: Text(context.l10n.sendToValue(_recipient)),
                   ),
                 ],
               ),
@@ -136,7 +137,7 @@ class _Recipient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Send to $name',
+      label: context.l10n.sendToValue(name),
       selected: selected,
       button: true,
       child: GestureDetector(

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'app_appearance.dart';
 import 'app_drawer.dart';
 import 'app_theme.dart';
+import '../l10n/localizations.dart';
 import '../features/gallery/home_screen.dart';
 import '../features/support/about_screen.dart';
 import '../features/support/feedback_screen.dart';
@@ -83,11 +84,13 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
   }
 
   void _updateDrawerDrag(DragUpdateDetails details, double drawerWidth) {
-    _drawerController.value += details.delta.dx / drawerWidth;
+    final direction = Directionality.of(context) == TextDirection.rtl ? -1 : 1;
+    _drawerController.value += details.delta.dx * direction / drawerWidth;
   }
 
   void _endDrawerDrag(DragEndDetails details) {
-    final velocity = details.primaryVelocity ?? 0;
+    final direction = Directionality.of(context) == TextDirection.rtl ? -1 : 1;
+    final velocity = (details.primaryVelocity ?? 0) * direction;
     final shouldOpen = velocity > 300 || (velocity >= -300 && _drawerController.value >= 0.5);
     _settleDrawer(shouldOpen: shouldOpen);
   }
@@ -106,6 +109,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
     final brightness = _appearance.resolve(context);
     final theme = AppTheme.build(brightness);
     final systemUiStyle = SystemUiOverlayStyle(
@@ -169,7 +173,7 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                               ),
                             ),
                             Transform.translate(
-                              offset: Offset(drawerWidth * _drawerController.value, 0),
+                              offset: Offset(drawerWidth * _drawerController.value * (isRtl ? -1 : 1), 0),
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).colorScheme.surface,
@@ -200,21 +204,26 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
                                       ),
                                     SafeArea(
                                       bottom: false,
-                                      minimum: const EdgeInsets.only(top: 8, left: 8),
+                                      minimum: const EdgeInsetsDirectional.only(
+                                        top: 8,
+                                        start: 8,
+                                      ).resolve(Directionality.of(context)),
                                       child: Align(
-                                        alignment: Alignment.topLeft,
+                                        alignment: AlignmentDirectional.topStart,
                                         child: SizedBox.square(
                                           dimension: 48,
                                           child: IconButton(
-                                            tooltip: drawerIsClosed ? 'Open navigation menu' : 'Close navigation menu',
+                                            tooltip: drawerIsClosed
+                                                ? context.l10n.openNavigationMenu
+                                                : context.l10n.closeNavigationMenu,
                                             onPressed: _toggleDrawer,
                                             icon: AnimatedIcon(
                                               icon: AnimatedIcons.arrow_menu,
                                               progress: _menuIconAnimation,
                                               color: Theme.of(context).colorScheme.onSurface,
                                               semanticLabel: drawerIsClosed
-                                                  ? 'Open navigation menu'
-                                                  : 'Close navigation menu',
+                                                  ? context.l10n.openNavigationMenu
+                                                  : context.l10n.closeNavigationMenu,
                                             ),
                                           ),
                                         ),

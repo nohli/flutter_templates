@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/finance_transaction.dart';
 import '../widgets/finance_entrance.dart';
 import '../widgets/transaction_list.dart';
+import '../../../../l10n/localizations.dart';
 
 enum _ActivityFilter { all, income, spending }
 
@@ -21,7 +22,7 @@ class _FinanceActivitySectionState extends State<FinanceActivitySection> {
 
   @override
   Widget build(BuildContext context) {
-    final transactions = FinanceTransaction.samples
+    final transactions = FinanceTransaction.samples(context.l10n)
         .where((FinanceTransaction transaction) {
           return switch (_filter) {
             _ActivityFilter.all => true,
@@ -41,7 +42,7 @@ class _FinanceActivitySectionState extends State<FinanceActivitySection> {
           animation: widget.animation,
           index: 0,
           child: Text(
-            'A clear view of every sample transaction.',
+            context.l10n.aClearViewOfEverySampleTransaction,
             style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 14),
           ),
         ),
@@ -96,8 +97,8 @@ class _FinanceActivitySectionState extends State<FinanceActivitySection> {
   }
 
   String _labelFor(_ActivityFilter filter) => switch (filter) {
-    _ActivityFilter.all => 'All',
-    _ActivityFilter.income => 'Income',
-    _ActivityFilter.spending => 'Spending',
+    _ActivityFilter.all => context.l10n.all,
+    _ActivityFilter.income => context.l10n.income,
+    _ActivityFilter.spending => context.l10n.spending,
   };
 }

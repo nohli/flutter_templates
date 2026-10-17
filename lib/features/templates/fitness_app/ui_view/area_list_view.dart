@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/motion_preferences.dart';
+import '../../../../l10n/localizations.dart';
 
 class AreaListView extends StatefulWidget {
   const AreaListView({required this.mainScreenAnimation, super.key});
@@ -113,7 +114,7 @@ class _AreaCard extends StatelessWidget {
               ),
               child: Semantics(
                 image: true,
-                label: 'Sample training focus illustration',
+                label: context.l10n.sampleTrainingFocusIllustration,
                 child: ExcludeSemantics(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16, left: 16, right: 16),

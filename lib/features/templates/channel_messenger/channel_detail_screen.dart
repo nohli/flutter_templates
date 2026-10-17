@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'channel_messenger_theme.dart';
 import 'models/channel_conversation.dart';
+import '../../../l10n/localizations.dart';
 
 class ChannelDetailScreen extends StatefulWidget {
   const ChannelDetailScreen({required this.conversation, super.key});
@@ -28,8 +29,8 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
             Text(widget.conversation.title),
             Text(
               widget.conversation.kind == ChannelConversationKind.channel
-                  ? '12.8K subscribers'
-                  : '5 members · 3 online',
+                  ? context.l10n.sample128KSubscribers
+                  : context.l10n.sample5Members3Online,
               style: TextStyle(
                 color: colors.onSurfaceVariant,
                 fontFamily: ChannelMessengerTheme.fontName,
@@ -40,8 +41,12 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
           ],
         ),
         actions: <Widget>[
-          IconButton(tooltip: 'Search conversation', onPressed: () {}, icon: const Icon(Icons.search_rounded)),
-          IconButton(tooltip: 'More options', onPressed: () {}, icon: const Icon(Icons.more_vert_rounded)),
+          IconButton(
+            tooltip: context.l10n.searchConversation,
+            onPressed: () {},
+            icon: const Icon(Icons.search_rounded),
+          ),
+          IconButton(tooltip: context.l10n.moreOptions, onPressed: () {}, icon: const Icon(Icons.more_vert_rounded)),
         ],
       ),
       body: Column(
@@ -69,14 +74,14 @@ class _ChannelDetailScreenState extends State<ChannelDetailScreen> {
                       onPressed: () => setState(() => _subscribed = !_subscribed),
                       style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(52)),
                       icon: Icon(_subscribed ? Icons.notifications_active_rounded : Icons.notifications_none_rounded),
-                      label: Text(_subscribed ? 'Subscribed' : 'Subscribe'),
+                      label: Text(_subscribed ? context.l10n.subscribed : context.l10n.subscribe),
                     )
                   : TextField(
                       decoration: InputDecoration(
-                        hintText: 'Message',
+                        hintText: context.l10n.message,
                         prefixIcon: const Icon(Icons.attach_file_rounded),
                         suffixIcon: IconButton(
-                          tooltip: 'Send message',
+                          tooltip: context.l10n.sendMessage,
                           onPressed: () {},
                           icon: const Icon(Icons.arrow_upward_rounded),
                         ),
@@ -102,7 +107,10 @@ class _DayPill extends StatelessWidget {
           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
           borderRadius: const BorderRadius.all(Radius.circular(14)),
         ),
-        child: const Text('TODAY', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.8)),
+        child: Text(
+          context.l10n.todayUpper,
+          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.8),
+        ),
       ),
     );
   }
@@ -142,14 +150,14 @@ class _ChannelPost extends StatelessWidget {
               ),
               borderRadius: BorderRadius.all(Radius.circular(18)),
             ),
-            child: const Stack(
+            child: Stack(
               children: <Widget>[
                 Positioned(
                   left: 22,
                   top: 22,
                   child: Text(
-                    'FIELD\nNOTES\n/ 08',
-                    style: TextStyle(
+                    context.l10n.fieldNotes08,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontFamily: ChannelMessengerTheme.displayFontName,
                       fontSize: 31,
@@ -158,20 +166,24 @@ class _ChannelPost extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(right: 22, bottom: 22, child: Icon(Icons.north_east_rounded, color: Colors.white, size: 48)),
+                const Positioned(
+                  right: 22,
+                  bottom: 22,
+                  child: Icon(Icons.north_east_rounded, color: Colors.white, size: 48),
+                ),
               ],
             ),
           ),
           const SizedBox(height: 14),
           Text(
-            channel ? 'Interfaces that move with purpose' : 'The prototype is ready to try',
+            channel ? context.l10n.interfacesThatMoveWithPurpose : context.l10n.thePrototypeIsReadyToTry,
             style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 8),
           Text(
             channel
-                ? 'A five-minute read on transitions that orient people instead of distracting them.'
-                : 'I added the final motion pass. Tell me what feels too slow.',
+                ? context.l10n.aFiveMinuteReadOnTransitionsThatOrientPeopleInstead
+                : context.l10n.iAddedTheFinalMotionPassTellMeWhatFeels,
             style: TextStyle(color: colors.onSurfaceVariant, fontSize: 15, height: 1.35),
           ),
           const SizedBox(height: 12),
@@ -184,16 +196,16 @@ class _ChannelPost extends StatelessWidget {
                   size: 17,
                   color: reacted ? ChannelMessengerTheme.blue : colors.onSurfaceVariant,
                 ),
-                label: Text('${reacted ? 128 : 127}'),
+                label: Text(context.l10n.number(reacted ? 128 : 127)),
               ),
               const SizedBox(width: 8),
-              const ActionChip(
+              ActionChip(
                 onPressed: null,
-                avatar: Icon(Icons.chat_bubble_outline_rounded, size: 16),
-                label: Text('24'),
+                avatar: const Icon(Icons.chat_bubble_outline_rounded, size: 16),
+                label: Text(context.l10n.number(24)),
               ),
               const Spacer(),
-              Text('18:42', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 11)),
+              Text(context.l10n.clock(18, 42), style: TextStyle(color: colors.onSurfaceVariant, fontSize: 11)),
             ],
           ),
         ],

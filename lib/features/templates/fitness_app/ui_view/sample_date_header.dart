@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
+import '../../../../l10n/localizations.dart';
 
 class SampleDateHeader extends StatelessWidget {
   const SampleDateHeader({super.key});
@@ -13,7 +14,7 @@ class SampleDateHeader extends StatelessWidget {
     final previousDay = SizedBox(height: 38, width: 38, child: Icon(Icons.keyboard_arrow_left, color: navigationColor));
     final nextDay = SizedBox(height: 38, width: 38, child: Icon(Icons.keyboard_arrow_right, color: navigationColor));
     return Semantics(
-      label: 'Sample day, 15 May',
+      label: context.l10n.sampleDay15May,
       excludeSemantics: true,
       child: useLargeTextLayout
           ? Column(
@@ -46,7 +47,7 @@ class _SampleDateLabel extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final navigationColor = colors.brightness == Brightness.dark ? colors.onSurfaceVariant : FitnessAppTheme.grey;
     final label = Text(
-      '15 May',
+      context.l10n.sample15May,
       textAlign: TextAlign.left,
       style: TextStyle(
         fontFamily: FitnessAppTheme.fontName,

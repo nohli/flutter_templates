@@ -1,0 +1,933 @@
+{
+  "@@locale": "en_GB",
+  "openNavigationMenu": "Open navigation menu",
+  "closeNavigationMenu": "Close navigation menu",
+  "navigationMenu": "Navigation menu",
+  "home": "Home",
+  "help": "Help",
+  "feedback": "Feedback",
+  "inviteFriends": "Invite friends",
+  "about": "About",
+  "systemAppearance": "System",
+  "lightAppearance": "Light",
+  "darkAppearance": "Dark",
+  "appearanceLabel": "Appearance: {appearance}",
+  "@appearanceLabel": {
+    "placeholders": {
+      "appearance": {
+        "type": "String"
+      }
+    }
+  },
+  "showOneColumn": "Show one column",
+  "showMultipleColumns": "Show multiple columns",
+  "appSummary": "An interactive gallery of mobile interface patterns built with the Flutter SDK.",
+  "sampleContentNotice": "All names, prices, ratings, reviews, activity values, balances, transactions, and other content inside the gallery are fictional examples.",
+  "trademarkDisclaimer": "Flutter and the related logo are trademarks of Google LLC. Flutter UI Templates is not affiliated with or otherwise sponsored by Google LLC. The app is now named UI Templates.",
+  "hotelBooking": "Hotel Booking",
+  "fitnessApp": "Fitness App",
+  "designCourse": "Design Course",
+  "uiUx": "UI/UX",
+  "personalFinance": "Personal Finance",
+  "datingAndSocial": "Dating & Social",
+  "languageLearning": "Language Learning",
+  "publicSocialFeed": "Public Social Feed",
+  "bankingSuperApp": "Banking Super-App",
+  "channelMessenger": "Channel Messenger",
+  "privateMessenger": "Private Messenger",
+  "openSource": "Open source",
+  "sourceAttribution": "UI Templates is based on a publicly available interface gallery. The complete inherited terms, third-party notices, and source history are available in the repository.",
+  "sourceCode": "UI Templates source code",
+  "openSourceLicenses": "Open-source licences",
+  "privacyPolicy": "Privacy Policy",
+  "developerPortfolio": "Developer portfolio",
+  "trademarkNotice": "Trademark notice",
+  "sharingUnavailable": "Sharing is temporarily unavailable.",
+  "inviteTitle": "Invite Your Friends",
+  "inviteDescription": "Share {appName} with friends and fellow developers.",
+  "@inviteDescription": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "opening": "Opening…",
+  "share": "Share",
+  "emailUnavailable": "No email app is available. Contact {email}.",
+  "@emailUnavailable": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "helpTitle": "How can we help you?",
+  "helpDescription": "Questions or problems with a template? Email us and we will help.",
+  "emailUs": "Email Us",
+  "supportEmailSubject": "{appName} support",
+  "@supportEmailSubject": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteMessage": "Explore {appName} at {sourceUrl}",
+  "@inviteMessage": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      },
+      "sourceUrl": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackEmailSubject": "{appName} feedback",
+  "@feedbackEmailSubject": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackRequired": "Enter your feedback before sending.",
+  "emailReady": "Your email app is ready. Send the message there when you are satisfied.",
+  "feedbackTitle": "Your Feedback",
+  "feedbackDescription": "Tell us what you liked or what we could improve.",
+  "send": "Send",
+  "feedbackHint": "Enter your feedback...",
+  "thread": "Thread",
+  "thatIsTheDifferenceBetweenDecorationAndDirectionBeautifullyPut": "That is the difference between decoration and direction. Beautifully put.",
+  "motionShouldAnswerAQuestionBeforeItAsksForAttention": "Motion should answer a question before it asks for attention.",
+  "postYourReply": "Post your reply",
+  "sendReply": "Send reply",
+  "replyPublished": "Reply published",
+  "smallInterfacesBecomeMemorableWhenEveryMotionExplainsWhereThe": "Small interfaces become memorable when every motion explains where the content came from.",
+  "sample4m": "4m",
+  "designSystems": "DESIGN SYSTEMS",
+  "theNightTrainIsQuietThePrototypeIsFinallyBehaving": "The night train is quiet, the prototype is finally behaving, and the city is turning blue outside.",
+  "sample27m": "27m",
+  "liveFromCopenhagen": "LIVE FROM COPENHAGEN",
+  "aGoodCommunityFeelsLessLikeAnAudienceAndMore": "A good community feels less like an audience and more like a table with one chair left open.",
+  "sample1h": "1h",
+  "cancel": "Cancel",
+  "publish": "Publish",
+  "whatIsHappening": "What is happening?",
+  "addMedia": "Add media",
+  "addPoll": "Add poll",
+  "addLocation": "Add location",
+  "anyoneCanReply": "Anyone can reply",
+  "createAPost": "Create a post",
+  "backToTemplateGallery": "Back to template gallery",
+  "socialFeed": "SOCIAL FEED",
+  "feedSettings": "Feed settings",
+  "forYou": "For you",
+  "following": "Following",
+  "liveDesignWeek": "LIVE / DESIGN WEEK",
+  "fromYourCircle": "FROM YOUR CIRCLE",
+  "whatPeopleAreBuildingRightNow": "What people are building right now.",
+  "theLatestFromPeopleYouChose": "The latest from people you chose.",
+  "dismissPublishedPost": "Dismiss published post",
+  "undoRepost": "Undo repost",
+  "repost": "Repost",
+  "unlikePost": "Unlike post",
+  "likePost": "Like post",
+  "manageYourSampleCardsAndLimits": "Manage your sample cards and limits.",
+  "unlockSampleCard": "Unlock sample card",
+  "lockSampleCard": "Lock sample card",
+  "sampleDebitCardEndingIn4832Value": "Sample debit card ending in 4832, {arg0}",
+  "@sampleDebitCardEndingIn4832Value": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "cardHolder": "CARD HOLDER",
+  "expires": "EXPIRES",
+  "cardStatus": "Card status",
+  "locked": "Locked",
+  "active": "Active",
+  "monthlyLimit": "Monthly limit",
+  "onlinePayments": "Online payments",
+  "enabled": "Enabled",
+  "recentActivity": "Recent activity",
+  "seeAll": "See all",
+  "goodMorningAlex": "Good morning, Alex",
+  "moneyAndCryptoTogether": "Money and crypto, together",
+  "preferences": "Preferences",
+  "spendingAlerts": "Spending alerts",
+  "sampleBudgetNotifications": "Sample budget notifications",
+  "biometricSignIn": "Biometric sign-in",
+  "interfaceDemonstrationOnly": "Interface demonstration only",
+  "demoProfile": "Demo profile",
+  "thisTemplateUsesFictionalLocalDataAndDoesNotConnect": "This template uses fictional local data and does not connect to a bank.",
+  "aClearViewOfEverySampleTransaction": "A clear view of every sample transaction.",
+  "all": "All",
+  "income": "Income",
+  "spending": "Spending",
+  "valueIsShownAsAnInterfacePreview": "{arg0} is shown as an interface preview.",
+  "@valueIsShownAsAnInterfacePreview": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "overview": "Overview",
+  "activity": "Activity",
+  "cards": "Cards",
+  "profile": "Profile",
+  "salary": "Salary",
+  "todayMonthlyIncome": "Today · Monthly income",
+  "greenMarket": "Green Market",
+  "todayGroceries": "Today · Groceries",
+  "metroPass": "Metro Pass",
+  "yesterdayTransport": "Yesterday · Transport",
+  "northStarCaf": "North Star Café",
+  "yesterdayDining": "Yesterday · Dining",
+  "studioCloud": "Studio Cloud",
+  "sample8SepSubscription": "8 Sep · Subscription",
+  "food": "Food",
+  "transport": "Transport",
+  "personalFinanceUpper": "PERSONAL FINANCE",
+  "marketsLive": "Markets live",
+  "live": "LIVE",
+  "thisMonth": "This month",
+  "valueSpendingValueOfTheDailyMaximum": "{arg0} spending {arg1} of the daily maximum",
+  "@valueSpendingValueOfTheDailyMaximum": {
+    "placeholders": {
+      "arg0": {},
+      "arg1": {}
+    }
+  },
+  "valueValueSpentOfValueValue": "{arg0}: {arg1} spent of {arg2}, {arg3}",
+  "@valueValueSpentOfValueValue": {
+    "placeholders": {
+      "arg0": {},
+      "arg1": {},
+      "arg2": {},
+      "arg3": {}
+    }
+  },
+  "valueOfValue": "{arg0} of {arg1}",
+  "@valueOfValue": {
+    "placeholders": {
+      "arg0": {},
+      "arg1": {}
+    }
+  },
+  "incomeAbbreviation": "IN",
+  "spent": "Spent",
+  "out": "OUT",
+  "totalBalance": "Total balance",
+  "hideBalance": "Hide balance",
+  "showBalance": "Show balance",
+  "balanceValue": "Balance {arg0}",
+  "@balanceValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "balanceHidden": "Balance hidden",
+  "balanceIncreasedValueThisMonth": "Balance increased {arg0} this month",
+  "@balanceIncreasedValueThisMonth": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "valueThisMonth": "{arg0} this month",
+  "@valueThisMonth": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "addMoney": "Add money",
+  "sample02Fund": "02 / FUND",
+  "request": "Request",
+  "addMoneyUpper": "ADD MONEY",
+  "requestUpper": "REQUEST",
+  "moreUpper": "MORE",
+  "more": "More",
+  "sample01Transfer": "01 / TRANSFER",
+  "sendUpper": "SEND",
+  "crypto": "Crypto",
+  "diary": "Diary",
+  "training": "Training",
+  "yourProgram": "Your programme",
+  "details": "Details",
+  "areaOfFocus": "Area of focus",
+  "breakfast": "Breakfast",
+  "bread": "Bread,",
+  "peanutButter": "Peanut butter,",
+  "apple": "Apple",
+  "lunch": "Lunch",
+  "salmon": "Salmon,",
+  "mixedVeggies": "Mixed veggies,",
+  "avocado": "Avocado",
+  "snack": "Snack",
+  "recommend": "Recommend:",
+  "sample800Kcal": "800 kcal",
+  "dinner": "Dinner",
+  "sample703Kcal": "703 kcal",
+  "myDiary": "My Diary",
+  "mediterraneanDiet": "Mediterranean diet",
+  "mealsToday": "Meals today",
+  "customize": "Customise",
+  "bodyMeasurement": "Body measurement",
+  "today": "Today",
+  "water": "Water",
+  "kcal": "kcal",
+  "ml": "ml",
+  "ofDailyGoal35L": "of daily goal 3.5L",
+  "lastDrink826Am": "Last drink 8:26 AM",
+  "yourBottleIsEmptyRefillIt": "Your bottle is empty, refill it!",
+  "youreDoingGreat": "You're doing great!",
+  "keepItUpAndStickToYourPlan": "Keep it up\nand stick to your plan!",
+  "prepareYourStomachForLunchWithOneOrTwoGlasses": "Prepare your stomach for lunch with one or two glasses of water",
+  "sample185Cm": "185 cm",
+  "height": "Height",
+  "sample273Bmi": "27.3 BMI",
+  "overweight": "Overweight",
+  "bodyFat": "Body fat",
+  "weight": "Weight",
+  "lbs": "lbs",
+  "today826Am": "Today 8:26 AM",
+  "connectedSmartScale": "Connected smart scale",
+  "sampleDay15May": "Sample day, 15 May",
+  "sample15May": "15 May",
+  "eaten": "Eaten",
+  "burned": "Burned",
+  "kcalLabel": "Kcal",
+  "kcalLeft": "Kcal left",
+  "carbs": "Carbs",
+  "sample12gLeft": "12g left",
+  "protein": "Protein",
+  "sample30gLeft": "30g left",
+  "fat": "Fat",
+  "sample10gLeft": "10g left",
+  "sampleTrainingFocusIllustration": "Sample training focus illustration",
+  "sample68Min": "68 min",
+  "nextWorkout": "Next workout",
+  "legsToningAndGlutesWorkoutAtHome": "Legs Toning and\nGlutes Workout at Home",
+  "theGardenTableIsBooked": "The garden table is booked 🌿",
+  "sundayHikers": "Sunday hikers",
+  "noraIllBringEnoughWater": "Nora: I’ll bring enough water",
+  "dad": "Dad",
+  "thatPhotoMadeMyDay": "That photo made my day",
+  "voiceMessage009": "Voice message · 0:09",
+  "yesterday": "Yesterday",
+  "dinnerClub": "Dinner club",
+  "youFridayWorksForMe": "You: Friday works for me",
+  "startAPrivateChat": "Start a private chat",
+  "chats": "Chats",
+  "updates": "Updates",
+  "communities": "Communities",
+  "calls": "Calls",
+  "statusUpdates": "Status updates",
+  "privacy": "Privacy",
+  "jules12M": "Jules · 12m",
+  "aSlowEveningInTheGreenhouse": "A slow evening\nin the greenhouse.",
+  "tapToReply": "Tap to reply",
+  "channels": "Channels",
+  "explore": "Explore",
+  "weekendMakers": "Weekend Makers",
+  "threeTinyCreativeChallenges": "Three tiny creative challenges",
+  "newAction": "New",
+  "neighbourhoodGarden": "Neighbourhood Garden",
+  "announcementsVolunteersSeedSwap": "Announcements, volunteers, seed swap",
+  "openStudio": "Open Studio",
+  "critiqueEventsCollaborations": "Critique, events, collaborations",
+  "newLink": "New link",
+  "today1420GroupVideo": "Today, 14:20 · Group video",
+  "yesterday190418Min": "Yesterday, 19:04 · 18 min",
+  "monday0812Missed": "Monday, 08:12 · Missed",
+  "online": "online",
+  "videoCall": "Video call",
+  "voiceCall": "Voice call",
+  "stillGoodForDinnerOnTheGardenTerrace": "Still good for dinner on the garden terrace?",
+  "absolutelySeven": "Absolutely. Seven?",
+  "now": "Now",
+  "message": "Message",
+  "addAttachment": "Add attachment",
+  "addEmoji": "Add emoji",
+  "sendMessage": "Send message",
+  "todayUpper": "TODAY",
+  "messages": "Messages",
+  "openCamera": "Open camera",
+  "searchChats": "Search chats",
+  "myUpdate": "My update",
+  "me": "ME",
+  "unread2": "Unread  2",
+  "groups2": "Groups  2",
+  "openPrivateChatWithValue": "Open private chat with {arg0}",
+  "@openPrivateChatWithValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "nomadCoffee": "Nomad Coffee",
+  "todayCard": "Today · Card",
+  "yesterdayTransfer": "Yesterday · Transfer",
+  "metro": "Metro",
+  "sendMoney": "Send money",
+  "recentPeople": "Recent people",
+  "youSend": "You send",
+  "balanceAfterTransfer889470": "Balance after transfer · €8,894.70",
+  "valueReceivesItInstantly": "{arg0} receives it instantly",
+  "@valueReceivesItInstantly": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "free": "Free",
+  "sendToValue": "Send to {arg0}",
+  "@sendToValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "moneySentToValue": "Money sent to {arg0}",
+  "@moneySentToValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "payments": "Payments",
+  "benefits": "Benefits",
+  "nameTagOrBank": "Name, tag, or bank",
+  "newRecipient": "New recipient",
+  "bankCardOrPaymentHandle": "Bank, card, or payment handle",
+  "international": "International",
+  "sendIn70Currencies": "Send in 70+ currencies",
+  "scheduled": "Scheduled",
+  "manageRecurringTransfers": "Manage recurring transfers",
+  "weekendEscape": "WEEKEND ESCAPE",
+  "turnEverydaySpendingIntoYourNextTrip": "Turn everyday spending into your next trip.",
+  "addACard": "Add a card",
+  "debit": "Debit",
+  "freezeCard": "Freeze card",
+  "paymentsArePaused": "Payments are paused",
+  "cardIsReadyToUse": "Card is ready to use",
+  "pinSecurity": "PIN & security",
+  "viewPinAndPaymentLimits": "View PIN and payment limits",
+  "enabledWorldwide": "Enabled worldwide",
+  "virtualCard": "Virtual card",
+  "aFreshNumberForOnlinePurchases": "A fresh number for online purchases",
+  "yourMoney": "Your money",
+  "exchangeRates": "Exchange rates",
+  "latest": "Latest",
+  "banking": "Banking",
+  "search": "Search",
+  "exchange": "Exchange",
+  "splitBill": "Split bill",
+  "primary": "Primary",
+  "totalBalanceUpper": "TOTAL BALANCE",
+  "sample48ThisMonth": "+ 4.8% this month",
+  "unCafSilVousPlaT": "Un café, s’il vous plaît.",
+  "closeLesson": "Close lesson",
+  "chooseTheBestReply": "Choose the best reply",
+  "bonjourWhatWouldYouLike": "Bonjour! What would you like?",
+  "oEstLaGare": "Où est la gare?",
+  "bonneNuit": "Bonne nuit!",
+  "perfectThatsAPoliteWayToOrder": "Perfect — that’s a polite way to order.",
+  "almostPickTheReplyThatOrdersACoffee": "Almost. Pick the reply that orders a coffee.",
+  "continueAction": "Continue",
+  "check": "Check",
+  "section1Unit4": "SECTION 1 · UNIT 4",
+  "orderFoodWithConfidence": "Order food with confidence",
+  "openUnitGuide": "Open unit guide",
+  "dailyQuest": "Daily quest",
+  "completeOneLesson01": "Complete one lesson · 0/1",
+  "learn": "Learn",
+  "practice": "Practice",
+  "leagues": "Leagues",
+  "greetingsComplete": "Greetings complete",
+  "startOrderingFood": "Start ordering food",
+  "readAShortStory": "Read a short story",
+  "listenAndRepeat": "Listen and repeat",
+  "checkpointLocked": "Checkpoint locked",
+  "startHere": "START HERE",
+  "newConversationsAreReadyToConnect": "New conversations are ready to connect.",
+  "backToDiscovery": "Back to discovery",
+  "startAConversation": "Start a conversation",
+  "connectionsThisWeek": "CONNECTIONS / THIS WEEK",
+  "aLittleCloser": "A little closer.",
+  "valueConversationsNoPressurePickUpWhereverItFeelsNatural": "{arg0, plural, =1{{arg0} conversation, no pressure. Pick up wherever it feels natural.} other{{arg0} conversations, no pressure. Pick up wherever it feels natural.}}",
+  "@valueConversationsNoPressurePickUpWhereverItFeelsNatural": {
+    "placeholders": {
+      "arg0": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "newMatches": "NEW MATCHES",
+  "openNewMatchValue": "Open new match {arg0}",
+  "@openNewMatchValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "conversations": "CONVERSATIONS",
+  "valueActive": "{arg0} ACTIVE",
+  "@valueActive": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "nowUpper": "NOW",
+  "backToConversations": "Back to conversations",
+  "conversationDetails": "Conversation details",
+  "conversationDetailsAreReadyToConnect": "Conversation details are ready to connect.",
+  "youAndValueMatched": "You and {arg0} matched",
+  "@youAndValueMatched": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "aGoodBeginning01": "A GOOD BEGINNING / 01",
+  "youAndValueFoundALittleCommonGround": "You and {arg0} found a little common ground.",
+  "@youAndValueFoundALittleCommonGround": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "attachmentsAreReadyToConnect": "Attachments are ready to connect.",
+  "messageValue": "Message {arg0}",
+  "@messageValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "onlineMatchedTuesday": "ONLINE / MATCHED TUESDAY",
+  "jazzAfterDarkCeramicsTinyRestaurants": "Jazz after dark · ceramics · tiny restaurants",
+  "youHadMeAtChoosingDessertFirstTinyJazzBar": "You had me at choosing dessert first. Tiny jazz bar this Thursday?",
+  "onlyIfWeOrderSomethingWeCannotPronounce": "Only if we order something we cannot pronounce.",
+  "dealIKnowExactlyThePlace": "Deal. I know exactly the place.",
+  "active12MinAgoMatchedToday": "ACTIVE 12 MIN AGO / MATCHED TODAY",
+  "nightSwimsSmallPlatesAnalogueCameras": "Night swims · small plates · analogue cameras",
+  "youMentionedTheSeaSunriseSwimOrMidnightDip": "You mentioned the sea. Sunrise swim or midnight dip?",
+  "midnightObviouslyIllBringTheTowels": "Midnight, obviously. I’ll bring the towels.",
+  "activeThisAfternoonMatchedMonday": "ACTIVE THIS AFTERNOON / MATCHED MONDAY",
+  "architectureVinylVerySlowSundays": "Architecture · vinyl · very slow Sundays",
+  "iFoundThatRecordShopIToldYouAbout": "I found that record shop I told you about.",
+  "mon": "MON",
+  "saveMeTheWeirdestSleeveInTheWindow": "Save me the weirdest sleeve in the window.",
+  "activeYesterdayMatchedFriday": "ACTIVE YESTERDAY / MATCHED FRIDAY",
+  "tinyConcertsTrainWindowsFreshPasta": "Tiny concerts · train windows · fresh pasta",
+  "theresAThreeSongSetInTheCourtyardTomorrow": "There’s a three-song set in the courtyard tomorrow.",
+  "fri": "FRI",
+  "theQuickestWayToMyHeart": "THE QUICKEST WAY TO MY HEART",
+  "aLongTableSharedPlatesAndChoosingDessertFirst": "A long table, shared plates, and choosing dessert first.",
+  "ceramics": "Ceramics",
+  "nightSwims": "Night swims",
+  "jazz": "Jazz",
+  "aPerfectSlowSunday": "A PERFECT SLOW SUNDAY",
+  "coffeeOutsideASecondHandBookshopThenNowhereToBe": "Coffee outside, a second-hand bookshop, then nowhere to be.",
+  "architecture": "Architecture",
+  "vinyl": "Vinyl",
+  "baking": "Baking",
+  "letsMakeTimeFor": "LET’S MAKE TIME FOR",
+  "sunriseHikesThatEndWithAVeryUnnecessaryBreakfast": "Sunrise hikes that end with a very unnecessary breakfast.",
+  "trails": "Trails",
+  "film": "Film",
+  "coffee": "Coffee",
+  "illAlwaysSayYesTo": "I’LL ALWAYS SAY YES TO",
+  "aTinyConcertATrainSomewhereNewOrFreshPasta": "A tiny concert, a train somewhere new, or fresh pasta.",
+  "liveMusic": "Live music",
+  "travel": "Travel",
+  "cooking": "Cooking",
+  "passedOnValueYourNextIntroductionIsReady": "Passed on {arg0}. Your next introduction is ready.",
+  "@passedOnValueYourNextIntroductionIsReady": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "aSparkWasSentToValue": "A spark was sent to {arg0}.",
+  "@aSparkWasSentToValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "youLikedValueWellLetYouKnowIfItsMutual": "You liked {arg0}. We’ll let you know if it’s mutual.",
+  "@youLikedValueWellLetYouKnowIfItsMutual": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "yourLastChoiceWasRestored": "Your last choice was restored.",
+  "dating": "Dating",
+  "afterDark04": "AFTER DARK / 04",
+  "openConversations": "Open conversations",
+  "discoverIsLive": "Discover is live",
+  "curatedConnections": "CURATED CONNECTIONS",
+  "oneGoodIntroduction": "One good introduction.",
+  "curatedConnectionsTonight": "CURATED CONNECTIONS / TONIGHT",
+  "oneGoodIntroductionUpper": "ONE GOOD\nINTRODUCTION.",
+  "swipeLeftToPassRightToLikeEveryProfileReturns": "Swipe left to pass · right to like. Every profile returns tomorrow.",
+  "thursdaySocial": "Thursday social",
+  "sample12SeatsOldPort1930": "12 seats · Old Port · 19:30",
+  "profileDistance": "{distance} km away",
+  "@profileDistance": {
+    "placeholders": {
+      "distance": {}
+    }
+  },
+  "portrait01Value": "PORTRAIT 01 / {arg0} KM AWAY",
+  "@portrait01Value": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "askValue": "ASK / {arg0}",
+  "@askValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "sample98Match": "98% match",
+  "openConversationWithValue": "Open conversation with {arg0}",
+  "@openConversationWithValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "undoLastChoice": "Undo last choice",
+  "passOnProfile": "Pass on profile",
+  "sendASpark": "Send a spark",
+  "likeProfile": "Like profile",
+  "swipeValueLeftToPassOrRightToLike": "Swipe {arg0} left to pass or right to like",
+  "@swipeValueLeftToPassOrRightToLike": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "passOnValue": "Pass on {arg0}",
+  "@passOnValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "sendASparkToValue": "Send a spark to {arg0}",
+  "@sendASparkToValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "likeValue": "Like {arg0}",
+  "@likeValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "like": "LIKE",
+  "pass": "PASS",
+  "spark": "SPARK",
+  "chooseDate": "Choose date",
+  "sampleGuests": "Sample guests",
+  "sample1Room2Adults": "1 room · 2 adults",
+  "searchSampleHotels": "Search sample hotels",
+  "valueSampleHotels": "{arg0, plural, =1{{arg0} sample hotel} other{{arg0} sample hotels}}",
+  "@valueSampleHotels": {
+    "placeholders": {
+      "arg0": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "filter": "Filter",
+  "back": "Back",
+  "previousMonth": "Previous month",
+  "nextMonth": "Next month",
+  "valueOutOfValue": "{arg0} out of {arg1}",
+  "@valueOutOfValue": {
+    "placeholders": {
+      "arg0": {},
+      "arg1": {}
+    }
+  },
+  "rating": "Rating",
+  "freeBreakfast": "Free Breakfast",
+  "freeParking": "Free Parking",
+  "pool": "Pool",
+  "petFriendly": "Pet Friendly",
+  "freeWifi": "Free wifi",
+  "apartment": "Apartment",
+  "villa": "Villa",
+  "hotel": "Hotel",
+  "resort": "Resort",
+  "apply": "Apply",
+  "typeOfAccommodation": "Type of Accommodation",
+  "distanceFromCityCenter": "Distance from city centre",
+  "popularFilters": "Popular filters",
+  "priceFor1Night": "Price (for 1 night)",
+  "closeFilters": "Close filters",
+  "filters": "Filters",
+  "from": "From",
+  "to": "To",
+  "selectDate": "Select date",
+  "grandRoyalHotel": "Grand Royal Hotel",
+  "wembleyLondon": "Wembley, London",
+  "queenHotel": "Queen Hotel",
+  "removeValueFromFavorites": "Remove {arg0} from favourites",
+  "@removeValueFromFavorites": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "favoriteValue": "Favourite {arg0}",
+  "@favoriteValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "valueValueKmToCity": "{arg0} · {arg1} km to city",
+  "@valueValueKmToCity": {
+    "placeholders": {
+      "arg0": {},
+      "arg1": {}
+    }
+  },
+  "valueKmToCity": "{arg0} km to city",
+  "@valueKmToCity": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "valueReviews": "{arg0, plural, =1{ {arg0} Review} other{ {arg0} Reviews}}",
+  "@valueReviews": {
+    "placeholders": {
+      "arg0": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "perNight": "/per night",
+  "lessThanValueKm": "Less than {arg0} km",
+  "@lessThanValueKm": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "designDispatch": "Design Dispatch",
+  "newInterfacesThatMoveWithPurpose": "New: Interfaces that move with purpose",
+  "studioCrew": "Studio Crew",
+  "mayaThePrototypeIsReadyToTry": "Maya: The prototype is ready to try ✨",
+  "voiceMessage018": "Voice message · 0:18",
+  "citySignals": "City Signals",
+  "fiveExhibitionsWorthSeeingThisWeekend": "Five exhibitions worth seeing this weekend",
+  "productCircle": "Product Circle",
+  "jonSharingTheNotesNow": "Jon: Sharing the notes now",
+  "sample128KSubscribers": "12.8K subscribers",
+  "sample5Members3Online": "5 members · 3 online",
+  "searchConversation": "Search conversation",
+  "moreOptions": "More options",
+  "subscribed": "Subscribed",
+  "subscribe": "Subscribe",
+  "fieldNotes08": "FIELD\nNOTES\n/ 08",
+  "interfacesThatMoveWithPurpose": "Interfaces that move with purpose",
+  "thePrototypeIsReadyToTry": "The prototype is ready to try",
+  "aFiveMinuteReadOnTransitionsThatOrientPeopleInstead": "A five-minute read on transitions that orient people instead of distracting them.",
+  "iAddedTheFinalMotionPassTellMeWhatFeels": "I added the final motion pass. Tell me what feels too slow.",
+  "newMessage": "New message",
+  "newGroup": "New group",
+  "bringAProjectTeamTogether": "Bring a project team together",
+  "newChannel": "New channel",
+  "broadcastUpdatesToAnAudience": "Broadcast updates to an audience",
+  "findSomeoneByNameOrUsername": "Find someone by name or username",
+  "unread": "Unread",
+  "searchMessages": "Search messages",
+  "messengerSettings": "Messenger settings",
+  "archivedChats": "Archived chats",
+  "openValue": "Open {arg0}",
+  "@openValue": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "category": "Category",
+  "noSampleCoursesAreIncludedInThisCategory": "No sample courses are included in this category.",
+  "noSampleCoursesMatchYourSearch": "No sample courses match your search.",
+  "popularCourse": "Popular Course",
+  "selectValueCategory": "Select {arg0} category",
+  "@selectValueCategory": {
+    "placeholders": {
+      "arg0": {}
+    }
+  },
+  "searchForCourse": "Search for course",
+  "chooseYour": "Choose your",
+  "coding": "Coding",
+  "basicUi": "Basic UI",
+  "lessonCount": "{count, plural, =1{{count} lesson} other{{count} lessons}}",
+  "@lessonCount": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "courseAccessibility": "Open {title} sample course, {lessons}, rating {rating}, price {price}",
+  "@courseAccessibility": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "lessons": {
+        "type": "String"
+      },
+      "rating": {
+        "type": "double",
+        "format": "decimalPattern"
+      },
+      "price": {
+        "type": "int",
+        "format": "currency",
+        "optionalParameters": {
+          "name": "USD",
+          "symbol": "$",
+          "decimalDigits": 0
+        }
+      }
+    }
+  },
+  "userInterfaceDesign": "User Interface Design",
+  "userExperienceResearch": "User Experience Research",
+  "designSystemsLabel": "Design Systems",
+  "mobilePrototyping": "Mobile Prototyping",
+  "appDesignCourse": "App Design Course",
+  "webDesignCourse": "Web Design Course",
+  "responsiveLayouts": "Responsive Layouts",
+  "interactionDesign": "Interaction Design",
+  "classes": "Classes",
+  "sample2Hours": "2 hours",
+  "time": "Time",
+  "seats": "Seats",
+  "thisFictionalCourseDemonstratesTheCourseDetailsInterface": "This fictional course demonstrates the course-details interface.",
+  "previewOnlyEnrollmentIsNotAvailable": "Preview only — enrollment is not available.",
+  "removeSavedSampleCourse": "Remove saved sample course",
+  "saveSampleCourse": "Save sample course",
+  "you": "YOU",
+  "profilePortrait": "{status, select, online{{name} profile portrait, online} other{{name} profile portrait}}",
+  "chatMessageLabel": "{author}, {time}: {message}",
+  "messageHeading": "{author} / {time}",
+  "dateRange": "{start} – {end}",
+  "@profilePortrait": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "@chatMessageLabel": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "@messageHeading": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@dateRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "nativeMainMenu": "Main Menu",
+  "nativeAboutApp": "About {appName}",
+  "@nativeAboutApp": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "nativePreferences": "Preferences…",
+  "nativeServices": "Services",
+  "nativeHideApp": "Hide {appName}",
+  "@nativeHideApp": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "nativeHideOthers": "Hide Others",
+  "nativeShowAll": "Show All",
+  "nativeQuitApp": "Quit {appName}",
+  "@nativeQuitApp": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "nativeEdit": "Edit",
+  "nativeUndo": "Undo",
+  "nativeRedo": "Redo",
+  "nativeCut": "Cut",
+  "nativeCopy": "Copy",
+  "nativePaste": "Paste",
+  "nativePasteMatchStyle": "Paste and Match Style",
+  "nativeDelete": "Delete",
+  "nativeSelectAll": "Select All",
+  "nativeFind": "Find",
+  "nativeFindEllipsis": "Find…",
+  "nativeFindReplace": "Find and Replace…",
+  "nativeFindNext": "Find Next",
+  "nativeFindPrevious": "Find Previous",
+  "nativeUseSelectionForFind": "Use Selection for Find",
+  "nativeJumpToSelection": "Jump to Selection",
+  "nativeSpellingGrammar": "Spelling and Grammar",
+  "nativeSpelling": "Spelling",
+  "nativeShowSpellingGrammar": "Show Spelling and Grammar",
+  "nativeCheckDocument": "Check Document Now",
+  "nativeCheckSpellingWhileTyping": "Check Spelling While Typing",
+  "nativeCheckGrammarWithSpelling": "Check Grammar With Spelling",
+  "nativeCorrectSpellingAutomatically": "Correct Spelling Automatically",
+  "nativeSubstitutions": "Substitutions",
+  "nativeShowSubstitutions": "Show Substitutions",
+  "nativeSmartCopyPaste": "Smart Copy/Paste",
+  "nativeSmartQuotes": "Smart Quotes",
+  "nativeSmartDashes": "Smart Dashes",
+  "nativeSmartLinks": "Smart Links",
+  "nativeDataDetectors": "Data Detectors",
+  "nativeTextReplacement": "Text Replacement",
+  "nativeTransformations": "Transformations",
+  "nativeMakeUpperCase": "Make Upper Case",
+  "nativeMakeLowerCase": "Make Lower Case",
+  "nativeCapitalize": "Capitalise",
+  "nativeSpeech": "Speech",
+  "nativeStartSpeaking": "Start Speaking",
+  "nativeStopSpeaking": "Stop Speaking",
+  "nativeView": "View",
+  "nativeEnterFullScreen": "Enter Full Screen",
+  "nativeWindow": "Window",
+  "nativeMinimize": "Minimise",
+  "nativeZoom": "Zoom",
+  "nativeBringAllToFront": "Bring All to Front"
+}

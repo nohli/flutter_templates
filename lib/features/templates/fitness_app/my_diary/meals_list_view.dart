@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/motion_preferences.dart';
 import '../fitness_app_theme.dart';
 import '../models/meals_list_data.dart';
+import '../../../../l10n/localizations.dart';
 
 class MealsListView extends StatefulWidget {
   const MealsListView({required this.mainScreenAnimation, super.key});
@@ -14,7 +15,7 @@ class MealsListView extends StatefulWidget {
 }
 
 class _MealsListViewState extends State<MealsListView> with SingleTickerProviderStateMixin {
-  final _meals = MealsListData.samples;
+  List<MealsListData> get _meals => MealsListData.samples(context.l10n);
 
   late final AnimationController _animationController;
   @override
@@ -85,7 +86,7 @@ class MealsView extends StatelessWidget {
     final useExpandedCard = textScale >= 2;
     final cardWidth = 130 + (textScale - 1).clamp(0.0, 2.2).toDouble() * 75;
     final contentColor = useExpandedCard ? colors.onSurface : FitnessAppTheme.white;
-    Widget content = _buildContent(colors, contentColor, useExpandedCard);
+    Widget content = _buildContent(context, colors, contentColor, useExpandedCard);
     if (useExpandedCard) {
       content = DecoratedBox(
         decoration: BoxDecoration(
@@ -169,7 +170,7 @@ class MealsView extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(ColorScheme colors, Color contentColor, bool useExpandedCard) {
+  Widget _buildContent(BuildContext context, ColorScheme colors, Color contentColor, bool useExpandedCard) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,18 +202,18 @@ class MealsView extends StatelessWidget {
           ),
         ),
         if (mealsListData.kcal case final kcal?)
-          _buildEnergyLabel(kcal, contentColor, useExpandedCard)
+          _buildEnergyLabel(context, kcal, contentColor, useExpandedCard)
         else
           _buildAddIcon(colors, useExpandedCard),
       ],
     );
   }
 
-  Widget _buildEnergyLabel(int kcal, Color contentColor, bool useExpandedCard) {
-    final value = Text('$kcal', textAlign: TextAlign.center, style: _contentStyle(contentColor, 24));
+  Widget _buildEnergyLabel(BuildContext context, int kcal, Color contentColor, bool useExpandedCard) {
+    final value = Text(context.l10n.number(kcal), textAlign: TextAlign.center, style: _contentStyle(contentColor, 24));
     final unit = Padding(
       padding: EdgeInsets.only(left: useExpandedCard ? 0 : 4, bottom: 3),
-      child: Text('kcal', style: _contentStyle(contentColor, 10)),
+      child: Text(context.l10n.kcal, style: _contentStyle(contentColor, 10)),
     );
 
     if (useExpandedCard) {

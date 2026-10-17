@@ -5,9 +5,10 @@ import 'hotel_app_theme.dart';
 import 'model/hotel_filter_settings.dart';
 import 'range_slider_view.dart';
 import 'slider_view.dart';
+import '../../../l10n/localizations.dart';
 
-const _amenityOptions = <String>['Free Breakfast', 'Free Parking', 'Pool', 'Pet Friendly', 'Free wifi'];
-const _accommodationOptions = <String>['All', 'Apartment', 'Home', 'Villa', 'Hotel', 'Resort'];
+const _amenityOptions = HotelAmenity.values;
+const _accommodationOptions = HotelAccommodation.values;
 
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({
@@ -26,8 +27,8 @@ class FiltersScreen extends StatefulWidget {
 class _FiltersScreenState extends State<FiltersScreen> {
   late RangeValues _values;
   late double _distanceValue;
-  late final Set<String> _selectedAmenities;
-  late final Set<String> _selectedAccommodationTypes;
+  late final Set<HotelAmenity> _selectedAmenities;
+  late final Set<HotelAccommodation> _selectedAccommodationTypes;
 
   @override
   void initState() {
@@ -72,7 +73,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 child: FilledButton(
                   style: FilledButton.styleFrom(minimumSize: const Size(double.infinity, 48)),
                   onPressed: _applyFilters,
-                  child: const Text('Apply'),
+                  child: Text(context.l10n.apply),
                 ),
               ),
             ),
@@ -87,7 +88,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _FilterSectionTitle(label: 'Type of Accommodation', colors: colors),
+        _FilterSectionTitle(label: context.l10n.typeOfAccommodation, colors: colors),
         Padding(
           padding: const EdgeInsets.only(right: 16, left: 16),
           child: Column(children: _buildAccommodationFilterRows()),
@@ -100,8 +101,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
   List<Widget> _buildAccommodationFilterRows() {
     final rows = <Widget>[];
     for (var i = 0; i < _accommodationOptions.length; i++) {
-      final label = _accommodationOptions[i];
-      final isSelected = i == 0 ? _selectedAccommodationTypes.isEmpty : _selectedAccommodationTypes.contains(label);
+      final option = _accommodationOptions[i];
+      final label = option.label(context.l10n);
+      final isSelected = i == 0 ? _selectedAccommodationTypes.isEmpty : _selectedAccommodationTypes.contains(option);
 
       void toggleAccommodation() {
         setState(() {
@@ -146,7 +148,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _FilterSectionTitle(label: 'Distance from city center', colors: colors),
+        _FilterSectionTitle(label: context.l10n.distanceFromCityCenter, colors: colors),
         SliderView(
           distanceValue: _distanceValue,
           onDistanceChanged: (double value) {
@@ -163,7 +165,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _FilterSectionTitle(label: 'Popular filters', colors: colors),
+        _FilterSectionTitle(label: context.l10n.popularFilters, colors: colors),
         Padding(
           padding: const EdgeInsets.only(right: 16, left: 16),
           child: Column(children: _buildPopularFilterRows()),
@@ -192,12 +194,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return rows;
   }
 
-  Widget _buildPopularFilter(String label) {
-    final isSelected = _selectedAmenities.contains(label);
+  Widget _buildPopularFilter(HotelAmenity amenity) {
+    final label = amenity.label(context.l10n);
+    final isSelected = _selectedAmenities.contains(amenity);
 
     void toggleFilter() {
       setState(() {
-        _toggleSelection(_selectedAmenities, label);
+        _toggleSelection(_selectedAmenities, amenity);
       });
     }
 
@@ -225,7 +228,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _FilterSectionTitle(label: 'Price (for 1 night)', colors: colors, bottomPadding: 16),
+        _FilterSectionTitle(label: context.l10n.priceFor1Night, colors: colors, bottomPadding: 16),
         RangeSliderView(
           values: _values,
           onChangeRangeValues: (RangeValues values) {
@@ -254,14 +257,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
               width: AppBar().preferredSize.height + 40,
               height: AppBar().preferredSize.height,
               child: IconButton(
-                tooltip: 'Close filters',
+                tooltip: context.l10n.closeFilters,
                 onPressed: () => Navigator.pop(context),
                 icon: const Icon(Icons.close),
               ),
             ),
-            const Expanded(
+            Expanded(
               child: Center(
-                child: Text('Filters', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22)),
+                child: Text(context.l10n.filters, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22)),
               ),
             ),
             SizedBox(width: AppBar().preferredSize.height + 40, height: AppBar().preferredSize.height),
@@ -280,13 +283,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
       maximumPrice: _values.end,
       maximumDistanceKm: _distanceValue / 10,
       amenities: amenities,
-      accommodationTypes: hasEveryType ? const <String>[] : types,
+      accommodationTypes: hasEveryType ? const <HotelAccommodation>[] : types,
     );
 
     Navigator.pop(context, settings);
   }
 
-  void _toggleSelection(Set<String> selection, String label) {
+  void _toggleSelection<T>(Set<T> selection, T label) {
     final wasSelected = !selection.add(label);
 
     if (wasSelected) {

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../app/app_identity.dart';
 import '../../app/app_theme.dart';
 import 'external_actions.dart';
 import 'illustrated_support_layout.dart';
+import '../../l10n/localizations.dart';
+import 'support_error.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({super.key, this.launcher = launchExternalUri});
@@ -16,23 +17,23 @@ class HelpScreen extends StatefulWidget {
 
 class _HelpScreenState extends State<HelpScreen> {
   var _isOpeningEmail = false;
-  String? _errorMessage;
+  SupportError? _error;
 
   Future<void> _openSupport() async {
     setState(() {
       _isOpeningEmail = true;
-      _errorMessage = null;
+      _error = null;
     });
     var launched = false;
     try {
-      launched = await widget.launcher(supportEmailUri());
+      launched = await widget.launcher(supportEmailUri(context.l10n));
     } catch (_) {
       launched = false;
     }
     if (!mounted) return;
     setState(() {
       _isOpeningEmail = false;
-      _errorMessage = launched ? null : 'No email app is available. Contact ${AppIdentity.supportEmail}.';
+      _error = launched ? null : SupportError.emailUnavailable;
     });
   }
 
@@ -54,23 +55,19 @@ class _HelpScreenState extends State<HelpScreen> {
             illustrationPath: 'assets/images/helpImage.png',
             content: <Widget>[
               const SizedBox(height: 8),
-              const Text(
-                'How can we help you?',
+              Text(
+                context.l10n.helpTitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Questions or problems with a template? Email us and we will help.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
-              ),
-              if (_errorMessage case final errorMessage?) ...<Widget>[
+              Text(context.l10n.helpDescription, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16)),
+              if (_error case final error?) ...<Widget>[
                 const SizedBox(height: 8),
                 Semantics(
                   liveRegion: true,
                   child: Text(
-                    errorMessage,
+                    error.message(context.l10n),
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
@@ -87,7 +84,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
               ),
               onPressed: _isOpeningEmail ? null : _openSupport,
-              child: Text(_isOpeningEmail ? 'Opening…' : 'Email Us'),
+              child: Text(_isOpeningEmail ? context.l10n.opening : context.l10n.emailUs),
             ),
           ),
         ),

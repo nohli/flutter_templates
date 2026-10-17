@@ -7,6 +7,7 @@ import 'banking_app_theme.dart';
 import 'banking_transfer_screen.dart';
 import 'widgets/banking_cards_content.dart';
 import 'widgets/banking_home_content.dart';
+import '../../../l10n/localizations.dart';
 
 class BankingHomeScreen extends StatelessWidget {
   const BankingHomeScreen({this.appearance = AppAppearance.light, super.key});
@@ -69,7 +70,7 @@ class _BankingHomeState extends State<_BankingHome> {
     if (!mounted || recipient == null) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Money sent to $recipient')));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.moneySentToValue(recipient))));
   }
 }
 
@@ -82,11 +83,11 @@ class _BankingNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    const items = <({String label, IconData icon})>[
-      (label: 'Home', icon: Icons.home_rounded),
-      (label: 'Payments', icon: Icons.swap_horiz_rounded),
-      (label: 'Cards', icon: Icons.credit_card_rounded),
-      (label: 'Benefits', icon: Icons.auto_awesome_rounded),
+    final items = <({String label, IconData icon})>[
+      (label: context.l10n.home, icon: Icons.home_rounded),
+      (label: context.l10n.payments, icon: Icons.swap_horiz_rounded),
+      (label: context.l10n.cards, icon: Icons.credit_card_rounded),
+      (label: context.l10n.benefits, icon: Icons.auto_awesome_rounded),
     ];
     return SafeArea(
       top: false,
@@ -142,19 +143,33 @@ class _PaymentsHub extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 110),
       children: <Widget>[
-        Text('Payments', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800)),
+        Text(
+          context.l10n.payments,
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800),
+        ),
         const SizedBox(height: 20),
-        const TextField(
-          decoration: InputDecoration(prefixIcon: Icon(Icons.search_rounded), hintText: 'Name, tag, or bank'),
+        TextField(
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.search_rounded),
+            hintText: context.l10n.nameTagOrBank,
+          ),
         ),
         const SizedBox(height: 24),
-        const _HubTile(
+        _HubTile(
           icon: Icons.person_add_alt_rounded,
-          title: 'New recipient',
-          detail: 'Bank, card, or payment handle',
+          title: context.l10n.newRecipient,
+          detail: context.l10n.bankCardOrPaymentHandle,
         ),
-        const _HubTile(icon: Icons.public_rounded, title: 'International', detail: 'Send in 70+ currencies'),
-        const _HubTile(icon: Icons.calendar_month_rounded, title: 'Scheduled', detail: 'Manage recurring transfers'),
+        _HubTile(
+          icon: Icons.public_rounded,
+          title: context.l10n.international,
+          detail: context.l10n.sendIn70Currencies,
+        ),
+        _HubTile(
+          icon: Icons.calendar_month_rounded,
+          title: context.l10n.scheduled,
+          detail: context.l10n.manageRecurringTransfers,
+        ),
       ],
     );
   }
@@ -168,7 +183,10 @@ class _BenefitsHub extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 110),
       children: <Widget>[
-        Text('Benefits', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800)),
+        Text(
+          context.l10n.benefits,
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800),
+        ),
         const SizedBox(height: 20),
         Container(
           height: 230,
@@ -182,19 +200,24 @@ class _BenefitsHub extends StatelessWidget {
               bottomRight: Radius.circular(8),
             ),
           ),
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'WEEKEND ESCAPE',
-                style: TextStyle(color: Color(0xFF263000), fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1),
+                context.l10n.weekendEscape,
+                style: const TextStyle(
+                  color: Color(0xFF263000),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1,
+                ),
               ),
-              Spacer(),
-              Icon(Icons.flight_takeoff_rounded, color: Color(0xFF263000), size: 56),
-              SizedBox(height: 16),
+              const Spacer(),
+              const Icon(Icons.flight_takeoff_rounded, color: Color(0xFF263000), size: 56),
+              const SizedBox(height: 16),
               Text(
-                'Turn everyday spending into your next trip.',
-                style: TextStyle(color: Color(0xFF263000), fontSize: 24, fontWeight: FontWeight.w800),
+                context.l10n.turnEverydaySpendingIntoYourNextTrip,
+                style: const TextStyle(color: Color(0xFF263000), fontSize: 24, fontWeight: FontWeight.w800),
               ),
             ],
           ),

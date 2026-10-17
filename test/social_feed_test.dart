@@ -7,6 +7,7 @@ import 'package:templates/features/templates/social_feed/social_compose_screen.d
 import 'package:templates/features/templates/social_feed/social_feed_home_screen.dart';
 import 'package:templates/features/templates/social_feed/social_feed_theme.dart';
 import 'package:templates/features/templates/social_feed/social_thread_screen.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('social feed palettes keep readable text and controls', () {
@@ -24,7 +25,7 @@ void main() {
       ..physicalSize = const Size(430, 932);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: SocialFeedHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: SocialFeedHomeScreen()));
     await tester.pumpAndSettle();
 
     expect(find.text('What people are building right now.'), findsOneWidget);
@@ -59,8 +60,24 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('a published French post translates its author avatar', (tester) async {
+    await tester.pumpWidget(const LocalizedTestApp(locale: Locale('fr'), home: SocialFeedHomeScreen()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Créer une publication'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const ValueKey<String>('social-composer')), 'Une nouvelle idée');
+    await tester.pump();
+    await tester.tap(find.text('Publier'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Une nouvelle idée'), findsOneWidget);
+    expect(find.text('TOI'), findsOneWidget);
+    expect(find.text('YO'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('social feed follows its requested dark appearance', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(home: SocialFeedHomeScreen(appearance: AppAppearance.dark)));
+    await tester.pumpWidget(const LocalizedTestApp(home: SocialFeedHomeScreen(appearance: AppAppearance.dark)));
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('SOCIAL FEED'))).brightness, Brightness.dark);

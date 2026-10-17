@@ -4,6 +4,7 @@ import '../finance_app_theme.dart';
 import '../finance_formatters.dart';
 import '../widgets/finance_entrance.dart';
 import '../widgets/finance_surface.dart';
+import '../../../../l10n/localizations.dart';
 
 class FinanceCardsSection extends StatefulWidget {
   const FinanceCardsSection({required this.animation, required this.scrollController, super.key});
@@ -30,7 +31,7 @@ class _FinanceCardsSectionState extends State<FinanceCardsSection> {
           animation: widget.animation,
           index: 0,
           child: Text(
-            'Manage your sample cards and limits.',
+            context.l10n.manageYourSampleCardsAndLimits,
             style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 14),
           ),
         ),
@@ -59,7 +60,7 @@ class _FinanceCardsSectionState extends State<FinanceCardsSection> {
                 key: ValueKey<bool>(_cardIsLocked),
               ),
             ),
-            label: Text(_cardIsLocked ? 'Unlock sample card' : 'Lock sample card'),
+            label: Text(_cardIsLocked ? context.l10n.unlockSampleCard : context.l10n.lockSampleCard),
           ),
         ),
         const SizedBox(height: 24),
@@ -82,7 +83,7 @@ class _PaymentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       container: true,
-      label: 'Sample debit card ending in 4832, ${isLocked ? 'locked' : 'active'}',
+      label: context.l10n.sampleDebitCardEndingIn4832Value(isLocked ? context.l10n.locked : context.l10n.active),
       child: ExcludeSemantics(
         child: AspectRatio(
           aspectRatio: 1.62,
@@ -120,12 +121,12 @@ class _PaymentCard extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: 1.5),
                 ),
                 const SizedBox(height: 18),
-                const Row(
+                Row(
                   children: <Widget>[
                     Expanded(
-                      child: _CardDetail(label: 'CARD HOLDER', value: 'ALEX RIVERA'),
+                      child: _CardDetail(label: context.l10n.cardHolder, value: 'ALEX RIVERA'),
                     ),
-                    _CardDetail(label: 'EXPIRES', value: '09/29'),
+                    _CardDetail(label: context.l10n.expires, value: '09/29'),
                   ],
                 ),
               ],
@@ -169,15 +170,19 @@ class _CardSettings extends StatelessWidget {
     return FinanceSurface(
       child: Column(
         children: <Widget>[
-          _SettingRow(icon: Icons.shield_outlined, label: 'Card status', value: isLocked ? 'Locked' : 'Active'),
+          _SettingRow(
+            icon: Icons.shield_outlined,
+            label: context.l10n.cardStatus,
+            value: isLocked ? context.l10n.locked : context.l10n.active,
+          ),
           Divider(height: 1, indent: 64, color: Theme.of(context).colorScheme.outlineVariant),
           _SettingRow(
             icon: Icons.speed_rounded,
-            label: 'Monthly limit',
+            label: context.l10n.monthlyLimit,
             value: formatCurrency(context, 3000, decimalDigits: 0),
           ),
           Divider(height: 1, indent: 64, color: Theme.of(context).colorScheme.outlineVariant),
-          const _SettingRow(icon: Icons.public_rounded, label: 'Online payments', value: 'Enabled'),
+          _SettingRow(icon: Icons.public_rounded, label: context.l10n.onlinePayments, value: context.l10n.enabled),
         ],
       ),
     );

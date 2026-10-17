@@ -6,6 +6,7 @@ import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/channel_messenger/channel_detail_screen.dart';
 import 'package:templates/features/templates/channel_messenger/channel_messenger_home_screen.dart';
 import 'package:templates/features/templates/channel_messenger/channel_messenger_theme.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('channel messenger palettes keep readable text and controls', () {
@@ -23,7 +24,7 @@ void main() {
       ..physicalSize = const Size(320, 640);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: ChannelMessengerHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: ChannelMessengerHomeScreen()));
     await tester.pumpAndSettle();
 
     expect(find.text('Studio Crew'), findsOneWidget);
@@ -50,8 +51,25 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('a French group translates its details and message composer', (tester) async {
+    await tester.pumpWidget(const LocalizedTestApp(locale: Locale('fr'), home: ChannelMessengerHomeScreen()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('L’équipe de l’atelier'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('5 membres · 3 en ligne'), findsOneWidget);
+    expect(find.text('Le prototype est prêt à être essayé'), findsOneWidget);
+    expect(find.text('J’ai terminé les animations. Dis-moi ce qui te semble trop lent.'), findsOneWidget);
+    expect(tester.widget<TextField>(find.byType(TextField)).decoration?.hintText, 'Message');
+    expect(find.byTooltip('Envoyer le message'), findsOneWidget);
+    expect(find.text('5 members · 3 online'), findsNothing);
+    await tester.enterText(find.byType(TextField), 'Mon message');
+    expect(find.text('Mon message'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('channel messenger exposes new conversation choices', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(home: ChannelMessengerHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: ChannelMessengerHomeScreen()));
     await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('New message'));
@@ -62,7 +80,7 @@ void main() {
   });
 
   testWidgets('channel messenger follows its requested dark appearance', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(home: ChannelMessengerHomeScreen(appearance: AppAppearance.dark)));
+    await tester.pumpWidget(const LocalizedTestApp(home: ChannelMessengerHomeScreen(appearance: AppAppearance.dark)));
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('Channels').first)).brightness, Brightness.dark);

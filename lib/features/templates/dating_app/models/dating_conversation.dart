@@ -1,5 +1,6 @@
 import 'dating_message.dart';
 import 'dating_profile.dart';
+import '../../../../l10n/localizations.dart';
 
 class DatingConversation {
   const DatingConversation({
@@ -37,33 +38,33 @@ class DatingConversation {
     );
   }
 
-  static const samples = <DatingConversation>[
+  static List<DatingConversation> samples(AppLocalizations l10n) => <DatingConversation>[
     DatingConversation(
       id: 'ari',
       name: 'Ari',
       palette: DatingProfilePalette.lagoon,
-      status: 'ONLINE / MATCHED TUESDAY',
-      connection: 'Jazz after dark · ceramics · tiny restaurants',
+      status: l10n.onlineMatchedTuesday,
+      connection: l10n.jazzAfterDarkCeramicsTinyRestaurants,
       unreadCount: 2,
       isOnline: true,
       messages: <DatingMessage>[
         DatingMessage(
           id: 'ari-1',
           author: DatingMessageAuthor.match,
-          text: 'You had me at choosing dessert first. Tiny jazz bar this Thursday?',
-          time: '18:42',
+          text: l10n.youHadMeAtChoosingDessertFirstTinyJazzBar,
+          time: l10n.clock(18, 42),
         ),
         DatingMessage(
           id: 'you-1',
           author: DatingMessageAuthor.user,
-          text: 'Only if we order something we cannot pronounce.',
-          time: '18:47',
+          text: l10n.onlyIfWeOrderSomethingWeCannotPronounce,
+          time: l10n.clock(18, 47),
         ),
         DatingMessage(
           id: 'ari-2',
           author: DatingMessageAuthor.match,
-          text: 'Deal. I know exactly the place.',
-          time: '18:49',
+          text: l10n.dealIKnowExactlyThePlace,
+          time: l10n.clock(18, 49),
         ),
       ],
     ),
@@ -71,21 +72,21 @@ class DatingConversation {
       id: 'mina',
       name: 'Mina',
       palette: DatingProfilePalette.sunset,
-      status: 'ACTIVE 12 MIN AGO / MATCHED TODAY',
-      connection: 'Night swims · small plates · analogue cameras',
+      status: l10n.active12MinAgoMatchedToday,
+      connection: l10n.nightSwimsSmallPlatesAnalogueCameras,
       unreadCount: 1,
       messages: <DatingMessage>[
         DatingMessage(
           id: 'mina-1',
           author: DatingMessageAuthor.user,
-          text: 'You mentioned the sea. Sunrise swim or midnight dip?',
-          time: '19:08',
+          text: l10n.youMentionedTheSeaSunriseSwimOrMidnightDip,
+          time: l10n.clock(19, 8),
         ),
         DatingMessage(
           id: 'mina-2',
           author: DatingMessageAuthor.match,
-          text: 'Midnight, obviously. I’ll bring the towels.',
-          time: '19:12',
+          text: l10n.midnightObviouslyIllBringTheTowels,
+          time: l10n.clock(19, 12),
         ),
       ],
     ),
@@ -93,20 +94,20 @@ class DatingConversation {
       id: 'noah',
       name: 'Noah',
       palette: DatingProfilePalette.violet,
-      status: 'ACTIVE THIS AFTERNOON / MATCHED MONDAY',
-      connection: 'Architecture · vinyl · very slow Sundays',
+      status: l10n.activeThisAfternoonMatchedMonday,
+      connection: l10n.architectureVinylVerySlowSundays,
       messages: <DatingMessage>[
         DatingMessage(
           id: 'noah-1',
           author: DatingMessageAuthor.match,
-          text: 'I found that record shop I told you about.',
-          time: 'MON',
+          text: l10n.iFoundThatRecordShopIToldYouAbout,
+          time: l10n.mon,
         ),
         DatingMessage(
           id: 'you-2',
           author: DatingMessageAuthor.user,
-          text: 'Save me the weirdest sleeve in the window.',
-          time: 'MON',
+          text: l10n.saveMeTheWeirdestSleeveInTheWindow,
+          time: l10n.mon,
         ),
       ],
     ),
@@ -114,14 +115,14 @@ class DatingConversation {
       id: 'zoe',
       name: 'Zoë',
       palette: DatingProfilePalette.citrus,
-      status: 'ACTIVE YESTERDAY / MATCHED FRIDAY',
-      connection: 'Tiny concerts · train windows · fresh pasta',
+      status: l10n.activeYesterdayMatchedFriday,
+      connection: l10n.tinyConcertsTrainWindowsFreshPasta,
       messages: <DatingMessage>[
         DatingMessage(
           id: 'zoe-1',
           author: DatingMessageAuthor.match,
-          text: 'There’s a three-song set in the courtyard tomorrow.',
-          time: 'FRI',
+          text: l10n.theresAThreeSongSetInTheCourtyardTomorrow,
+          time: l10n.fri,
         ),
       ],
     ),

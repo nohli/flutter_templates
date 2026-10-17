@@ -38,6 +38,7 @@ import 'package:templates/features/templates/hotel_booking/range_slider_view.dar
 import 'package:templates/features/templates/hotel_booking/slider_view.dart';
 import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
 import 'package:templates/main.dart' as app;
+import 'localized_test_app.dart';
 
 void main() {
   testWidgets('root app uses the adaptive shell', (WidgetTester tester) async {
@@ -106,7 +107,10 @@ void main() {
 
   testWidgets('course details and staged actions render without layout errors', (WidgetTester tester) async {
     _evictAssets(<String>['assets/design_course/interFace4.png']);
-    await _pumpScreen(tester, CourseInfoScreen(course: Category.popularCourseList[1], savedCourses: SavedCourses()));
+    await _pumpScreen(
+      tester,
+      CourseInfoScreen(course: Category.popularCourseList(english)[1], savedCourses: SavedCourses()),
+    );
 
     expect(find.text('Web Design Course'), findsOneWidget);
     expect(find.text('Preview only — enrollment is not available.'), findsOneWidget);
@@ -124,7 +128,7 @@ void main() {
   });
 
   testWidgets('course details keep primary content visible on phone viewports', (WidgetTester tester) async {
-    final course = Category.categoryList.first;
+    final course = Category.categoryList(english).first;
     _evictAssets(<String>[course.imagePath]);
     await _pumpScreen(
       tester,
@@ -146,8 +150,8 @@ void main() {
   });
 
   testWidgets('course details follow updated course and saved-state inputs', (WidgetTester tester) async {
-    final firstCourse = Category.popularCourseList.first;
-    final secondCourse = Category.popularCourseList.last;
+    final firstCourse = Category.popularCourseList(english).first;
+    final secondCourse = Category.popularCourseList(english).last;
     final firstSavedCourses = SavedCourses()..toggle(firstCourse);
     final secondSavedCourses = SavedCourses();
     var course = firstCourse;
@@ -267,7 +271,7 @@ void main() {
     await tester.tap(find.text('${selectedEnd.day}'));
     await tester.pump();
 
-    expect(find.text(DateFormat('EEE, dd MMM').format(selectedEnd)), findsOneWidget);
+    expect(find.text(DateFormat.MMMEd('en').format(selectedEnd)), findsOneWidget);
 
     await tester.tap(find.text('Apply'));
     await tester.pumpAndSettle();
@@ -297,11 +301,11 @@ void main() {
     );
 
     for (var month = 0; month < 12; month += 1) {
-      await tester.tap(find.widgetWithIcon(IconButton, Icons.keyboard_arrow_right));
+      await tester.tap(find.byTooltip('Next month'));
       await tester.pump();
     }
     final matchingCurrentDate = find.bySemanticsLabel(
-      DateFormat('EEEE, d MMMM yyyy').format(DateTime(now.year, now.month, 5)),
+      DateFormat.yMMMMEEEEd('en').format(DateTime(now.year, now.month, 5)),
     );
     await tester.tap(matchingCurrentDate);
     await tester.pump();
@@ -814,7 +818,7 @@ void main() {
     var reduceMotion = false;
     late StateSetter updateMediaQuery;
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             updateMediaQuery = setState;
@@ -870,7 +874,7 @@ void main() {
     _evictAssets(<String>['assets/design_course/interFace4.png']);
     await _pumpScreen(
       tester,
-      CourseInfoScreen(course: Category.popularCourseList[1], savedCourses: SavedCourses()),
+      CourseInfoScreen(course: Category.popularCourseList(english)[1], savedCourses: SavedCourses()),
       size: const Size(932, 430),
       disableAnimations: true,
       padding: const EdgeInsets.only(left: 44, right: 36),
@@ -914,7 +918,7 @@ void main() {
     final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     final hotelCard = HotelListView(
-      hotelData: HotelListData.samples.first,
+      hotelData: HotelListData.samples(english).first,
       isFavorite: false,
       onFavoriteChanged: () {},
       animation: controller,
@@ -1024,19 +1028,19 @@ void main() {
   testWidgets('hotel date selection updates the visible stay summary', (WidgetTester tester) async {
     final now = DateTime.now();
     final replacementEnd = DateTime(now.year, now.month + 1, 20);
-    _evictAssets(HotelListData.samples.map((HotelListData hotel) => hotel.imagePath));
+    _evictAssets(HotelListData.samples(english).map((HotelListData hotel) => hotel.imagePath));
     await _pumpScreen(tester, const HotelHomeScreen(), disableAnimations: true);
 
     await tester.tap(find.text('Choose date'));
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithIcon(IconButton, Icons.keyboard_arrow_right));
+    await tester.tap(find.byTooltip('Next month'));
     await tester.pump();
-    await tester.tap(find.bySemanticsLabel(DateFormat('EEEE, d MMMM yyyy').format(replacementEnd)));
+    await tester.tap(find.bySemanticsLabel(DateFormat.yMMMMEEEEd('en').format(replacementEnd)));
     await tester.pump();
     await tester.tap(find.text('Apply'));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining(DateFormat('dd, MMM').format(replacementEnd)), findsOneWidget);
+    expect(find.textContaining(DateFormat.MMMd('en').format(replacementEnd)), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -1097,7 +1101,7 @@ Future<void> _pumpScreen(
   );
 
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
       home: MediaQuery(
         data: mediaQuery,
         child: Scaffold(body: screen),
@@ -1109,7 +1113,7 @@ Future<void> _pumpScreen(
 
 Future<void> _expectStatusBarTapScrollsToTop(WidgetTester tester, Widget screen) async {
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
       home: MediaQuery(
         data: MediaQueryData.fromView(
           tester.view,

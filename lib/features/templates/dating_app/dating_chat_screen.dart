@@ -9,6 +9,7 @@ import 'models/dating_conversation.dart';
 import 'models/dating_message.dart';
 import 'widgets/dating_conversation_avatar.dart';
 import 'widgets/dating_message_bubble.dart';
+import '../../../l10n/localizations.dart';
 
 class DatingChatScreen extends StatefulWidget {
   const DatingChatScreen({required this.appearance, required this.conversation, super.key});
@@ -23,7 +24,7 @@ class DatingChatScreen extends StatefulWidget {
 class _DatingChatScreenState extends State<DatingChatScreen> {
   final _composer = TextEditingController();
   final _scrollController = ScrollController();
-  late final _messages = <DatingMessage>[...widget.conversation.messages];
+  final _sentMessages = <String>[];
 
   @override
   void initState() {
@@ -57,8 +58,24 @@ class _DatingChatScreenState extends State<DatingChatScreen> {
                   children: <Widget>[
                     _MatchNote(conversation: widget.conversation),
                     const SizedBox(height: 26),
-                    for (final message in _messages)
-                      DatingMessageBubble(key: ValueKey<String>(message.id), message: message),
+                    for (final message in widget.conversation.messages)
+                      DatingMessageBubble(
+                        key: ValueKey<String>(message.id),
+                        message: message,
+                        matchName: widget.conversation.name,
+                      ),
+                    for (final (index, text) in _sentMessages.indexed)
+                      DatingMessageBubble(
+                        key: ValueKey<String>('sent-$index'),
+                        message: DatingMessage(
+                          id: 'sent-$index',
+                          author: DatingMessageAuthor.user,
+                          text: text,
+                          time: '',
+                        ),
+                        matchName: widget.conversation.name,
+                        isRecent: true,
+                      ),
                   ],
                 ),
               ),
@@ -85,9 +102,7 @@ class _DatingChatScreenState extends State<DatingChatScreen> {
 
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     setState(() {
-      _messages.add(
-        DatingMessage(id: 'you-${_messages.length}', author: DatingMessageAuthor.user, text: text, time: 'NOW'),
-      );
+      _sentMessages.add(text);
     });
     _composer.clear();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -125,7 +140,7 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: 62,
       leading: Center(
         child: IconButton(
-          tooltip: 'Back to conversations',
+          tooltip: context.l10n.backToConversations,
           onPressed: () => Navigator.of(context).pop(),
           style: IconButton.styleFrom(
             side: BorderSide(color: colors.outlineVariant),
@@ -169,11 +184,11 @@ class _ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: <Widget>[
         IconButton(
-          tooltip: 'Conversation details',
+          tooltip: context.l10n.conversationDetails,
           onPressed: () {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(const SnackBar(content: Text('Conversation details are ready to connect.')));
+              ..showSnackBar(SnackBar(content: Text(context.l10n.conversationDetailsAreReadyToConnect)));
           },
           icon: const Icon(Icons.more_horiz_rounded),
         ),
@@ -197,7 +212,7 @@ class _MatchNote extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Semantics(
-      label: 'You and ${conversation.name} matched',
+      label: context.l10n.youAndValueMatched(conversation.name),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: colors.secondaryContainer,
@@ -213,7 +228,7 @@ class _MatchNote extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'A GOOD BEGINNING / 01',
+                context.l10n.aGoodBeginning01,
                 style: TextStyle(
                   color: colors.onSecondaryContainer,
                   fontSize: 8,
@@ -223,7 +238,7 @@ class _MatchNote extends StatelessWidget {
               ),
               const SizedBox(height: 9),
               Text(
-                'You and ${conversation.name} found a little common ground.',
+                context.l10n.youAndValueFoundALittleCommonGround(conversation.name),
                 style: TextStyle(
                   color: colors.onSecondaryContainer,
                   fontFamily: DatingAppTheme.displayFontName,
@@ -278,11 +293,11 @@ class _MessageComposer extends StatelessWidget {
           children: <Widget>[
             if (!largeText) ...<Widget>[
               IconButton.outlined(
-                tooltip: 'Add attachment',
+                tooltip: context.l10n.addAttachment,
                 onPressed: () {
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
-                    ..showSnackBar(const SnackBar(content: Text('Attachments are ready to connect.')));
+                    ..showSnackBar(SnackBar(content: Text(context.l10n.attachmentsAreReadyToConnect)));
                 },
                 style: IconButton.styleFrom(
                   minimumSize: const Size.square(50),
@@ -301,7 +316,7 @@ class _MessageComposer extends StatelessWidget {
                 textInputAction: TextInputAction.send,
                 onSubmitted: canSend ? (_) => onSend() : null,
                 decoration: InputDecoration(
-                  hintText: 'Message $conversationName',
+                  hintText: context.l10n.messageValue(conversationName),
                   filled: true,
                   fillColor: colors.surfaceContainerHighest,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 17, vertical: 14),
@@ -326,7 +341,7 @@ class _MessageComposer extends StatelessWidget {
               duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 180),
               curve: Curves.easeOutBack,
               child: IconButton(
-                tooltip: 'Send message',
+                tooltip: context.l10n.sendMessage,
                 onPressed: canSend ? onSend : null,
                 style: ButtonStyle(
                   minimumSize: const WidgetStatePropertyAll<Size>(Size.square(50)),

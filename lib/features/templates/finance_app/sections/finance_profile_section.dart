@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../finance_app_theme.dart';
 import '../widgets/finance_entrance.dart';
 import '../widgets/finance_surface.dart';
+import '../../../../l10n/localizations.dart';
 
 class FinanceProfileSection extends StatefulWidget {
   const FinanceProfileSection({required this.animation, required this.scrollController, super.key});
@@ -34,15 +35,15 @@ class _FinanceProfileSectionState extends State<FinanceProfileSection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text('Preferences', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+              Text(context.l10n.preferences, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
               const SizedBox(height: 12),
               FinanceSurface(
                 child: Column(
                   children: <Widget>[
                     SwitchListTile.adaptive(
                       secondary: const Icon(Icons.notifications_none_rounded, color: FinanceAppTheme.primary),
-                      title: const Text('Spending alerts', style: TextStyle(fontWeight: FontWeight.w600)),
-                      subtitle: const Text('Sample budget notifications'),
+                      title: Text(context.l10n.spendingAlerts, style: const TextStyle(fontWeight: FontWeight.w600)),
+                      subtitle: Text(context.l10n.sampleBudgetNotifications),
                       value: _alertsAreEnabled,
                       onChanged: (bool value) {
                         setState(() {
@@ -53,8 +54,8 @@ class _FinanceProfileSectionState extends State<FinanceProfileSection> {
                     Divider(height: 1, indent: 64, color: Theme.of(context).colorScheme.outlineVariant),
                     SwitchListTile.adaptive(
                       secondary: const Icon(Icons.fingerprint_rounded, color: FinanceAppTheme.primary),
-                      title: const Text('Biometric sign-in', style: TextStyle(fontWeight: FontWeight.w600)),
-                      subtitle: const Text('Interface demonstration only'),
+                      title: Text(context.l10n.biometricSignIn, style: const TextStyle(fontWeight: FontWeight.w600)),
+                      subtitle: Text(context.l10n.interfaceDemonstrationOnly),
                       value: _biometricsAreEnabled,
                       onChanged: (bool value) {
                         setState(() {
@@ -101,7 +102,7 @@ class _ProfileSummary extends StatelessWidget {
               children: <Widget>[
                 const Text('Alex Rivera', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 3),
-                Text('Demo profile', style: TextStyle(color: colors.onSurfaceVariant, fontSize: 13)),
+                Text(context.l10n.demoProfile, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 13)),
               ],
             ),
           ),
@@ -130,7 +131,7 @@ class _PrivacyNotice extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'This template uses fictional local data and does not connect to a bank.',
+              context.l10n.thisTemplateUsesFictionalLocalDataAndDoesNotConnect,
               style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer, height: 1.4),
             ),
           ),

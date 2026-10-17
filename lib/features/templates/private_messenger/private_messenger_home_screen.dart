@@ -9,6 +9,7 @@ import 'models/private_conversation.dart';
 import 'private_chat_screen.dart';
 import 'private_messenger_theme.dart';
 import 'widgets/private_chats_content.dart';
+import '../../../l10n/localizations.dart';
 
 class PrivateMessengerHomeScreen extends StatelessWidget {
   const PrivateMessengerHomeScreen({this.appearance = AppAppearance.light, super.key});
@@ -40,7 +41,7 @@ class _PrivateMessengerHomeState extends State<_PrivateMessengerHome> {
     return Scaffold(
       floatingActionButton: _selectedIndex == 0
           ? FloatingActionButton(
-              tooltip: 'Start a private chat',
+              tooltip: context.l10n.startAPrivateChat,
               onPressed: () {},
               child: const Icon(Icons.chat_rounded),
             )
@@ -71,7 +72,11 @@ class _PrivateMessengerHomeState extends State<_PrivateMessengerHome> {
       Navigator.of(context).push<void>(
         templatePageRoute<void>(
           context: context,
-          builder: (_) => PrivateChatScreen(conversation: conversation),
+          builder: (context) => PrivateChatScreen(
+            conversation: PrivateConversation.samples(
+              context.l10n,
+            ).firstWhere((sample) => sample.initials == conversation.initials),
+          ),
         ),
       ),
     );
@@ -87,11 +92,11 @@ class _PrivateNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    const items = <({String label, IconData icon})>[
-      (label: 'Chats', icon: Icons.chat_bubble_rounded),
-      (label: 'Updates', icon: Icons.blur_circular_rounded),
-      (label: 'Communities', icon: Icons.groups_rounded),
-      (label: 'Calls', icon: Icons.call_rounded),
+    final items = <({String label, IconData icon})>[
+      (label: context.l10n.chats, icon: Icons.chat_bubble_rounded),
+      (label: context.l10n.updates, icon: Icons.blur_circular_rounded),
+      (label: context.l10n.communities, icon: Icons.groups_rounded),
+      (label: context.l10n.calls, icon: Icons.call_rounded),
     ];
     return SafeArea(
       top: false,
@@ -212,7 +217,7 @@ class _UpdatesContent extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 22, 20, 100),
       children: <Widget>[
-        const _SectionTitle(title: 'Status updates', action: 'Privacy'),
+        _SectionTitle(title: context.l10n.statusUpdates, action: context.l10n.privacy),
         const SizedBox(height: 22),
         Container(
           height: 290,
@@ -230,29 +235,29 @@ class _UpdatesContent extends StatelessWidget {
               bottomRight: Radius.circular(40),
             ),
           ),
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  CircleAvatar(
+                  const CircleAvatar(
                     backgroundColor: Colors.white,
                     child: Text(
                       'JU',
                       style: TextStyle(color: PrivateMessengerTheme.evergreen, fontWeight: FontWeight.w800),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(
-                    'Jules · 12m',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                    context.l10n.jules12M,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Text(
-                'A slow evening\nin the greenhouse.',
-                style: TextStyle(
+                context.l10n.aSlowEveningInTheGreenhouse,
+                style: const TextStyle(
                   color: Colors.white,
                   fontFamily: PrivateMessengerTheme.displayFontName,
                   fontSize: 34,
@@ -260,18 +265,21 @@ class _UpdatesContent extends StatelessWidget {
                   height: 1.05,
                 ),
               ),
-              SizedBox(height: 12),
-              Text('Tap to reply', style: TextStyle(color: Colors.white70)),
+              const SizedBox(height: 12),
+              Text(context.l10n.tapToReply, style: const TextStyle(color: Colors.white70)),
             ],
           ),
         ),
         const SizedBox(height: 28),
-        const _SectionTitle(title: 'Channels', action: 'Explore'),
-        const ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: 8),
-          leading: CircleAvatar(backgroundColor: PrivateMessengerTheme.peach, child: Icon(Icons.palette_outlined)),
-          title: Text('Weekend Makers', style: TextStyle(fontWeight: FontWeight.w800)),
-          subtitle: Text('Three tiny creative challenges'),
+        _SectionTitle(title: context.l10n.channels, action: context.l10n.explore),
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 8),
+          leading: const CircleAvatar(
+            backgroundColor: PrivateMessengerTheme.peach,
+            child: Icon(Icons.palette_outlined),
+          ),
+          title: Text(context.l10n.weekendMakers, style: const TextStyle(fontWeight: FontWeight.w800)),
+          subtitle: Text(context.l10n.threeTinyCreativeChallenges),
         ),
       ],
     );
@@ -286,19 +294,19 @@ class _CommunitiesContent extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 22, 20, 100),
       children: <Widget>[
-        const _SectionTitle(title: 'Communities', action: 'New'),
+        _SectionTitle(title: context.l10n.communities, action: context.l10n.newAction),
         const SizedBox(height: 20),
-        const _CommunityCard(
+        _CommunityCard(
           icon: Icons.park_rounded,
-          title: 'Neighbourhood Garden',
-          detail: 'Announcements, volunteers, seed swap',
+          title: context.l10n.neighbourhoodGarden,
+          detail: context.l10n.announcementsVolunteersSeedSwap,
           color: PrivateMessengerTheme.mint,
         ),
         const SizedBox(height: 14),
-        const _CommunityCard(
+        _CommunityCard(
           icon: Icons.brush_rounded,
-          title: 'Open Studio',
-          detail: 'Critique, events, collaborations',
+          title: context.l10n.openStudio,
+          detail: context.l10n.critiqueEventsCollaborations,
           color: PrivateMessengerTheme.lilac,
         ),
       ],
@@ -314,12 +322,16 @@ class _CallsContent extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 22, 20, 100),
       children: <Widget>[
-        const _SectionTitle(title: 'Calls', action: 'New link'),
+        _SectionTitle(title: context.l10n.calls, action: context.l10n.newLink),
         const SizedBox(height: 20),
-        for (final call in const <({String name, String detail, Color color})>[
-          (name: 'Sunday hikers', detail: 'Today, 14:20 · Group video', color: PrivateMessengerTheme.mint),
-          (name: 'Dad', detail: 'Yesterday, 19:04 · 18 min', color: Color(0xFF9AB0F8)),
-          (name: 'Lea', detail: 'Monday, 08:12 · Missed', color: PrivateMessengerTheme.lilac),
+        for (final call in <({String name, String detail, Color color})>[
+          (
+            name: context.l10n.sundayHikers,
+            detail: context.l10n.today1420GroupVideo,
+            color: PrivateMessengerTheme.mint,
+          ),
+          (name: context.l10n.dad, detail: context.l10n.yesterday190418Min, color: const Color(0xFF9AB0F8)),
+          (name: 'Lea', detail: context.l10n.monday0812Missed, color: PrivateMessengerTheme.lilac),
         ])
           ListTile(
             contentPadding: const EdgeInsets.symmetric(vertical: 7),

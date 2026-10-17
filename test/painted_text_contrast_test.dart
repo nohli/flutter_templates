@@ -69,6 +69,43 @@ void main() {
     });
   }
 
+  testWidgets('opaque text contrast ignores very thin antialiasing', (tester) async {
+    await tester.pumpWidget(
+      const LocalizedTestApp(
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: Text(
+            'Choose your',
+            style: TextStyle(fontFamily: 'WorkSans', fontSize: 6, color: DesignCourseAppTheme.lightText),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final result = await PaintedTextContrastGuideline(find.text('Choose your')).evaluate(tester);
+    expect(result.passed, isTrue, reason: result.reason);
+  });
+
+  testWidgets('painted contrast includes ancestor color filtering', (tester) async {
+    await tester.pumpWidget(
+      const LocalizedTestApp(
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: ColorFiltered(
+            colorFilter: ColorFilter.mode(Color(0xFFBBBBBB), BlendMode.srcIn),
+            child: Text(
+              'Filtered text',
+              style: TextStyle(fontFamily: 'WorkSans', fontSize: 16, color: Colors.black),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final result = await PaintedTextContrastGuideline(find.text('Filtered text')).evaluate(tester);
+    expect(result.passed, isFalse, reason: result.reason);
+  });
+
   testWidgets('painted contrast includes ancestor opacity', (tester) async {
     await tester.pumpWidget(
       const LocalizedTestApp(

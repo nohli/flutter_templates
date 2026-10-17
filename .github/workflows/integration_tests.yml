@@ -63,7 +63,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86_64
-          script: flutter test integration_test --no-enable-impeller
+          script: flutter test integration_test --no-enable-impeller --reporter expanded --verbose
 
   ios:
     name: iOS
@@ -89,7 +89,7 @@ jobs:
         with:
           model: 'iPhone 17'
       - name: Test
-        run: flutter test integration_test -d "${{ steps.simulator.outputs.udid }}"
+        run: flutter test integration_test --reporter expanded --verbose -d "${{ steps.simulator.outputs.udid }}"
 
   web:
     name: Web
@@ -115,6 +115,7 @@ jobs:
         run: |
           "${{ steps.browser.outputs.chromedriver-path }}" --port=4444 &
           flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_smoke_test.dart -d web-server --chrome-binary="${{ steps.browser.outputs.chrome-path }}"
+          cat build/integration_response_data.json
 
   linux:
     name: Linux

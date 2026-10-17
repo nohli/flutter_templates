@@ -10,8 +10,8 @@ import 'package:templates/app/app_identity.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/templates/private_messenger/widgets/private_conversation_tile.dart';
 import 'package:templates/features/templates/shared/animated_favorite_icon.dart';
+import 'package:templates/l10n/localizations.dart';
 import 'package:templates/main.dart' as app;
-import '../test/localized_test_app.dart';
 
 const _matrixRevision = String.fromEnvironment('TEMPLATES_TEST_REVISION');
 
@@ -32,6 +32,21 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   setUp(() => binding.platformDispatcher.localesTestValue = const [Locale('en')]);
   tearDown(binding.platformDispatcher.clearLocalesTestValue);
+  tearDownAll(() {
+    final results = binding.results.map((name, result) => MapEntry(name, result == 'success'));
+    binding.reportData = {
+      ...?binding.reportData,
+      'templatesTestRevision': _matrixRevision,
+      'templatesTestResults': results,
+    };
+    debugPrint(
+      'TEMPLATES_TEST_RESULTS ${jsonEncode({
+        'completed': results.length,
+        'failed': [for (final result in results.entries)
+          if (!result.value) result.key],
+      })}',
+    );
+  });
 
   for (var batchStart = 0; batchStart < _templates.length; batchStart += 2) {
     final batchEnd = batchStart + 2 < _templates.length ? batchStart + 2 : _templates.length;
@@ -45,9 +60,10 @@ void main() {
 
       expect(find.text(AppIdentity.name), findsOneWidget);
       if (validatesCatalog) {
+        final l10n = AppLocalizations.of(tester.element(find.text(AppIdentity.name)));
         expect(
           _templates.map((template) => template.cardLabel).toSet(),
-          TemplateGalleryItem.items.map((item) => item.title(english)).toSet(),
+          TemplateGalleryItem.items.map((item) => item.title(l10n)).toSet(),
         );
         if (_matrixRevision.isNotEmpty) {
           final runtime = {

@@ -90,20 +90,27 @@ class PaintedTextContrastGuideline extends AccessibilityGuideline {
                 darkCount = sample.count;
               }
             }
-            final foreground = style.foreground?.color ?? style.color;
-            if (foreground != null && ink.isNotEmpty) {
-              // Frequency can select an antialiasing shade instead of the text paint
-              final painted = ink.map((rgb) => Color(0xFF000000 | rgb)).reduce((first, second) {
-                return _distance(first, foreground) <= _distance(second, foreground) ? first : second;
+            var foregroundColor = dark ?? light!;
+            var backgroundColor = light ?? dark!;
+            final textColor = style.foreground?.color ?? style.color;
+            final hasForeground = textColor != null && ink.isNotEmpty;
+
+            if (hasForeground) {
+              final isLightPaint = HSLColor.fromColor(textColor).lightness > mean;
+              backgroundColor = isLightPaint ? dark ?? light! : light ?? dark!;
+              final sampled = ink.map((rgb) => Color(0xFF000000 | rgb)).reduce((first, second) {
+                return _distance(first, textColor) <= _distance(second, textColor) ? first : second;
               });
-              if (HSLColor.fromColor(foreground).lightness > mean) {
-                light = painted;
-              } else {
-                dark = painted;
-              }
+              final hasVisibleInk = ink.any((rgb) => Color(0xFF000000 | rgb) != backgroundColor);
+              final isOpaquePaint =
+                  hasVisibleInk && style.foreground == null && textColor.a == 1 && !_hasPaintEffect(paragraph);
+
+              // WCAG compares opaque paint colors without antialiasing shades
+              // Composited text still uses the observed foreground pixels
+              foregroundColor = isOpaquePaint ? textColor : sampled;
             }
-            final first = (light ?? dark!).computeLuminance();
-            final second = (dark ?? light!).computeLuminance();
+            final first = foregroundColor.computeLuminance();
+            final second = backgroundColor.computeLuminance();
             final ratio = (math.max(first, second) + 0.05) / (math.min(first, second) + 0.05);
             if (ratio < target - 0.01) {
               result += Evaluation.fail('${text.data}: painted contrast ${ratio.toStringAsFixed(2)} is below $target');
@@ -115,6 +122,22 @@ class PaintedTextContrastGuideline extends AccessibilityGuideline {
       }
     }
     return result;
+  }
+
+  bool _hasPaintEffect(RenderParagraph paragraph) {
+    RenderObject? node = paragraph;
+    while (node != null) {
+      final hasEffect = switch (node.debugLayer) {
+        OpacityLayer(:final alpha) => alpha != 255,
+        ColorFilterLayer() || ShaderMaskLayer() || ImageFilterLayer() => true,
+        _ => false,
+      };
+
+      if (hasEffect) return true;
+      node = node.parent;
+    }
+
+    return false;
   }
 
   double _distance(Color first, Color second) =>

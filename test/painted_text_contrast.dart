@@ -45,17 +45,23 @@ class PaintedTextContrastGuideline extends AccessibilityGuideline {
           );
           if (runs.isEmpty) return Evaluation.fail('No glyphs were painted for ${text.data}');
           for (final run in runs) {
+            final inkBounds = MatrixUtils.transformRect(
+              paragraph.getTransformTo(null),
+              Rect.fromLTRB(run.left, run.top, run.right, run.bottom),
+            );
             final bounds = MatrixUtils.transformRect(
               paragraph.getTransformTo(null),
               Rect.fromLTRB(run.left, run.top, run.right, run.bottom).inflate(4),
             );
             final histogram = <int, int>{};
+            final ink = <int>{};
             for (var y = math.max(0, bounds.top.floor()); y < math.min(image.height, bounds.bottom.ceil()); y++) {
               for (var x = math.max(0, bounds.left.floor()); x < math.min(image.width, bounds.right.ceil()); x++) {
                 final offset = (y * image.width + x) * 4;
                 final rgb =
                     (bytes.getUint8(offset) << 16) | (bytes.getUint8(offset + 1) << 8) | bytes.getUint8(offset + 2);
                 histogram.update(rgb, (count) => count + 1, ifAbsent: () => 1);
+                if (inkBounds.contains(Offset(x + .5, y + .5))) ink.add(rgb);
               }
             }
             if (histogram.isEmpty) return Evaluation.fail('No visible pixels for ${text.data}');
@@ -84,6 +90,18 @@ class PaintedTextContrastGuideline extends AccessibilityGuideline {
                 darkCount = sample.count;
               }
             }
+            final foreground = style.foreground?.color ?? style.color;
+            if (foreground != null && ink.isNotEmpty) {
+              // Frequency can select an antialiasing shade instead of the text paint
+              final painted = ink.map((rgb) => Color(0xFF000000 | rgb)).reduce((first, second) {
+                return _distance(first, foreground) <= _distance(second, foreground) ? first : second;
+              });
+              if (HSLColor.fromColor(foreground).lightness > mean) {
+                light = painted;
+              } else {
+                dark = painted;
+              }
+            }
             final first = (light ?? dark!).computeLuminance();
             final second = (dark ?? light!).computeLuminance();
             final ratio = (math.max(first, second) + 0.05) / (math.min(first, second) + 0.05);
@@ -98,4 +116,7 @@ class PaintedTextContrastGuideline extends AccessibilityGuideline {
     }
     return result;
   }
+
+  double _distance(Color first, Color second) =>
+      (first.r - second.r).abs() + (first.g - second.g).abs() + (first.b - second.b).abs();
 }

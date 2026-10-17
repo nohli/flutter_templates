@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app/motion_preferences.dart';
+import 'design_course_app_theme.dart';
 import 'models/category.dart';
 import '../../../l10n/localizations.dart';
 
@@ -207,7 +208,7 @@ class _CategoryCourseCard extends StatelessWidget {
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 18,
                                                     letterSpacing: 0.27,
-                                                    color: colors.primary,
+                                                    color: DesignCourseAppTheme.accentTextColor(colors),
                                                   ),
                                                 ),
                                                 Container(

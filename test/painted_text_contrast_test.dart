@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
 
 import 'localized_test_app.dart';
 import 'painted_text_contrast.dart';
@@ -48,4 +49,43 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  for (final (foreground, isReadable) in [(DesignCourseAppTheme.lightText, true), (const Color(0xFFBBBBBB), false)]) {
+    testWidgets('thin glyph contrast detects readable=$isReadable', (tester) async {
+      await tester.pumpWidget(
+        LocalizedTestApp(
+          home: Scaffold(
+            backgroundColor: Colors.white,
+            body: Text(
+              'Choose your',
+              style: TextStyle(fontFamily: DesignCourseAppTheme.fontName, fontSize: 8, color: foreground),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final result = await PaintedTextContrastGuideline(find.text('Choose your')).evaluate(tester);
+      expect(result.passed, isReadable, reason: result.reason);
+    });
+  }
+
+  testWidgets('painted contrast includes ancestor opacity', (tester) async {
+    await tester.pumpWidget(
+      const LocalizedTestApp(
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: Opacity(
+            opacity: .15,
+            child: Text(
+              'Faint text',
+              style: TextStyle(fontFamily: 'WorkSans', fontSize: 16, color: Colors.black),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final result = await PaintedTextContrastGuideline(find.text('Faint text')).evaluate(tester);
+    expect(result.passed, isFalse, reason: result.reason);
+  });
 }

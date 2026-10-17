@@ -1,12 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/app_appearance.dart';
 import 'package:templates/app/app_theme.dart';
 import 'package:templates/features/templates/dating_app/dating_app_theme.dart';
 import 'package:templates/features/templates/dating_app/dating_home_screen.dart';
 import 'package:templates/features/templates/design_course/design_course_app_theme.dart';
+import 'package:templates/features/templates/design_course/course_info_screen.dart';
 import 'package:templates/features/templates/design_course/home_design_course.dart';
+import 'package:templates/features/templates/design_course/models/category.dart' as samples;
 import 'package:templates/features/templates/finance_app/finance_app_theme.dart';
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/fitness_app/fitness_app_home_screen.dart';
@@ -14,6 +18,7 @@ import 'package:templates/features/templates/fitness_app/fitness_app_theme.dart'
 import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart';
 import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
+import 'package:templates/l10n/localizations.dart';
 import 'package:templates/main.dart';
 import 'localized_test_app.dart';
 import 'painted_text_contrast.dart';
@@ -169,7 +174,7 @@ void main() {
     await _pumpThemedScreen(tester, const DesignCourseHomeScreen());
     await tester.pump(const Duration(seconds: 2));
     _expectTemplateTheme(tester, find.text('Category'), DesignCourseAppTheme.build());
-    await _expectAccessible(tester);
+    await _expectAccessible(tester, contrast: PaintedTextContrastGuideline(find.byType(Text).hitTestable()));
 
     _evictAssets(_hotelAssets);
     await _pumpThemedScreen(tester, const HotelHomeScreen());
@@ -192,6 +197,65 @@ void main() {
     await _expectAccessible(tester);
     semantics.dispose();
   });
+
+  for (final appearance in [AppAppearance.light, AppAppearance.dark]) {
+    testWidgets('course labels and prices use readable ${appearance.name} text colors', (tester) async {
+      addTearDown(tester.view.reset);
+      _evictAssets(_designAssets);
+      await _pumpThemedScreen(tester, DesignCourseHomeScreen(appearance: appearance));
+      await tester.pumpAndSettle();
+
+      final colors = Theme.of(tester.element(find.text('Category'))).colorScheme;
+      final expected = appearance == AppAppearance.light ? colors.onSurfaceVariant : colors.primary;
+      expect(tester.widget<Text>(find.text('Coding')).style?.color, expected);
+      expect(tester.widget<Text>(find.text('Basic UI')).style?.color, expected);
+
+      final course = samples.Category.categoryList(english).first;
+      final price = english.money(course.money, 'USD', decimalDigits: 0);
+      expect(tester.widget<Text>(find.text(price).first).style?.color, expected);
+      await expectLater(tester, meetsGuideline(PaintedTextContrastGuideline(find.byType(Text).hitTestable())));
+
+      await tester.tap(find.text(course.title).first);
+      await tester.pumpAndSettle();
+      expect(find.byType(CourseInfoScreen), findsOneWidget);
+      await tester.ensureVisible(find.text(price).first);
+      await tester.pumpAndSettle();
+      expect(tester.widget<Text>(find.text(price).first).style?.color, expected);
+      await expectLater(tester, meetsGuideline(PaintedTextContrastGuideline(find.byType(Text).hitTestable())));
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final appearance in [AppAppearance.light, AppAppearance.dark]) {
+    testWidgets('wrapped Greek category labels stay centered inside ${appearance.name} buttons', (tester) async {
+      addTearDown(tester.view.reset);
+      _evictAssets(_designAssets);
+      await _pumpThemedScreen(
+        tester,
+        DesignCourseHomeScreen(appearance: appearance),
+        size: const Size(375, 667),
+        textScale: 1.5,
+        locale: const Locale('el'),
+      );
+      await tester.pumpAndSettle();
+
+      final label = find.text('Προγραμματισμός');
+      final button = find.ancestor(of: label, matching: find.byType(InkWell));
+      expect(button, findsOneWidget);
+      final bounds = tester.getRect(button);
+      final paragraph = tester.renderObject<RenderParagraph>(label);
+      final boxes = paragraph.getBoxesForSelection(const TextSelection(baseOffset: 0, extentOffset: 15));
+      expect(boxes.length, greaterThan(1));
+      for (final box in boxes) {
+        final left = paragraph.localToGlobal(Offset(box.left, box.top)).dx;
+        final right = paragraph.localToGlobal(Offset(box.right, box.top)).dx;
+        expect((left + right) / 2, closeTo(bounds.center.dx, .75));
+        expect(left, greaterThanOrEqualTo(bounds.left + 4));
+        expect(right, lessThanOrEqualTo(bounds.right - 4));
+      }
+      expect(tester.takeException(), isNull);
+    });
+  }
 
   testWidgets('template surfaces stay usable at compact maximum text size', (WidgetTester tester) async {
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
@@ -286,6 +350,7 @@ Future<void> _pumpThemedScreen(
   Widget screen, {
   Size size = const Size(430, 932),
   double textScale = 1,
+  Locale locale = const Locale('en'),
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
@@ -296,6 +361,7 @@ Future<void> _pumpThemedScreen(
   await tester.pumpWidget(
     LocalizedTestApp(
       theme: AppTheme.build(),
+      locale: locale,
       home: MediaQuery(
         data: mediaQuery,
         child: Scaffold(body: screen),
@@ -315,8 +381,8 @@ void _expectTemplateTheme(WidgetTester tester, Finder finder, ThemeData expected
   expect(actual.textTheme.bodyMedium?.fontFamily, expected.textTheme.bodyMedium?.fontFamily);
 }
 
-Future<void> _expectAccessible(WidgetTester tester) async {
-  await expectLater(tester, meetsGuideline(textContrastGuideline));
+Future<void> _expectAccessible(WidgetTester tester, {AccessibilityGuideline contrast = textContrastGuideline}) async {
+  await expectLater(tester, meetsGuideline(contrast));
   await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
   await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
   await expectLater(tester, meetsGuideline(androidTapTargetGuideline));

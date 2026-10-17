@@ -285,7 +285,12 @@ class _CoursePriceAndRating extends StatelessWidget {
           Text(
             context.l10n.money(course.money, 'USD', decimalDigits: 0),
             textAlign: TextAlign.left,
-            style: TextStyle(fontWeight: FontWeight.w200, fontSize: 22, letterSpacing: 0.27, color: colors.primary),
+            style: TextStyle(
+              fontWeight: FontWeight.w200,
+              fontSize: 22,
+              letterSpacing: 0.27,
+              color: DesignCourseAppTheme.accentTextColor(colors),
+            ),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -336,7 +341,12 @@ class _CourseFact extends StatelessWidget {
             Text(
               value,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, letterSpacing: 0.27, color: colors.primary),
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                letterSpacing: 0.27,
+                color: DesignCourseAppTheme.accentTextColor(colors),
+              ),
             ),
             Text(
               label,

@@ -202,15 +202,18 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
             onTap: selectCategory,
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 48),
-              child: Center(
-                child: Text(
-                  category.label(context.l10n),
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    letterSpacing: 0.27,
-                    color: isSelected ? colors.onPrimary : colors.primary,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Center(
+                  child: Text(
+                    category.label(context.l10n),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      letterSpacing: 0.27,
+                      color: isSelected ? colors.onPrimary : DesignCourseAppTheme.accentTextColor(colors),
+                    ),
                   ),
                 ),
               ),

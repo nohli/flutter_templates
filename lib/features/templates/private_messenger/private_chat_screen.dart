@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'models/private_conversation.dart';
 import 'private_messenger_theme.dart';
+import '../../../l10n/localizations.dart';
 
 class PrivateChatScreen extends StatefulWidget {
   const PrivateChatScreen({required this.conversation, super.key});
@@ -44,7 +45,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
               children: <Widget>[
                 Text(widget.conversation.name),
                 Text(
-                  'online',
+                  context.l10n.online,
                   style: TextStyle(
                     color: colors.primary,
                     fontFamily: PrivateMessengerTheme.fontName,
@@ -57,8 +58,8 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
           ],
         ),
         actions: <Widget>[
-          IconButton(tooltip: 'Video call', onPressed: () {}, icon: const Icon(Icons.videocam_outlined)),
-          IconButton(tooltip: 'Voice call', onPressed: () {}, icon: const Icon(Icons.call_outlined)),
+          IconButton(tooltip: context.l10n.videoCall, onPressed: () {}, icon: const Icon(Icons.videocam_outlined)),
+          IconButton(tooltip: context.l10n.voiceCall, onPressed: () {}, icon: const Icon(Icons.call_outlined)),
         ],
       ),
       body: Stack(
@@ -73,14 +74,23 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                     children: <Widget>[
                       const _DayMarker(),
                       const SizedBox(height: 18),
-                      const _MessageBubble(
-                        message: 'Still good for dinner on the garden terrace?',
+                      _MessageBubble(
+                        message: context.l10n.stillGoodForDinnerOnTheGardenTerrace,
                         mine: false,
-                        time: '18:30',
+                        time: context.l10n.clock(18, 30),
                       ),
-                      const _MessageBubble(message: 'Absolutely. Seven?', mine: true, time: '18:32'),
-                      const _MessageBubble(message: 'The garden table is booked 🌿', mine: false, time: '18:36'),
-                      for (final message in _messages) _MessageBubble(message: message, mine: true, time: 'Now'),
+                      _MessageBubble(
+                        message: context.l10n.absolutelySeven,
+                        mine: true,
+                        time: context.l10n.clock(18, 32),
+                      ),
+                      _MessageBubble(
+                        message: context.l10n.theGardenTableIsBooked,
+                        mine: false,
+                        time: context.l10n.clock(18, 36),
+                      ),
+                      for (final message in _messages)
+                        _MessageBubble(message: message, mine: true, time: context.l10n.now),
                     ],
                   ),
                 ),
@@ -97,14 +107,14 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                             minLines: 1,
                             maxLines: 5,
                             decoration: InputDecoration(
-                              hintText: 'Message',
+                              hintText: context.l10n.message,
                               prefixIcon: IconButton(
-                                tooltip: 'Add attachment',
+                                tooltip: context.l10n.addAttachment,
                                 onPressed: () {},
                                 icon: const Icon(Icons.add_rounded),
                               ),
                               suffixIcon: IconButton(
-                                tooltip: 'Add emoji',
+                                tooltip: context.l10n.addEmoji,
                                 onPressed: () {},
                                 icon: const Icon(Icons.sentiment_satisfied_alt_rounded),
                               ),
@@ -115,7 +125,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
                         ValueListenableBuilder<TextEditingValue>(
                           valueListenable: _controller,
                           builder: (BuildContext context, TextEditingValue value, Widget? child) => IconButton.filled(
-                            tooltip: 'Send message',
+                            tooltip: context.l10n.sendMessage,
                             onPressed: _send,
                             icon: Icon(value.text.trim().isEmpty ? Icons.mic_rounded : Icons.send_rounded),
                           ),
@@ -156,7 +166,10 @@ class _DayMarker extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.92),
           borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),
-        child: const Text('TODAY', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.7)),
+        child: Text(
+          context.l10n.todayUpper,
+          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.7),
+        ),
       ),
     );
   }

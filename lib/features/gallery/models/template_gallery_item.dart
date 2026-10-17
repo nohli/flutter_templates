@@ -1,3 +1,5 @@
+import '../../../l10n/localizations.dart';
+
 enum TemplateGalleryDestination {
   hotelBooking,
   fitness,
@@ -12,9 +14,9 @@ enum TemplateGalleryDestination {
 }
 
 extension TemplateGalleryDestinationArtwork on TemplateGalleryDestination {
-  String galleryPreviewPath({required bool dark}) {
+  String galleryPreviewPath(AppLocalizations l10n, {required bool dark}) {
     final appearanceSuffix = dark ? '-dark' : '';
-    return 'assets/gallery/$assetName$appearanceSuffix.png';
+    return 'assets/gallery/${l10n.localeName}/$assetName$appearanceSuffix.png';
   }
 
   String get assetName => switch (this) {
@@ -32,21 +34,33 @@ extension TemplateGalleryDestinationArtwork on TemplateGalleryDestination {
 }
 
 class TemplateGalleryItem {
-  const TemplateGalleryItem({required this.title, required this.destination});
+  const TemplateGalleryItem({required this.destination});
 
-  final String title;
   final TemplateGalleryDestination destination;
 
+  String title(AppLocalizations l10n) => switch (destination) {
+    TemplateGalleryDestination.hotelBooking => l10n.hotelBooking,
+    TemplateGalleryDestination.fitness => l10n.fitnessApp,
+    TemplateGalleryDestination.designCourse => l10n.designCourse,
+    TemplateGalleryDestination.personalFinance => l10n.personalFinance,
+    TemplateGalleryDestination.dating => l10n.datingAndSocial,
+    TemplateGalleryDestination.languageLearning => l10n.languageLearning,
+    TemplateGalleryDestination.socialFeed => l10n.publicSocialFeed,
+    TemplateGalleryDestination.bankingSuperApp => l10n.bankingSuperApp,
+    TemplateGalleryDestination.channelMessenger => l10n.channelMessenger,
+    TemplateGalleryDestination.privateMessenger => l10n.privateMessenger,
+  };
+
   static const items = <TemplateGalleryItem>[
-    TemplateGalleryItem(title: 'Hotel Booking', destination: TemplateGalleryDestination.hotelBooking),
-    TemplateGalleryItem(title: 'Fitness App', destination: TemplateGalleryDestination.fitness),
-    TemplateGalleryItem(title: 'Design Course', destination: TemplateGalleryDestination.designCourse),
-    TemplateGalleryItem(title: 'Personal Finance', destination: TemplateGalleryDestination.personalFinance),
-    TemplateGalleryItem(title: 'Dating & Social', destination: TemplateGalleryDestination.dating),
-    TemplateGalleryItem(title: 'Language Learning', destination: TemplateGalleryDestination.languageLearning),
-    TemplateGalleryItem(title: 'Public Social Feed', destination: TemplateGalleryDestination.socialFeed),
-    TemplateGalleryItem(title: 'Banking Super-App', destination: TemplateGalleryDestination.bankingSuperApp),
-    TemplateGalleryItem(title: 'Channel Messenger', destination: TemplateGalleryDestination.channelMessenger),
-    TemplateGalleryItem(title: 'Private Messenger', destination: TemplateGalleryDestination.privateMessenger),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.hotelBooking),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.fitness),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.designCourse),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.personalFinance),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.dating),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.languageLearning),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.socialFeed),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.bankingSuperApp),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.channelMessenger),
+    TemplateGalleryItem(destination: TemplateGalleryDestination.privateMessenger),
   ];
 }

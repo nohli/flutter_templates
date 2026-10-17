@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/private_conversation.dart';
 import '../private_messenger_theme.dart';
 import 'private_conversation_tile.dart';
+import '../../../../l10n/localizations.dart';
 
 class PrivateChatsContent extends StatelessWidget {
   const PrivateChatsContent({required this.onOpenChat, super.key});
@@ -19,7 +20,7 @@ class PrivateChatsContent extends StatelessWidget {
         const SizedBox(height: 14),
         const _ChatFilters(),
         const SizedBox(height: 8),
-        for (final conversation in PrivateConversation.samples)
+        for (final conversation in PrivateConversation.samples(context.l10n))
           PrivateConversationTile(conversation: conversation, onTap: () => onOpenChat(conversation)),
       ],
     );
@@ -36,23 +37,23 @@ class _PrivateMessengerHeader extends StatelessWidget {
       child: Row(
         children: <Widget>[
           IconButton(
-            tooltip: 'Back to template gallery',
+            tooltip: context.l10n.backToTemplateGallery,
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.arrow_back_rounded),
           ),
           const SizedBox(width: 4),
-          const Expanded(
+          Expanded(
             child: Text(
-              'Messages',
-              style: TextStyle(
+              context.l10n.messages,
+              style: const TextStyle(
                 fontFamily: PrivateMessengerTheme.displayFontName,
                 fontSize: 34,
                 fontWeight: FontWeight.w700,
               ),
             ),
           ),
-          IconButton(tooltip: 'Open camera', onPressed: () {}, icon: const Icon(Icons.camera_alt_outlined)),
-          IconButton(tooltip: 'Search chats', onPressed: () {}, icon: const Icon(Icons.search_rounded)),
+          IconButton(tooltip: context.l10n.openCamera, onPressed: () {}, icon: const Icon(Icons.camera_alt_outlined)),
+          IconButton(tooltip: context.l10n.searchChats, onPressed: () {}, icon: const Icon(Icons.search_rounded)),
         ],
       ),
     );
@@ -69,17 +70,21 @@ class _StatusRail extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 18),
         scrollDirection: Axis.horizontal,
-        children: const <Widget>[
+        children: <Widget>[
           _StatusAvatar(
-            label: 'My update',
-            initials: 'ME',
+            label: context.l10n.myUpdate,
+            initials: context.l10n.me,
             colors: <Color>[PrivateMessengerTheme.evergreen, PrivateMessengerTheme.mint],
             own: true,
           ),
-          _StatusAvatar(label: 'Jules', initials: 'JU', colors: <Color>[Color(0xFFFFA070), Color(0xFFFFCE8A)]),
-          _StatusAvatar(label: 'Nora', initials: 'NO', colors: <Color>[Color(0xFF68C99E), Color(0xFF279776)]),
-          _StatusAvatar(label: 'Lea', initials: 'LE', colors: <Color>[Color(0xFFB78AF3), Color(0xFFE4C1FF)]),
-          _StatusAvatar(label: 'Dad', initials: 'DA', colors: <Color>[Color(0xFF7797F7), Color(0xFFB9C7FF)]),
+          const _StatusAvatar(label: 'Jules', initials: 'JU', colors: <Color>[Color(0xFFFFA070), Color(0xFFFFCE8A)]),
+          const _StatusAvatar(label: 'Nora', initials: 'NO', colors: <Color>[Color(0xFF68C99E), Color(0xFF279776)]),
+          const _StatusAvatar(label: 'Lea', initials: 'LE', colors: <Color>[Color(0xFFB78AF3), Color(0xFFE4C1FF)]),
+          _StatusAvatar(
+            label: context.l10n.dad,
+            initials: 'DA',
+            colors: <Color>[const Color(0xFF7797F7), const Color(0xFFB9C7FF)],
+          ),
         ],
       ),
     );
@@ -154,16 +159,16 @@ class _ChatFilters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
+    return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.symmetric(horizontal: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Row(
         children: <Widget>[
-          Chip(label: Text('All')),
-          SizedBox(width: 8),
-          Chip(label: Text('Unread  2')),
-          SizedBox(width: 8),
-          Chip(label: Text('Groups  2')),
+          Chip(label: Text(context.l10n.all)),
+          const SizedBox(width: 8),
+          Chip(label: Text(context.l10n.unread2)),
+          const SizedBox(width: 8),
+          Chip(label: Text(context.l10n.groups2)),
         ],
       ),
     );

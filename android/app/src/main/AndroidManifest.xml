@@ -12,6 +12,7 @@
     <application
         android:label="UI Templates"
         android:name="${applicationName}"
+        android:localeConfig="@xml/locale_config"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

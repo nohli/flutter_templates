@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'models/social_post.dart';
 import 'widgets/social_avatar.dart';
 import 'widgets/social_post_tile.dart';
+import '../../../l10n/localizations.dart';
 
 class SocialThreadScreen extends StatefulWidget {
   const SocialThreadScreen({required this.post, super.key});
@@ -27,7 +28,7 @@ class _SocialThreadScreenState extends State<SocialThreadScreen> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Thread')),
+      appBar: AppBar(title: Text(context.l10n.thread)),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -42,15 +43,15 @@ class _SocialThreadScreenState extends State<SocialThreadScreen> {
                   onOpen: () {},
                 ),
                 Divider(height: 1, color: colors.outlineVariant),
-                const _Reply(
-                  avatar: SocialAvatar(initials: 'AT', colors: <Color>[Color(0xFF8A6CFF), Color(0xFFD877FF)]),
+                _Reply(
+                  avatar: const SocialAvatar(initials: 'AT', colors: <Color>[Color(0xFF8A6CFF), Color(0xFFD877FF)]),
                   name: 'Amir Taylor',
-                  body: 'That is the difference between decoration and direction. Beautifully put.',
+                  body: context.l10n.thatIsTheDifferenceBetweenDecorationAndDirectionBeautifullyPut,
                 ),
-                const _Reply(
-                  avatar: SocialAvatar(initials: 'JO', colors: <Color>[Color(0xFFFF8A5B), Color(0xFFFFC46B)]),
+                _Reply(
+                  avatar: const SocialAvatar(initials: 'JO', colors: <Color>[Color(0xFFFF8A5B), Color(0xFFFFC46B)]),
                   name: 'June Okafor',
-                  body: 'Motion should answer a question before it asks for attention.',
+                  body: context.l10n.motionShouldAnswerAQuestionBeforeItAsksForAttention,
                 ),
               ],
             ),
@@ -62,15 +63,15 @@ class _SocialThreadScreenState extends State<SocialThreadScreen> {
               child: TextField(
                 controller: _replyController,
                 decoration: InputDecoration(
-                  hintText: 'Post your reply',
+                  hintText: context.l10n.postYourReply,
                   suffixIcon: IconButton(
-                    tooltip: 'Send reply',
+                    tooltip: context.l10n.sendReply,
                     onPressed: () {
                       if (_replyController.text.trim().isEmpty) {
                         return;
                       }
                       FocusScope.of(context).unfocus();
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Reply published')));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.replyPublished)));
                       _replyController.clear();
                     },
                     icon: const Icon(Icons.arrow_upward_rounded),

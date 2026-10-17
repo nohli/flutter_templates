@@ -6,6 +6,7 @@ import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/banking_super_app/banking_app_theme.dart';
 import 'package:templates/features/templates/banking_super_app/banking_home_screen.dart';
 import 'package:templates/features/templates/banking_super_app/banking_transfer_screen.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('banking palettes keep readable text and controls', () {
@@ -23,7 +24,7 @@ void main() {
       ..physicalSize = const Size(430, 932);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: BankingHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: BankingHomeScreen()));
     await tester.pumpAndSettle();
 
     expect(find.text('Banking'), findsOneWidget);
@@ -56,7 +57,7 @@ void main() {
   });
 
   testWidgets('banking template follows its requested dark appearance', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(home: BankingHomeScreen(appearance: AppAppearance.dark)));
+    await tester.pumpWidget(const LocalizedTestApp(home: BankingHomeScreen(appearance: AppAppearance.dark)));
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('TOTAL BALANCE'))).brightness, Brightness.dark);
@@ -72,7 +73,7 @@ void main() {
       ..physicalSize = const Size(390, 844);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: BankingHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: BankingHomeScreen()));
     await tester.pumpAndSettle();
 
     expect(find.text('€8,942.70'), findsOneWidget);
@@ -86,7 +87,7 @@ void main() {
       ..viewInsets = const FakeViewPadding(bottom: 350);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: BankingTransferScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: BankingTransferScreen()));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Lea'));
@@ -103,7 +104,7 @@ void main() {
       ..physicalSize = const Size(402, 874);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: BankingHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: BankingHomeScreen()));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Send'));
     await tester.pumpAndSettle();

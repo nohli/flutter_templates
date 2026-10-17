@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../l10n/localizations.dart';
+
 enum AppSection { home, help, feedback, invite, about }
 
 class AppDrawer extends StatelessWidget {
@@ -15,7 +17,7 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Semantics(
-      label: 'Navigation menu',
+      label: context.l10n.navigationMenu,
       container: true,
       explicitChildNodes: true,
       child: ColoredBox(
@@ -59,7 +61,7 @@ class AppDrawer extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 8, left: 4),
+                      padding: const EdgeInsetsDirectional.only(top: 8, start: 4),
                       child: Text(
                         'Shaquille Oatmeal',
                         style: TextStyle(fontWeight: FontWeight.w600, color: colors.onSurfaceVariant, fontSize: 18),
@@ -106,7 +108,7 @@ class _DrawerItem extends StatelessWidget {
     return Semantics(
       selected: isSelected,
       button: true,
-      label: section.label,
+      label: section.label(context),
       onTap: onPressed,
       child: ExcludeSemantics(
         child: Material(
@@ -118,22 +120,27 @@ class _DrawerItem extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Stack(
-                alignment: Alignment.centerLeft,
+                alignment: AlignmentDirectional.centerStart,
                 children: <Widget>[
                   if (isSelected)
                     Positioned.fill(
                       child: AnimatedBuilder(
                         animation: drawerAnimation,
                         builder: (BuildContext context, Widget? child) {
-                          return FractionalTranslation(translation: Offset(drawerAnimation.value - 1, 0), child: child);
+                          final direction = Directionality.of(context) == TextDirection.rtl ? -1 : 1;
+
+                          return FractionalTranslation(
+                            translation: Offset((drawerAnimation.value - 1) * direction, 0),
+                            child: child,
+                          );
                         },
                         child: FractionallySizedBox(
-                          alignment: Alignment.centerLeft,
+                          alignment: AlignmentDirectional.centerStart,
                           widthFactor: 0.78,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               color: colors.primaryContainer,
-                              borderRadius: const BorderRadius.horizontal(right: Radius.circular(28)),
+                              borderRadius: const BorderRadiusDirectional.horizontal(end: Radius.circular(28)),
                             ),
                           ),
                         ),
@@ -149,7 +156,7 @@ class _DrawerItem extends StatelessWidget {
                           const SizedBox(width: 16),
                           Expanded(
                             child: Text(
-                              section.label,
+                              section.label(context),
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,
@@ -172,12 +179,12 @@ class _DrawerItem extends StatelessWidget {
 }
 
 extension on AppSection {
-  String get label => switch (this) {
-    AppSection.home => 'Home',
-    AppSection.help => 'Help',
-    AppSection.feedback => 'Feedback',
-    AppSection.invite => 'Invite friends',
-    AppSection.about => 'About',
+  String label(BuildContext context) => switch (this) {
+    AppSection.home => context.l10n.home,
+    AppSection.help => context.l10n.help,
+    AppSection.feedback => context.l10n.feedback,
+    AppSection.invite => context.l10n.inviteFriends,
+    AppSection.about => context.l10n.about,
   };
 
   IconData get icon => switch (this) {

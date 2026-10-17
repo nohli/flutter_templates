@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../fitness_app_theme.dart';
 import '../ui_view/animated_fitness_card.dart';
 import '../ui_view/wave_view.dart';
+import '../../../../l10n/localizations.dart';
 
 class WaterView extends StatelessWidget {
   const WaterView({required this.animation, super.key});
@@ -59,13 +60,13 @@ class _CompactWaterSummary extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.end,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 4, bottom: 3),
                   child: Text(
-                    '2100',
+                    context.l10n.number(2100),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: FitnessAppTheme.fontName,
@@ -78,7 +79,7 @@ class _CompactWaterSummary extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 8, bottom: 8),
                   child: Text(
-                    'ml',
+                    context.l10n.ml,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: FitnessAppTheme.fontName,
@@ -94,7 +95,7 @@ class _CompactWaterSummary extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 4, top: 2, bottom: 14),
               child: Text(
-                'of daily goal 3.5L',
+                context.l10n.ofDailyGoal35L,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: FitnessAppTheme.fontName,
@@ -142,7 +143,7 @@ class _LargeWaterContent extends StatelessWidget {
           runSpacing: 4,
           children: <Widget>[
             Text(
-              '2100',
+              context.l10n.number(2100),
               style: TextStyle(
                 fontFamily: FitnessAppTheme.fontName,
                 fontWeight: FontWeight.w600,
@@ -151,7 +152,7 @@ class _LargeWaterContent extends StatelessWidget {
               ),
             ),
             Text(
-              'ml',
+              context.l10n.ml,
               style: TextStyle(
                 fontFamily: FitnessAppTheme.fontName,
                 fontWeight: FontWeight.w500,
@@ -162,7 +163,7 @@ class _LargeWaterContent extends StatelessWidget {
           ],
         ),
         Text(
-          'of daily goal 3.5L',
+          context.l10n.ofDailyGoal35L,
           style: TextStyle(
             fontFamily: FitnessAppTheme.fontName,
             fontWeight: FontWeight.w500,
@@ -211,7 +212,7 @@ class _WaterStatus extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(left: compact ? 4 : 0),
                 child: Text(
-                  'Last drink 8:26 AM',
+                  context.l10n.lastDrink826Am,
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontFamily: FitnessAppTheme.fontName,
@@ -233,7 +234,7 @@ class _WaterStatus extends StatelessWidget {
             if (!compact) const SizedBox(width: 8),
             Flexible(
               child: Text(
-                'Your bottle is empty, refill it!',
+                context.l10n.yourBottleIsEmptyRefillIt,
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontFamily: FitnessAppTheme.fontName,

@@ -17,6 +17,7 @@ import 'package:templates/features/templates/fitness_app/ui_view/fitness_section
 import 'package:templates/features/templates/fitness_app/ui_view/mediterranean_diet_view.dart';
 import 'package:templates/features/templates/fitness_app/ui_view/sample_date_header.dart';
 import 'package:templates/features/templates/fitness_app/ui_view/wave_view.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('Fitness dark theme preserves its cobalt identity with accessible semantic colors', () {
@@ -130,7 +131,7 @@ void main() {
         disableAnimations: true,
       );
 
-      expect(find.text('1503'), findsOneWidget);
+      expect(find.text('1,503'), findsOneWidget);
       expect(find.text('30g left'), findsOneWidget);
       expect(tester.takeException(), isNull);
     }
@@ -172,7 +173,7 @@ void main() {
         disableAnimations: true,
       );
 
-      expect(find.text('2100'), findsOneWidget);
+      expect(find.text('2,100'), findsOneWidget);
       expect(find.text('Your bottle is empty, refill it!'), findsOneWidget);
       expect(tester.takeException(), isNull);
     }
@@ -190,7 +191,7 @@ void main() {
       SizedBox(
         width: 160,
         height: 240,
-        child: MealsView(mealsListData: MealsListData.samples.first, animation: controller),
+        child: MealsView(mealsListData: MealsListData.samples(english).first, animation: controller),
       ),
     );
 
@@ -222,7 +223,7 @@ void main() {
       SizedBox(
         width: 320,
         height: 600,
-        child: MealsView(mealsListData: MealsListData.samples.first, animation: controller),
+        child: MealsView(mealsListData: MealsListData.samples(english).first, animation: controller),
       ),
       size: const Size(320, 700),
       textScale: 3.2,
@@ -238,7 +239,7 @@ void main() {
   ) async {
     final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
-    _evictAssets(MealsListData.samples.map((MealsListData meal) => meal.imagePath));
+    _evictAssets(MealsListData.samples(english).map((MealsListData meal) => meal.imagePath));
 
     await _pumpFitnessScreen(
       tester,
@@ -250,7 +251,7 @@ void main() {
       (Widget widget) => widget is Scrollable && widget.axisDirection == AxisDirection.right,
     );
     expect(horizontalList, findsOneWidget);
-    for (final MealsListData meal in MealsListData.samples) {
+    for (final MealsListData meal in MealsListData.samples(english)) {
       await tester.scrollUntilVisible(find.text(meal.title), 180, scrollable: horizontalList);
       expect(find.text(meal.title), findsOneWidget);
       expect(tester.takeException(), isNull);
@@ -262,7 +263,7 @@ void main() {
   testWidgets('large-text snack and dinner cards expand without shrinking their content', (WidgetTester tester) async {
     final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
-    final recommendations = MealsListData.samples.where((MealsListData meal) => meal.kcal == 0);
+    final recommendations = MealsListData.samples(english).where((MealsListData meal) => meal.kcal == 0);
     _evictAssets(recommendations.map((MealsListData meal) => meal.imagePath));
 
     for (final meal in recommendations) {
@@ -426,7 +427,7 @@ Future<void> _pumpFitnessScreen(
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
 
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
       theme: FitnessAppTheme.build(),
       home: MediaQuery(
         data: mediaQuery,

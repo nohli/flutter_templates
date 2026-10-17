@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'finance_entrance.dart';
+import '../../../../l10n/localizations.dart';
 
 class FinanceQuickActions extends StatelessWidget {
   const FinanceQuickActions({required this.animation, required this.onSelected, super.key});
@@ -47,8 +48,9 @@ class _TransferOrbit extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: _SatelliteAction(
-                    label: 'Add money',
-                    code: '02 / FUND',
+                    label: context.l10n.addMoney,
+                    caption: context.l10n.addMoneyUpper,
+                    code: context.l10n.sample02Fund,
                     icon: Icons.add_rounded,
                     accent: colors.primary,
                     onSelected: onSelected,
@@ -60,8 +62,9 @@ class _TransferOrbit extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: _SatelliteAction(
-                          label: 'Request',
-                          code: '03',
+                          label: context.l10n.request,
+                          caption: context.l10n.requestUpper,
+                          code: context.l10n.number(3, minimumIntegerDigits: 2),
                           icon: Icons.south_west_rounded,
                           accent: colors.secondary,
                           compact: true,
@@ -71,8 +74,9 @@ class _TransferOrbit extends StatelessWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: _SatelliteAction(
-                          label: 'More',
-                          code: '04',
+                          label: context.l10n.more,
+                          caption: context.l10n.moreUpper,
+                          code: context.l10n.number(4, minimumIntegerDigits: 2),
                           icon: Icons.more_horiz_rounded,
                           accent: colors.onSurfaceVariant,
                           compact: true,
@@ -102,15 +106,15 @@ class _PrimaryOrbitAction extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: 'Send',
-      onTap: () => onSelected('Send'),
+      label: context.l10n.send,
+      onTap: () => onSelected(context.l10n.send),
       child: ExcludeSemantics(
         child: Material(
           color: colors.onSurface,
           borderRadius: const BorderRadius.all(Radius.circular(9)),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
-            onTap: () => onSelected('Send'),
+            onTap: () => onSelected(context.l10n.send),
             child: Stack(
               children: <Widget>[
                 Positioned.fill(
@@ -120,7 +124,7 @@ class _PrimaryOrbitAction extends StatelessWidget {
                   left: 12,
                   top: 10,
                   child: Text(
-                    '01 / TRANSFER',
+                    context.l10n.sample01Transfer,
                     style: TextStyle(
                       color: colors.surface.withValues(alpha: 0.62),
                       fontSize: 7,
@@ -141,7 +145,7 @@ class _PrimaryOrbitAction extends StatelessWidget {
                   left: 12,
                   bottom: 10,
                   child: Text(
-                    'SEND',
+                    context.l10n.sendUpper,
                     style: TextStyle(
                       color: colors.surface,
                       fontSize: 11,
@@ -162,6 +166,7 @@ class _PrimaryOrbitAction extends StatelessWidget {
 class _SatelliteAction extends StatelessWidget {
   const _SatelliteAction({
     required this.label,
+    required this.caption,
     required this.code,
     required this.icon,
     required this.accent,
@@ -170,6 +175,7 @@ class _SatelliteAction extends StatelessWidget {
   });
 
   final String label;
+  final String caption;
   final String code;
   final IconData icon;
   final Color accent;
@@ -206,7 +212,7 @@ class _SatelliteAction extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          label.toUpperCase(),
+                          caption,
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           softWrap: false,
@@ -234,7 +240,7 @@ class _SatelliteAction extends StatelessWidget {
                               Text(code, style: TextStyle(color: colors.onSurfaceVariant, fontSize: 7)),
                               const SizedBox(height: 3),
                               Text(
-                                label.toUpperCase(),
+                                caption,
                                 maxLines: 1,
                                 overflow: TextOverflow.fade,
                                 softWrap: false,
@@ -261,11 +267,11 @@ class _AccessibleActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const actions = <({String label, IconData icon})>[
-      (label: 'Send', icon: Icons.arrow_outward_rounded),
-      (label: 'Add money', icon: Icons.add_rounded),
-      (label: 'Request', icon: Icons.south_west_rounded),
-      (label: 'More', icon: Icons.more_horiz_rounded),
+    final actions = <({String label, IconData icon})>[
+      (label: context.l10n.send, icon: Icons.arrow_outward_rounded),
+      (label: context.l10n.addMoney, icon: Icons.add_rounded),
+      (label: context.l10n.request, icon: Icons.south_west_rounded),
+      (label: context.l10n.more, icon: Icons.more_horiz_rounded),
     ];
 
     return Column(

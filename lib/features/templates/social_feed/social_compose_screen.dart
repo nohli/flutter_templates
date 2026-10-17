@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/localizations.dart';
 
 class SocialComposeScreen extends StatefulWidget {
   const SocialComposeScreen({super.key});
@@ -20,7 +21,7 @@ class _SocialComposeScreenState extends State<SocialComposeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+        leading: TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(context.l10n.cancel)),
         leadingWidth: 86,
         actions: <Widget>[
           Padding(
@@ -30,7 +31,7 @@ class _SocialComposeScreenState extends State<SocialComposeScreen> {
               builder: (BuildContext context, TextEditingValue value, _) {
                 return FilledButton(
                   onPressed: value.text.trim().isEmpty ? null : () => Navigator.of(context).pop(value.text.trim()),
-                  child: const Text('Publish'),
+                  child: Text(context.l10n.publish),
                 );
               },
             ),
@@ -52,8 +53,8 @@ class _SocialComposeScreenState extends State<SocialComposeScreen> {
                   expands: true,
                   textAlignVertical: TextAlignVertical.top,
                   style: const TextStyle(fontSize: 22, height: 1.35),
-                  decoration: const InputDecoration(
-                    hintText: 'What is happening?',
+                  decoration: InputDecoration(
+                    hintText: context.l10n.whatIsHappening,
                     filled: false,
                     border: InputBorder.none,
                   ),
@@ -61,11 +62,15 @@ class _SocialComposeScreenState extends State<SocialComposeScreen> {
               ),
               Row(
                 children: <Widget>[
-                  IconButton(tooltip: 'Add media', onPressed: () {}, icon: const Icon(Icons.image_outlined)),
-                  IconButton(tooltip: 'Add poll', onPressed: () {}, icon: const Icon(Icons.poll_outlined)),
-                  IconButton(tooltip: 'Add location', onPressed: () {}, icon: const Icon(Icons.location_on_outlined)),
+                  IconButton(tooltip: context.l10n.addMedia, onPressed: () {}, icon: const Icon(Icons.image_outlined)),
+                  IconButton(tooltip: context.l10n.addPoll, onPressed: () {}, icon: const Icon(Icons.poll_outlined)),
+                  IconButton(
+                    tooltip: context.l10n.addLocation,
+                    onPressed: () {},
+                    icon: const Icon(Icons.location_on_outlined),
+                  ),
                   const Spacer(),
-                  const Text('Anyone can reply', style: TextStyle(fontWeight: FontWeight.w700)),
+                  Text(context.l10n.anyoneCanReply, style: const TextStyle(fontWeight: FontWeight.w700)),
                 ],
               ),
             ],

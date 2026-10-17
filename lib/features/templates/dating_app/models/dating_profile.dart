@@ -1,3 +1,5 @@
+import '../../../../l10n/localizations.dart';
+
 enum DatingProfilePalette { sunset, violet, lagoon, citrus }
 
 class DatingProfile {
@@ -5,7 +7,7 @@ class DatingProfile {
     required this.id,
     required this.name,
     required this.age,
-    required this.distance,
+    required this.distanceKm,
     required this.prompt,
     required this.answer,
     required this.interests,
@@ -15,51 +17,51 @@ class DatingProfile {
   final String id;
   final String name;
   final int age;
-  final String distance;
+  final int distanceKm;
   final String prompt;
   final String answer;
   final List<String> interests;
   final DatingProfilePalette palette;
 
-  static const samples = <DatingProfile>[
+  static List<DatingProfile> samples(AppLocalizations l10n) => <DatingProfile>[
     DatingProfile(
       id: 'mina',
       name: 'Mina',
       age: 29,
-      distance: '2 km away',
-      prompt: 'The quickest way to my heart',
-      answer: 'A long table, shared plates, and choosing dessert first.',
-      interests: <String>['Ceramics', 'Night swims', 'Jazz'],
+      distanceKm: 2,
+      prompt: l10n.theQuickestWayToMyHeart,
+      answer: l10n.aLongTableSharedPlatesAndChoosingDessertFirst,
+      interests: <String>[l10n.ceramics, l10n.nightSwims, l10n.jazz],
       palette: DatingProfilePalette.sunset,
     ),
     DatingProfile(
       id: 'noah',
       name: 'Noah',
       age: 31,
-      distance: '4 km away',
-      prompt: 'A perfect slow Sunday',
-      answer: 'Coffee outside, a second-hand bookshop, then nowhere to be.',
-      interests: <String>['Architecture', 'Vinyl', 'Baking'],
+      distanceKm: 4,
+      prompt: l10n.aPerfectSlowSunday,
+      answer: l10n.coffeeOutsideASecondHandBookshopThenNowhereToBe,
+      interests: <String>[l10n.architecture, l10n.vinyl, l10n.baking],
       palette: DatingProfilePalette.violet,
     ),
     DatingProfile(
       id: 'eli',
       name: 'Eli',
       age: 28,
-      distance: '6 km away',
-      prompt: 'Let’s make time for',
-      answer: 'Sunrise hikes that end with a very unnecessary breakfast.',
-      interests: <String>['Trails', 'Film', 'Coffee'],
+      distanceKm: 6,
+      prompt: l10n.letsMakeTimeFor,
+      answer: l10n.sunriseHikesThatEndWithAVeryUnnecessaryBreakfast,
+      interests: <String>[l10n.trails, l10n.film, l10n.coffee],
       palette: DatingProfilePalette.lagoon,
     ),
     DatingProfile(
       id: 'zoe',
       name: 'Zoë',
       age: 30,
-      distance: '8 km away',
-      prompt: 'I’ll always say yes to',
-      answer: 'A tiny concert, a train somewhere new, or fresh pasta.',
-      interests: <String>['Live music', 'Travel', 'Cooking'],
+      distanceKm: 8,
+      prompt: l10n.illAlwaysSayYesTo,
+      answer: l10n.aTinyConcertATrainSomewhereNewOrFreshPasta,
+      interests: <String>[l10n.liveMusic, l10n.travel, l10n.cooking],
       palette: DatingProfilePalette.citrus,
     ),
   ];

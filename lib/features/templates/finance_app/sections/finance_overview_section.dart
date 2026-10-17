@@ -7,6 +7,7 @@ import '../widgets/finance_entrance.dart';
 import '../widgets/quick_actions.dart';
 import '../widgets/spending_overview.dart';
 import '../widgets/transaction_list.dart';
+import '../../../../l10n/localizations.dart';
 
 class FinanceOverviewSection extends StatelessWidget {
   const FinanceOverviewSection({
@@ -57,9 +58,17 @@ class FinanceOverviewSection extends StatelessWidget {
           index: 5,
           child: Column(
             children: <Widget>[
-              _SectionHeader(title: 'Recent activity', actionLabel: 'See all', onPressed: onViewAllActivity),
+              _SectionHeader(
+                title: context.l10n.recentActivity,
+                actionLabel: context.l10n.seeAll,
+                onPressed: onViewAllActivity,
+              ),
               const SizedBox(height: 12),
-              FinanceTransactionList(animation: animation, transactions: FinanceTransaction.samples, compact: true),
+              FinanceTransactionList(
+                animation: animation,
+                transactions: FinanceTransaction.samples(context.l10n),
+                compact: true,
+              ),
             ],
           ),
         ),
@@ -88,7 +97,7 @@ class _OverviewGreeting extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Good morning, Alex',
+                      context.l10n.goodMorningAlex,
                       maxLines: 1,
                       overflow: TextOverflow.fade,
                       softWrap: false,
@@ -103,9 +112,9 @@ class _OverviewGreeting extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 9),
-              const Text(
-                'Money and crypto, together',
-                style: TextStyle(fontSize: 27, fontWeight: FontWeight.w800, letterSpacing: -1.1, height: 1.02),
+              Text(
+                context.l10n.moneyAndCryptoTogether,
+                style: const TextStyle(fontSize: 27, fontWeight: FontWeight.w800, letterSpacing: -1.1, height: 1.02),
               ),
             ],
           ),

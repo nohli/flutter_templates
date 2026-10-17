@@ -12,6 +12,8 @@ dependencies:
   cupertino_icons: ^2.0.0
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   font_awesome_flutter: ^11.0.0
   intl: ^0.20.0
   share_plus: ^13.3.1
@@ -48,10 +50,59 @@ flutter_launcher_icons:
     image_path: icon/app_icon.png
 
 flutter:
+  generate: true
   uses-material-design: true
 
   assets:
-    - assets/gallery/
+    - assets/gallery/ar/
+    - assets/gallery/bg/
+    - assets/gallery/ca/
+    - assets/gallery/cs/
+    - assets/gallery/da/
+    - assets/gallery/de/
+    - assets/gallery/el/
+    - assets/gallery/en/
+    - assets/gallery/en_AU/
+    - assets/gallery/en_GB/
+    - assets/gallery/en_US/
+    - assets/gallery/es/
+    - assets/gallery/es_419/
+    - assets/gallery/es_ES/
+    - assets/gallery/fi/
+    - assets/gallery/fr/
+    - assets/gallery/fr_CA/
+    - assets/gallery/fr_FR/
+    - assets/gallery/he/
+    - assets/gallery/hi/
+    - assets/gallery/hr/
+    - assets/gallery/hu/
+    - assets/gallery/id/
+    - assets/gallery/it/
+    - assets/gallery/ja/
+    - assets/gallery/kk/
+    - assets/gallery/ko/
+    - assets/gallery/ms/
+    - assets/gallery/nb/
+    - assets/gallery/nl/
+    - assets/gallery/no/
+    - assets/gallery/pl/
+    - assets/gallery/pt/
+    - assets/gallery/pt_BR/
+    - assets/gallery/pt_PT/
+    - assets/gallery/ro/
+    - assets/gallery/ru/
+    - assets/gallery/sk/
+    - assets/gallery/sv/
+    - assets/gallery/th/
+    - assets/gallery/tr/
+    - assets/gallery/uk/
+    - assets/gallery/vi/
+    - assets/gallery/zh/
+    - assets/gallery/zh_Hans/
+    - assets/gallery/zh_Hans_CN/
+    - assets/gallery/zh_Hant/
+    - assets/gallery/zh_Hant_HK/
+    - assets/gallery/zh_Hant_TW/
     - assets/images/
     - assets/design_course/
     - assets/fitness_app/

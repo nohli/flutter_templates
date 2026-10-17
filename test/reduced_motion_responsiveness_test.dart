@@ -13,6 +13,7 @@ import 'package:templates/features/templates/fitness_app/ui_view/wave_view.dart'
 import 'package:templates/features/gallery/home_screen.dart';
 import 'package:templates/features/templates/hotel_booking/calendar_popup_view.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
+import 'localized_test_app.dart';
 
 void main() {
   testWidgets('reduced motion settles gallery, course, hotel, and calendar entrances', (WidgetTester tester) async {
@@ -156,7 +157,7 @@ void main() {
     _evictAssets(<String>['assets/design_course/interFace4.png']);
     await _pumpScreen(
       tester,
-      CourseInfoScreen(course: course_model.Category.popularCourseList[1], savedCourses: SavedCourses()),
+      CourseInfoScreen(course: course_model.Category.popularCourseList(english)[1], savedCourses: SavedCourses()),
       size: const Size(320, 568),
       textScale: 3.2,
       disableAnimations: true,
@@ -235,7 +236,7 @@ Future<void> _pumpScreen(
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
 
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
       home: MediaQuery(
         data: mediaQuery,
         child: Scaffold(body: screen),

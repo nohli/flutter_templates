@@ -15,6 +15,8 @@ import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart'
 import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/main.dart';
+import 'localized_test_app.dart';
+import 'painted_text_contrast.dart';
 
 void main() {
   test('template themes preserve their accepted palettes and accessible semantic roles', () {
@@ -140,7 +142,9 @@ void main() {
     await tester.tap(find.byTooltip('Open navigation menu'));
     await tester.pumpAndSettle();
 
-    await expectLater(tester, meetsGuideline(textContrastGuideline));
+    final labels = find.byType(Text).hitTestable();
+    expect(labels, findsNWidgets(6));
+    await expectLater(tester, meetsGuideline(PaintedTextContrastGuideline(labels)));
   });
 
   testWidgets('gallery follows the system appearance until the user chooses a mode', (WidgetTester tester) async {
@@ -290,7 +294,7 @@ Future<void> _pumpThemedScreen(
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
 
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
       theme: AppTheme.build(),
       home: MediaQuery(
         data: mediaQuery,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../banking_app_theme.dart';
+import '../../../../l10n/localizations.dart';
 
 class BankingBalanceHero extends StatelessWidget {
   const BankingBalanceHero({required this.balanceVisible, required this.onToggleVisibility, super.key});
@@ -36,7 +37,7 @@ class BankingBalanceHero extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Text(
-                    'TOTAL BALANCE',
+                    context.l10n.totalBalanceUpper,
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.72),
                       fontSize: 11,
@@ -46,7 +47,7 @@ class BankingBalanceHero extends StatelessWidget {
                   ),
                   const Spacer(),
                   IconButton(
-                    tooltip: balanceVisible ? 'Hide balance' : 'Show balance',
+                    tooltip: balanceVisible ? context.l10n.hideBalance : context.l10n.showBalance,
                     onPressed: onToggleVisibility,
                     color: Colors.white,
                     icon: Icon(balanceVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined),
@@ -61,7 +62,7 @@ class BankingBalanceHero extends StatelessWidget {
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 180),
                       child: Text(
-                        balanceVisible ? '€8,942.70' : '€••••••',
+                        balanceVisible ? context.l10n.money(8942.70, 'EUR') : '€••••••',
                         key: ValueKey<bool>(balanceVisible),
                         style: const TextStyle(
                           color: Colors.white,
@@ -82,9 +83,9 @@ class BankingBalanceHero extends StatelessWidget {
                       color: BankingAppTheme.acid,
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
-                    child: const Text(
-                      '+ 4.8% this month',
-                      style: TextStyle(color: Color(0xFF263000), fontSize: 11, fontWeight: FontWeight.w800),
+                    child: Text(
+                      context.l10n.sample48ThisMonth,
+                      style: const TextStyle(color: Color(0xFF263000), fontSize: 11, fontWeight: FontWeight.w800),
                     ),
                   ),
                   const Spacer(),

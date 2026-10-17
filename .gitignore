@@ -32,6 +32,7 @@
 /build/
 /android/build/
 /coverage/
+/lib/l10n/gen/
 
 # Web related
 

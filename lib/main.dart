@@ -5,6 +5,7 @@ import 'app/app_identity.dart';
 import 'app/app_shell.dart';
 import 'app/app_theme.dart';
 import 'app/font_licenses.dart';
+import 'l10n/localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +34,8 @@ class UiTemplatesApp extends StatelessWidget {
       theme: AppTheme.build(Brightness.light),
       darkTheme: AppTheme.build(Brightness.dark),
       themeMode: ThemeMode.system,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const AppShell(),
     );
   }

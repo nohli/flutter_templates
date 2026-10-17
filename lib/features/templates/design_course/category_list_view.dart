@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/motion_preferences.dart';
 import 'models/category.dart';
+import '../../../l10n/localizations.dart';
 
 const _baseListHeight = 134;
 const _baseCardWidth = 280;
@@ -53,26 +54,32 @@ class _CategoryListViewState extends State<CategoryListView> with SingleTickerPr
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 16),
       child: SizedBox(
-        height: listHeight,
         width: double.infinity,
-        child: ListView.builder(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.only(right: 16, left: 16),
-          itemCount: widget.categories.length,
           scrollDirection: Axis.horizontal,
-          itemBuilder: (BuildContext context, int index) {
-            final count = widget.categories.length > 10 ? 10 : widget.categories.length;
-            final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(
-                parent: _animationController,
-                curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: listHeight),
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: List.generate(widget.categories.length, (index) {
+                  final count = widget.categories.length > 10 ? 10 : widget.categories.length;
+                  final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+                    CurvedAnimation(
+                      parent: _animationController,
+                      curve: Interval((1 / count) * index, 1.0, curve: Curves.fastOutSlowIn),
+                    ),
+                  );
+                  return _CategoryCourseCard(
+                    category: widget.categories[index],
+                    animation: animation,
+                    callback: () => widget.onSelected(widget.categories[index]),
+                  );
+                }),
               ),
-            );
-            return _CategoryCourseCard(
-              category: widget.categories[index],
-              animation: animation,
-              callback: () => widget.onSelected(widget.categories[index]),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
@@ -103,7 +110,7 @@ class _CategoryCourseCard extends StatelessWidget {
             transform: Matrix4.translationValues(100 * (1.0 - animation.value), 0.0, 0.0),
             child: Semantics(
               button: true,
-              label: category.accessibilityLabel,
+              label: category.accessibilityLabel(context.l10n),
               excludeSemantics: true,
               onTap: callback,
               child: Material(
@@ -115,6 +122,7 @@ class _CategoryCourseCard extends StatelessWidget {
                   child: SizedBox(
                     width: cardWidth,
                     child: Stack(
+                      fit: StackFit.expand,
                       children: <Widget>[
                         Row(
                           children: <Widget>[
@@ -156,7 +164,7 @@ class _CategoryCourseCard extends StatelessWidget {
                                               runSpacing: 4,
                                               children: <Widget>[
                                                 Text(
-                                                  category.lessonLabel,
+                                                  category.lessonLabel(context.l10n),
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w200,
@@ -169,7 +177,7 @@ class _CategoryCourseCard extends StatelessWidget {
                                                   mainAxisSize: MainAxisSize.min,
                                                   children: <Widget>[
                                                     Text(
-                                                      '${category.rating}',
+                                                      context.l10n.number(category.rating, decimalDigits: 1),
                                                       textAlign: TextAlign.left,
                                                       style: TextStyle(
                                                         fontWeight: FontWeight.w200,
@@ -193,7 +201,7 @@ class _CategoryCourseCard extends StatelessWidget {
                                               runSpacing: 4,
                                               children: <Widget>[
                                                 Text(
-                                                  '\$${category.money}',
+                                                  context.l10n.money(category.money, 'USD', decimalDigits: 0),
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w600,
@@ -227,6 +235,7 @@ class _CategoryCourseCard extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(top: 24, bottom: 24, left: 16),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               ClipRRect(
                                 borderRadius: const BorderRadius.all(Radius.circular(16.0)),

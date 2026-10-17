@@ -7,6 +7,7 @@ import 'package:templates/features/templates/private_messenger/private_chat_scre
 import 'package:templates/features/templates/private_messenger/private_messenger_home_screen.dart';
 import 'package:templates/features/templates/private_messenger/private_messenger_theme.dart';
 import 'package:templates/features/templates/private_messenger/widgets/private_conversation_tile.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('private messenger palettes keep text and controls readable', () {
@@ -24,7 +25,7 @@ void main() {
       ..physicalSize = const Size(430, 932);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: PrivateMessengerHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: PrivateMessengerHomeScreen()));
     await tester.pumpAndSettle();
 
     expect(find.text('Messages'), findsOneWidget);
@@ -60,7 +61,7 @@ void main() {
       ..physicalSize = const Size(430, 932);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: PrivateMessengerHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(locale: Locale('en'), home: PrivateMessengerHomeScreen()));
     await tester.pumpAndSettle();
 
     for (final destination in <({String label, String content})>[
@@ -89,7 +90,7 @@ void main() {
   });
 
   testWidgets('private messenger follows its requested dark appearance', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(home: PrivateMessengerHomeScreen(appearance: AppAppearance.dark)));
+    await tester.pumpWidget(const LocalizedTestApp(home: PrivateMessengerHomeScreen(appearance: AppAppearance.dark)));
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('Messages'))).brightness, Brightness.dark);

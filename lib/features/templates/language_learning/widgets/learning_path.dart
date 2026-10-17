@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/localizations.dart';
 
 class LearningPath extends StatelessWidget {
   const LearningPath({required this.onLessonPressed, super.key});
@@ -7,12 +8,37 @@ class LearningPath extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const nodes = <({Alignment alignment, IconData icon, bool active, String label})>[
-      (alignment: Alignment(-0.15, 0), icon: Icons.check_rounded, active: true, label: 'Greetings complete'),
-      (alignment: Alignment(0.32, 0), icon: Icons.chat_bubble_rounded, active: true, label: 'Start ordering food'),
-      (alignment: Alignment(0.08, 0), icon: Icons.auto_stories_rounded, active: false, label: 'Read a short story'),
-      (alignment: Alignment(-0.36, 0), icon: Icons.headphones_rounded, active: false, label: 'Listen and repeat'),
-      (alignment: Alignment(-0.08, 0), icon: Icons.lock_rounded, active: false, label: 'Checkpoint locked'),
+    final nodes = <({Alignment alignment, IconData icon, bool active, String label})>[
+      (
+        alignment: const Alignment(-0.15, 0),
+        icon: Icons.check_rounded,
+        active: true,
+        label: context.l10n.greetingsComplete,
+      ),
+      (
+        alignment: const Alignment(0.32, 0),
+        icon: Icons.chat_bubble_rounded,
+        active: true,
+        label: context.l10n.startOrderingFood,
+      ),
+      (
+        alignment: const Alignment(0.08, 0),
+        icon: Icons.auto_stories_rounded,
+        active: false,
+        label: context.l10n.readAShortStory,
+      ),
+      (
+        alignment: const Alignment(-0.36, 0),
+        icon: Icons.headphones_rounded,
+        active: false,
+        label: context.l10n.listenAndRepeat,
+      ),
+      (
+        alignment: const Alignment(-0.08, 0),
+        icon: Icons.lock_rounded,
+        active: false,
+        label: context.l10n.checkpointLocked,
+      ),
     ];
 
     return Column(
@@ -89,7 +115,7 @@ class _LessonNode extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(color: colors.onSurface, borderRadius: const BorderRadius.all(Radius.circular(16))),
           child: Text(
-            'START HERE',
+            context.l10n.startHere,
             style: TextStyle(color: colors.surface, fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 0.5),
           ),
         ),

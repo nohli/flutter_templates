@@ -1,3 +1,5 @@
+import '../../../../l10n/localizations.dart';
+
 enum TransactionCategory { dining, groceries, income, subscription, transport }
 
 class FinanceTransaction {
@@ -17,39 +19,39 @@ class FinanceTransaction {
 
   bool get isIncome => amount > 0;
 
-  static const samples = <FinanceTransaction>[
+  static List<FinanceTransaction> samples(AppLocalizations l10n) => <FinanceTransaction>[
     FinanceTransaction(
       id: 'salary-september',
-      title: 'Salary',
-      subtitle: 'Today · Monthly income',
+      title: l10n.salary,
+      subtitle: l10n.todayMonthlyIncome,
       amount: 4200,
       category: TransactionCategory.income,
     ),
     FinanceTransaction(
       id: 'green-market',
-      title: 'Green Market',
-      subtitle: 'Today · Groceries',
+      title: l10n.greenMarket,
+      subtitle: l10n.todayGroceries,
       amount: -84.60,
       category: TransactionCategory.groceries,
     ),
     FinanceTransaction(
       id: 'metro-pass',
-      title: 'Metro Pass',
-      subtitle: 'Yesterday · Transport',
+      title: l10n.metroPass,
+      subtitle: l10n.yesterdayTransport,
       amount: -42,
       category: TransactionCategory.transport,
     ),
     FinanceTransaction(
       id: 'north-star-cafe',
-      title: 'North Star Café',
-      subtitle: 'Yesterday · Dining',
+      title: l10n.northStarCaf,
+      subtitle: l10n.yesterdayDining,
       amount: -18.40,
       category: TransactionCategory.dining,
     ),
     FinanceTransaction(
       id: 'studio-cloud',
-      title: 'Studio Cloud',
-      subtitle: '8 Sep · Subscription',
+      title: l10n.studioCloud,
+      subtitle: l10n.sample8SepSubscription,
       amount: -12.99,
       category: TransactionCategory.subscription,
     ),

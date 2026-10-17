@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../dating_app_theme.dart';
 import '../models/dating_conversation.dart';
 import 'dating_conversation_avatar.dart';
+import '../../../../l10n/localizations.dart';
 
 class DatingConversationTile extends StatelessWidget {
   const DatingConversationTile({required this.conversation, required this.onTap, super.key});
@@ -18,7 +19,7 @@ class DatingConversationTile extends StatelessWidget {
     return Semantics(
       button: true,
       excludeSemantics: true,
-      label: 'Open conversation with ${conversation.name}',
+      label: context.l10n.openConversationWithValue(conversation.name),
       child: Material(
         color: hasUnread ? colors.primaryContainer.withValues(alpha: 0.55) : colors.surface,
         shape: RoundedRectangleBorder(
@@ -86,7 +87,7 @@ class DatingConversationTile extends StatelessWidget {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(color: colors.primary, shape: BoxShape.circle),
                               child: Text(
-                                '${conversation.unreadCount}',
+                                context.l10n.number(conversation.unreadCount),
                                 style: TextStyle(color: colors.onPrimary, fontSize: 11, fontWeight: FontWeight.w900),
                               ),
                             ),

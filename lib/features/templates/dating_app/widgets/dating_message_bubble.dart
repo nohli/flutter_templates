@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../models/dating_message.dart';
+import '../../../../l10n/localizations.dart';
 
 class DatingMessageBubble extends StatelessWidget {
-  const DatingMessageBubble({required this.message, super.key});
+  const DatingMessageBubble({required this.message, required this.matchName, this.isRecent = false, super.key});
 
   final DatingMessage message;
+  final String matchName;
+  final bool isRecent;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final isUser = message.author == DatingMessageAuthor.user;
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final author = isUser ? context.l10n.you : matchName;
+    final time = isRecent ? context.l10n.nowUpper : message.time;
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: 0, end: 1),
@@ -20,7 +25,7 @@ class DatingMessageBubble extends StatelessWidget {
       child: Align(
         alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
         child: Semantics(
-          label: '${isUser ? 'You' : 'Ari'}, ${message.time}: ${message.text}',
+          label: context.l10n.chatMessageLabel(author, time, message.text),
           child: Container(
             constraints: const BoxConstraints(maxWidth: 310),
             margin: const EdgeInsets.only(bottom: 14),
@@ -54,7 +59,7 @@ class DatingMessageBubble extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    isUser ? 'YOU / ${message.time}' : 'ARI / ${message.time}',
+                    context.l10n.messageHeading(author.toUpperCase(), time),
                     style: TextStyle(
                       color: isUser ? colors.primary : colors.secondary,
                       fontSize: 8,

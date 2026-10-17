@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/localizations.dart';
 
 class SliderView extends StatefulWidget {
   const SliderView({required this.onDistanceChanged, required this.distanceValue, super.key});
@@ -39,7 +40,10 @@ class _SliderViewState extends State<SliderView> {
             Expanded(flex: position, child: const SizedBox()),
             SizedBox(
               width: 170,
-              child: Text('Less than ${(_distanceValue / 10).toStringAsFixed(1)} km', textAlign: TextAlign.center),
+              child: Text(
+                context.l10n.lessThanValueKm(context.l10n.number(_distanceValue / 10, decimalDigits: 1)),
+                textAlign: TextAlign.center,
+              ),
             ),
             Expanded(flex: 100 - position, child: const SizedBox()),
           ],

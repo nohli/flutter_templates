@@ -18,6 +18,7 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import 'package:flutter/material.dart';
+import '../../../l10n/localizations.dart';
 
 typedef RatingChangeCallback = void Function(double rating);
 
@@ -63,9 +64,12 @@ class SmoothStarRating extends StatelessWidget {
     return icon;
   }
 
-  double _ratingForPosition(double position) {
+  double _ratingForPosition(double position, TextDirection direction) {
     final itemWidth = size + spacing;
-    final rawRating = position / itemWidth;
+    final distance = direction == TextDirection.rtl
+        ? size * starCount + spacing * (starCount - 1) - position
+        : position;
+    final rawRating = distance / itemWidth;
     final selectedRating = allowHalfRating ? (rawRating * 2).ceil() / 2 : rawRating.ceilToDouble();
 
     return selectedRating.clamp(0, starCount).toDouble();
@@ -77,10 +81,10 @@ class SmoothStarRating extends StatelessWidget {
     return (rating + increment * direction).clamp(0, starCount).toDouble();
   }
 
-  String _formattedRating(double value) {
+  String _formattedRating(AppLocalizations l10n, double value) {
     final hasWholeRating = value == value.roundToDouble();
 
-    return hasWholeRating ? value.round().toString() : value.toStringAsFixed(1);
+    return l10n.number(value, decimalDigits: hasWholeRating ? 0 : 1);
   }
 
   @override
@@ -91,19 +95,22 @@ class SmoothStarRating extends StatelessWidget {
     );
     final callback = onRatingChanged;
     final isInteractive = callback != null;
-    final ratingValue = '${_formattedRating(rating)} out of $starCount';
+    final ratingValue = context.l10n.valueOutOfValue(
+      _formattedRating(context.l10n, rating),
+      context.l10n.number(starCount),
+    );
     final interactiveStars = ConstrainedBox(
       constraints: BoxConstraints(minHeight: isInteractive ? 48 : size),
-      child: Align(alignment: Alignment.centerLeft, widthFactor: 1, heightFactor: 1, child: stars),
+      child: Align(alignment: AlignmentDirectional.centerStart, widthFactor: 1, heightFactor: 1, child: stars),
     );
 
     return Semantics(
-      label: 'Rating',
+      label: context.l10n.rating,
       value: ratingValue,
       slider: isInteractive,
       readOnly: !isInteractive,
-      increasedValue: isInteractive ? _formattedRating(_steppedRating(1)) : null,
-      decreasedValue: isInteractive ? _formattedRating(_steppedRating(-1)) : null,
+      increasedValue: isInteractive ? _formattedRating(context.l10n, _steppedRating(1)) : null,
+      decreasedValue: isInteractive ? _formattedRating(context.l10n, _steppedRating(-1)) : null,
       onIncrease: isInteractive ? () => callback(_steppedRating(1)) : null,
       onDecrease: isInteractive ? () => callback(_steppedRating(-1)) : null,
       child: ExcludeSemantics(
@@ -113,9 +120,10 @@ class SmoothStarRating extends StatelessWidget {
               ? interactiveStars
               : GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTapUp: (TapUpDetails details) => callback(_ratingForPosition(details.localPosition.dx)),
+                  onTapUp: (TapUpDetails details) =>
+                      callback(_ratingForPosition(details.localPosition.dx, Directionality.of(context))),
                   onHorizontalDragUpdate: (DragUpdateDetails details) =>
-                      callback(_ratingForPosition(details.localPosition.dx)),
+                      callback(_ratingForPosition(details.localPosition.dx, Directionality.of(context))),
                   child: interactiveStars,
                 ),
         ),

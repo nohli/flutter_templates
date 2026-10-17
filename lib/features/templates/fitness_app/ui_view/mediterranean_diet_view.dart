@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
 import 'animated_fitness_card.dart';
+import '../../../../l10n/localizations.dart';
 
 class MediterraneanDietView extends StatelessWidget {
   const MediterraneanDietView({required this.animation, required this.macroAnimation, super.key});
@@ -74,7 +75,7 @@ class _CompactEnergyOverview extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   _CompactEnergyMetric(
-                    label: 'Eaten',
+                    label: context.l10n.eaten,
                     value: (1127 * progress).toInt(),
                     imagePath: 'assets/fitness_app/eaten.png',
                     accent: const Color(0xFF87A0E5),
@@ -82,7 +83,7 @@ class _CompactEnergyOverview extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   _CompactEnergyMetric(
-                    label: 'Burned',
+                    label: context.l10n.burned,
                     value: (102 * progress).toInt(),
                     imagePath: 'assets/fitness_app/burned.png',
                     accent: const Color(0xFFF56E98),
@@ -164,7 +165,7 @@ class _CompactEnergyMetric extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 4, bottom: 3),
                         child: Text(
-                          '$value',
+                          context.l10n.number(value),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: FitnessAppTheme.fontName,
@@ -177,7 +178,7 @@ class _CompactEnergyMetric extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.only(left: unitInset, bottom: 3),
                         child: Text(
-                          'Kcal',
+                          context.l10n.kcalLabel,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: FitnessAppTheme.fontName,
@@ -235,7 +236,7 @@ class _CompactCalorieRing extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(
-                      '${(1503 * progress).toInt()}',
+                      context.l10n.number((1503 * progress).toInt()),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: FitnessAppTheme.fontName,
@@ -245,7 +246,7 @@ class _CompactCalorieRing extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Kcal left',
+                      context.l10n.kcalLeft,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: FitnessAppTheme.fontName,
@@ -293,8 +294,8 @@ class _CompactMacroSummary extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: _CompactMacroMetric(
-              label: 'Carbs',
-              remaining: '12g left',
+              label: context.l10n.carbs,
+              remaining: context.l10n.sample12gLeft,
               width: (70 / 1.2) * progress,
               background: const Color(0xFF87A0E5).withValues(alpha: 0.2),
               gradient: LinearGradient(
@@ -306,8 +307,8 @@ class _CompactMacroSummary extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: _CompactMacroMetric(
-                label: 'Protein',
-                remaining: '30g left',
+                label: context.l10n.protein,
+                remaining: context.l10n.sample30gLeft,
                 width: (70 / 2) * macroProgress,
                 background: const Color(0xFFF56E98).withValues(alpha: 0.2),
                 gradient: LinearGradient(
@@ -321,8 +322,8 @@ class _CompactMacroSummary extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 _CompactMacroMetric(
-                  label: 'Fat',
-                  remaining: '10g left',
+                  label: context.l10n.fat,
+                  remaining: context.l10n.sample10gLeft,
                   width: (70 / 2.5) * macroProgress,
                   background: const Color(0xFFF1B440).withValues(alpha: 0.2),
                   gradient: LinearGradient(
@@ -427,7 +428,7 @@ class _LargeDietSummary extends StatelessWidget {
         children: <Widget>[
           _LargeEnergyMetric(
             colors: colors,
-            label: 'Eaten',
+            label: context.l10n.eaten,
             value: (1127 * progress).toInt(),
             imagePath: 'assets/fitness_app/eaten.png',
             accent: const Color(0xFF87A0E5),
@@ -435,7 +436,7 @@ class _LargeDietSummary extends StatelessWidget {
           const SizedBox(height: 16),
           _LargeEnergyMetric(
             colors: colors,
-            label: 'Burned',
+            label: context.l10n.burned,
             value: (102 * progress).toInt(),
             imagePath: 'assets/fitness_app/burned.png',
             accent: const Color(0xFFF56E98),
@@ -448,24 +449,24 @@ class _LargeDietSummary extends StatelessWidget {
           ),
           _LargeMacroMetric(
             colors: colors,
-            label: 'Carbs',
-            remaining: '12g left',
+            label: context.l10n.carbs,
+            remaining: context.l10n.sample12gLeft,
             value: progress / 1.2,
             accent: const Color(0xFF87A0E5),
           ),
           const SizedBox(height: 24),
           _LargeMacroMetric(
             colors: colors,
-            label: 'Protein',
-            remaining: '30g left',
+            label: context.l10n.protein,
+            remaining: context.l10n.sample30gLeft,
             value: progress / 2,
             accent: const Color(0xFFF56E98),
           ),
           const SizedBox(height: 24),
           _LargeMacroMetric(
             colors: colors,
-            label: 'Fat',
-            remaining: '10g left',
+            label: context.l10n.fat,
+            remaining: context.l10n.sample10gLeft,
             value: progress / 2.5,
             accent: const Color(0xFFF1B440),
           ),
@@ -525,7 +526,7 @@ class _LargeEnergyMetric extends StatelessWidget {
                 children: <Widget>[
                   SizedBox(width: 28, height: 28, child: Image.asset(imagePath)),
                   Text(
-                    '$value',
+                    context.l10n.number(value),
                     style: TextStyle(
                       fontFamily: FitnessAppTheme.fontName,
                       fontWeight: FontWeight.w600,
@@ -534,7 +535,7 @@ class _LargeEnergyMetric extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Kcal',
+                    context.l10n.kcalLabel,
                     style: TextStyle(
                       fontFamily: FitnessAppTheme.fontName,
                       fontWeight: FontWeight.w600,
@@ -587,7 +588,7 @@ class _LargeCalorieRing extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          '${(1503 * progress).toInt()}',
+          context.l10n.number((1503 * progress).toInt()),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: FitnessAppTheme.fontName,
@@ -597,7 +598,7 @@ class _LargeCalorieRing extends StatelessWidget {
           ),
         ),
         Text(
-          'Kcal left',
+          context.l10n.kcalLeft,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: FitnessAppTheme.fontName,

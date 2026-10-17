@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/localizations.dart';
+
 class RangeSliderView extends StatefulWidget {
   const RangeSliderView({required this.values, required this.onChangeRangeValues, super.key});
 
@@ -39,14 +41,26 @@ class _RangeSliderViewState extends State<RangeSliderView> {
             Row(
               children: <Widget>[
                 Expanded(flex: startPosition, child: const SizedBox()),
-                SizedBox(width: 54, child: Text('\$${_values.start.round()}', textAlign: TextAlign.center)),
+                SizedBox(
+                  width: 54,
+                  child: Text(
+                    context.l10n.money(_values.start.round(), 'USD', decimalDigits: 0),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 Expanded(flex: 1000 - startPosition, child: const SizedBox()),
               ],
             ),
             Row(
               children: <Widget>[
                 Expanded(flex: endPosition, child: const SizedBox()),
-                SizedBox(width: 54, child: Text('\$${_values.end.round()}', textAlign: TextAlign.center)),
+                SizedBox(
+                  width: 54,
+                  child: Text(
+                    context.l10n.money(_values.end.round(), 'USD', decimalDigits: 0),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 Expanded(flex: 1000 - endPosition, child: const SizedBox()),
               ],
             ),

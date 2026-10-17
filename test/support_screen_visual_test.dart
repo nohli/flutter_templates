@@ -7,6 +7,7 @@ import 'package:templates/app/app_theme.dart';
 import 'package:templates/features/support/feedback_screen.dart';
 import 'package:templates/features/support/help_screen.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
+import 'localized_test_app.dart';
 
 void main() {
   testWidgets('illustrated support screens preserve the light artwork and blue action hierarchy', (
@@ -108,6 +109,40 @@ void main() {
     expect(descriptionBounds.right, lessThanOrEqualTo(406));
   });
 
+  testWidgets('support actions center inside asymmetric native safe areas', (WidgetTester tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(466, 678);
+    addTearDown(tester.view.reset);
+
+    for (final screen in <Widget>[
+      HelpScreen(launcher: (_) async => false),
+      FeedbackScreen(launcher: (_) async => false),
+      InviteFriendScreen(sharer: (_, _) async {}),
+    ]) {
+      for (final asset in ['helpImage', 'feedbackImage', 'inviteImage']) {
+        rootBundle.evict('assets/images/$asset.png');
+      }
+      await tester.pumpWidget(
+        LocalizedTestApp(
+          theme: AppTheme.build(Brightness.dark),
+          home: MediaQuery(
+            data: const MediaQueryData(size: Size(466, 678), padding: EdgeInsets.only(right: 84, bottom: 34)),
+            child: Scaffold(body: screen),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final action = find.byType(FilledButton);
+      final scroll = find.descendant(of: find.byType(CustomScrollView), matching: find.byType(Scrollable)).first;
+      await tester.scrollUntilVisible(action, 200, scrollable: scroll);
+      await tester.pumpAndSettle();
+
+      expect(action.hitTestable(), findsOneWidget);
+      expect(tester.getRect(action).center.dx, 191);
+      expect(tester.takeException(), isNull);
+    }
+  });
+
   testWidgets('support screens use semantic dark surfaces with readable actions', (WidgetTester tester) async {
     final scenarios = <({Widget screen, String heading, String? imagePath, String? actionLabel})>[
       (
@@ -199,8 +234,8 @@ void main() {
     );
     expect(content, findsOneWidget);
     expect(tester.getSize(content).width, 640);
-    expect(find.text(AppIdentity.sampleContentNotice), findsOneWidget);
-    expect(find.text(AppIdentity.trademarkDisclaimer), findsOneWidget);
+    expect(find.text(english.sampleContentNotice), findsOneWidget);
+    expect(find.text(english.trademarkDisclaimer), findsOneWidget);
 
     final enabled = <WidgetState>{};
     final links = tester.widgetList<TextButton>(find.byType(TextButton));
@@ -335,7 +370,7 @@ Future<void> _pumpScreen(
   }
 
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
       theme: AppTheme.build(brightness).copyWith(platform: platform),
       home: home,
     ),

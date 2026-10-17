@@ -17,6 +17,7 @@ import 'package:templates/features/templates/design_course/models/category.dart'
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/shared/template_appearance.dart';
 import 'package:templates/main.dart';
+import 'localized_test_app.dart';
 
 void main() {
   testWidgets('root app surface follows the system brightness before the gallery paints', (WidgetTester tester) async {
@@ -36,7 +37,7 @@ void main() {
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: TemplateAppearanceShell(
           appearance: AppAppearance.system,
           themeBuilder: (Brightness brightness) => ThemeData(brightness: brightness),
@@ -47,7 +48,7 @@ void main() {
     expect(Theme.of(tester.element(find.text('Preview'))).brightness, Brightness.dark);
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: TemplateAppearanceShell(
           appearance: AppAppearance.light,
           themeBuilder: (Brightness brightness) => ThemeData(brightness: brightness),
@@ -60,7 +61,7 @@ void main() {
 
   testWidgets('template detail routes preserve the active template theme', (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: TemplateAppearanceShell(
           appearance: AppAppearance.dark,
           themeBuilder: (Brightness brightness) => ThemeData(
@@ -113,7 +114,7 @@ void main() {
     final mediaQuery = MediaQueryData.fromView(tester.view).copyWith(disableAnimations: true);
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: MediaQuery(
           data: mediaQuery,
           child: const DesignCourseHomeScreen(appearance: AppAppearance.dark),
@@ -124,11 +125,11 @@ void main() {
 
     expect(Theme.of(tester.element(find.text('Category'))).brightness, Brightness.dark);
 
-    await tester.tap(find.bySemanticsLabel(Category.categoryList.first.accessibilityLabel));
+    await tester.tap(find.bySemanticsLabel(Category.categoryList(english).first.accessibilityLabel(english)));
     await tester.pumpAndSettle();
 
     expect(find.byType(CourseInfoScreen), findsOneWidget);
-    expect(Theme.of(tester.element(find.text(Category.categoryList.first.title))).brightness, Brightness.dark);
+    expect(Theme.of(tester.element(find.text(Category.categoryList(english).first.title))).brightness, Brightness.dark);
     expect(tester.takeException(), isNull);
   });
 
@@ -261,21 +262,21 @@ void main() {
     for (final brightness in Brightness.values) {
       for (final item in TemplateGalleryItem.items) {
         await tester.pumpWidget(
-          MaterialApp(
+          LocalizedTestApp(
             theme: ThemeData(brightness: brightness),
             themeAnimationDuration: Duration.zero,
             home: TemplateGalleryArtwork(item: item),
           ),
         );
 
-        final expectedPath = item.destination.galleryPreviewPath(dark: brightness == Brightness.dark);
+        final expectedPath = item.destination.galleryPreviewPath(english, dark: brightness == Brightness.dark);
         final artworkImages = tester.widgetList<Image>(
           find.descendant(of: find.byType(TemplateGalleryArtwork), matching: find.byType(Image)),
         );
         final assetPaths = artworkImages.map((image) => (image.image as AssetImage).assetName).toSet();
 
-        expect(artworkImages, hasLength(3), reason: item.title);
-        expect(assetPaths, <String>{expectedPath}, reason: item.title);
+        expect(artworkImages, hasLength(3), reason: item.title(english));
+        expect(assetPaths, <String>{expectedPath}, reason: item.title(english));
         expect(tester.takeException(), isNull);
       }
     }

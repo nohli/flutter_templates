@@ -9,6 +9,7 @@ import 'channel_detail_screen.dart';
 import 'channel_messenger_theme.dart';
 import 'models/channel_conversation.dart';
 import 'widgets/channel_conversation_tile.dart';
+import '../../../l10n/localizations.dart';
 
 class ChannelMessengerHomeScreen extends StatelessWidget {
   const ChannelMessengerHomeScreen({this.appearance = AppAppearance.light, super.key});
@@ -45,18 +46,17 @@ class _ChannelMessengerHomeState extends State<_ChannelMessengerHome> {
   @override
   Widget build(BuildContext context) {
     final conversations = switch (_folder) {
-      1 => ChannelConversation.samples.where((conversation) => conversation.unread > 0).toList(),
-      2 =>
-        ChannelConversation.samples
-            .where((conversation) => conversation.kind == ChannelConversationKind.channel)
-            .toList(),
-      _ => ChannelConversation.samples,
+      1 => ChannelConversation.samples(context.l10n).where((conversation) => conversation.unread > 0).toList(),
+      2 => ChannelConversation.samples(
+        context.l10n,
+      ).where((conversation) => conversation.kind == ChannelConversationKind.channel).toList(),
+      _ => ChannelConversation.samples(context.l10n),
     };
     return PrimaryScrollController(
       controller: _scrollController,
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          tooltip: 'New message',
+          tooltip: context.l10n.newMessage,
           onPressed: () => _showNewMessage(context),
           child: const Icon(Icons.edit_rounded),
         ),
@@ -94,7 +94,11 @@ class _ChannelMessengerHomeState extends State<_ChannelMessengerHome> {
       Navigator.of(context).push<void>(
         templatePageRoute<void>(
           context: context,
-          builder: (_) => ChannelDetailScreen(conversation: conversation),
+          builder: (context) => ChannelDetailScreen(
+            conversation: ChannelConversation.samples(
+              context.l10n,
+            ).firstWhere((sample) => sample.initials == conversation.initials),
+          ),
         ),
       ),
     );
@@ -104,28 +108,28 @@ class _ChannelMessengerHomeState extends State<_ChannelMessengerHome> {
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (BuildContext context) => const SafeArea(
+      builder: (BuildContext context) => SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(20, 4, 20, 24),
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Start a conversation', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
-              SizedBox(height: 18),
+              Text(context.l10n.startAConversation, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+              const SizedBox(height: 18),
               ListTile(
-                leading: CircleAvatar(child: Icon(Icons.group_add_rounded)),
-                title: Text('New group'),
-                subtitle: Text('Bring a project team together'),
+                leading: const CircleAvatar(child: Icon(Icons.group_add_rounded)),
+                title: Text(context.l10n.newGroup),
+                subtitle: Text(context.l10n.bringAProjectTeamTogether),
               ),
               ListTile(
-                leading: CircleAvatar(child: Icon(Icons.campaign_rounded)),
-                title: Text('New channel'),
-                subtitle: Text('Broadcast updates to an audience'),
+                leading: const CircleAvatar(child: Icon(Icons.campaign_rounded)),
+                title: Text(context.l10n.newChannel),
+                subtitle: Text(context.l10n.broadcastUpdatesToAnAudience),
               ),
               ListTile(
-                leading: CircleAvatar(child: Icon(Icons.person_add_alt_rounded)),
-                title: Text('New message'),
-                subtitle: Text('Find someone by name or username'),
+                leading: const CircleAvatar(child: Icon(Icons.person_add_alt_rounded)),
+                title: Text(context.l10n.newMessage),
+                subtitle: Text(context.l10n.findSomeoneByNameOrUsername),
               ),
             ],
           ),
@@ -144,7 +148,7 @@ class _MessengerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    const folders = <String>['All', 'Unread', 'Channels'];
+    final folders = <String>[context.l10n.all, context.l10n.unread, context.l10n.channels];
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
       child: Column(
@@ -152,23 +156,31 @@ class _MessengerHeader extends StatelessWidget {
           Row(
             children: <Widget>[
               IconButton(
-                tooltip: 'Back to template gallery',
+                tooltip: context.l10n.backToTemplateGallery,
                 onPressed: () => Navigator.of(context).pop(),
                 icon: const Icon(Icons.arrow_back_rounded),
               ),
               const SizedBox(width: 4),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'Channels',
-                  style: TextStyle(
+                  context.l10n.channels,
+                  style: const TextStyle(
                     fontFamily: ChannelMessengerTheme.displayFontName,
                     fontSize: 31,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-              IconButton(tooltip: 'Search messages', onPressed: () {}, icon: const Icon(Icons.search_rounded)),
-              IconButton(tooltip: 'Messenger settings', onPressed: () {}, icon: const Icon(Icons.tune_rounded)),
+              IconButton(
+                tooltip: context.l10n.searchMessages,
+                onPressed: () {},
+                icon: const Icon(Icons.search_rounded),
+              ),
+              IconButton(
+                tooltip: context.l10n.messengerSettings,
+                onPressed: () {},
+                icon: const Icon(Icons.tune_rounded),
+              ),
             ],
           ),
           const SizedBox(height: 14),
@@ -226,11 +238,11 @@ class _ArchiveRow extends StatelessWidget {
         children: <Widget>[
           Icon(Icons.archive_outlined, color: colors.primary),
           const SizedBox(width: 12),
-          const Expanded(
-            child: Text('Archived chats', style: TextStyle(fontWeight: FontWeight.w700)),
+          Expanded(
+            child: Text(context.l10n.archivedChats, style: const TextStyle(fontWeight: FontWeight.w700)),
           ),
           Text(
-            '8',
+            context.l10n.number(8),
             style: TextStyle(color: colors.primary, fontWeight: FontWeight.w800),
           ),
         ],

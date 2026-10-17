@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/localizations.dart';
 
 class MealsListData {
   const MealsListData({
@@ -17,36 +18,36 @@ class MealsListData {
   final List<String> meals;
   final int? kcal;
 
-  static const samples = <MealsListData>[
+  static List<MealsListData> samples(AppLocalizations l10n) => <MealsListData>[
     MealsListData(
       imagePath: 'assets/fitness_app/breakfast.png',
-      title: 'Breakfast',
+      title: l10n.breakfast,
       kcal: 525,
-      meals: <String>['Bread,', 'Peanut butter,', 'Apple'],
-      startColor: Color(0xFFFA7D82),
-      endColor: Color(0xFFFFB295),
+      meals: <String>[l10n.bread, l10n.peanutButter, l10n.apple],
+      startColor: const Color(0xFFFA7D82),
+      endColor: const Color(0xFFFFB295),
     ),
     MealsListData(
       imagePath: 'assets/fitness_app/lunch.png',
-      title: 'Lunch',
+      title: l10n.lunch,
       kcal: 602,
-      meals: <String>['Salmon,', 'Mixed veggies,', 'Avocado'],
-      startColor: Color(0xFF738AE6),
-      endColor: Color(0xFF5C5EDD),
+      meals: <String>[l10n.salmon, l10n.mixedVeggies, l10n.avocado],
+      startColor: const Color(0xFF738AE6),
+      endColor: const Color(0xFF5C5EDD),
     ),
     MealsListData(
       imagePath: 'assets/fitness_app/snack.png',
-      title: 'Snack',
-      meals: <String>['Recommend:', '800 kcal'],
-      startColor: Color(0xFFFE95B6),
-      endColor: Color(0xFFFF5287),
+      title: l10n.snack,
+      meals: <String>[l10n.recommend, l10n.sample800Kcal],
+      startColor: const Color(0xFFFE95B6),
+      endColor: const Color(0xFFFF5287),
     ),
     MealsListData(
       imagePath: 'assets/fitness_app/dinner.png',
-      title: 'Dinner',
-      meals: <String>['Recommend:', '703 kcal'],
-      startColor: Color(0xFF6F72CA),
-      endColor: Color(0xFF1E1466),
+      title: l10n.dinner,
+      meals: <String>[l10n.recommend, l10n.sample703Kcal],
+      startColor: const Color(0xFF6F72CA),
+      endColor: const Color(0xFF1E1466),
     ),
   ];
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../finance_app_theme.dart';
 import '../finance_formatters.dart';
+import '../../../../l10n/localizations.dart';
 
 class BalanceCard extends StatelessWidget {
   const BalanceCard({required this.balanceIsVisible, required this.onToggleBalance, super.key});
@@ -47,20 +48,40 @@ class BalanceCard extends StatelessWidget {
                 if (usesLargeText)
                   Column(
                     children: <Widget>[
-                      _BalanceMetric(label: 'Income', value: '+$income', code: 'IN', positive: true),
+                      _BalanceMetric(
+                        label: context.l10n.income,
+                        value: '+$income',
+                        code: context.l10n.incomeAbbreviation,
+                        positive: true,
+                      ),
                       const SizedBox(height: 12),
-                      _BalanceMetric(label: 'Spent', value: spending, code: 'OUT', positive: false),
+                      _BalanceMetric(
+                        label: context.l10n.spent,
+                        value: spending,
+                        code: context.l10n.out,
+                        positive: false,
+                      ),
                     ],
                   )
                 else
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: _BalanceMetric(label: 'Income', value: '+$income', code: 'IN', positive: true),
+                        child: _BalanceMetric(
+                          label: context.l10n.income,
+                          value: '+$income',
+                          code: context.l10n.incomeAbbreviation,
+                          positive: true,
+                        ),
                       ),
                       const SizedBox(width: 20),
                       Expanded(
-                        child: _BalanceMetric(label: 'Spent', value: spending, code: 'OUT', positive: false),
+                        child: _BalanceMetric(
+                          label: context.l10n.spent,
+                          value: spending,
+                          code: context.l10n.out,
+                          positive: false,
+                        ),
                       ),
                     ],
                   ),
@@ -88,17 +109,22 @@ class _BalanceHeader extends StatelessWidget {
           child: SizedBox.square(dimension: 7),
         ),
         const SizedBox(width: 8),
-        const Expanded(
+        Expanded(
           child: Text(
-            'Total balance',
+            context.l10n.totalBalance,
             maxLines: 1,
             overflow: TextOverflow.fade,
             softWrap: false,
-            style: TextStyle(color: Color(0xFFB9C3D5), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1.3),
+            style: const TextStyle(
+              color: Color(0xFFB9C3D5),
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.3,
+            ),
           ),
         ),
         IconButton(
-          tooltip: balanceIsVisible ? 'Hide balance' : 'Show balance',
+          tooltip: balanceIsVisible ? context.l10n.hideBalance : context.l10n.showBalance,
           onPressed: onToggleBalance,
           style: IconButton.styleFrom(
             foregroundColor: Colors.white,
@@ -122,7 +148,7 @@ class _BalanceValue extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       liveRegion: true,
-      label: balanceIsVisible ? 'Balance $balance' : 'Balance hidden',
+      label: balanceIsVisible ? context.l10n.balanceValue(balance) : context.l10n.balanceHidden,
       child: ExcludeSemantics(
         child: AnimatedSwitcher(
           duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 180),
@@ -154,7 +180,7 @@ class _BalanceTrend extends StatelessWidget {
     final percentage = formatPercentage(context, 0.124, decimalDigits: 1);
 
     return Semantics(
-      label: 'Balance increased $percentage this month',
+      label: context.l10n.balanceIncreasedValueThisMonth(percentage),
       child: ExcludeSemantics(
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
@@ -163,10 +189,13 @@ class _BalanceTrend extends StatelessWidget {
           children: <Widget>[
             const Icon(Icons.north_east_rounded, size: 15, color: FinanceAppTheme.mint),
             Text(
-              '$percentage this month',
+              context.l10n.valueThisMonth(percentage),
               style: const TextStyle(color: FinanceAppTheme.mint, fontSize: 11, fontWeight: FontWeight.w700),
             ),
-            const Text('17:42 UTC', style: TextStyle(color: Color(0xFF7B8598), fontSize: 9, letterSpacing: 0.8)),
+            Text(
+              '${context.l10n.clock(17, 42)} UTC',
+              style: const TextStyle(color: Color(0xFF7B8598), fontSize: 9, letterSpacing: 0.8),
+            ),
           ],
         ),
       ),

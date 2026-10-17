@@ -11,6 +11,7 @@ import 'package:templates/features/support/feedback_screen.dart';
 import 'package:templates/app/font_licenses.dart';
 import 'package:templates/features/support/help_screen.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
+import 'localized_test_app.dart';
 
 const _fontLicenseAssets = <String>[
   'assets/fonts/WorkSans-LICENSE.txt',
@@ -35,7 +36,7 @@ void main() {
   });
 
   test('feedback email preserves spaces and reserved characters', () {
-    final uri = feedbackEmailUri('Hotel & fitness + course? Yes.');
+    final uri = feedbackEmailUri('Hotel & fitness + course? Yes.', english);
 
     expect(uri.scheme, 'mailto');
     expect(uri.path, AppIdentity.supportEmail);
@@ -49,11 +50,11 @@ void main() {
   });
 
   test('support and sharing use the project contact details', () {
-    expect(supportEmailUri().scheme, 'mailto');
-    expect(supportEmailUri().path, AppIdentity.supportEmail);
-    expect(supportEmailUri().queryParameters['subject'], '${AppIdentity.name} support');
+    expect(supportEmailUri(english).scheme, 'mailto');
+    expect(supportEmailUri(english).path, AppIdentity.supportEmail);
+    expect(supportEmailUri(english).queryParameters['subject'], '${AppIdentity.name} support');
     expect(developerPortfolioUri, AppIdentity.supportUri);
-    expect(inviteText, contains(AppIdentity.sourceUrl));
+    expect(inviteText(english), contains(AppIdentity.sourceUrl));
   });
 
   testWidgets('feedback validates text and opens one truthful email draft', (WidgetTester tester) async {
@@ -129,7 +130,7 @@ void main() {
     launchResult.complete(false);
     await tester.pumpAndSettle();
 
-    expect(launchedUri, supportEmailUri());
+    expect(launchedUri, supportEmailUri(english));
     expect(find.text('No email app is available. Contact ${AppIdentity.supportEmail}.'), findsOneWidget);
   });
 
@@ -160,7 +161,7 @@ void main() {
     shareResult.complete();
     await tester.pumpAndSettle();
 
-    expect(sharedText, inviteText);
+    expect(sharedText, inviteText(english));
     expect(sharedOrigin, isNotNull);
     expect(sharedOrigin!.isEmpty, isFalse);
   });
@@ -203,7 +204,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(launchedUris, <Uri>[AppIdentity.sourceUri, AppIdentity.privacyPolicyUri, developerPortfolioUri]);
-    expect(find.text(AppIdentity.trademarkDisclaimer), findsOneWidget);
+    expect(find.text(english.trademarkDisclaimer), findsOneWidget);
     expect(find.text('The link could not be opened.'), findsNothing);
     expect(tester.takeException(), isNull);
   });
@@ -338,7 +339,7 @@ Future<void> _pumpScreen(
   addTearDown(tester.view.reset);
 
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
       theme: platform == null ? null : ThemeData(platform: platform),
       home: Scaffold(body: screen),
     ),

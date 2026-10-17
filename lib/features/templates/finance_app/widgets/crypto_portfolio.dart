@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import '../finance_app_theme.dart';
 import '../finance_formatters.dart';
 import 'finance_surface.dart';
+import '../../../../l10n/localizations.dart';
 
 class CryptoPortfolio extends StatelessWidget {
   const CryptoPortfolio({super.key});
 
-  static const _assets = <({String amount, String name, String symbol, Color color})>[
-    (symbol: 'BTC', name: 'Bitcoin', amount: '0.083', color: Color(0xFFF59E0B)),
-    (symbol: 'ETH', name: 'Ethereum', amount: '1.42', color: Color(0xFF7C8CF8)),
-    (symbol: 'SOL', name: 'Solana', amount: '14.8', color: Color(0xFF43D6A2)),
+  static const _assets = <({double amount, String name, String symbol, Color color})>[
+    (symbol: 'BTC', name: 'Bitcoin', amount: 0.083, color: Color(0xFFF59E0B)),
+    (symbol: 'ETH', name: 'Ethereum', amount: 1.42, color: Color(0xFF7C8CF8)),
+    (symbol: 'SOL', name: 'Solana', amount: 14.8, color: Color(0xFF43D6A2)),
   ];
 
   @override
@@ -32,7 +33,7 @@ class CryptoPortfolio extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Crypto',
+                        context.l10n.crypto,
                         style: TextStyle(color: colors.onSurfaceVariant, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 5),
@@ -48,16 +49,16 @@ class CryptoPortfolio extends StatelessWidget {
                     color: FinanceAppTheme.mint.withValues(alpha: 0.18),
                     borderRadius: const BorderRadius.all(Radius.circular(99)),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Icon(Icons.north_east_rounded, size: 14, color: Color(0xFF167A5B)),
-                        SizedBox(width: 4),
+                        const Icon(Icons.north_east_rounded, size: 14, color: Color(0xFF167A5B)),
+                        const SizedBox(width: 4),
                         Text(
-                          '+8.7%',
-                          style: TextStyle(color: Color(0xFF167A5B), fontWeight: FontWeight.w700),
+                          '+${context.l10n.percent(0.087, decimalDigits: 1)}',
+                          style: const TextStyle(color: Color(0xFF167A5B), fontWeight: FontWeight.w700),
                         ),
                       ],
                     ),
@@ -80,7 +81,7 @@ class CryptoPortfolio extends StatelessWidget {
                     child: _CryptoAsset(
                       symbol: asset.symbol,
                       name: asset.name,
-                      amount: asset.amount,
+                      amount: context.l10n.number(asset.amount),
                       color: asset.color,
                     ),
                   ),

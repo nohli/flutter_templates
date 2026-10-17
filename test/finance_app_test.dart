@@ -9,8 +9,10 @@ import 'package:templates/features/templates/finance_app/models/finance_transact
 import 'package:templates/features/templates/finance_app/models/spending_category.dart';
 import 'package:templates/features/templates/finance_app/widgets/finance_bottom_bar.dart';
 import 'package:templates/features/templates/finance_app/widgets/finance_entrance.dart';
+import 'package:templates/features/templates/finance_app/widgets/finance_surface.dart';
 import 'package:templates/features/templates/finance_app/widgets/quick_actions.dart';
 import 'package:templates/features/templates/finance_app/widgets/spending_overview.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('finance keeps its market-display face out of body copy', () {
@@ -22,14 +24,34 @@ void main() {
   });
 
   test('finance sample models expose stable values and bounded progress', () {
-    expect(FinanceTransaction.samples.map((FinanceTransaction transaction) => transaction.id).toSet(), hasLength(5));
-    expect(FinanceTransaction.samples.first.isIncome, isTrue);
-    expect(FinanceTransaction.samples.last.isIncome, isFalse);
+    expect(
+      FinanceTransaction.samples(english).map((FinanceTransaction transaction) => transaction.id).toSet(),
+      hasLength(5),
+    );
+    expect(FinanceTransaction.samples(english).first.isIncome, isTrue);
+    expect(FinanceTransaction.samples(english).last.isIncome, isFalse);
 
     const overBudget = SpendingCategory(label: 'Sample', spent: 120, budget: 100, kind: SpendingCategoryKind.food);
     const noBudget = SpendingCategory(label: 'Sample', spent: 0, budget: 0, kind: SpendingCategoryKind.home);
     expect(overBudget.progress, 1);
     expect(noBudget.progress, 0);
+  });
+
+  testWidgets('localized spending samples preserve the final row spacing', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const LocalizedTestApp(
+        home: Scaffold(
+          body: SingleChildScrollView(child: SpendingOverview(animation: AlwaysStoppedAnimation<double>(1))),
+        ),
+      ),
+    );
+
+    final categories = find.byWidgetPredicate(
+      (widget) => widget is Semantics && (widget.properties.label?.contains('spent of') ?? false),
+    );
+    expect(categories, findsNWidgets(3));
+    expect(tester.getBottomRight(find.byType(FinanceSurface)).dy - tester.getBottomRight(categories.last).dy, 20);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('finance overview presents the complete sample dashboard without layout errors', (
@@ -71,7 +93,7 @@ void main() {
       (item) => item.destination == TemplateGalleryDestination.personalFinance,
     );
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: Center(
           child: SizedBox(width: 214, height: 143, child: TemplateGalleryArtwork(item: item)),
         ),
@@ -81,7 +103,7 @@ void main() {
     final imagePaths = tester
         .widgetList<Image>(find.descendant(of: find.byType(TemplateGalleryArtwork), matching: find.byType(Image)))
         .map((image) => (image.image as AssetImage).assetName);
-    expect(imagePaths, everyElement('assets/gallery/personal-finance-screen.png'));
+    expect(imagePaths, everyElement('assets/gallery/en/personal-finance-screen.png'));
     expect(tester.takeException(), isNull);
   });
 
@@ -127,7 +149,7 @@ void main() {
     var selectedAction = '';
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: MediaQuery(
           data: MediaQueryData.fromView(tester.view).copyWith(textScaler: const TextScaler.linear(3.2)),
           child: Scaffold(
@@ -146,6 +168,20 @@ void main() {
     await tester.tap(find.widgetWithText(OutlinedButton, 'Request'));
     expect(selectedAction, 'Request');
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('French balance metrics remain translated and reachable at maximum text size', (tester) async {
+    await _pumpFinance(tester, size: const Size(320, 568), textScale: 3.2, locale: const Locale('fr'));
+    final scrollable = find.descendant(of: find.byType(FinanceHomeScreen), matching: find.byType(Scrollable)).first;
+    for (final label in ['Revenus', 'Dépensé']) {
+      await tester.scrollUntilVisible(find.text(label), 180, scrollable: scrollable);
+      await tester.ensureVisible(find.text(label));
+      await tester.pumpAndSettle();
+      expect(find.text(label).hitTestable(), findsOneWidget);
+      expect(tester.takeException(), isNull, reason: label);
+    }
+    expect(find.text('Income'), findsNothing);
+    expect(find.text('Spent'), findsNothing);
   });
 
   testWidgets('finance renders the externally selected dark theme', (WidgetTester tester) async {
@@ -361,6 +397,7 @@ Future<void> _pumpFinance(
   Size size = const Size(430, 932),
   double textScale = 1,
   AppAppearance appearance = AppAppearance.light,
+  Locale locale = const Locale('en'),
   bool disableAnimations = false,
   bool settle = true,
 }) async {
@@ -372,7 +409,8 @@ Future<void> _pumpFinance(
     tester.view,
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
+      locale: locale,
       home: MediaQuery(
         data: mediaQuery,
         child: FinanceHomeScreen(appearance: appearance),

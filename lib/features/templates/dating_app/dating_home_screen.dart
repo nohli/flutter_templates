@@ -10,6 +10,7 @@ import 'dating_inbox_screen.dart';
 import 'models/dating_profile.dart';
 import 'widgets/dating_action_bar.dart';
 import 'widgets/dating_swipe_deck.dart';
+import '../../../l10n/localizations.dart';
 
 class DatingHomeScreen extends StatefulWidget {
   const DatingHomeScreen({this.appearance = AppAppearance.dark, super.key});
@@ -37,7 +38,7 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = DatingProfile.samples[_profileIndex];
+    final profile = DatingProfile.samples(context.l10n)[_profileIndex];
 
     return TemplateAppearanceShell(
       appearance: widget.appearance,
@@ -75,7 +76,9 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
                           const SizedBox(height: 18),
                           DatingSwipeDeck(
                             profile: profile,
-                            nextProfile: DatingProfile.samples[(_profileIndex + 1) % DatingProfile.samples.length],
+                            nextProfile: DatingProfile.samples(
+                              context.l10n,
+                            )[(_profileIndex + 1) % DatingProfile.samples(context.l10n).length],
                             controller: _swipeController,
                             onChoice: _choose,
                           ),
@@ -95,14 +98,14 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
   }
 
   void _choose(DatingProfileChoice decision) {
-    final profile = DatingProfile.samples[_profileIndex];
+    final profile = DatingProfile.samples(context.l10n)[_profileIndex];
     setState(() {
       _previousProfileIndex = _profileIndex;
-      _profileIndex = (_profileIndex + 1) % DatingProfile.samples.length;
+      _profileIndex = (_profileIndex + 1) % DatingProfile.samples(context.l10n).length;
       _decision = switch (decision) {
-        DatingProfileChoice.pass => 'Passed on ${profile.name}. Your next introduction is ready.',
-        DatingProfileChoice.spark => 'A spark was sent to ${profile.name}.',
-        DatingProfileChoice.like => 'You liked ${profile.name}. We’ll let you know if it’s mutual.',
+        DatingProfileChoice.pass => context.l10n.passedOnValueYourNextIntroductionIsReady(profile.name),
+        DatingProfileChoice.spark => context.l10n.aSparkWasSentToValue(profile.name),
+        DatingProfileChoice.like => context.l10n.youLikedValueWellLetYouKnowIfItsMutual(profile.name),
       };
     });
   }
@@ -111,7 +114,7 @@ class _DatingHomeScreenState extends State<DatingHomeScreen> {
     setState(() {
       _profileIndex = _previousProfileIndex!;
       _previousProfileIndex = null;
-      _decision = 'Your last choice was restored.';
+      _decision = context.l10n.yourLastChoiceWasRestored;
     });
   }
 
@@ -138,7 +141,7 @@ class _DatingHeader extends StatelessWidget {
       children: <Widget>[
         if (Navigator.of(context).canPop())
           IconButton(
-            tooltip: 'Back to template gallery',
+            tooltip: context.l10n.backToTemplateGallery,
             onPressed: () => Navigator.of(context).pop(),
             style: IconButton.styleFrom(
               side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
@@ -153,12 +156,12 @@ class _DatingHeader extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Flexible(
+                Flexible(
                   child: Text(
-                    'Dating',
+                    context.l10n.dating,
                     maxLines: 1,
                     overflow: TextOverflow.fade,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: DatingAppTheme.displayFontName,
                       fontSize: 31,
                       fontWeight: FontWeight.w500,
@@ -168,9 +171,9 @@ class _DatingHeader extends StatelessWidget {
                 ),
                 if (!largeText) ...<Widget>[
                   const SizedBox(width: 8),
-                  const Text(
-                    'AFTER DARK / 04',
-                    style: TextStyle(fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 0.8),
+                  Text(
+                    context.l10n.afterDark04,
+                    style: const TextStyle(fontSize: 7, fontWeight: FontWeight.w900, letterSpacing: 0.8),
                   ),
                   const SizedBox(width: 7),
                   const _LiveDot(),
@@ -180,7 +183,7 @@ class _DatingHeader extends StatelessWidget {
           ),
         ),
         IconButton(
-          tooltip: 'Open conversations',
+          tooltip: context.l10n.openConversations,
           onPressed: onOpenInbox,
           style: IconButton.styleFrom(
             side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
@@ -204,7 +207,7 @@ class _LiveDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Discover is live',
+      label: context.l10n.discoverIsLive,
       child: Container(
         width: 10,
         height: 10,
@@ -229,14 +232,14 @@ class _DiscoveryIntro extends StatelessWidget {
     final largeText = MediaQuery.textScalerOf(context).scale(1) >= 2;
 
     if (largeText) {
-      return const Column(
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('CURATED CONNECTIONS', style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900)),
-          SizedBox(height: 10),
+          Text(context.l10n.curatedConnections, style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 10),
           Text(
-            'One good introduction.',
-            style: TextStyle(
+            context.l10n.oneGoodIntroduction,
+            style: const TextStyle(
               fontFamily: DatingAppTheme.displayFontName,
               fontSize: 29,
               fontWeight: FontWeight.w500,
@@ -250,18 +253,18 @@ class _DiscoveryIntro extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'CURATED CONNECTIONS / TONIGHT',
-                style: TextStyle(fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1),
+                context.l10n.curatedConnectionsTonight,
+                style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                'ONE GOOD\nINTRODUCTION.',
-                style: TextStyle(
+                context.l10n.oneGoodIntroductionUpper,
+                style: const TextStyle(
                   fontFamily: DatingAppTheme.displayFontName,
                   fontSize: 34,
                   fontWeight: FontWeight.w500,
@@ -279,7 +282,7 @@ class _DiscoveryIntro extends StatelessWidget {
             dimension: 48,
             child: Center(
               child: Text(
-                '${DatingProfile.samples.length}',
+                context.l10n.number(DatingProfile.samples(context.l10n).length),
                 style: TextStyle(color: colors.onPrimaryContainer, fontSize: 18, fontWeight: FontWeight.w800),
               ),
             ),
@@ -332,7 +335,7 @@ class _DecisionNote extends StatelessWidget {
     return Semantics(
       liveRegion: true,
       child: Text(
-        message ?? 'Swipe left to pass · right to like. Every profile returns tomorrow.',
+        message ?? context.l10n.swipeLeftToPassRightToLikeEveryProfileReturns,
         textAlign: TextAlign.center,
         style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, height: 1.35),
       ),
@@ -370,11 +373,11 @@ class _TonightCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Thursday social',
+                    context.l10n.thursdaySocial,
                     style: TextStyle(color: colors.onPrimaryContainer, fontSize: 17, fontWeight: FontWeight.w900),
                   ),
                   const SizedBox(height: 3),
-                  Text('12 seats · Old Port · 19:30', style: TextStyle(color: colors.onPrimaryContainer)),
+                  Text(context.l10n.sample12SeatsOldPort1930, style: TextStyle(color: colors.onPrimaryContainer)),
                 ],
               ),
             ),

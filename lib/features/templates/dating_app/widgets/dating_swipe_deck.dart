@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import '../dating_app_theme.dart';
 import '../models/dating_profile.dart';
 import 'dating_profile_card.dart';
+import '../../../../l10n/localizations.dart';
 
 enum DatingProfileChoice { pass, spark, like }
 
@@ -95,11 +96,11 @@ class _DatingSwipeDeckState extends State<DatingSwipeDeck> with SingleTickerProv
 
         return Semantics(
           container: true,
-          label: 'Swipe ${widget.profile.name} left to pass or right to like',
+          label: context.l10n.swipeValueLeftToPassOrRightToLike(widget.profile.name),
           customSemanticsActions: <CustomSemanticsAction, VoidCallback>{
-            CustomSemanticsAction(label: 'Pass on ${widget.profile.name}'): widget.controller.pass,
-            CustomSemanticsAction(label: 'Send a spark to ${widget.profile.name}'): widget.controller.spark,
-            CustomSemanticsAction(label: 'Like ${widget.profile.name}'): widget.controller.like,
+            CustomSemanticsAction(label: context.l10n.passOnValue(widget.profile.name)): widget.controller.pass,
+            CustomSemanticsAction(label: context.l10n.sendASparkToValue(widget.profile.name)): widget.controller.spark,
+            CustomSemanticsAction(label: context.l10n.likeValue(widget.profile.name)): widget.controller.like,
           },
           child: MouseRegion(
             cursor: _offset == Offset.zero ? SystemMouseCursors.grab : SystemMouseCursors.grabbing,
@@ -109,12 +110,13 @@ class _DatingSwipeDeckState extends State<DatingSwipeDeck> with SingleTickerProv
               onHorizontalDragUpdate: _isCommitting ? null : _updateDrag,
               onHorizontalDragEnd: _isCommitting ? null : _endDrag,
               onHorizontalDragCancel: _isCommitting ? null : _cancelDrag,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: <Widget>[
-                  if (showQueuedProfile)
-                    Positioned.fill(
-                      child: ExcludeSemantics(
+              child: IntrinsicHeight(
+                child: Stack(
+                  fit: StackFit.expand,
+                  clipBehavior: Clip.none,
+                  children: <Widget>[
+                    if (showQueuedProfile)
+                      ExcludeSemantics(
                         child: IgnorePointer(
                           child: Transform.translate(
                             offset: Offset(0, 16 - 8 * revealProgress),
@@ -128,57 +130,57 @@ class _DatingSwipeDeckState extends State<DatingSwipeDeck> with SingleTickerProv
                           ),
                         ),
                       ),
-                    ),
-                  Transform.translate(
-                    offset: _offset,
-                    child: Transform.rotate(
-                      angle: rotation,
-                      alignment: Alignment.bottomCenter,
-                      child: RepaintBoundary(
-                        child: Stack(
-                          children: <Widget>[
-                            DatingProfileCard(profile: widget.profile),
-                            Positioned(
-                              left: 20,
-                              top: 24,
-                              child: _ChoiceStamp(
-                                label: 'LIKE',
-                                icon: Icons.favorite_rounded,
-                                color: DatingAppTheme.mint,
-                                opacity: progress.clamp(0.0, 1.0),
-                                angle: -0.08,
-                              ),
-                            ),
-                            Positioned(
-                              right: 20,
-                              top: 24,
-                              child: _ChoiceStamp(
-                                label: 'PASS',
-                                icon: Icons.close_rounded,
-                                color: DatingAppTheme.coral,
-                                opacity: (-progress).clamp(0.0, 1.0),
-                                angle: 0.08,
-                              ),
-                            ),
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              top: 24,
-                              child: Center(
+                    Transform.translate(
+                      offset: _offset,
+                      child: Transform.rotate(
+                        angle: rotation,
+                        alignment: Alignment.bottomCenter,
+                        child: RepaintBoundary(
+                          child: Stack(
+                            children: <Widget>[
+                              DatingProfileCard(profile: widget.profile),
+                              Positioned(
+                                left: 20,
+                                top: 24,
                                 child: _ChoiceStamp(
-                                  label: 'SPARK',
-                                  icon: Icons.auto_awesome_rounded,
-                                  color: DatingAppTheme.sun,
-                                  opacity: sparkProgress,
+                                  label: context.l10n.like,
+                                  icon: Icons.favorite_rounded,
+                                  color: DatingAppTheme.mint,
+                                  opacity: progress.clamp(0.0, 1.0),
+                                  angle: -0.08,
                                 ),
                               ),
-                            ),
-                          ],
+                              Positioned(
+                                right: 20,
+                                top: 24,
+                                child: _ChoiceStamp(
+                                  label: context.l10n.pass,
+                                  icon: Icons.close_rounded,
+                                  color: DatingAppTheme.coral,
+                                  opacity: (-progress).clamp(0.0, 1.0),
+                                  angle: 0.08,
+                                ),
+                              ),
+                              Positioned(
+                                left: 0,
+                                right: 0,
+                                top: 24,
+                                child: Center(
+                                  child: _ChoiceStamp(
+                                    label: context.l10n.spark,
+                                    icon: Icons.auto_awesome_rounded,
+                                    color: DatingAppTheme.sun,
+                                    opacity: sparkProgress,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

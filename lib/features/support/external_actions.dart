@@ -3,6 +3,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/app_identity.dart';
+import '../../l10n/localizations.dart';
 
 typedef ExternalUriLauncher = Future<bool> Function(Uri uri);
 typedef TextSharer = Future<void> Function(String text, Rect origin);
@@ -22,8 +23,8 @@ Uri appEmailUri({required String subject, String? body}) {
   return Uri(scheme: 'mailto', path: AppIdentity.supportEmail, query: query);
 }
 
-Uri supportEmailUri() => appEmailUri(subject: '${AppIdentity.name} support');
+Uri supportEmailUri(AppLocalizations l10n) => appEmailUri(subject: l10n.supportEmailSubject(AppIdentity.name));
 
 final developerPortfolioUri = AppIdentity.supportUri;
 
-const inviteText = 'Explore ${AppIdentity.name} at ${AppIdentity.sourceUrl}';
+String inviteText(AppLocalizations l10n) => l10n.inviteMessage(AppIdentity.name, AppIdentity.sourceUrl);

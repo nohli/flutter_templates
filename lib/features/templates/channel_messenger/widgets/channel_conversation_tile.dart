@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/channel_conversation.dart';
+import '../../../../l10n/localizations.dart';
 
 class ChannelConversationTile extends StatelessWidget {
   const ChannelConversationTile({required this.conversation, required this.onTap, super.key});
@@ -12,7 +13,7 @@ class ChannelConversationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Semantics(
-      label: 'Open ${conversation.title}',
+      label: context.l10n.openValue(conversation.title),
       button: true,
       child: InkWell(
         onTap: onTap,
@@ -75,7 +76,7 @@ class ChannelConversationTile extends StatelessWidget {
                             ),
                             alignment: Alignment.center,
                             child: Text(
-                              '${conversation.unread}',
+                              context.l10n.number(conversation.unread),
                               style: TextStyle(color: colors.onPrimary, fontSize: 11, fontWeight: FontWeight.w800),
                             ),
                           ),

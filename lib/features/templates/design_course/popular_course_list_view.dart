@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/motion_preferences.dart';
 import 'models/category.dart';
+import '../../../l10n/localizations.dart';
 
 class PopularCourseListView extends StatefulWidget {
   const PopularCourseListView({required this.courses, required this.onSelected, super.key});
@@ -104,7 +105,7 @@ class _PopularCourseCard extends StatelessWidget {
             transform: Matrix4.translationValues(0.0, 50 * (1.0 - animation.value), 0.0),
             child: Semantics(
               button: true,
-              label: category.accessibilityLabel,
+              label: category.accessibilityLabel(context.l10n),
               excludeSemantics: true,
               onTap: callback,
               child: Material(
@@ -154,7 +155,7 @@ class _PopularCourseCard extends StatelessWidget {
                                               runSpacing: 4,
                                               children: <Widget>[
                                                 Text(
-                                                  category.lessonLabel,
+                                                  category.lessonLabel(context.l10n),
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w200,
@@ -167,7 +168,7 @@ class _PopularCourseCard extends StatelessWidget {
                                                   mainAxisSize: MainAxisSize.min,
                                                   children: <Widget>[
                                                     Text(
-                                                      '${category.rating}',
+                                                      context.l10n.number(category.rating, decimalDigits: 1),
                                                       textAlign: TextAlign.left,
                                                       style: TextStyle(
                                                         fontWeight: FontWeight.w200,

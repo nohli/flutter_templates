@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../dating_app_theme.dart';
 import '../models/dating_profile.dart';
 import 'dating_profile_artwork.dart';
+import '../../../../l10n/localizations.dart';
 
 class DatingProfileCard extends StatelessWidget {
   const DatingProfileCard({required this.profile, super.key});
@@ -16,7 +17,8 @@ class DatingProfileCard extends StatelessWidget {
 
     return Semantics(
       container: true,
-      label: '${profile.name}, ${profile.age}, ${profile.distance}',
+      label:
+          '${profile.name}, ${context.l10n.number(profile.age)}, ${context.l10n.profileDistance(context.l10n.number(profile.distanceKm))}',
       child: Container(
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
@@ -52,7 +54,7 @@ class DatingProfileCard extends StatelessWidget {
                             children: <Widget>[
                               Expanded(
                                 child: Text(
-                                  '${profile.name}, ${profile.age}',
+                                  '${profile.name}, ${context.l10n.number(profile.age)}',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontFamily: DatingAppTheme.displayFontName,
@@ -78,7 +80,7 @@ class DatingProfileCard extends StatelessWidget {
                 children: <Widget>[
                   if (largeText) ...<Widget>[
                     Text(
-                      '${profile.name}, ${profile.age}',
+                      '${profile.name}, ${context.l10n.number(profile.age)}',
                       style: const TextStyle(
                         fontFamily: DatingAppTheme.displayFontName,
                         fontSize: 28,
@@ -89,12 +91,12 @@ class DatingProfileCard extends StatelessWidget {
                     const SizedBox(height: 8),
                   ],
                   Text(
-                    'PORTRAIT 01 / ${profile.distance.toUpperCase()}',
+                    context.l10n.portrait01Value(context.l10n.number(profile.distanceKm)),
                     style: TextStyle(color: colors.onSurfaceVariant, fontSize: 8, fontWeight: FontWeight.w900),
                   ),
                   const SizedBox(height: 14),
                   Text(
-                    'ASK / ${profile.prompt.toUpperCase()}',
+                    context.l10n.askValue(profile.prompt),
                     style: TextStyle(
                       color: colors.primary,
                       fontSize: 9,
@@ -144,16 +146,16 @@ class _MatchBadge extends StatelessWidget {
         border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
         borderRadius: const BorderRadius.all(Radius.circular(99)),
       ),
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Icon(Icons.auto_awesome_rounded, color: Color(0xFFFFD36B), size: 16),
-            SizedBox(width: 6),
+            const Icon(Icons.auto_awesome_rounded, color: Color(0xFFFFD36B), size: 16),
+            const SizedBox(width: 6),
             Text(
-              '98% match',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+              context.l10n.sample98Match,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
             ),
           ],
         ),

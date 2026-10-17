@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/localizations.dart';
 
 class SocialPost {
   const SocialPost({
@@ -25,41 +26,41 @@ class SocialPost {
   final int likes;
   final List<Color> avatarColors;
 
-  static const samples = <SocialPost>[
+  static List<SocialPost> samples(AppLocalizations l10n) => <SocialPost>[
     SocialPost(
       author: 'Mara Chen',
       handle: '@maracodes',
       initials: 'MC',
-      body: 'Small interfaces become memorable when every motion explains where the content came from.',
-      time: '4m',
-      topic: 'Design systems',
+      body: l10n.smallInterfacesBecomeMemorableWhenEveryMotionExplainsWhereThe,
+      time: l10n.sample4m,
+      topic: l10n.designSystems,
       replies: 18,
       reposts: 42,
       likes: 386,
-      avatarColors: <Color>[Color(0xFFFFB86B), Color(0xFFFF5E87)],
+      avatarColors: <Color>[const Color(0xFFFFB86B), const Color(0xFFFF5E87)],
     ),
     SocialPost(
       author: 'Field Notes',
       handle: '@fieldnotes',
       initials: 'FN',
-      body: 'The night train is quiet, the prototype is finally behaving, and the city is turning blue outside.',
-      time: '27m',
-      topic: 'Live from Copenhagen',
+      body: l10n.theNightTrainIsQuietThePrototypeIsFinallyBehaving,
+      time: l10n.sample27m,
+      topic: l10n.liveFromCopenhagen,
       replies: 31,
       reposts: 77,
       likes: 924,
-      avatarColors: <Color>[Color(0xFF466DFF), Color(0xFF7DE3FF)],
+      avatarColors: <Color>[const Color(0xFF466DFF), const Color(0xFF7DE3FF)],
     ),
     SocialPost(
       author: 'Noah Williams',
       handle: '@northbound',
       initials: 'NW',
-      body: 'A good community feels less like an audience and more like a table with one chair left open.',
-      time: '1h',
+      body: l10n.aGoodCommunityFeelsLessLikeAnAudienceAndMore,
+      time: l10n.sample1h,
       replies: 12,
       reposts: 24,
       likes: 201,
-      avatarColors: <Color>[Color(0xFF80D6A3), Color(0xFF1A936F)],
+      avatarColors: <Color>[const Color(0xFF80D6A3), const Color(0xFF1A936F)],
     ),
   ];
 }

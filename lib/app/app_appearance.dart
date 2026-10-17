@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/localizations.dart';
+
 enum AppAppearance {
   system,
   light,
   dark;
 
-  String get label => switch (this) {
-    AppAppearance.system => 'System',
-    AppAppearance.light => 'Light',
-    AppAppearance.dark => 'Dark',
+  String label(BuildContext context) => switch (this) {
+    AppAppearance.system => context.l10n.systemAppearance,
+    AppAppearance.light => context.l10n.lightAppearance,
+    AppAppearance.dark => context.l10n.darkAppearance,
   };
 
   Brightness resolve(BuildContext context) => switch (this) {
@@ -71,7 +73,7 @@ class AppAppearanceButton extends StatelessWidget {
               ),
             ),
             child: Text(
-              option.label,
+              option.label(context),
               style: TextStyle(
                 color: appearance == option ? colors.primary : colors.onSurface,
                 fontSize: 14,
@@ -82,7 +84,7 @@ class AppAppearanceButton extends StatelessWidget {
       ],
       builder: (BuildContext context, MenuController controller, Widget? child) {
         return IconButton(
-          tooltip: 'Appearance: ${appearance.label}',
+          tooltip: context.l10n.appearanceLabel(appearance.label(context)),
           onPressed: controller.isOpen ? controller.close : controller.open,
           style: IconButton.styleFrom(
             foregroundColor: colors.onSurface,

@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 import '../finance_app_theme.dart';
 import '../models/finance_section.dart';
+import '../../../../l10n/localizations.dart';
 
 class FinanceBottomBar extends StatelessWidget {
   const FinanceBottomBar({required this.selectedSection, required this.onSelected, super.key});
 
   static const _destinations = <_FinanceDestination>[
-    _FinanceDestination(section: FinanceSection.overview, label: 'Home', icon: Icons.home_rounded),
-    _FinanceDestination(section: FinanceSection.activity, label: 'Activity', icon: Icons.swap_horiz_rounded),
-    _FinanceDestination(section: FinanceSection.cards, label: 'Cards', icon: Icons.credit_card_rounded),
-    _FinanceDestination(section: FinanceSection.profile, label: 'Profile', icon: Icons.person_rounded),
+    _FinanceDestination(section: FinanceSection.overview, icon: Icons.home_rounded),
+    _FinanceDestination(section: FinanceSection.activity, icon: Icons.swap_horiz_rounded),
+    _FinanceDestination(section: FinanceSection.cards, icon: Icons.credit_card_rounded),
+    _FinanceDestination(section: FinanceSection.profile, icon: Icons.person_rounded),
   ];
 
   final FinanceSection selectedSection;
@@ -98,7 +99,7 @@ class _FinanceDestinationButton extends StatelessWidget {
     return Semantics(
       button: true,
       selected: isSelected,
-      label: destination.label,
+      label: destination.label(context.l10n),
       child: ExcludeSemantics(
         child: InkWell(
           onTap: onPressed,
@@ -126,7 +127,7 @@ class _FinanceDestinationButton extends StatelessWidget {
                     Icon(destination.icon, size: 22, color: activeColor),
                     const SizedBox(height: 4),
                     Text(
-                      destination.label,
+                      destination.label(context.l10n),
                       maxLines: 1,
                       overflow: TextOverflow.fade,
                       softWrap: false,
@@ -168,15 +169,21 @@ class _LargeTextDestination extends StatelessWidget {
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(7))),
       ),
       icon: Icon(destination.icon, size: 22),
-      label: Text(destination.label),
+      label: Text(destination.label(context.l10n)),
     );
   }
 }
 
 class _FinanceDestination {
-  const _FinanceDestination({required this.section, required this.label, required this.icon});
+  const _FinanceDestination({required this.section, required this.icon});
 
   final FinanceSection section;
-  final String label;
   final IconData icon;
+
+  String label(AppLocalizations l10n) => switch (section) {
+    FinanceSection.overview => l10n.home,
+    FinanceSection.activity => l10n.activity,
+    FinanceSection.cards => l10n.cards,
+    FinanceSection.profile => l10n.profile,
+  };
 }

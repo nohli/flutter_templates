@@ -41,7 +41,7 @@ import 'package:templates/main.dart' as app;
 
 void main() {
   testWidgets('root app uses the adaptive shell', (WidgetTester tester) async {
-    app.main();
+    await tester.runAsync(app.main);
     await tester.pump();
 
     expect(find.byType(AppShell), findsOneWidget);

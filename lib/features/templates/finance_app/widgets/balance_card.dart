@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/sdf_rounded_rectangle_border.dart';
+
 import '../finance_app_theme.dart';
 import '../finance_formatters.dart';
 
@@ -103,7 +105,10 @@ class _BalanceHeader extends StatelessWidget {
           style: IconButton.styleFrom(
             foregroundColor: Colors.white,
             side: const BorderSide(color: Color(0x3DFFFFFF)),
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6))),
+            shape: SdfRoundedRectangleBorder(
+              devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
+              borderRadius: const BorderRadius.all(Radius.circular(6)),
+            ),
           ),
           icon: Icon(balanceIsVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined, size: 18),
         ),

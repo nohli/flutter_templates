@@ -31,7 +31,7 @@ void main() {
     final validatesCatalog = batchStart == 0;
 
     testWidgets('opens $templateNames in light and dark mode', (WidgetTester tester) async {
-      app.main();
+      await app.main();
       await _finishAnimations(tester);
 
       expect(find.text(AppIdentity.name), findsOneWidget);
@@ -67,7 +67,7 @@ void main() {
   testWidgets('keeps support actions aligned and dark feedback keyboard surroundings themed', (
     WidgetTester tester,
   ) async {
-    app.main();
+    await app.main();
     await _finishAnimations(tester);
     await _selectAppearance(tester, 'Dark');
 
@@ -119,7 +119,7 @@ void main() {
   });
 
   testWidgets('opens a dating conversation and sends a message', (WidgetTester tester) async {
-    app.main();
+    await app.main();
     await _finishAnimations(tester);
 
     final card = find.bySemanticsLabel('Dating & Social');
@@ -142,7 +142,7 @@ void main() {
   });
 
   testWidgets('completes a language lesson', (WidgetTester tester) async {
-    app.main();
+    await app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Language Learning');
 
@@ -157,7 +157,7 @@ void main() {
   });
 
   testWidgets('reacts and publishes in the social feed', (WidgetTester tester) async {
-    app.main();
+    await app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Public Social Feed');
 
@@ -174,7 +174,7 @@ void main() {
   });
 
   testWidgets('favorites and unfavorites a hotel', (WidgetTester tester) async {
-    app.main();
+    await app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Hotel Booking');
 
@@ -195,7 +195,7 @@ void main() {
   });
 
   testWidgets('sends money in the banking template', (WidgetTester tester) async {
-    app.main();
+    await app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Banking Super-App');
 
@@ -212,7 +212,7 @@ void main() {
   });
 
   testWidgets('opens and reacts to a channel', (WidgetTester tester) async {
-    app.main();
+    await app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Channel Messenger');
 
@@ -230,7 +230,7 @@ void main() {
   });
 
   testWidgets('opens a private chat and sends a message', (WidgetTester tester) async {
-    app.main();
+    await app.main();
     await _finishAnimations(tester);
     await _openGalleryTemplate(tester, 'Private Messenger');
 

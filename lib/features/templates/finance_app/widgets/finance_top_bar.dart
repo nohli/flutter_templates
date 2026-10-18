@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/sdf_rounded_rectangle_border.dart';
+
 import '../finance_app_theme.dart';
 
 class FinanceTopBar extends StatelessWidget {
@@ -167,7 +169,10 @@ class _BackButton extends StatelessWidget {
       style: IconButton.styleFrom(
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+        shape: SdfRoundedRectangleBorder(
+          devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+        ),
       ),
       icon: const Icon(Icons.arrow_back_rounded),
     );

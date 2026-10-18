@@ -5,9 +5,11 @@ import 'app/app_identity.dart';
 import 'app/app_shell.dart';
 import 'app/app_theme.dart';
 import 'app/font_licenses.dart';
+import 'app/sdf_rounded_rectangle_border.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SdfRoundedRectangleBorder.initialize();
   registerBundledFontLicenses();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(

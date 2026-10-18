@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
+import 'package:templates/app/sdf_rounded_rectangle_border.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/gallery/template_gallery_artwork.dart';
 import 'package:templates/features/templates/finance_app/finance_app_theme.dart';
@@ -66,6 +67,37 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('finance back outline preserves display density and navigation', (WidgetTester tester) async {
+    tester.view.devicePixelRatio = 2.625;
+    tester.view.physicalSize = const Size(1128.75, 2446.5);
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => TextButton(
+            onPressed: () => Navigator.of(context).push<void>(
+              MaterialPageRoute<void>(builder: (_) => const FinanceHomeScreen(appearance: AppAppearance.light)),
+            ),
+            child: const Text('Open finance'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open finance'));
+    await tester.pumpAndSettle();
+    final button = tester.widget<IconButton>(
+      find.byWidgetPredicate((widget) => widget is IconButton && widget.tooltip == 'Back to template gallery'),
+    );
+    final outline = button.style!.shape!.resolve({})!;
+    expect(outline, isA<SdfRoundedRectangleBorder>());
+    expect((outline as SdfRoundedRectangleBorder).devicePixelRatio, 2.625);
+    expect(outline.borderRadius, BorderRadius.circular(8));
+    await tester.tap(find.byTooltip('Back to template gallery'));
+    await tester.pumpAndSettle();
+    expect(find.text('Open finance'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('finance gallery artwork uses its real compact dashboard', (WidgetTester tester) async {
     final item = TemplateGalleryItem.items.singleWhere(
       (item) => item.destination == TemplateGalleryDestination.personalFinance,
@@ -87,7 +119,14 @@ void main() {
 
   testWidgets('finance balance privacy and quick actions provide visible feedback', (WidgetTester tester) async {
     final semantics = tester.ensureSemantics();
-    await _pumpFinance(tester);
+    await _pumpFinance(tester, devicePixelRatio: 2.625);
+    final button = tester.widget<IconButton>(
+      find.byWidgetPredicate((widget) => widget is IconButton && widget.tooltip == 'Hide balance'),
+    );
+    final outline = button.style!.shape!.resolve({})!;
+    expect(outline, isA<SdfRoundedRectangleBorder>());
+    expect((outline as SdfRoundedRectangleBorder).devicePixelRatio, 2.625);
+    expect(outline.borderRadius, BorderRadius.circular(6));
 
     expect(
       tester.getSemantics(find.bySemanticsLabel('Send')),
@@ -359,13 +398,14 @@ void main() {
 Future<void> _pumpFinance(
   WidgetTester tester, {
   Size size = const Size(430, 932),
+  double devicePixelRatio = 1,
   double textScale = 1,
   AppAppearance appearance = AppAppearance.light,
   bool disableAnimations = false,
   bool settle = true,
 }) async {
-  tester.view.devicePixelRatio = 1;
-  tester.view.physicalSize = size;
+  tester.view.devicePixelRatio = devicePixelRatio;
+  tester.view.physicalSize = size * devicePixelRatio;
   addTearDown(tester.view.reset);
 
   final mediaQuery = MediaQueryData.fromView(

@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:templates/app/sdf_rounded_rectangle_border.dart';
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   TestWidgetsFlutterBinding.ensureInitialized();
+  await SdfRoundedRectangleBorder.initialize();
   await _loadBundledFonts();
   await testMain();
 }

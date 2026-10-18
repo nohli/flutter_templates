@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../dating_app_theme.dart';
 import '../models/dating_conversation.dart';
 import 'dating_profile_artwork.dart';
+import '../../../../l10n/localizations.dart';
 
 class DatingConversationAvatar extends StatelessWidget {
   const DatingConversationAvatar({required this.conversation, this.size = 54, super.key});
@@ -14,7 +15,7 @@ class DatingConversationAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       image: true,
-      label: '${conversation.name} profile portrait${conversation.isOnline ? ', online' : ''}',
+      label: context.l10n.profilePortrait(conversation.name, conversation.isOnline ? 'online' : 'offline'),
       child: SizedBox.square(
         dimension: size,
         child: Stack(

@@ -1,3 +1,6 @@
+import '../../../../l10n/localizations.dart';
+import 'hotel_filter_settings.dart';
+
 class HotelListData {
   const HotelListData({
     required this.id,
@@ -20,69 +23,69 @@ class HotelListData {
   final int reviews;
   final double rating;
   final int nightlyPrice;
-  final List<String> amenities;
-  final String accommodationType;
+  final List<HotelAmenity> amenities;
+  final HotelAccommodation accommodationType;
 
-  static const samples = <HotelListData>[
+  static List<HotelListData> samples(AppLocalizations l10n) => <HotelListData>[
     HotelListData(
       id: 'grand-royal-hotel-1',
       imagePath: 'assets/hotel/hotel_1.png',
-      title: 'Grand Royal Hotel',
-      location: 'Wembley, London',
+      title: l10n.grandRoyalHotel,
+      location: l10n.wembleyLondon,
       distanceKm: 2.0,
       reviews: 80,
       rating: 4.4,
       nightlyPrice: 180,
-      amenities: <String>['Free Breakfast', 'Free wifi', 'Pool'],
-      accommodationType: 'Hotel',
+      amenities: const <HotelAmenity>[HotelAmenity.breakfast, HotelAmenity.wifi, HotelAmenity.pool],
+      accommodationType: HotelAccommodation.hotel,
     ),
     HotelListData(
       id: 'queen-hotel-1',
       imagePath: 'assets/hotel/hotel_2.png',
-      title: 'Queen Hotel',
-      location: 'Wembley, London',
+      title: l10n.queenHotel,
+      location: l10n.wembleyLondon,
       distanceKm: 4.0,
       reviews: 74,
       rating: 4.5,
       nightlyPrice: 200,
-      amenities: <String>['Free Parking', 'Pet Friendly'],
-      accommodationType: 'Apartment',
+      amenities: const <HotelAmenity>[HotelAmenity.parking, HotelAmenity.pets],
+      accommodationType: HotelAccommodation.apartment,
     ),
     HotelListData(
       id: 'grand-royal-hotel-2',
       imagePath: 'assets/hotel/hotel_3.png',
-      title: 'Grand Royal Hotel',
-      location: 'Wembley, London',
+      title: l10n.grandRoyalHotel,
+      location: l10n.wembleyLondon,
       distanceKm: 3.0,
       reviews: 62,
       rating: 4.0,
       nightlyPrice: 60,
-      amenities: <String>['Free Breakfast', 'Free Parking'],
-      accommodationType: 'Home',
+      amenities: const <HotelAmenity>[HotelAmenity.breakfast, HotelAmenity.parking],
+      accommodationType: HotelAccommodation.home,
     ),
     HotelListData(
       id: 'queen-hotel-2',
       imagePath: 'assets/hotel/hotel_4.png',
-      title: 'Queen Hotel',
-      location: 'Wembley, London',
+      title: l10n.queenHotel,
+      location: l10n.wembleyLondon,
       distanceKm: 7.0,
       reviews: 90,
       rating: 4.4,
       nightlyPrice: 170,
-      amenities: <String>['Pool', 'Pet Friendly', 'Free wifi'],
-      accommodationType: 'Villa',
+      amenities: const <HotelAmenity>[HotelAmenity.pool, HotelAmenity.pets, HotelAmenity.wifi],
+      accommodationType: HotelAccommodation.villa,
     ),
     HotelListData(
       id: 'grand-royal-hotel-3',
       imagePath: 'assets/hotel/hotel_5.png',
-      title: 'Grand Royal Hotel',
-      location: 'Wembley, London',
+      title: l10n.grandRoyalHotel,
+      location: l10n.wembleyLondon,
       distanceKm: 2.0,
       reviews: 240,
       rating: 4.5,
       nightlyPrice: 200,
-      amenities: <String>['Free Breakfast', 'Pool', 'Free wifi'],
-      accommodationType: 'Resort',
+      amenities: const <HotelAmenity>[HotelAmenity.breakfast, HotelAmenity.pool, HotelAmenity.wifi],
+      accommodationType: HotelAccommodation.resort,
     ),
   ];
 }

@@ -14,6 +14,9 @@ abstract final class DesignCourseAppTheme {
   static const darkSurface = Color(0xFF101A21);
   static const fontName = 'WorkSans';
 
+  static Color accentTextColor(ColorScheme colors) =>
+      colors.brightness == Brightness.light ? colors.onSurfaceVariant : colors.primary;
+
   static ThemeData build([Brightness brightness = Brightness.light]) {
     final dark = brightness == Brightness.dark;
     final colors = dark

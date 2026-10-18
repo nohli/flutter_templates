@@ -10,6 +10,7 @@ import 'dating_chat_screen.dart';
 import 'models/dating_conversation.dart';
 import 'widgets/dating_conversation_avatar.dart';
 import 'widgets/dating_conversation_tile.dart';
+import '../../../l10n/localizations.dart';
 
 class DatingInboxScreen extends StatefulWidget {
   const DatingInboxScreen({required this.appearance, super.key});
@@ -44,7 +45,7 @@ class _DatingInboxScreenState extends State<DatingInboxScreen> {
                       const SizedBox(height: 28),
                       const _ConversationHeading(),
                       const SizedBox(height: 12),
-                      for (final (index, conversation) in DatingConversation.samples.indexed) ...<Widget>[
+                      for (final (index, conversation) in DatingConversation.samples(context.l10n).indexed) ...<Widget>[
                         _ConversationEntrance(
                           index: index,
                           child: DatingConversationTile(
@@ -52,7 +53,7 @@ class _DatingInboxScreenState extends State<DatingInboxScreen> {
                             onTap: () => _openChat(context, conversation),
                           ),
                         ),
-                        if (index != DatingConversation.samples.length - 1) const SizedBox(height: 10),
+                        if (index != DatingConversation.samples(context.l10n).length - 1) const SizedBox(height: 10),
                       ],
                     ],
                   ),
@@ -70,7 +71,10 @@ class _DatingInboxScreenState extends State<DatingInboxScreen> {
       _readConversationIds.add(conversation.id);
     });
     final route = MaterialPageRoute<void>(
-      builder: (_) => DatingChatScreen(appearance: widget.appearance, conversation: conversation),
+      builder: (context) => DatingChatScreen(
+        appearance: widget.appearance,
+        conversation: DatingConversation.samples(context.l10n).firstWhere((sample) => sample.id == conversation.id),
+      ),
     );
     unawaited(Navigator.of(context).push<void>(route));
   }
@@ -82,7 +86,7 @@ class _DatingInboxScreenState extends State<DatingInboxScreen> {
   void _showPreview(BuildContext context) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(const SnackBar(content: Text('New conversations are ready to connect.')));
+      ..showSnackBar(SnackBar(content: Text(context.l10n.newConversationsAreReadyToConnect)));
   }
 }
 
@@ -105,7 +109,7 @@ class _InboxAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: 62,
       leading: Center(
         child: IconButton(
-          tooltip: 'Back to discovery',
+          tooltip: context.l10n.backToDiscovery,
           onPressed: () => Navigator.of(context).pop(),
           style: IconButton.styleFrom(
             side: BorderSide(color: colors.outlineVariant),
@@ -115,13 +119,13 @@ class _InboxAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       titleSpacing: 0,
-      title: const Text(
-        'Messages',
-        style: TextStyle(fontFamily: DatingAppTheme.displayFontName, fontSize: 28, fontWeight: FontWeight.w600),
+      title: Text(
+        context.l10n.messages,
+        style: const TextStyle(fontFamily: DatingAppTheme.displayFontName, fontSize: 28, fontWeight: FontWeight.w600),
       ),
       actions: <Widget>[
         IconButton(
-          tooltip: 'Start a conversation',
+          tooltip: context.l10n.startAConversation,
           onPressed: onNewMessage,
           style: IconButton.styleFrom(
             side: BorderSide(color: colors.outlineVariant),
@@ -150,13 +154,13 @@ class _InboxIntro extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'CONNECTIONS / THIS WEEK',
+          context.l10n.connectionsThisWeek,
           style: TextStyle(color: colors.primary, fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.1),
         ),
         const SizedBox(height: 8),
-        const Text(
-          'A little closer.',
-          style: TextStyle(
+        Text(
+          context.l10n.aLittleCloser,
+          style: const TextStyle(
             fontFamily: DatingAppTheme.displayFontName,
             fontSize: 39,
             height: 0.95,
@@ -165,7 +169,9 @@ class _InboxIntro extends StatelessWidget {
         ),
         const SizedBox(height: 9),
         Text(
-          '${DatingConversation.samples.length} conversations, no pressure. Pick up wherever it feels natural.',
+          context.l10n.valueConversationsNoPressurePickUpWhereverItFeelsNatural(
+            DatingConversation.samples(context.l10n).length,
+          ),
           style: TextStyle(color: colors.onSurfaceVariant, height: 1.35),
         ),
       ],
@@ -183,15 +189,18 @@ class _NewMatches extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Text('NEW MATCHES', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.1)),
+        Text(
+          context.l10n.newMatches,
+          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.1),
+        ),
         const SizedBox(height: 12),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: <Widget>[
-              for (final (index, conversation) in DatingConversation.samples.indexed) ...<Widget>[
+              for (final (index, conversation) in DatingConversation.samples(context.l10n).indexed) ...<Widget>[
                 _MatchShortcut(conversation: conversation, onTap: () => onOpen(conversation)),
-                if (index != DatingConversation.samples.length - 1) const SizedBox(width: 16),
+                if (index != DatingConversation.samples(context.l10n).length - 1) const SizedBox(width: 16),
               ],
             ],
           ),
@@ -212,7 +221,7 @@ class _MatchShortcut extends StatelessWidget {
     return Semantics(
       button: true,
       excludeSemantics: true,
-      label: 'Open new match ${conversation.name}',
+      label: context.l10n.openNewMatchValue(conversation.name),
       child: InkWell(
         onTap: onTap,
         customBorder: const StadiumBorder(),
@@ -238,11 +247,16 @@ class _ConversationHeading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        const Expanded(
-          child: Text('CONVERSATIONS', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.1)),
+        Expanded(
+          child: Text(
+            context.l10n.conversations,
+            style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1.1),
+          ),
         ),
         Text(
-          '${DatingConversation.samples.length.toString().padLeft(2, '0')} ACTIVE',
+          context.l10n.valueActive(
+            context.l10n.number(DatingConversation.samples(context.l10n).length, minimumIntegerDigits: 2),
+          ),
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontSize: 9,

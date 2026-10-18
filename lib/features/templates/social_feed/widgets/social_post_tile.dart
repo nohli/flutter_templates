@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/social_post.dart';
 import '../social_feed_theme.dart';
 import 'social_avatar.dart';
+import '../../../../l10n/localizations.dart';
 
 class SocialPostTile extends StatelessWidget {
   const SocialPostTile({
@@ -64,7 +65,7 @@ class SocialPostTile extends StatelessWidget {
                   if (post.topic case final topic?) ...<Widget>[
                     const SizedBox(height: 6),
                     Text(
-                      topic.toUpperCase(),
+                      topic,
                       style: TextStyle(
                         color: colors.primary,
                         fontSize: 10,
@@ -108,20 +109,20 @@ class _PostActions extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        _PostAction(icon: Icons.chat_bubble_outline_rounded, label: '${post.replies}', color: muted),
+        _PostAction(icon: Icons.chat_bubble_outline_rounded, label: context.l10n.number(post.replies), color: muted),
         _PostAction(
           icon: Icons.repeat_rounded,
-          label: '${post.reposts + (reposted ? 1 : 0)}',
+          label: context.l10n.number(post.reposts + (reposted ? 1 : 0)),
           color: reposted ? const Color(0xFF20B781) : muted,
           onTap: onRepost,
-          tooltip: reposted ? 'Undo repost' : 'Repost',
+          tooltip: reposted ? context.l10n.undoRepost : context.l10n.repost,
         ),
         _PostAction(
           icon: liked ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-          label: '${post.likes + (liked ? 1 : 0)}',
+          label: context.l10n.number(post.likes + (liked ? 1 : 0)),
           color: liked ? SocialFeedTheme.accent : muted,
           onTap: onLike,
-          tooltip: liked ? 'Unlike post' : 'Like post',
+          tooltip: liked ? context.l10n.unlikePost : context.l10n.likePost,
         ),
         _PostAction(icon: Icons.bookmark_border_rounded, label: '', color: muted),
       ],

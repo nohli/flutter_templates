@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/app_appearance.dart';
 import '../../app/app_identity.dart';
+import '../../l10n/localizations.dart';
 import '../templates/dating_app/dating_home_screen.dart';
 import '../templates/banking_super_app/banking_home_screen.dart';
 import '../templates/channel_messenger/channel_messenger_home_screen.dart';
@@ -171,7 +172,7 @@ class _GalleryHeader extends StatelessWidget {
         )..layout();
         final stackTitle = titlePainter.width > constraints.maxWidth - 208;
         final actions = Padding(
-          padding: const EdgeInsets.only(right: 8),
+          padding: const EdgeInsetsDirectional.only(end: 8),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -182,7 +183,7 @@ class _GalleryHeader extends StatelessWidget {
               SizedBox.square(
                 dimension: 48,
                 child: IconButton(
-                  tooltip: multiple ? 'Show one column' : 'Show multiple columns',
+                  tooltip: multiple ? context.l10n.showOneColumn : context.l10n.showMultipleColumns,
                   onPressed: onToggleLayout,
                   icon: Icon(multiple ? Icons.dashboard : Icons.view_agenda),
                 ),
@@ -240,7 +241,7 @@ class _TemplateGalleryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: item.title,
+      label: item.title(context.l10n),
       button: true,
       onTap: onTap,
       child: ExcludeSemantics(

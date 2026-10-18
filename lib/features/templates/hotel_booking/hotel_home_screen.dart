@@ -11,6 +11,7 @@ import 'hotel_app_theme.dart';
 import 'hotel_list_view.dart';
 import 'model/hotel_filter_settings.dart';
 import 'model/hotel_list_data.dart';
+import '../../../l10n/localizations.dart';
 
 class HotelHomeScreen extends StatefulWidget {
   const HotelHomeScreen({this.appearance = AppAppearance.light, super.key});
@@ -164,12 +165,15 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Choose date',
+                      context.l10n.chooseDate,
                       style: TextStyle(fontWeight: FontWeight.w100, fontSize: 16, color: colors.onSurfaceVariant),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '${DateFormat('dd, MMM').format(_startDate)} - ${DateFormat('dd, MMM').format(_endDate)}',
+                      context.l10n.dateRange(
+                        DateFormat.MMMd(context.l10n.localeName).format(_startDate),
+                        DateFormat.MMMd(context.l10n.localeName).format(_endDate),
+                      ),
                       style: const TextStyle(fontWeight: FontWeight.w100, fontSize: 16),
                     ),
                   ],
@@ -189,11 +193,14 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Sample guests',
+                    context.l10n.sampleGuests,
                     style: TextStyle(fontWeight: FontWeight.w100, fontSize: 16, color: colors.onSurfaceVariant),
                   ),
                   const SizedBox(height: 8),
-                  const Text('1 room · 2 adults', style: TextStyle(fontWeight: FontWeight.w100, fontSize: 16)),
+                  Text(
+                    context.l10n.sample1Room2Adults,
+                    style: const TextStyle(fontWeight: FontWeight.w100, fontSize: 16),
+                  ),
                 ],
               ),
             ),
@@ -229,7 +236,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
                     },
                     style: const TextStyle(fontSize: 18),
                     cursorColor: colors.secondary,
-                    decoration: const InputDecoration(border: InputBorder.none, hintText: 'Search sample hotels'),
+                    decoration: InputDecoration(border: InputBorder.none, hintText: context.l10n.searchSampleHotels),
                   ),
                 ),
               ),
@@ -244,7 +251,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
               ],
             ),
             child: IconButton(
-              tooltip: 'Search sample hotels',
+              tooltip: context.l10n.searchSampleHotels,
               constraints: const BoxConstraints.tightFor(width: 52, height: 52),
               onPressed: () => FocusScope.of(context).unfocus(),
               icon: FaIcon(FontAwesomeIcons.magnifyingGlass, size: 20, color: colors.onPrimary),
@@ -260,7 +267,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
     final hotelCount = Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(
-        '${_visibleHotels.length} sample hotels',
+        context.l10n.valueSampleHotels(_visibleHotels.length),
         style: const TextStyle(fontWeight: FontWeight.w100, fontSize: 16),
       ),
     );
@@ -271,7 +278,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
         direction: stackActions ? Axis.vertical : Axis.horizontal,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text('Filter', style: TextStyle(color: colors.onSurface)),
+          Text(context.l10n.filter, style: TextStyle(color: colors.onSurface)),
           Padding(
             padding: EdgeInsets.only(left: stackActions ? 0 : 8, top: stackActions ? 8 : 0),
             child: Icon(Icons.sort, color: colors.primary),
@@ -339,7 +346,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
   Widget _buildAppBar(ColorScheme colors) {
     final stackTitle = MediaQuery.textScalerOf(context).scale(1) >= 2;
     final backButton = IconButton(
-      tooltip: 'Back',
+      tooltip: context.l10n.back,
       onPressed: () => Navigator.pop(context),
       icon: const Icon(Icons.arrow_back),
     );
@@ -354,7 +361,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
         ],
       ),
     );
-    const title = Text('Explore', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22));
+    final title = Text(context.l10n.explore, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22));
     return Container(
       decoration: BoxDecoration(
         color: colors.surface,
@@ -377,8 +384,8 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
                         trailingIcons,
                       ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 8),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
                       child: Center(child: title),
                     ),
                   ],
@@ -392,7 +399,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
                         width: AppBar().preferredSize.height + 40,
                         child: backButton,
                       ),
-                      const Expanded(child: Center(child: title)),
+                      Expanded(child: Center(child: title)),
                       trailingIcons,
                     ],
                   ),
@@ -403,7 +410,7 @@ class _HotelHomeScreenState extends State<HotelHomeScreen> with SingleTickerProv
   }
 
   List<HotelListData> get _visibleHotels {
-    return HotelListData.samples
+    return HotelListData.samples(context.l10n)
         .where((HotelListData hotel) {
           final searchableText = '${hotel.title} ${hotel.location}'.toLowerCase();
           final matchesQuery = _query.isEmpty || searchableText.contains(_query);

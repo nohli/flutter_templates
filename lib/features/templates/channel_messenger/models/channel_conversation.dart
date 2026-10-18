@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/localizations.dart';
 
 enum ChannelConversationKind { private, group, channel }
 
@@ -25,50 +26,50 @@ class ChannelConversation {
   final bool muted;
   final bool pinned;
 
-  static const samples = <ChannelConversation>[
+  static List<ChannelConversation> samples(AppLocalizations l10n) => <ChannelConversation>[
     ChannelConversation(
-      title: 'Design Dispatch',
-      preview: 'New: Interfaces that move with purpose',
-      time: '18:42',
+      title: l10n.designDispatch,
+      preview: l10n.newInterfacesThatMoveWithPurpose,
+      time: l10n.clock(18, 42),
       initials: 'DD',
-      colors: <Color>[Color(0xFF506CF0), Color(0xFF63CFF4)],
+      colors: <Color>[const Color(0xFF506CF0), const Color(0xFF63CFF4)],
       kind: ChannelConversationKind.channel,
       unread: 4,
       pinned: true,
     ),
     ChannelConversation(
-      title: 'Studio Crew',
-      preview: 'Maya: The prototype is ready to try ✨',
-      time: '18:21',
+      title: l10n.studioCrew,
+      preview: l10n.mayaThePrototypeIsReadyToTry,
+      time: l10n.clock(18, 21),
       initials: 'SC',
-      colors: <Color>[Color(0xFFFF9C66), Color(0xFFFFD166)],
+      colors: <Color>[const Color(0xFFFF9C66), const Color(0xFFFFD166)],
       kind: ChannelConversationKind.group,
       unread: 2,
       pinned: true,
     ),
     ChannelConversation(
       title: 'Nora',
-      preview: 'Voice message · 0:18',
-      time: '17:55',
+      preview: l10n.voiceMessage018,
+      time: l10n.clock(17, 55),
       initials: 'NO',
-      colors: <Color>[Color(0xFF6ED6A0), Color(0xFF28A87B)],
+      colors: <Color>[const Color(0xFF6ED6A0), const Color(0xFF28A87B)],
       kind: ChannelConversationKind.private,
     ),
     ChannelConversation(
-      title: 'City Signals',
-      preview: 'Five exhibitions worth seeing this weekend',
-      time: '16:04',
+      title: l10n.citySignals,
+      preview: l10n.fiveExhibitionsWorthSeeingThisWeekend,
+      time: l10n.clock(16, 4),
       initials: 'CS',
-      colors: <Color>[Color(0xFFB48CFF), Color(0xFF7453DA)],
+      colors: <Color>[const Color(0xFFB48CFF), const Color(0xFF7453DA)],
       kind: ChannelConversationKind.channel,
       muted: true,
     ),
     ChannelConversation(
-      title: 'Product Circle',
-      preview: 'Jon: Sharing the notes now',
-      time: '14:31',
+      title: l10n.productCircle,
+      preview: l10n.jonSharingTheNotesNow,
+      time: l10n.clock(14, 31),
       initials: 'PC',
-      colors: <Color>[Color(0xFFFF7395), Color(0xFFC94F78)],
+      colors: <Color>[const Color(0xFFFF7395), const Color(0xFFC94F78)],
       kind: ChannelConversationKind.group,
     ),
   ];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/localizations.dart';
 
 class BankingPayment {
   const BankingPayment({
@@ -15,27 +16,27 @@ class BankingPayment {
   final IconData icon;
   final Color color;
 
-  static const samples = <BankingPayment>[
+  static List<BankingPayment> samples(AppLocalizations l10n) => <BankingPayment>[
     BankingPayment(
-      name: 'Nomad Coffee',
-      detail: 'Today · Card',
-      amount: '− €6.80',
+      name: l10n.nomadCoffee,
+      detail: l10n.todayCard,
+      amount: l10n.money(-6.8, 'EUR'),
       icon: Icons.local_cafe_rounded,
-      color: Color(0xFFFFB15A),
+      color: const Color(0xFFFFB15A),
     ),
     BankingPayment(
       name: 'Mina Park',
-      detail: 'Yesterday · Transfer',
-      amount: '+ €48.00',
+      detail: l10n.yesterdayTransfer,
+      amount: '+ ${l10n.money(48, 'EUR')}',
       icon: Icons.person_rounded,
-      color: Color(0xFF8A7CF6),
+      color: const Color(0xFF8A7CF6),
     ),
     BankingPayment(
-      name: 'Metro',
-      detail: 'Yesterday · Transport',
-      amount: '− €3.20',
+      name: l10n.metro,
+      detail: l10n.yesterdayTransport,
+      amount: l10n.money(-3.2, 'EUR'),
       icon: Icons.directions_subway_rounded,
-      color: Color(0xFF74C9E8),
+      color: const Color(0xFF74C9E8),
     ),
   ];
 }

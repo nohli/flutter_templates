@@ -6,6 +6,7 @@ import '../shared/animated_favorite_icon.dart';
 import 'design_course_app_theme.dart';
 import 'models/category.dart';
 import 'models/saved_courses.dart';
+import '../../../l10n/localizations.dart';
 
 class CourseInfoScreen extends StatefulWidget {
   const CourseInfoScreen({
@@ -220,9 +221,13 @@ class _CourseDetailsPanel extends StatelessWidget {
                           spacing: 8,
                           runSpacing: 8,
                           children: <Widget>[
-                            _CourseFact(value: '${course.lessonCount}', label: 'Classes', colors: colors),
-                            _CourseFact(value: '2 hours', label: 'Time', colors: colors),
-                            _CourseFact(value: '24', label: 'Seats', colors: colors),
+                            _CourseFact(
+                              value: context.l10n.number(course.lessonCount),
+                              label: context.l10n.classes,
+                              colors: colors,
+                            ),
+                            _CourseFact(value: context.l10n.sample2Hours, label: context.l10n.time, colors: colors),
+                            _CourseFact(value: context.l10n.number(24), label: context.l10n.seats, colors: colors),
                           ],
                         ),
                       ),
@@ -233,7 +238,7 @@ class _CourseDetailsPanel extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
                         child: Text(
-                          'This fictional course demonstrates the course-details interface.',
+                          context.l10n.thisFictionalCourseDemonstratesTheCourseDetailsInterface,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontWeight: FontWeight.w200,
@@ -278,15 +283,20 @@ class _CoursePriceAndRating extends StatelessWidget {
         runSpacing: 8,
         children: <Widget>[
           Text(
-            '\$${course.money}',
+            context.l10n.money(course.money, 'USD', decimalDigits: 0),
             textAlign: TextAlign.left,
-            style: TextStyle(fontWeight: FontWeight.w200, fontSize: 22, letterSpacing: 0.27, color: colors.primary),
+            style: TextStyle(
+              fontWeight: FontWeight.w200,
+              fontSize: 22,
+              letterSpacing: 0.27,
+              color: DesignCourseAppTheme.accentTextColor(colors),
+            ),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                '${course.rating}',
+                context.l10n.number(course.rating, decimalDigits: 1),
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w200,
@@ -331,7 +341,12 @@ class _CourseFact extends StatelessWidget {
             Text(
               value,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, letterSpacing: 0.27, color: colors.primary),
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                letterSpacing: 0.27,
+                color: DesignCourseAppTheme.accentTextColor(colors),
+              ),
             ),
             Text(
               label,
@@ -373,7 +388,7 @@ class _PreviewNotice extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Preview only — enrollment is not available.',
+                context.l10n.previewOnlyEnrollmentIsNotAvailable,
                 style: TextStyle(color: colors.onPrimaryContainer),
               ),
             ),
@@ -393,7 +408,7 @@ class _FavoriteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final label = isFavorite ? 'Remove saved sample course' : 'Save sample course';
+    final label = isFavorite ? context.l10n.removeSavedSampleCourse : context.l10n.saveSampleCourse;
 
     return Card(
       color: colors.primary,
@@ -442,7 +457,7 @@ class _BackButton extends StatelessWidget {
           shape: const CircleBorder(),
           elevation: 4,
           child: Tooltip(
-            message: 'Back',
+            message: context.l10n.back,
             child: InkWell(
               borderRadius: BorderRadius.circular(kToolbarHeight),
               onTap: () => Navigator.pop(context),

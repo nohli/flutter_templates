@@ -4,6 +4,8 @@ import '../../app/app_identity.dart';
 import '../../app/app_theme.dart';
 import 'external_actions.dart';
 import 'illustrated_support_layout.dart';
+import '../../l10n/localizations.dart';
+import 'support_error.dart';
 
 class InviteFriendScreen extends StatefulWidget {
   const InviteFriendScreen({super.key, this.sharer = shareText});
@@ -17,24 +19,24 @@ class InviteFriendScreen extends StatefulWidget {
 class _InviteFriendScreenState extends State<InviteFriendScreen> {
   final _shareButtonKey = GlobalKey();
   var _isSharing = false;
-  String? _errorMessage;
+  SupportError? _error;
 
   Future<void> _share() async {
     final renderObject = _shareButtonKey.currentContext?.findRenderObject();
     if (renderObject is! RenderBox || !renderObject.hasSize) {
-      setState(() => _errorMessage = 'Sharing is temporarily unavailable.');
+      setState(() => _error = SupportError.sharingUnavailable);
       return;
     }
     final origin = renderObject.localToGlobal(Offset.zero) & renderObject.size;
     setState(() {
       _isSharing = true;
-      _errorMessage = null;
+      _error = null;
     });
     try {
-      await widget.sharer(inviteText, origin);
+      await widget.sharer(inviteText(context.l10n), origin);
     } catch (_) {
       if (mounted) {
-        setState(() => _errorMessage = 'Sharing is temporarily unavailable.');
+        setState(() => _error = SupportError.sharingUnavailable);
       }
     } finally {
       if (mounted) {
@@ -61,23 +63,23 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
             illustrationPath: 'assets/images/inviteImage.png',
             content: <Widget>[
               const SizedBox(height: 8),
-              const Text(
-                'Invite Your Friends',
+              Text(
+                context.l10n.inviteTitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Share ${AppIdentity.name} with friends and fellow developers.',
+              Text(
+                context.l10n.inviteDescription(AppIdentity.name),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
-              if (_errorMessage case final errorMessage?) ...<Widget>[
+              if (_error case final error?) ...<Widget>[
                 const SizedBox(height: 8),
                 Semantics(
                   liveRegion: true,
                   child: Text(
-                    errorMessage,
+                    error.message(context.l10n),
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
@@ -96,7 +98,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
               ),
               onPressed: _isSharing ? null : _share,
               icon: Icon(_isSharing ? Icons.more_horiz : Icons.share),
-              label: Text(_isSharing ? 'Opening…' : 'Share'),
+              label: Text(_isSharing ? context.l10n.opening : context.l10n.share),
             ),
           ),
         ),

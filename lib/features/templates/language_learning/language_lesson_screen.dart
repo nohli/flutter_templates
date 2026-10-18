@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/localizations.dart';
 
 class LanguageLessonScreen extends StatefulWidget {
   const LanguageLessonScreen({super.key});
@@ -13,12 +14,12 @@ class _LanguageLessonScreenState extends State<LanguageLessonScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final correct = _answer == 'Un café, s’il vous plaît.';
+    final correct = _answer == context.l10n.unCafSilVousPlaT;
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          tooltip: 'Close lesson',
+          tooltip: context.l10n.closeLesson,
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.close_rounded),
         ),
@@ -26,14 +27,14 @@ class _LanguageLessonScreenState extends State<LanguageLessonScreen> {
           borderRadius: const BorderRadius.all(Radius.circular(99)),
           child: LinearProgressIndicator(value: _answer == null ? 0.34 : 0.46, minHeight: 10),
         ),
-        actions: const <Widget>[
+        actions: <Widget>[
           Padding(
-            padding: EdgeInsets.only(right: 20),
+            padding: const EdgeInsetsDirectional.only(end: 20),
             child: Row(
               children: <Widget>[
-                Icon(Icons.favorite_rounded, color: Color(0xFFFF6B62)),
-                SizedBox(width: 5),
-                Text('5'),
+                const Icon(Icons.favorite_rounded, color: Color(0xFFFF6B62)),
+                const SizedBox(width: 5),
+                Text(context.l10n.number(5)),
               ],
             ),
           ),
@@ -52,7 +53,7 @@ class _LanguageLessonScreenState extends State<LanguageLessonScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Text(
-                        'Choose the best reply',
+                        context.l10n.chooseTheBestReply,
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(height: 26),
@@ -62,29 +63,29 @@ class _LanguageLessonScreenState extends State<LanguageLessonScreen> {
                           color: colors.surface,
                           borderRadius: const BorderRadius.all(Radius.circular(28)),
                         ),
-                        child: const Row(
+                        child: Row(
                           children: <Widget>[
-                            CircleAvatar(radius: 25, child: Text('☕', style: TextStyle(fontSize: 25))),
-                            SizedBox(width: 16),
+                            const CircleAvatar(radius: 25, child: Text('☕', style: TextStyle(fontSize: 25))),
+                            const SizedBox(width: 16),
                             Expanded(
                               child: Text(
-                                'Bonjour! What would you like?',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                                context.l10n.bonjourWhatWouldYouLike,
+                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                               ),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 30),
-                      for (final answer in const <String>[
-                        'Un café, s’il vous plaît.',
-                        'Où est la gare?',
-                        'Bonne nuit!',
+                      for (final answer in <String>[
+                        context.l10n.unCafSilVousPlaT,
+                        context.l10n.oEstLaGare,
+                        context.l10n.bonneNuit,
                       ]) ...<Widget>[
                         _AnswerTile(
                           answer: answer,
                           selected: _answer == answer,
-                          correct: _answer != null && answer == 'Un café, s’il vous plaît.',
+                          correct: _answer != null && answer == context.l10n.unCafSilVousPlaT,
                           onTap: () => setState(() => _answer = answer),
                         ),
                         const SizedBox(height: 12),
@@ -98,15 +99,15 @@ class _LanguageLessonScreenState extends State<LanguageLessonScreen> {
                   padding: const EdgeInsets.only(bottom: 14),
                   child: Text(
                     correct
-                        ? 'Perfect — that’s a polite way to order.'
-                        : 'Almost. Pick the reply that orders a coffee.',
+                        ? context.l10n.perfectThatsAPoliteWayToOrder
+                        : context.l10n.almostPickTheReplyThatOrdersACoffee,
                     style: TextStyle(color: correct ? colors.primary : colors.error, fontWeight: FontWeight.w700),
                   ),
                 ),
               FilledButton(
                 onPressed: correct ? () => Navigator.of(context).pop() : null,
                 style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
-                child: Text(correct ? 'Continue' : 'Check'),
+                child: Text(correct ? context.l10n.continueAction : context.l10n.check),
               ),
             ],
           ),

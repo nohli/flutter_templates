@@ -5,6 +5,7 @@ import '../../../app/app_appearance.dart';
 import '../../../app/motion_preferences.dart';
 import 'custom_calendar.dart';
 import 'hotel_app_theme.dart';
+import '../../../l10n/localizations.dart';
 
 class CalendarPopupView extends StatefulWidget {
   const CalendarPopupView({
@@ -143,16 +144,16 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with SingleTicker
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            _buildStackedDateSummaryValue(colors, label: 'From', date: _startDate),
+            _buildStackedDateSummaryValue(colors, label: context.l10n.from, date: _startDate),
             const SizedBox(height: 12),
-            _buildStackedDateSummaryValue(colors, label: 'To', date: _endDate),
+            _buildStackedDateSummaryValue(colors, label: context.l10n.to, date: _endDate),
           ],
         ),
       );
     }
 
-    final from = _buildDateSummaryValue(colors, label: 'From', date: _startDate);
-    final to = _buildDateSummaryValue(colors, label: 'To', date: _endDate);
+    final from = _buildDateSummaryValue(colors, label: context.l10n.from, date: _startDate);
+    final to = _buildDateSummaryValue(colors, label: context.l10n.to, date: _endDate);
 
     return Row(
       children: <Widget>[
@@ -174,7 +175,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with SingleTicker
   }
 
   Widget _buildStackedDateSummaryValue(ColorScheme colors, {required String label, required DateTime? date}) {
-    final value = date == null ? 'Select date' : DateFormat('EEE, dd MMM').format(date);
+    final value = date == null ? context.l10n.selectDate : DateFormat.MMMEd(context.l10n.localeName).format(date);
 
     return Text.rich(
       TextSpan(
@@ -204,7 +205,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with SingleTicker
         ),
         const SizedBox(height: 4),
         Text(
-          date == null ? 'Select date' : DateFormat('EEE, dd MMM').format(date),
+          date == null ? context.l10n.selectDate : DateFormat.MMMEd(context.l10n.localeName).format(date),
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ],
@@ -229,7 +230,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView> with SingleTicker
         child: FilledButton(
           style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48), shape: const StadiumBorder()),
           onPressed: applySelection,
-          child: const Text('Apply', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
+          child: Text(context.l10n.apply, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
         ),
       ),
     );

@@ -8,6 +8,7 @@ import 'design_course_app_theme.dart';
 import 'models/category.dart';
 import 'models/saved_courses.dart';
 import 'popular_course_list_view.dart';
+import '../../../l10n/localizations.dart';
 
 class DesignCourseHomeScreen extends StatefulWidget {
   const DesignCourseHomeScreen({this.appearance = AppAppearance.light, this.savedCourses, super.key});
@@ -64,7 +65,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
 
   Widget _buildCategorySection(ColorScheme colors) {
     final categories = _coursesMatchingQuery(
-      _categoryType == CategoryType.ui ? Category.categoryList : const <Category>[],
+      _categoryType == CategoryType.ui ? Category.categoryList(context.l10n) : const <Category>[],
     );
 
     return Column(
@@ -74,7 +75,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
           child: Text(
-            'Category',
+            context.l10n.category,
             textAlign: TextAlign.left,
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22, letterSpacing: 0.27, color: colors.onSurface),
           ),
@@ -85,8 +86,8 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         if (categories.isEmpty)
           _EmptyCourses(
             message: _query.isEmpty
-                ? 'No sample courses are included in this category.'
-                : 'No sample courses match your search.',
+                ? context.l10n.noSampleCoursesAreIncludedInThisCategory
+                : context.l10n.noSampleCoursesMatchYourSearch,
           )
         else
           CategoryListView(categories: categories, onSelected: _openCourse),
@@ -95,7 +96,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
   }
 
   Widget _buildPopularCourseSection(ColorScheme colors) {
-    final courses = _coursesMatchingQuery(Category.popularCourseList);
+    final courses = _coursesMatchingQuery(Category.popularCourseList(context.l10n));
 
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
@@ -104,12 +105,12 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Popular Course',
+            context.l10n.popularCourse,
             textAlign: TextAlign.left,
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22, letterSpacing: 0.27, color: colors.onSurface),
           ),
           if (courses.isEmpty)
-            const _EmptyCourses(message: 'No sample courses match your search.')
+            _EmptyCourses(message: context.l10n.noSampleCoursesMatchYourSearch)
           else
             PopularCourseListView(courses: courses, onSelected: _openCourse),
         ],
@@ -121,7 +122,14 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
         builder: (BuildContext context) => MediaQuery.withNoTextScaling(
-          child: CourseInfoScreen(appearance: widget.appearance, course: course, savedCourses: _savedCourses),
+          child: CourseInfoScreen(
+            appearance: widget.appearance,
+            course: [
+              ...Category.categoryList(context.l10n),
+              ...Category.popularCourseList(context.l10n),
+            ].firstWhere((sample) => sample.id == course.id),
+            savedCourses: _savedCourses,
+          ),
         ),
       ),
     );
@@ -169,7 +177,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
     return Semantics(
       button: true,
       selected: isSelected,
-      label: 'Select ${category.label} category',
+      label: context.l10n.selectValueCategory(category.label(context.l10n)),
       excludeSemantics: true,
       onTap: selectCategory,
       child: AnimatedContainer(
@@ -194,15 +202,18 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
             onTap: selectCategory,
             child: ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 48),
-              child: Center(
-                child: Text(
-                  category.label,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    letterSpacing: 0.27,
-                    color: isSelected ? colors.onPrimary : colors.primary,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Center(
+                  child: Text(
+                    category.label(context.l10n),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      letterSpacing: 0.27,
+                      color: isSelected ? colors.onPrimary : DesignCourseAppTheme.accentTextColor(colors),
+                    ),
                   ),
                 ),
               ),
@@ -245,7 +256,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                         child: TextFormField(
                           onChanged: (String value) {
                             setState(() {
-                              _query = value.trim().toLowerCase();
+                              _query = value.trim();
                             });
                           },
                           style: TextStyle(
@@ -256,7 +267,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                           ),
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
-                            labelText: 'Search for course',
+                            labelText: context.l10n.searchForCourse,
                             border: InputBorder.none,
                             helperStyle: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -290,13 +301,32 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
   }
 
   List<Category> _coursesMatchingQuery(List<Category> courses) {
+    final query = _searchKey(_query);
     return courses
         .where((Category course) {
-          final title = course.title.toLowerCase();
+          final title = _searchKey(course.title);
 
-          return _query.isEmpty || title.contains(_query);
+          return query.isEmpty || title.contains(query);
         })
         .toList(growable: false);
+  }
+
+  String _searchKey(String value) {
+    final language = Localizations.localeOf(context).languageCode;
+    final isTurkish = language == 'tr';
+    final text = isTurkish ? value.replaceAll('I', 'ı').replaceAll('İ', 'i') : value;
+    final key = text.toLowerCase();
+    final isGreek = language == 'el';
+
+    if (isGreek) {
+      // Fold final sigma and Greek accents for uppercase searches
+      const variants = 'άέήίόύώΐΰς';
+      const folded = 'αεηιουωϊϋσ';
+
+      return key.replaceAllMapped(RegExp('[$variants]'), (match) => folded[variants.indexOf(match[0]!)]);
+    }
+
+    return key;
   }
 
   Widget _buildAppBar(ColorScheme colors) {
@@ -311,7 +341,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Choose your',
+                  context.l10n.chooseYour,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
@@ -321,7 +351,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                   ),
                 ),
                 Text(
-                  'Design Course',
+                  context.l10n.designCourse,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -341,13 +371,15 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
 }
 
 enum CategoryType {
-  ui('UI/UX'),
-  coding('Coding'),
-  basic('Basic UI');
+  ui,
+  coding,
+  basic;
 
-  const CategoryType(this.label);
-
-  final String label;
+  String label(AppLocalizations l10n) => switch (this) {
+    CategoryType.ui => l10n.uiUx,
+    CategoryType.coding => l10n.coding,
+    CategoryType.basic => l10n.basicUi,
+  };
 }
 
 class _EmptyCourses extends StatelessWidget {

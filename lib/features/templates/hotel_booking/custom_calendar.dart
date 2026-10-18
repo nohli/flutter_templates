@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../l10n/localizations.dart';
 
 class CustomCalendarView extends StatefulWidget {
   const CustomCalendarView({
@@ -123,25 +124,26 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
     final canShowNextMonth = _monthHasSelectableDate(nextMonth);
     final useStackedHeader = MediaQuery.textScalerOf(context).scale(1) >= 2;
     final previousButton = IconButton.outlined(
-      tooltip: 'Previous month',
+      tooltip: context.l10n.previousMonth,
       constraints: const BoxConstraints.tightFor(width: 48, height: 48),
       style: IconButton.styleFrom(foregroundColor: colors.onSurfaceVariant),
       onPressed: canShowPreviousMonth ? () => _showMonth(previousMonth) : null,
-      icon: const Icon(Icons.keyboard_arrow_left),
+      icon: const Icon(Icons.chevron_left),
     );
     final nextButton = IconButton.outlined(
-      tooltip: 'Next month',
+      tooltip: context.l10n.nextMonth,
       constraints: const BoxConstraints.tightFor(width: 48, height: 48),
       style: IconButton.styleFrom(foregroundColor: colors.onSurfaceVariant),
       onPressed: canShowNextMonth ? () => _showMonth(nextMonth) : null,
-      icon: const Icon(Icons.keyboard_arrow_right),
+      icon: const Icon(Icons.chevron_right),
     );
     final monthLabel = Semantics(
-      label: DateFormat('MMMM yyyy').format(_visibleMonth),
+      label: DateFormat.yMMMM(context.l10n.localeName).format(_visibleMonth),
       header: true,
       child: ExcludeSemantics(
         child: Text(
-          DateFormat(useStackedHeader ? 'MMM yyyy' : 'MMMM, yyyy').format(_visibleMonth),
+          (useStackedHeader ? DateFormat.yMMM(context.l10n.localeName) : DateFormat.yMMMM(context.l10n.localeName))
+              .format(_visibleMonth),
           textAlign: TextAlign.center,
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: colors.onSurface),
         ),
@@ -191,10 +193,10 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
                 : isSelectable
                 ? colors.onSurface
                 : colors.onSurfaceVariant.withValues(alpha: 0.6);
-            final semanticsLabel = DateFormat('EEEE, d MMMM yyyy').format(date);
+            final semanticsLabel = DateFormat.yMMMMEEEEd(context.l10n.localeName).format(date);
 
             return Semantics(
-              key: ValueKey<String>('calendar-day-${DateFormat('yyyy-MM-dd').format(date)}'),
+              key: ValueKey<String>('calendar-day-${DateFormat('yyyy-MM-dd', 'en').format(date)}'),
               button: true,
               enabled: isSelectable,
               selected: isSelected,
@@ -213,7 +215,7 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
                           children: <Widget>[
                             Expanded(
                               child: Text(
-                                DateFormat('EEEE, d MMMM').format(date),
+                                DateFormat.MMMMEEEEd(context.l10n.localeName).format(date),
                                 style: TextStyle(color: foregroundColor, fontSize: 16),
                               ),
                             ),
@@ -233,12 +235,18 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
 
   List<Widget> _buildWeekdayHeaders() {
     final colors = Theme.of(context).colorScheme;
+    final weekdays = MaterialLocalizations.of(context).narrowWeekdays;
     return List<Widget>.generate(7, (int weekdayIndex) {
+      final date = _visibleDates[weekdayIndex];
       return Expanded(
         child: Center(
-          child: Text(
-            DateFormat('EEE').format(_visibleDates[weekdayIndex]),
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: colors.secondary),
+          child: Semantics(
+            label: DateFormat.EEEE(context.l10n.localeName).format(date),
+            excludeSemantics: true,
+            child: Text(
+              weekdays[date.weekday % 7],
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: colors.secondary),
+            ),
           ),
         ),
       );
@@ -267,15 +275,15 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
               children: <Widget>[
                 Positioned.fill(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(startsRange ? 4 : 0, 5, endsRange ? 4 : 0, 5),
+                    padding: EdgeInsetsDirectional.fromSTEB(startsRange ? 4 : 0, 5, endsRange ? 4 : 0, 5),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: _startDate != null && _endDate != null && (isSelected || isInRange)
                             ? colors.primaryContainer
                             : Colors.transparent,
-                        borderRadius: BorderRadius.horizontal(
-                          left: startsRange ? const Radius.circular(24) : Radius.zero,
-                          right: endsRange ? const Radius.circular(24) : Radius.zero,
+                        borderRadius: BorderRadiusDirectional.horizontal(
+                          start: startsRange ? const Radius.circular(24) : Radius.zero,
+                          end: endsRange ? const Radius.circular(24) : Radius.zero,
                         ),
                       ),
                     ),
@@ -285,7 +293,7 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
                   button: true,
                   enabled: isSelectable,
                   selected: isSelected,
-                  label: DateFormat('EEEE, d MMMM yyyy').format(date),
+                  label: DateFormat.yMMMMEEEEd(context.l10n.localeName).format(date),
                   onTap: isSelectable ? () => _selectDate(date) : null,
                   child: ExcludeSemantics(
                     child: InkWell(
@@ -304,7 +312,7 @@ class _CustomCalendarViewState extends State<CustomCalendarView> {
                           ),
                           child: Center(
                             child: Text(
-                              '${date.day}',
+                              context.l10n.number(date.day),
                               style: TextStyle(
                                 color: isSelected
                                     ? colors.onPrimary

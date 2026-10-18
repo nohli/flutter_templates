@@ -11,6 +11,7 @@ import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart'
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_list_view.dart';
 import 'package:templates/features/templates/hotel_booking/model/hotel_list_data.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('Hotel theme keeps mint surfaces and uses an accessible action foreground', () {
@@ -87,7 +88,7 @@ void main() {
     await tester.tap(find.bySemanticsLabel(_fullDate(replacementEnd)));
     await tester.pump();
 
-    expect(find.text(DateFormat('EEE, dd MMM').format(replacementEnd)), findsOneWidget);
+    expect(find.text(DateFormat.MMMEd('en').format(replacementEnd)), findsOneWidget);
     final applyButton = tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Apply'));
     expect(applyButton.onPressed, isNotNull);
     applyButton.onPressed!();
@@ -190,9 +191,23 @@ void main() {
       ),
     );
 
-    expect(find.text(DateFormat('MMMM, yyyy').format(selectedStart)), findsOneWidget);
-    expect(tester.widget<IconButton>(find.widgetWithIcon(IconButton, Icons.keyboard_arrow_left)).onPressed, isNull);
-    expect(tester.widget<IconButton>(find.widgetWithIcon(IconButton, Icons.keyboard_arrow_right)).onPressed, isNull);
+    expect(find.text(DateFormat.yMMMM('en').format(selectedStart)), findsOneWidget);
+    expect(
+      tester
+          .widget<IconButton>(
+            find.byWidgetPredicate((widget) => widget is IconButton && widget.tooltip == 'Previous month'),
+          )
+          .onPressed,
+      isNull,
+    );
+    expect(
+      tester
+          .widget<IconButton>(
+            find.byWidgetPredicate((widget) => widget is IconButton && widget.tooltip == 'Next month'),
+          )
+          .onPressed,
+      isNull,
+    );
   });
 
   testWidgets('calendar renders a visible connected selected range', (WidgetTester tester) async {
@@ -233,14 +248,16 @@ void main() {
       ),
     );
 
-    final previousButton = find.widgetWithIcon(IconButton, Icons.keyboard_arrow_left);
-    final nextButton = find.widgetWithIcon(IconButton, Icons.keyboard_arrow_right);
+    final previousButton = find.byWidgetPredicate(
+      (widget) => widget is IconButton && widget.tooltip == 'Previous month',
+    );
+    final nextButton = find.byWidgetPredicate((widget) => widget is IconButton && widget.tooltip == 'Next month');
     expect(tester.widget<IconButton>(previousButton).onPressed, isNotNull);
     expect(tester.widget<IconButton>(nextButton).onPressed, isNotNull);
 
     await tester.tap(nextButton);
     await tester.pump();
-    expect(find.text(DateFormat('MMMM, yyyy').format(maximumDate)), findsOneWidget);
+    expect(find.text(DateFormat.yMMMM('en').format(maximumDate)), findsOneWidget);
     expect(tester.widget<IconButton>(nextButton).onPressed, isNull);
     expect(
       tester.getSemantics(find.bySemanticsLabel(_fullDate(maximumDate))).flagsCollection.isEnabled,
@@ -251,7 +268,7 @@ void main() {
     await tester.pump();
     await tester.tap(previousButton);
     await tester.pump();
-    expect(find.text(DateFormat('MMMM, yyyy').format(minimumDate)), findsOneWidget);
+    expect(find.text(DateFormat.yMMMM('en').format(minimumDate)), findsOneWidget);
     expect(tester.widget<IconButton>(previousButton).onPressed, isNull);
     expect(
       tester.getSemantics(find.bySemanticsLabel(_fullDate(minimumDate))).flagsCollection.isEnabled,
@@ -417,7 +434,7 @@ void main() {
   ) async {
     final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
-    final hotel = HotelListData.samples.first;
+    final hotel = HotelListData.samples(english).first;
     final card = HotelListView(hotelData: hotel, isFavorite: false, onFavoriteChanged: () {}, animation: controller);
 
     await _pumpHotelWidget(tester, SingleChildScrollView(child: card));
@@ -457,7 +474,7 @@ Future<void> _pumpHotelWidget(
   ).copyWith(disableAnimations: true, textScaler: TextScaler.linear(textScale));
 
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
       theme: HotelAppTheme.build(),
       home: MediaQuery(
         data: mediaQuery,
@@ -468,7 +485,7 @@ Future<void> _pumpHotelWidget(
   await tester.pump();
 }
 
-String _fullDate(DateTime date) => DateFormat('EEEE, d MMMM yyyy').format(date);
+String _fullDate(DateTime date) => DateFormat.yMMMMEEEEd('en').format(date);
 
 ValueKey<String> _calendarDayKey(DateTime date) {
   return ValueKey<String>('calendar-day-${DateFormat('yyyy-MM-dd').format(date)}');

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/app_identity.dart';
 import '../../app/app_theme.dart';
 import 'external_actions.dart';
+import '../../l10n/localizations.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key, this.launcher = launchExternalUri});
@@ -62,61 +63,61 @@ class _AboutScreenState extends State<AboutScreen> {
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
-                    const Text(AppIdentity.summary, textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+                    Text(context.l10n.appSummary, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16)),
                     const SizedBox(height: 16),
-                    const Text(
-                      AppIdentity.sampleContentNotice,
+                    Text(
+                      context.l10n.sampleContentNotice,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 24),
-                    const Text(
-                      'Open source',
+                    Text(
+                      context.l10n.openSource,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      'UI Templates is based on a publicly available interface gallery by Mitesh Chodvadiya. The complete inherited terms, third-party notices, and source history are available in the repository.',
+                    Text(
+                      context.l10n.sourceAttribution,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 8),
                     TextButton.icon(
                       style: linkStyle,
                       onPressed: _isOpeningLink ? null : () => _open(AppIdentity.sourceUri),
                       icon: const Icon(Icons.code),
-                      label: const Text('UI Templates source code'),
+                      label: Text(context.l10n.sourceCode),
                     ),
                     TextButton.icon(
                       style: linkStyle,
                       onPressed: () => showLicensePage(context: context, applicationName: AppIdentity.name),
                       icon: const Icon(Icons.description_outlined),
-                      label: const Text('Open-source licenses'),
+                      label: Text(context.l10n.openSourceLicenses),
                     ),
                     TextButton.icon(
                       style: linkStyle,
                       onPressed: _isOpeningLink ? null : () => _open(AppIdentity.privacyPolicyUri),
                       icon: const Icon(Icons.privacy_tip_outlined),
-                      label: const Text('Privacy Policy'),
+                      label: Text(context.l10n.privacyPolicy),
                     ),
                     TextButton.icon(
                       style: linkStyle,
                       onPressed: _isOpeningLink ? null : () => _open(developerPortfolioUri),
                       icon: const Icon(Icons.language),
-                      label: const Text('Developer portfolio'),
+                      label: Text(context.l10n.developerPortfolio),
                     ),
                     const SizedBox(height: 24),
-                    const Text(
-                      'Trademark notice',
+                    Text(
+                      context.l10n.trademarkNotice,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      AppIdentity.trademarkDisclaimer,
+                    Text(
+                      context.l10n.trademarkDisclaimer,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ],
                 ),

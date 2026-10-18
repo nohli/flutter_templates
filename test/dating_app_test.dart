@@ -11,26 +11,27 @@ import 'package:templates/features/templates/dating_app/models/dating_conversati
 import 'package:templates/features/templates/dating_app/models/dating_profile.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_action_bar.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_conversation_tile.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('dating profiles have stable identities and complete prompts', () {
-    expect(DatingProfile.samples, hasLength(4));
+    expect(DatingProfile.samples(english), hasLength(4));
     expect(
-      DatingProfile.samples.map((DatingProfile profile) => profile.id).toSet(),
-      hasLength(DatingProfile.samples.length),
+      DatingProfile.samples(english).map((DatingProfile profile) => profile.id).toSet(),
+      hasLength(DatingProfile.samples(english).length),
     );
     expect(
-      DatingProfile.samples.every(
+      DatingProfile.samples(english).every(
         (DatingProfile profile) =>
             profile.name.isNotEmpty && profile.answer.isNotEmpty && profile.interests.length >= 3,
       ),
       isTrue,
     );
-    expect(DatingConversation.samples, hasLength(4));
-    expect(DatingConversation.samples.every((conversation) => conversation.messages.isNotEmpty), isTrue);
-    expect(DatingConversation.samples.map((conversation) => conversation.id).toSet(), hasLength(4));
-    expect(DatingConversation.samples.first.copyWith().unreadCount, 2);
-    expect(DatingConversation.samples.first.copyWith(unreadCount: 0).unreadCount, 0);
+    expect(DatingConversation.samples(english), hasLength(4));
+    expect(DatingConversation.samples(english).every((conversation) => conversation.messages.isNotEmpty), isTrue);
+    expect(DatingConversation.samples(english).map((conversation) => conversation.id).toSet(), hasLength(4));
+    expect(DatingConversation.samples(english).first.copyWith().unreadCount, 2);
+    expect(DatingConversation.samples(english).first.copyWith(unreadCount: 0).unreadCount, 0);
   });
 
   testWidgets('dating screen can close before the first swipe', (WidgetTester tester) async {
@@ -196,7 +197,7 @@ void main() {
   testWidgets('dating gallery artwork uses its real editorial profile', (WidgetTester tester) async {
     final item = TemplateGalleryItem.items.singleWhere((item) => item.destination == TemplateGalleryDestination.dating);
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: Center(
           child: SizedBox(width: 214, height: 143, child: TemplateGalleryArtwork(item: item)),
         ),
@@ -206,7 +207,7 @@ void main() {
     final imagePaths = tester
         .widgetList<Image>(find.descendant(of: find.byType(TemplateGalleryArtwork), matching: find.byType(Image)))
         .map((image) => (image.image as AssetImage).assetName);
-    expect(imagePaths, everyElement('assets/gallery/dating-screen.png'));
+    expect(imagePaths, everyElement('assets/gallery/en/dating-screen.png'));
     expect(tester.takeException(), isNull);
   });
 
@@ -251,7 +252,7 @@ Future<void> _pumpDating(
     tester.view,
   ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
   await tester.pumpWidget(
-    MaterialApp(
+    LocalizedTestApp(
       home: MediaQuery(
         data: mediaQuery,
         child: DatingHomeScreen(appearance: appearance),

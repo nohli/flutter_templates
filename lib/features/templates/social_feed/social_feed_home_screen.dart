@@ -11,6 +11,7 @@ import 'social_feed_theme.dart';
 import 'social_thread_screen.dart';
 import 'widgets/social_avatar.dart';
 import 'widgets/social_post_tile.dart';
+import '../../../l10n/localizations.dart';
 
 class SocialFeedHomeScreen extends StatelessWidget {
   const SocialFeedHomeScreen({this.appearance = AppAppearance.light, super.key});
@@ -54,7 +55,7 @@ class _SocialFeedHomeState extends State<_SocialFeedHome> {
       controller: _scrollController,
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          tooltip: 'Create a post',
+          tooltip: context.l10n.createAPost,
           onPressed: _compose,
           child: const Icon(Icons.edit_rounded),
         ),
@@ -68,14 +69,18 @@ class _SocialFeedHomeState extends State<_SocialFeedHome> {
                 SliverAppBar(
                   pinned: true,
                   leading: IconButton(
-                    tooltip: 'Back to template gallery',
+                    tooltip: context.l10n.backToTemplateGallery,
                     onPressed: () => Navigator.of(context).pop(),
                     icon: const Icon(Icons.arrow_back_rounded),
                   ),
-                  title: const Text('SOCIAL FEED', style: TextStyle(fontSize: 19, letterSpacing: 2.8)),
+                  title: Text(context.l10n.socialFeed, style: const TextStyle(fontSize: 19, letterSpacing: 2.8)),
                   centerTitle: true,
                   actions: <Widget>[
-                    IconButton(tooltip: 'Feed settings', onPressed: () {}, icon: const Icon(Icons.tune_rounded)),
+                    IconButton(
+                      tooltip: context.l10n.feedSettings,
+                      onPressed: () {},
+                      icon: const Icon(Icons.tune_rounded),
+                    ),
                   ],
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(49),
@@ -88,10 +93,10 @@ class _SocialFeedHomeState extends State<_SocialFeedHome> {
                   ),
                 SliverToBoxAdapter(child: _FeedMoment(tab: _tab)),
                 SliverList.separated(
-                  itemCount: SocialPost.samples.length,
+                  itemCount: SocialPost.samples(context.l10n).length,
                   separatorBuilder: (_, _) => Divider(height: 1, color: colors.outlineVariant),
                   itemBuilder: (BuildContext context, int index) {
-                    final post = SocialPost.samples[index];
+                    final post = SocialPost.samples(context.l10n)[index];
                     return SocialPostTile(
                       post: post,
                       liked: _liked.contains(index),
@@ -127,7 +132,9 @@ class _SocialFeedHomeState extends State<_SocialFeedHome> {
       Navigator.of(context).push<void>(
         templatePageRoute<void>(
           context: context,
-          builder: (_) => SocialThreadScreen(post: post),
+          builder: (context) => SocialThreadScreen(
+            post: SocialPost.samples(context.l10n).firstWhere((sample) => sample.handle == post.handle),
+          ),
         ),
       ),
     );
@@ -144,8 +151,8 @@ class _FeedTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        _FeedTab(label: 'For you', selected: selectedIndex == 0, onTap: () => onSelected(0)),
-        _FeedTab(label: 'Following', selected: selectedIndex == 1, onTap: () => onSelected(1)),
+        _FeedTab(label: context.l10n.forYou, selected: selectedIndex == 0, onTap: () => onSelected(0)),
+        _FeedTab(label: context.l10n.following, selected: selectedIndex == 1, onTap: () => onSelected(1)),
       ],
     );
   }
@@ -221,12 +228,12 @@ class _FeedMoment extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  tab == 0 ? 'LIVE / DESIGN WEEK' : 'FROM YOUR CIRCLE',
+                  tab == 0 ? context.l10n.liveDesignWeek : context.l10n.fromYourCircle,
                   style: TextStyle(color: colors.primary, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  tab == 0 ? 'What people are building right now.' : 'The latest from people you chose.',
+                  tab == 0 ? context.l10n.whatPeopleAreBuildingRightNow : context.l10n.theLatestFromPeopleYouChose,
                   style: TextStyle(color: colors.surface, fontSize: 19, fontWeight: FontWeight.w700),
                 ),
               ],
@@ -253,10 +260,18 @@ class _PublishedPost extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(18, 14, 8, 14),
       child: Row(
         children: <Widget>[
-          const SocialAvatar(initials: 'YO', colors: <Color>[SocialFeedTheme.accent, Color(0xFFFFA65B)], radius: 20),
+          SocialAvatar(
+            initials: context.l10n.you,
+            colors: const <Color>[SocialFeedTheme.accent, Color(0xFFFFA65B)],
+            radius: 20,
+          ),
           const SizedBox(width: 12),
           Expanded(child: Text(body, maxLines: 3, overflow: TextOverflow.ellipsis)),
-          IconButton(tooltip: 'Dismiss published post', onPressed: onDismiss, icon: const Icon(Icons.close_rounded)),
+          IconButton(
+            tooltip: context.l10n.dismissPublishedPost,
+            onPressed: onDismiss,
+            icon: const Icon(Icons.close_rounded),
+          ),
         ],
       ),
     );

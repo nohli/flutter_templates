@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/private_conversation.dart';
+import '../../../../l10n/localizations.dart';
 
 class PrivateConversationTile extends StatelessWidget {
   const PrivateConversationTile({required this.conversation, required this.onTap, super.key});
@@ -12,7 +13,7 @@ class PrivateConversationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     return Semantics(
-      label: 'Open private chat with ${conversation.name}',
+      label: context.l10n.openPrivateChatWithValue(conversation.name),
       button: true,
       child: InkWell(
         onTap: onTap,
@@ -70,7 +71,7 @@ class PrivateConversationTile extends StatelessWidget {
                             ),
                             alignment: Alignment.center,
                             child: Text(
-                              '${conversation.unread}',
+                              context.l10n.number(conversation.unread),
                               style: TextStyle(color: colors.onPrimary, fontSize: 11, fontWeight: FontWeight.w800),
                             ),
                           ),

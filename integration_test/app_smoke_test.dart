@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -6,7 +10,10 @@ import 'package:templates/app/app_identity.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/templates/private_messenger/widgets/private_conversation_tile.dart';
 import 'package:templates/features/templates/shared/animated_favorite_icon.dart';
+import 'package:templates/l10n/localizations.dart';
 import 'package:templates/main.dart' as app;
+
+const _matrixRevision = String.fromEnvironment('TEMPLATES_TEST_REVISION');
 
 const _templates = <({String cardLabel, String screenText})>[
   (cardLabel: 'Hotel Booking', screenText: 'Explore'),
@@ -22,7 +29,24 @@ const _templates = <({String cardLabel, String screenText})>[
 ];
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  setUp(() => binding.platformDispatcher.localesTestValue = const [Locale('en')]);
+  tearDown(binding.platformDispatcher.clearLocalesTestValue);
+  tearDownAll(() {
+    final results = binding.results.map((name, result) => MapEntry(name, result == 'success'));
+    binding.reportData = {
+      ...?binding.reportData,
+      'templatesTestRevision': _matrixRevision,
+      'templatesTestResults': results,
+    };
+    debugPrint(
+      'TEMPLATES_TEST_RESULTS ${jsonEncode({
+        'completed': results.length,
+        'failed': [for (final result in results.entries)
+          if (!result.value) result.key],
+      })}',
+    );
+  });
 
   for (var batchStart = 0; batchStart < _templates.length; batchStart += 2) {
     final batchEnd = batchStart + 2 < _templates.length ? batchStart + 2 : _templates.length;
@@ -36,10 +60,28 @@ void main() {
 
       expect(find.text(AppIdentity.name), findsOneWidget);
       if (validatesCatalog) {
+        final l10n = AppLocalizations.of(tester.element(find.text(AppIdentity.name)));
         expect(
           _templates.map((template) => template.cardLabel).toSet(),
-          TemplateGalleryItem.items.map((item) => item.title).toSet(),
+          TemplateGalleryItem.items.map((item) => item.title(l10n)).toSet(),
         );
+        if (_matrixRevision.isNotEmpty) {
+          final runtime = {
+            'kind': 'templates-sdk-matrix',
+            'dart': kIsWeb ? 'web' : Platform.version,
+            'harness': _matrixRevision,
+            'os': kIsWeb ? 'web' : Platform.operatingSystemVersion,
+            'viewport': {
+              'width': tester.view.physicalSize.width / tester.view.devicePixelRatio,
+              'height': tester.view.physicalSize.height / tester.view.devicePixelRatio,
+              'topInset': tester.view.padding.top / tester.view.devicePixelRatio,
+              'bottomInset': tester.view.padding.bottom / tester.view.devicePixelRatio,
+              'leftInset': tester.view.padding.left / tester.view.devicePixelRatio,
+              'rightInset': tester.view.padding.right / tester.view.devicePixelRatio,
+            },
+          };
+          debugPrint('TEMPLATES_TEST_RUNTIME ${jsonEncode(runtime)}');
+        }
       }
 
       for (final appearance in <({Brightness brightness, String label})>[
@@ -85,8 +127,10 @@ void main() {
       expect(action.hitTestable(), findsOneWidget, reason: destination);
       final actionBounds = tester.getRect(action);
       final screenWidth = tester.view.physicalSize.width / tester.view.devicePixelRatio;
+      final leftInset = tester.view.padding.left / tester.view.devicePixelRatio;
+      final rightInset = tester.view.padding.right / tester.view.devicePixelRatio;
       actionBottom ??= actionBounds.bottom;
-      expect(actionBounds.center.dx, screenWidth / 2, reason: destination);
+      expect(actionBounds.center.dx, (screenWidth + leftInset - rightInset) / 2, reason: destination);
       expect(actionBounds.bottom, actionBottom, reason: destination);
     }
 
@@ -251,6 +295,36 @@ void main() {
     await tester.tap(find.byTooltip('Send message'));
     await tester.pump();
     expect(find.text('The terrace sounds perfect.'), findsOneWidget);
+  });
+
+  testWidgets('Greek course search matches uppercase letters and accents', (WidgetTester tester) async {
+    tester.platformDispatcher.localesTestValue = const [Locale('el')];
+    try {
+      await app.main();
+      await _finishAnimations(tester);
+      await _openGalleryTemplate(tester, 'Μάθημα σχεδίασης');
+
+      for (final (query, title) in [
+        ('ΔΙΕΠΑΦΉΣ', 'Σχεδίαση διεπαφής χρήστη'),
+        ('ΔΙΕΠΑΦΗΣ', 'Σχεδίαση διεπαφής χρήστη'),
+        ('ΣΧΕΔΊΑΣΗΣ', 'Συστήματα σχεδίασης'),
+        ('ΣΧΕΔΙΑΣΗΣ', 'Συστήματα σχεδίασης'),
+      ]) {
+        final search = find.byType(TextFormField);
+        await tester.ensureVisible(search);
+        await _finishAnimations(tester);
+        await tester.enterText(search, query);
+        await _finishAnimations(tester);
+
+        final course = find.text(title);
+        expect(course, findsOneWidget);
+        await tester.ensureVisible(course);
+        await _finishAnimations(tester);
+        expect(course.hitTestable(), findsOneWidget);
+      }
+    } finally {
+      tester.platformDispatcher.localesTestValue = const [Locale('en')];
+    }
   });
 }
 

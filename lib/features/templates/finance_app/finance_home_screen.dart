@@ -12,6 +12,7 @@ import 'sections/finance_overview_section.dart';
 import 'sections/finance_profile_section.dart';
 import 'widgets/finance_bottom_bar.dart';
 import 'widgets/finance_top_bar.dart';
+import '../../../l10n/localizations.dart';
 
 class FinanceHomeScreen extends StatefulWidget {
   const FinanceHomeScreen({this.appearance = AppAppearance.light, super.key});
@@ -127,13 +128,13 @@ class _FinanceHomeScreenState extends State<FinanceHomeScreen> with SingleTicker
   void _showPreviewMessage(String action) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$action is shown as an interface preview.')));
+      ..showSnackBar(SnackBar(content: Text(context.l10n.valueIsShownAsAnInterfacePreview(action))));
   }
 
   String _titleFor(FinanceSection section) => switch (section) {
-    FinanceSection.overview => 'Overview',
-    FinanceSection.activity => 'Activity',
-    FinanceSection.cards => 'Cards',
-    FinanceSection.profile => 'Profile',
+    FinanceSection.overview => context.l10n.overview,
+    FinanceSection.activity => context.l10n.activity,
+    FinanceSection.cards => context.l10n.cards,
+    FinanceSection.profile => context.l10n.profile,
   };
 }

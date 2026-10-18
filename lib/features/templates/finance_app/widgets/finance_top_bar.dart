@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/sdf_rounded_rectangle_border.dart';
 
 import '../finance_app_theme.dart';
+import '../../../../l10n/localizations.dart';
 
 class FinanceTopBar extends StatelessWidget {
   const FinanceTopBar({required this.title, super.key});
@@ -80,7 +81,7 @@ class _AnimatedTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          'PERSONAL FINANCE',
+          context.l10n.personalFinanceUpper,
           maxLines: 1,
           overflow: TextOverflow.fade,
           softWrap: false,
@@ -131,24 +132,27 @@ class _MarketStatus extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Semantics(
-      label: 'Markets live',
+      label: context.l10n.marketsLive,
       child: ExcludeSemantics(
         child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(color: colors.outlineVariant),
             borderRadius: const BorderRadius.all(Radius.circular(6)),
           ),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 9, vertical: 7),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                DecoratedBox(
+                const DecoratedBox(
                   decoration: BoxDecoration(color: FinanceAppTheme.mint, shape: BoxShape.circle),
                   child: SizedBox.square(dimension: 6),
                 ),
-                SizedBox(width: 6),
-                Text('LIVE', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, letterSpacing: 1)),
+                const SizedBox(width: 6),
+                Text(
+                  context.l10n.live,
+                  style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, letterSpacing: 1),
+                ),
               ],
             ),
           ),
@@ -164,7 +168,7 @@ class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton.outlined(
-      tooltip: 'Back to template gallery',
+      tooltip: context.l10n.backToTemplateGallery,
       onPressed: () => Navigator.of(context).pop(),
       style: IconButton.styleFrom(
         foregroundColor: Theme.of(context).colorScheme.onSurface,

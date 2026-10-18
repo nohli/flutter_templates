@@ -7,6 +7,7 @@ import '../ui_view/mediterranean_diet_view.dart';
 import '../ui_view/title_view.dart';
 import 'meals_list_view.dart';
 import 'water_view.dart';
+import '../../../../l10n/localizations.dart';
 
 class MyDiaryScreen extends StatelessWidget {
   const MyDiaryScreen({required this.animation, super.key});
@@ -22,16 +23,16 @@ class MyDiaryScreen extends StatelessWidget {
     );
 
     return FitnessSectionScaffold(
-      title: 'My Diary',
+      title: context.l10n.myDiary,
       animation: animation,
       sections: <Widget>[
-        TitleView(title: 'Mediterranean diet', actionLabel: 'Details', animation: entrance(0)),
+        TitleView(title: context.l10n.mediterraneanDiet, actionLabel: context.l10n.details, animation: entrance(0)),
         MediterraneanDietView(animation: entrance(1), macroAnimation: animation),
-        TitleView(title: 'Meals today', actionLabel: 'Customize', animation: entrance(2)),
+        TitleView(title: context.l10n.mealsToday, actionLabel: context.l10n.customize, animation: entrance(2)),
         MealsListView(mainScreenAnimation: entrance(3)),
-        TitleView(title: 'Body measurement', actionLabel: 'Today', animation: entrance(4)),
+        TitleView(title: context.l10n.bodyMeasurement, actionLabel: context.l10n.today, animation: entrance(4)),
         BodyMeasurementView(animation: entrance(5)),
-        TitleView(title: 'Water', actionLabel: 'Aqua SmartBottle', animation: entrance(6)),
+        TitleView(title: context.l10n.water, actionLabel: 'Aqua SmartBottle', animation: entrance(6)),
         WaterView(animation: entrance(7)),
         GlassView(animation: entrance(8)),
       ],

@@ -21,6 +21,28 @@ fvm flutter run
 
 The first run needs no environment file, extra build flags, account or hosting setup.
 
+## Languages
+
+The app follows the device or per-app language setting. Its 49 complete locale catalogs cover all 34 iOS interface
+languages, including Apple's named English, French, Spanish, Portuguese, and Chinese regional variants.
+Right-to-left languages use the same examples and navigation. Names, addresses, user-written content, original legal
+notices, and the French answers in the language lesson retain their original meaning.
+
+Translations live in `lib/l10n/app_*.arb`. The app uses Flutter's
+[generated localizations](https://docs.flutter.dev/ui/internationalization), configured in `l10n.yaml`.
+After changing copy, update every catalog and regenerate both Flutter and native resources:
+
+```sh
+fvm flutter gen-l10n
+fvm dart run scripts/generate_native_localizations.dart
+fvm dart run scripts/generate_native_localizations.dart --check
+```
+
+Generated Dart files stay out of Git. Native menu tables and language declarations are checked in.
+If you reuse an example, install `AppLocalizations.localizationsDelegates` and `AppLocalizations.supportedLocales`
+on its `MaterialApp`, as shown in `lib/main.dart`. Keep localized sample identifiers stable when the language changes.
+See [the artwork generation instructions](scripts/README.md) when changing the example screens or their translations.
+
 ## Architecture
 
 - `lib/app/` owns the app shell, appearance, identity, and shared styling.

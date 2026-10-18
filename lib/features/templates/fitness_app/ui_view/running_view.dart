@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/localizations.dart';
 
 class RunningView extends StatelessWidget {
   const RunningView({required this.animation, super.key});
@@ -63,7 +64,7 @@ class RunningView extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.only(left: 100, right: 16, top: 16),
                                           child: Text(
-                                            "You're doing great!",
+                                            context.l10n.youreDoingGreat,
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                               fontWeight: FontWeight.w500,
@@ -79,7 +80,7 @@ class RunningView extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 100, bottom: 12, top: 4, right: 16),
                                     child: Text(
-                                      'Keep it up\nand stick to your plan!',
+                                      context.l10n.keepItUpAndStickToYourPlan,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,

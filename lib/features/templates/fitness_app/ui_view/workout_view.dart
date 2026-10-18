@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../fitness_app_theme.dart';
+import '../../../../l10n/localizations.dart';
 
 class WorkoutView extends StatelessWidget {
   const WorkoutView({required this.animation, super.key});
@@ -16,17 +17,17 @@ class WorkoutView extends StatelessWidget {
       direction: stackFooter ? Axis.vertical : Axis.horizontal,
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: stackFooter ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-      children: const <Widget>[
-        Padding(
+      children: <Widget>[
+        const Padding(
           padding: EdgeInsets.only(left: 4),
           child: Icon(Icons.timer, color: Colors.white, size: 16),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 4.0),
+          padding: const EdgeInsets.only(left: 4.0),
           child: Text(
-            '68 min',
+            context.l10n.sample68Min,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: FitnessAppTheme.fontName,
               fontWeight: FontWeight.w500,
               fontSize: 14,
@@ -93,10 +94,10 @@ class WorkoutView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const Text(
-                        'Next workout',
+                      Text(
+                        context.l10n.nextWorkout,
                         textAlign: TextAlign.left,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: FitnessAppTheme.fontName,
                           fontWeight: FontWeight.normal,
                           fontSize: 14,
@@ -104,12 +105,12 @@ class WorkoutView extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
-                          'Legs Toning and\nGlutes Workout at Home',
+                          context.l10n.legsToningAndGlutesWorkoutAtHome,
                           textAlign: TextAlign.left,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: FitnessAppTheme.fontName,
                             fontWeight: FontWeight.normal,
                             fontSize: 20,

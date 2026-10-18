@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/features/templates/shared/template_motion.dart';
+import 'localized_test_app.dart';
 
 void main() {
   testWidgets('template entrance settles immediately when animations are disabled', (WidgetTester tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      const LocalizedTestApp(
         home: MediaQuery(
           data: MediaQueryData(disableAnimations: true),
           child: TemplateEntrance(child: Text('Ready')),
@@ -19,7 +20,7 @@ void main() {
 
   testWidgets('section transitions retain state and expose only the active section', (WidgetTester tester) async {
     final key = GlobalKey<_MotionHarnessState>();
-    await tester.pumpWidget(MaterialApp(home: _MotionHarness(key: key)));
+    await tester.pumpWidget(LocalizedTestApp(home: _MotionHarness(key: key)));
 
     await tester.tap(find.text('First 0'));
     await tester.pump();
@@ -42,7 +43,7 @@ void main() {
 
   testWidgets('section transitions settle immediately when animations are disabled', (WidgetTester tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      const LocalizedTestApp(
         home: MediaQuery(
           data: MediaQueryData(disableAnimations: true),
           child: TemplateSectionSwitcher(selectedIndex: 0, children: <Widget>[Text('First'), Text('Second')]),

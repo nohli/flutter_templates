@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../banking_app_theme.dart';
 import '../models/banking_payment.dart';
 import 'banking_balance_hero.dart';
+import '../../../../l10n/localizations.dart';
 
 class BankingHomeContent extends StatelessWidget {
   const BankingHomeContent({
@@ -27,13 +28,13 @@ class BankingHomeContent extends StatelessWidget {
         const SizedBox(height: 28),
         _QuickActions(onSend: onSend),
         const SizedBox(height: 30),
-        const _SectionHeader(title: 'Your money', action: 'Exchange rates'),
+        _SectionHeader(title: context.l10n.yourMoney, action: context.l10n.exchangeRates),
         const SizedBox(height: 13),
         const _CurrencyRail(),
         const SizedBox(height: 30),
-        const _SectionHeader(title: 'Latest', action: 'See all'),
+        _SectionHeader(title: context.l10n.latest, action: context.l10n.seeAll),
         const SizedBox(height: 8),
-        for (final payment in BankingPayment.samples) _PaymentTile(payment: payment),
+        for (final payment in BankingPayment.samples(context.l10n)) _PaymentTile(payment: payment),
       ],
     );
   }
@@ -47,23 +48,24 @@ class _BankingHeader extends StatelessWidget {
     return Row(
       children: <Widget>[
         IconButton(
-          tooltip: 'Back to template gallery',
+          tooltip: context.l10n.backToTemplateGallery,
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.arrow_back_rounded),
         ),
         const SizedBox(width: 7),
-        const Text(
-          'Banking',
-          style: TextStyle(
-            fontFamily: BankingAppTheme.displayFontName,
-            fontSize: 31,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -1.5,
+        Expanded(
+          child: Text(
+            context.l10n.banking,
+            style: const TextStyle(
+              fontFamily: BankingAppTheme.displayFontName,
+              fontSize: 31,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -1.5,
+            ),
           ),
         ),
-        const Spacer(),
         IconButton(
-          tooltip: 'Search',
+          tooltip: context.l10n.search,
           onPressed: () {},
           style: IconButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.surface,
@@ -92,10 +94,10 @@ class _QuickActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        _QuickAction(label: 'Add money', icon: Icons.add_rounded, onTap: () {}),
-        _QuickAction(label: 'Send', icon: Icons.north_east_rounded, onTap: onSend),
-        _QuickAction(label: 'Exchange', icon: Icons.swap_horiz_rounded, onTap: () {}),
-        _QuickAction(label: 'Split bill', icon: Icons.call_split_rounded, onTap: () {}),
+        _QuickAction(label: context.l10n.addMoney, icon: Icons.add_rounded, onTap: () {}),
+        _QuickAction(label: context.l10n.send, icon: Icons.north_east_rounded, onTap: onSend),
+        _QuickAction(label: context.l10n.exchange, icon: Icons.swap_horiz_rounded, onTap: () {}),
+        _QuickAction(label: context.l10n.splitBill, icon: Icons.call_split_rounded, onTap: () {}),
       ],
     );
   }
@@ -183,12 +185,29 @@ class _CurrencyRail extends StatelessWidget {
       height: 112,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: const <Widget>[
-          _CurrencyCard(code: 'EUR', amount: '€8,942', change: 'Primary', color: BankingAppTheme.acid),
-          SizedBox(width: 10),
-          _CurrencyCard(code: 'USD', amount: r'$2,180', change: '1 EUR = 1.17 USD', color: BankingAppTheme.ice),
-          SizedBox(width: 10),
-          _CurrencyCard(code: 'GBP', amount: '£640', change: '1 EUR = 0.86 GBP', color: BankingAppTheme.coral),
+        children: <Widget>[
+          _CurrencyCard(
+            code: 'EUR',
+            amount: context.l10n.money(8942, 'EUR', decimalDigits: 0),
+            change: context.l10n.primary,
+            color: BankingAppTheme.acid,
+          ),
+          const SizedBox(width: 10),
+          _CurrencyCard(
+            code: 'USD',
+            amount: context.l10n.money(2180, 'USD', decimalDigits: 0),
+            change: '${context.l10n.number(1)} EUR = ${context.l10n.number(1.17)} USD',
+            changeTextDirection: TextDirection.ltr,
+            color: BankingAppTheme.ice,
+          ),
+          const SizedBox(width: 10),
+          _CurrencyCard(
+            code: 'GBP',
+            amount: context.l10n.money(640, 'GBP', decimalDigits: 0),
+            change: '${context.l10n.number(1)} EUR = ${context.l10n.number(0.86)} GBP',
+            changeTextDirection: TextDirection.ltr,
+            color: BankingAppTheme.coral,
+          ),
         ],
       ),
     );
@@ -196,12 +215,19 @@ class _CurrencyRail extends StatelessWidget {
 }
 
 class _CurrencyCard extends StatelessWidget {
-  const _CurrencyCard({required this.code, required this.amount, required this.change, required this.color});
+  const _CurrencyCard({
+    required this.code,
+    required this.amount,
+    required this.change,
+    required this.color,
+    this.changeTextDirection,
+  });
 
   final String code;
   final String amount;
   final String change;
   final Color color;
+  final TextDirection? changeTextDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -236,6 +262,7 @@ class _CurrencyCard extends StatelessWidget {
           ),
           Text(
             change,
+            textDirection: changeTextDirection,
             style: const TextStyle(color: Color(0xAA1D1B20), fontSize: 10, fontWeight: FontWeight.w600),
           ),
         ],

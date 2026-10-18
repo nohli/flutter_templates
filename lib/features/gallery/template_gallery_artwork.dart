@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/localizations.dart';
 import 'models/template_gallery_item.dart';
 
 class TemplateGalleryArtwork extends StatelessWidget {
@@ -11,7 +12,7 @@ class TemplateGalleryArtwork extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
     final palette = _GalleryArtworkPalette.forDestination(item.destination, dark: dark);
-    final imagePath = item.destination.galleryPreviewPath(dark: dark);
+    final imagePath = item.destination.galleryPreviewPath(context.l10n, dark: dark);
 
     return DecoratedBox(
       decoration: BoxDecoration(

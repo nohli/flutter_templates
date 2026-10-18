@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../dating_app_theme.dart';
+import '../../../../l10n/localizations.dart';
 
 class DatingActionBar extends StatelessWidget {
   const DatingActionBar({required this.onDismiss, required this.onLike, required this.onSpark, this.onUndo, super.key});
@@ -16,14 +17,14 @@ class DatingActionBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         _DatingAction(
-          tooltip: 'Undo last choice',
+          tooltip: context.l10n.undoLastChoice,
           icon: Icons.undo_rounded,
           color: DatingAppTheme.lavender,
           onPressed: onUndo,
         ),
         const SizedBox(width: 12),
         _DatingAction(
-          tooltip: 'Pass on profile',
+          tooltip: context.l10n.passOnProfile,
           icon: Icons.close_rounded,
           color: DatingAppTheme.coral,
           onPressed: onDismiss,
@@ -31,14 +32,14 @@ class DatingActionBar extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         _DatingAction(
-          tooltip: 'Send a spark',
+          tooltip: context.l10n.sendASpark,
           icon: Icons.auto_awesome_rounded,
           color: const Color(0xFFFFC857),
           onPressed: onSpark,
         ),
         const SizedBox(width: 12),
         _DatingAction(
-          tooltip: 'Like profile',
+          tooltip: context.l10n.likeProfile,
           icon: Icons.favorite_rounded,
           color: DatingAppTheme.primary,
           onPressed: onLike,

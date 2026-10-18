@@ -6,6 +6,7 @@ import 'app/app_shell.dart';
 import 'app/app_theme.dart';
 import 'app/font_licenses.dart';
 import 'app/sdf_rounded_rectangle_border.dart';
+import 'l10n/localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,8 @@ class UiTemplatesApp extends StatelessWidget {
       theme: AppTheme.build(Brightness.light),
       darkTheme: AppTheme.build(Brightness.dark),
       themeMode: ThemeMode.system,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const AppShell(),
     );
   }

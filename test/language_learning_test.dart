@@ -6,6 +6,7 @@ import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/language_learning/language_learning_home_screen.dart';
 import 'package:templates/features/templates/language_learning/language_learning_theme.dart';
 import 'package:templates/features/templates/language_learning/language_lesson_screen.dart';
+import 'localized_test_app.dart';
 
 void main() {
   test('language palettes keep readable text and controls', () {
@@ -23,7 +24,7 @@ void main() {
       ..physicalSize = const Size(430, 932);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: LanguageLearningHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: LanguageLearningHomeScreen()));
     await tester.pumpAndSettle();
 
     expect(find.text('Order food with confidence'), findsOneWidget);
@@ -50,7 +51,7 @@ void main() {
       ..physicalSize = const Size(320, 640);
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: LanguageLearningHomeScreen()));
+    await tester.pumpWidget(const LocalizedTestApp(home: LanguageLearningHomeScreen()));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey<String>('language-current-lesson')));
     await tester.pumpAndSettle();
@@ -62,7 +63,7 @@ void main() {
   });
 
   testWidgets('language template follows its requested dark appearance', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(home: LanguageLearningHomeScreen(appearance: AppAppearance.dark)));
+    await tester.pumpWidget(const LocalizedTestApp(home: LanguageLearningHomeScreen(appearance: AppAppearance.dark)));
     await tester.pump();
 
     expect(Theme.of(tester.element(find.text('Order food with confidence'))).brightness, Brightness.dark);

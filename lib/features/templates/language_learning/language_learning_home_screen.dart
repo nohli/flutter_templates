@@ -8,6 +8,7 @@ import '../shared/template_motion.dart';
 import 'language_learning_theme.dart';
 import 'language_lesson_screen.dart';
 import 'widgets/learning_path.dart';
+import '../../../l10n/localizations.dart';
 
 class LanguageLearningHomeScreen extends StatelessWidget {
   const LanguageLearningHomeScreen({this.appearance = AppAppearance.light, super.key});
@@ -91,7 +92,7 @@ class _LearningHeader extends StatelessWidget {
     return Row(
       children: <Widget>[
         IconButton(
-          tooltip: 'Back to template gallery',
+          tooltip: context.l10n.backToTemplateGallery,
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.arrow_back_rounded),
         ),
@@ -104,15 +105,19 @@ class _LearningHeader extends StatelessWidget {
           ),
           child: const Text('FR  🇫🇷', style: TextStyle(fontWeight: FontWeight.w800)),
         ),
-        const Expanded(
+        Expanded(
           child: FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerRight,
             child: Row(
               children: <Widget>[
-                _Score(icon: Icons.local_fire_department_rounded, color: LanguageLearningTheme.coral, value: '12'),
-                SizedBox(width: 14),
-                _Score(icon: Icons.diamond_rounded, color: LanguageLearningTheme.sky, value: '860'),
+                _Score(
+                  icon: Icons.local_fire_department_rounded,
+                  color: LanguageLearningTheme.coral,
+                  value: context.l10n.number(12),
+                ),
+                const SizedBox(width: 14),
+                _Score(icon: Icons.diamond_rounded, color: LanguageLearningTheme.sky, value: context.l10n.number(860)),
               ],
             ),
           ),
@@ -163,7 +168,7 @@ class _UnitBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'SECTION 1 · UNIT 4',
+                  context.l10n.section1Unit4,
                   style: TextStyle(
                     color: colors.onPrimary.withValues(alpha: 0.78),
                     fontSize: 11,
@@ -173,14 +178,14 @@ class _UnitBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 7),
                 Text(
-                  'Order food with confidence',
+                  context.l10n.orderFoodWithConfidence,
                   style: TextStyle(color: colors.onPrimary, fontSize: 23, fontWeight: FontWeight.w800, height: 1.05),
                 ),
               ],
             ),
           ),
           IconButton.filledTonal(
-            tooltip: 'Open unit guide',
+            tooltip: context.l10n.openUnitGuide,
             onPressed: () {},
             icon: const Icon(Icons.menu_book_rounded),
           ),
@@ -203,25 +208,25 @@ class _DailyQuest extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(24)),
         border: Border.all(color: colors.outlineVariant),
       ),
-      child: const Row(
+      child: Row(
         children: <Widget>[
-          CircleAvatar(
+          const CircleAvatar(
             backgroundColor: LanguageLearningTheme.mango,
             foregroundColor: Color(0xFF463400),
             child: Icon(Icons.bolt_rounded),
           ),
-          SizedBox(width: 14),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Daily quest', style: TextStyle(fontWeight: FontWeight.w800)),
-                SizedBox(height: 3),
-                Text('Complete one lesson · 0/1'),
+                Text(context.l10n.dailyQuest, style: const TextStyle(fontWeight: FontWeight.w800)),
+                const SizedBox(height: 3),
+                Text(context.l10n.completeOneLesson01),
               ],
             ),
           ),
-          Icon(Icons.arrow_forward_rounded),
+          const Icon(Icons.arrow_forward_rounded),
         ],
       ),
     );
@@ -242,13 +247,13 @@ class _LearningNavigation extends StatelessWidget {
           color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.all(Radius.circular(24)),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _LearningNavIcon(icon: Icons.route_rounded, label: 'Learn', selected: true),
-            _LearningNavIcon(icon: Icons.fitness_center_rounded, label: 'Practice'),
-            _LearningNavIcon(icon: Icons.shield_rounded, label: 'Leagues'),
-            _LearningNavIcon(icon: Icons.person_rounded, label: 'Profile'),
+            _LearningNavIcon(icon: Icons.route_rounded, label: context.l10n.learn, selected: true),
+            _LearningNavIcon(icon: Icons.fitness_center_rounded, label: context.l10n.practice),
+            _LearningNavIcon(icon: Icons.shield_rounded, label: context.l10n.leagues),
+            _LearningNavIcon(icon: Icons.person_rounded, label: context.l10n.profile),
           ],
         ),
       ),

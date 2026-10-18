@@ -4,8 +4,11 @@ import '../../app/app_identity.dart';
 import '../../app/app_theme.dart';
 import 'external_actions.dart';
 import 'illustrated_support_layout.dart';
+import '../../l10n/localizations.dart';
+import 'support_error.dart';
 
-Uri feedbackEmailUri(String message) => appEmailUri(subject: '${AppIdentity.name} feedback', body: message);
+Uri feedbackEmailUri(String message, AppLocalizations l10n) =>
+    appEmailUri(subject: l10n.feedbackEmailSubject(AppIdentity.name), body: message);
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key, this.launcher = launchExternalUri});
@@ -19,7 +22,7 @@ class FeedbackScreen extends StatefulWidget {
 class _FeedbackScreenState extends State<FeedbackScreen> {
   final _controller = TextEditingController();
   var _isOpeningEmail = false;
-  String? _errorMessage;
+  SupportError? _error;
 
   @override
   void dispose() {
@@ -30,30 +33,28 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Future<void> _sendFeedback() async {
     final message = _controller.text.trim();
     if (message.isEmpty) {
-      setState(() => _errorMessage = 'Enter your feedback before sending.');
+      setState(() => _error = SupportError.feedbackRequired);
       return;
     }
 
     FocusScope.of(context).unfocus();
     setState(() {
       _isOpeningEmail = true;
-      _errorMessage = null;
+      _error = null;
     });
     var launched = false;
     try {
-      launched = await widget.launcher(feedbackEmailUri(message));
+      launched = await widget.launcher(feedbackEmailUri(message, context.l10n));
     } catch (_) {
       launched = false;
     }
     if (!mounted) return;
     setState(() {
       _isOpeningEmail = false;
-      _errorMessage = launched ? null : 'No email app is available. Contact ${AppIdentity.supportEmail}.';
+      _error = launched ? null : SupportError.emailUnavailable;
     });
     if (launched) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Your email app is ready. Send the message there when you are satisfied.')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.l10n.emailReady)));
     }
   }
 
@@ -75,20 +76,16 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             illustrationPath: 'assets/images/feedbackImage.png',
             content: <Widget>[
               const SizedBox(height: 8),
-              const Text('Your Feedback', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(context.l10n.feedbackTitle, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
-              const Text(
-                'Tell us what you liked or what we could improve.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
-              ),
+              Text(context.l10n.feedbackDescription, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16)),
               _buildComposer(),
-              if (_errorMessage case final errorMessage?) ...<Widget>[
+              if (_error case final error?) ...<Widget>[
                 const SizedBox(height: 8),
                 Semantics(
                   liveRegion: true,
                   child: Text(
-                    errorMessage,
+                    error.message(context.l10n),
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
@@ -105,7 +102,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
               ),
               onPressed: _isOpeningEmail ? null : _sendFeedback,
-              child: Text(_isOpeningEmail ? 'Opening…' : 'Send'),
+              child: Text(_isOpeningEmail ? context.l10n.opening : context.l10n.send),
             ),
           ),
         ),
@@ -146,8 +143,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 controller: _controller,
                 maxLines: null,
                 onChanged: (_) {
-                  if (_errorMessage != null) {
-                    setState(() => _errorMessage = null);
+                  if (_error != null) {
+                    setState(() => _error = null);
                   }
                 },
                 keyboardType: TextInputType.multiline,
@@ -156,7 +153,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 cursorColor: colors.primary,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: 'Enter your feedback...',
+                  hintText: context.l10n.feedbackHint,
                   hintStyle: TextStyle(color: hint),
                 ),
               ),

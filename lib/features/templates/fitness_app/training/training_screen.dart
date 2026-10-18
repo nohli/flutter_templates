@@ -5,6 +5,7 @@ import '../ui_view/fitness_section_scaffold.dart';
 import '../ui_view/running_view.dart';
 import '../ui_view/title_view.dart';
 import '../ui_view/workout_view.dart';
+import '../../../../l10n/localizations.dart';
 
 class TrainingScreen extends StatelessWidget {
   const TrainingScreen({required this.animation, super.key});
@@ -20,13 +21,13 @@ class TrainingScreen extends StatelessWidget {
     );
 
     return FitnessSectionScaffold(
-      title: 'Training',
+      title: context.l10n.training,
       animation: animation,
       sections: <Widget>[
-        TitleView(title: 'Your program', actionLabel: 'Details', animation: entrance(0)),
+        TitleView(title: context.l10n.yourProgram, actionLabel: context.l10n.details, animation: entrance(0)),
         WorkoutView(animation: entrance(1)),
         RunningView(animation: entrance(2)),
-        TitleView(title: 'Area of focus', actionLabel: 'More', animation: entrance(3)),
+        TitleView(title: context.l10n.areaOfFocus, actionLabel: context.l10n.more, animation: entrance(3)),
         AreaListView(mainScreenAnimation: entrance(4)),
       ],
     );

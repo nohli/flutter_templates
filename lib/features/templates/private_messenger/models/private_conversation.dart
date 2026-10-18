@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/localizations.dart';
 
 class PrivateConversation {
   const PrivateConversation({
@@ -21,44 +22,44 @@ class PrivateConversation {
   final bool sent;
   final bool group;
 
-  static const samples = <PrivateConversation>[
+  static List<PrivateConversation> samples(AppLocalizations l10n) => <PrivateConversation>[
     PrivateConversation(
       name: 'Jules',
-      preview: 'The garden table is booked 🌿',
-      time: '18:36',
+      preview: l10n.theGardenTableIsBooked,
+      time: l10n.clock(18, 36),
       initials: 'JU',
-      colors: <Color>[Color(0xFFFFA070), Color(0xFFFFCE8A)],
+      colors: <Color>[const Color(0xFFFFA070), const Color(0xFFFFCE8A)],
       unread: 2,
     ),
     PrivateConversation(
-      name: 'Sunday hikers',
-      preview: 'Nora: I’ll bring enough water',
-      time: '17:50',
+      name: l10n.sundayHikers,
+      preview: l10n.noraIllBringEnoughWater,
+      time: l10n.clock(17, 50),
       initials: 'SH',
-      colors: <Color>[Color(0xFF68C99E), Color(0xFF279776)],
+      colors: <Color>[const Color(0xFF68C99E), const Color(0xFF279776)],
       group: true,
     ),
     PrivateConversation(
-      name: 'Dad',
-      preview: 'That photo made my day',
-      time: '16:12',
+      name: l10n.dad,
+      preview: l10n.thatPhotoMadeMyDay,
+      time: l10n.clock(16, 12),
       initials: 'DA',
-      colors: <Color>[Color(0xFF7797F7), Color(0xFFB9C7FF)],
+      colors: <Color>[const Color(0xFF7797F7), const Color(0xFFB9C7FF)],
       sent: true,
     ),
     PrivateConversation(
       name: 'Lea',
-      preview: 'Voice message · 0:09',
-      time: 'Yesterday',
+      preview: l10n.voiceMessage009,
+      time: l10n.yesterday,
       initials: 'LE',
-      colors: <Color>[Color(0xFFB78AF3), Color(0xFFE4C1FF)],
+      colors: <Color>[const Color(0xFFB78AF3), const Color(0xFFE4C1FF)],
     ),
     PrivateConversation(
-      name: 'Dinner club',
-      preview: 'You: Friday works for me',
-      time: 'Yesterday',
+      name: l10n.dinnerClub,
+      preview: l10n.youFridayWorksForMe,
+      time: l10n.yesterday,
       initials: 'DC',
-      colors: <Color>[Color(0xFFFF7B8F), Color(0xFFFFB0B9)],
+      colors: <Color>[const Color(0xFFFF7B8F), const Color(0xFFFFB0B9)],
       sent: true,
       group: true,
     ),

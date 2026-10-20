@@ -29,41 +29,69 @@ workflows:
       - &check_app_settings
         name: Check Release Contact Settings
         script: |
-          set -eu
-          : "${SUPPORT_EMAIL:?Add SUPPORT_EMAIL to the release_config group}"
-          : "${PRIVACY_POLICY_URL:?Add PRIVACY_POLICY_URL to the release_config group}"
-          : "${SUPPORT_URL:?Add SUPPORT_URL to the release_config group}"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            : "${SUPPORT_EMAIL:?Add SUPPORT_EMAIL to the release_config group}"
+            : "${PRIVACY_POLICY_URL:?Add PRIVACY_POLICY_URL to the release_config group}"
+            : "${SUPPORT_URL:?Add SUPPORT_URL to the release_config group}"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/check-release-contact-settings.log"
       - &get_packages
         name: Get Packages
         script: |
-          set -eu
-          flutter pub get
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            flutter pub get
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/get-packages.log"
       - &apply_signing
         name: Apply Signing Profiles
-        script: xcode-project use-profiles --project ios/Runner.xcodeproj
+        script: |
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            xcode-project use-profiles --project ios/Runner.xcodeproj
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/apply-signing-profiles.log"
       - name: Build IPA
         script: |
-          set -eu
-          shallow_repository="$(git rev-parse --is-shallow-repository)"
-          [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
-          build_number="$(git rev-list --count HEAD)"
-          flutter build ipa --release \
-            --build-number="$build_number" \
-            --export-options-plist=/Users/builder/export_options.plist \
-            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
-            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
-            --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            shallow_repository="$(git rev-parse --is-shallow-repository)"
+            [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
+            build_number="$(git rev-list --count HEAD)"
+            flutter build ipa --release \
+              --build-number="$build_number" \
+              --export-options-plist=/Users/builder/export_options.plist \
+              --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+              --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+              --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/build-ipa.log"
       - name: Verify IPA
         script: |
-          set -eu
-          : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
-          set -- "$CM_BUILD_DIR/build/ios/ipa/"*.ipa
-          for artifact in "$@"; do
-            [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty IPA artifact: $artifact" >&2; exit 1; }
-          done
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
+            set -- "$CM_BUILD_DIR/build/ios/ipa/"*.ipa
+            for artifact in "$@"; do
+              [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty IPA artifact: $artifact" >&2; exit 1; }
+            done
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/verify-ipa.log"
     artifacts:
       - build/ios/ipa/*.ipa
       - build/ios/archive/*.xcarchive/dSYMs/**/*.dSYM
+      - $CM_BUILD_DIR/build/logs/*.log
+      - /tmp/xcodebuild_logs/*.log
     publishing:
       scripts:
         - name: Verify Collected IPA
@@ -104,29 +132,45 @@ workflows:
       - *check_app_settings
       - name: Get Packages
         script: |
-          set -eu
-          flutter pub get
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            flutter pub get
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/get-packages.log"
       - name: Build App Bundle
         script: |
-          set -eu
-          shallow_repository="$(git rev-parse --is-shallow-repository)"
-          [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
-          build_number="$(git rev-list --count HEAD)"
-          flutter build appbundle --release --build-number="$build_number" \
-            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
-            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
-            --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            shallow_repository="$(git rev-parse --is-shallow-repository)"
+            [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
+            build_number="$(git rev-list --count HEAD)"
+            flutter build appbundle --release --build-number="$build_number" \
+              --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+              --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+              --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/build-app-bundle.log"
       - name: Verify App Bundle
         script: |
-          set -eu
-          : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
-          set -- "$CM_BUILD_DIR/build/app/outputs/bundle/release/"*.aab
-          for artifact in "$@"; do
-            [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty App Bundle artifact: $artifact" >&2; exit 1; }
-          done
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
+            set -- "$CM_BUILD_DIR/build/app/outputs/bundle/release/"*.aab
+            for artifact in "$@"; do
+              [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty App Bundle artifact: $artifact" >&2; exit 1; }
+            done
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/verify-app-bundle.log"
     artifacts:
       - build/app/outputs/bundle/release/*.aab
       - build/app/outputs/mapping/release/mapping.txt
+      - $CM_BUILD_DIR/build/logs/*.log
     publishing:
       scripts:
         - name: Verify Collected App Bundle
@@ -159,23 +203,39 @@ workflows:
       - *check_app_settings
       - name: Get Packages
         script: |
-          set -eu
-          flutter pub get
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            flutter pub get
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/get-packages.log"
       - name: Build Web
         script: |
-          flutter build web --release \
-            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
-            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
-            --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            flutter build web --release \
+              --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+              --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+              --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/build-web.log"
       - name: Publish Web
         script: |
-          set -eu
-          : "${CLOUDFLARE_ACCOUNT_ID:?Add CLOUDFLARE_ACCOUNT_ID to the cloudflare_credentials group}"
-          : "${CLOUDFLARE_API_TOKEN:?Add CLOUDFLARE_API_TOKEN to the cloudflare_credentials group}"
-          : "${CLOUDFLARE_PAGES_PROJECT:?Add CLOUDFLARE_PAGES_PROJECT to the cloudflare_credentials group}"
-          npx --yes wrangler@4.133.0 pages deploy build/web --project-name="$CLOUDFLARE_PAGES_PROJECT"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            : "${CLOUDFLARE_ACCOUNT_ID:?Add CLOUDFLARE_ACCOUNT_ID to the cloudflare_credentials group}"
+            : "${CLOUDFLARE_API_TOKEN:?Add CLOUDFLARE_API_TOKEN to the cloudflare_credentials group}"
+            : "${CLOUDFLARE_PAGES_PROJECT:?Add CLOUDFLARE_PAGES_PROJECT to the cloudflare_credentials group}"
+            npx --yes wrangler@4.133.0 pages deploy build/web --project-name="$CLOUDFLARE_PAGES_PROJECT"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/publish-web.log"
     artifacts:
       - build/web/**
+      - $CM_BUILD_DIR/build/logs/*.log
     publishing:
       scripts:
         - name: Verify Collected Web
@@ -212,44 +272,67 @@ workflows:
       - *check_app_settings
       - &prepare_shorebird
         name: Prepare Shorebird Configuration
-        script: ruby tool/prepare_shorebird.rb
+        script: |
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            ruby tool/prepare_shorebird.rb
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/prepare-shorebird-configuration.log"
       - &install_shorebird
         name: Install Shorebird
         script: |
-          set -eu
-          : "${SHOREBIRD_TOKEN:?Add SHOREBIRD_TOKEN to the shorebird group for this application}"
-          shorebird_root="$HOME/.shorebird"
-          if [ ! -d "$shorebird_root" ]; then
-            git clone -b stable https://github.com/shorebirdtech/shorebird.git "$shorebird_root"
-          fi
-          "$shorebird_root/bin/shorebird" --version
-          echo "PATH=$shorebird_root/bin:$PATH" >> "$CM_ENV"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            : "${SHOREBIRD_TOKEN:?Add SHOREBIRD_TOKEN to the shorebird group for this application}"
+            shorebird_root="$HOME/.shorebird"
+            if [ ! -d "$shorebird_root" ]; then
+              git clone -b stable https://github.com/shorebirdtech/shorebird.git "$shorebird_root"
+            fi
+            "$shorebird_root/bin/shorebird" --version
+            echo "PATH=$shorebird_root/bin:$PATH" >> "$CM_ENV"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/install-shorebird.log"
       - *get_packages
       - *apply_signing
       - name: Build IPA
         script: |
-          set -eu
-          shallow_repository="$(git rev-parse --is-shallow-repository)"
-          [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
-          build_number="$(git rev-list --count HEAD)"
-          shorebird release ios --flutter-version=latest \
-            --build-number="$build_number" \
-            --export-options-plist=/Users/builder/export_options.plist \
-            -- \
-            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
-            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
-            --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            shallow_repository="$(git rev-parse --is-shallow-repository)"
+            [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
+            build_number="$(git rev-list --count HEAD)"
+            shorebird release ios --flutter-version=latest \
+              --build-number="$build_number" \
+              --export-options-plist=/Users/builder/export_options.plist \
+              -- \
+              --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+              --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+              --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/build-ipa.log"
       - name: Verify IPA
         script: |
-          set -eu
-          : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
-          set -- "$CM_BUILD_DIR/build/ios/ipa/"*.ipa
-          for artifact in "$@"; do
-            [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty IPA artifact: $artifact" >&2; exit 1; }
-          done
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
+            set -- "$CM_BUILD_DIR/build/ios/ipa/"*.ipa
+            for artifact in "$@"; do
+              [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty IPA artifact: $artifact" >&2; exit 1; }
+            done
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/verify-ipa.log"
     artifacts:
       - build/ios/ipa/*.ipa
       - build/ios/archive/*.xcarchive/dSYMs/**/*.dSYM
+      - $CM_BUILD_DIR/build/logs/*.log
+      - /tmp/xcodebuild_logs/*.log
     publishing:
       scripts:
         - name: Verify Collected IPA
@@ -288,29 +371,45 @@ workflows:
       - *install_shorebird
       - name: Get Packages
         script: |
-          set -eu
-          flutter pub get
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            flutter pub get
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/get-packages.log"
       - name: Build App Bundle
         script: |
-          set -eu
-          shallow_repository="$(git rev-parse --is-shallow-repository)"
-          [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
-          build_number="$(git rev-list --count HEAD)"
-          shorebird release android --flutter-version=latest --build-number="$build_number" -- \
-            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
-            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
-            --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            shallow_repository="$(git rev-parse --is-shallow-repository)"
+            [ "$shallow_repository" = false ] || { echo "Codemagic checkout must contain the full Git history" >&2; exit 1; }
+            build_number="$(git rev-list --count HEAD)"
+            shorebird release android --flutter-version=latest --build-number="$build_number" -- \
+              --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+              --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+              --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/build-app-bundle.log"
       - name: Verify App Bundle
         script: |
-          set -eu
-          : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
-          set -- "$CM_BUILD_DIR/build/app/outputs/bundle/release/"*.aab
-          for artifact in "$@"; do
-            [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty App Bundle artifact: $artifact" >&2; exit 1; }
-          done
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            : "${CM_BUILD_DIR:?Codemagic must provide the repository clone directory}"
+            set -- "$CM_BUILD_DIR/build/app/outputs/bundle/release/"*.aab
+            for artifact in "$@"; do
+              [ -f "$artifact" ] && [ -s "$artifact" ] || { echo "Missing or empty App Bundle artifact: $artifact" >&2; exit 1; }
+            done
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/verify-app-bundle.log"
     artifacts:
       - build/app/outputs/bundle/release/*.aab
       - build/app/outputs/mapping/release/mapping.txt
+      - $CM_BUILD_DIR/build/logs/*.log
     publishing:
       scripts:
         - name: Verify Collected App Bundle
@@ -357,15 +456,20 @@ workflows:
       - &validate_patch
         name: Validate Patch Inputs
         script: |
-          set -eu
-          export SHOREBIRD_RELEASE_VERSION="${{ inputs.release_version }}"
-          ruby -e 'abort "Enter an exact app version and build, such as 1.0.0+123" unless ENV.fetch("SHOREBIRD_RELEASE_VERSION", "").match?(/\A[0-9]+(?:\.[0-9]+){1,2}\+[0-9]+\z/)'
-          case "${{ inputs.dry_run }}" in
-            true|false) ;;
-            *) echo "dry_run must be true or false" >&2; exit 1 ;;
-          esac
-          : "${CM_ENV:?Codemagic must provide its environment file}"
-          printf 'SHOREBIRD_RELEASE_VERSION=%s\n' "$SHOREBIRD_RELEASE_VERSION" >> "$CM_ENV"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            export SHOREBIRD_RELEASE_VERSION="${{ inputs.release_version }}"
+            ruby -e 'abort "Enter an exact app version and build, such as 1.0.0+123" unless ENV.fetch("SHOREBIRD_RELEASE_VERSION", "").match?(/\A[0-9]+(?:\.[0-9]+){1,2}\+[0-9]+\z/)'
+            case "${{ inputs.dry_run }}" in
+              true|false) ;;
+              *) echo "dry_run must be true or false" >&2; exit 1 ;;
+            esac
+            : "${CM_ENV:?Codemagic must provide its environment file}"
+            printf 'SHOREBIRD_RELEASE_VERSION=%s\n' "$SHOREBIRD_RELEASE_VERSION" >> "$CM_ENV"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/validate-patch-inputs.log"
       - *check_app_settings
       - *prepare_shorebird
       - *install_shorebird
@@ -373,18 +477,25 @@ workflows:
       - *apply_signing
       - name: Publish iOS Patch
         script: |
-          set -eu
-          set -- ios "--release-version=$SHOREBIRD_RELEASE_VERSION" --track=staging --export-options-plist=/Users/builder/export_options.plist
-          if [ "${{ inputs.dry_run }}" = true ]; then
-            set -- "$@" --dry-run
-          fi
-          shorebird patch "$@" -- \
-            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
-            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
-            --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            set -- ios "--release-version=$SHOREBIRD_RELEASE_VERSION" --track=staging --export-options-plist=/Users/builder/export_options.plist
+            if [ "${{ inputs.dry_run }}" = true ]; then
+              set -- "$@" --dry-run
+            fi
+            shorebird patch "$@" -- \
+              --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+              --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+              --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/publish-ios-patch.log"
     artifacts:
       - build/ios/ipa/*.ipa
       - build/ios/archive/*.xcarchive/dSYMs/**/*.dSYM
+      - $CM_BUILD_DIR/build/logs/*.log
+      - /tmp/xcodebuild_logs/*.log
     publishing:
       slack: *failure_notifications
 
@@ -413,17 +524,23 @@ workflows:
       - *get_packages
       - name: Publish Android Patch
         script: |
-          set -eu
-          set -- android "--release-version=$SHOREBIRD_RELEASE_VERSION" --track=staging
-          if [ "${{ inputs.dry_run }}" = true ]; then
-            set -- "$@" --dry-run
-          fi
-          shorebird patch "$@" -- \
-            --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
-            --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
-            --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          #!/usr/bin/env bash
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/build/logs"
+          (
+            set -eu
+            set -- android "--release-version=$SHOREBIRD_RELEASE_VERSION" --track=staging
+            if [ "${{ inputs.dry_run }}" = true ]; then
+              set -- "$@" --dry-run
+            fi
+            shorebird patch "$@" -- \
+              --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
+              --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
+              --dart-define="SUPPORT_URL=$SUPPORT_URL"
+          ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/publish-android-patch.log"
     artifacts:
       - build/app/outputs/bundle/release/*.aab
       - build/app/outputs/mapping/release/mapping.txt
+      - $CM_BUILD_DIR/build/logs/*.log
     publishing:
       slack: *failure_notifications

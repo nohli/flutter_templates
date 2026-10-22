@@ -203,7 +203,7 @@ void main() {
     await tester.tap(find.text('Developer portfolio'));
     await tester.pumpAndSettle();
 
-    expect(launchedUris, <Uri>[AppIdentity.sourceUri, AppIdentity.privacyPolicyUri, developerPortfolioUri]);
+    expect(launchedUris, <Uri>[AppIdentity.sourceUri, AppIdentity.privacyPolicyUri, AppIdentity.supportUri]);
     expect(find.text(english.trademarkDisclaimer), findsOneWidget);
     expect(find.text('The link could not be opened.'), findsNothing);
     expect(tester.takeException(), isNull);

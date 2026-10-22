@@ -39,3 +39,9 @@ temporary storage, then remove the completed temporary review folder and disposa
 After adding or removing source messages, run `fvm dart run scripts/generate_localization_test.dart` to update the
 generated runtime getter inventory. `fvm flutter test test/localization_test.dart` loads every catalog and its gallery
 artwork through Flutter's app bundle and checks locale selection, formatting and translated interactions.
+
+## Codemagic workflow timeout
+
+Every workflow uses Codemagic's native `max_build_duration: 30` for a 30-minute limit. Scripts run directly, and signing and built-in publishers keep their existing configuration.
+
+Codemagic's YAML schema has no per-step or built-in store-upload timeout setting. The workflow limit does not establish a separate upload cutoff.

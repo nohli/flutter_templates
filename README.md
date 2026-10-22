@@ -80,6 +80,11 @@ Codemagic passes the contact values from `release_config` directly to Flutter an
 You may replace its environment reference with that exact saved name; keeping the variable lets forks choose their own.
 See [Codemagic's Apple integration configuration](https://docs.codemagic.io/yaml-quick-start/building-a-native-ios-app/).
 Only iOS releases trigger automatically on `main`; Android, web, and Shorebird workflows are manual.
+
+Every workflow uses Codemagic's native `max_build_duration: 30` for a 30-minute limit.
+Codemagic has no per-step or built-in store-upload timeout setting; the workflow limit does not
+establish a separate upload cutoff. Scripts run directly without a custom timeout runner.
+
 Publishing requires the selected workflow's account configuration; for a web build without publishing, run
 `fvm flutter build web --release`. Optional [Terraform hosting configuration](infrastructure/cloudflare/README.md)
 provisions your own Pages project and custom domain.

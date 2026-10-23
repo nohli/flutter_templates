@@ -220,6 +220,7 @@ workflows:
               --dart-define="SUPPORT_EMAIL=$SUPPORT_EMAIL" \
               --dart-define="PRIVACY_POLICY_URL=$PRIVACY_POLICY_URL" \
               --dart-define="SUPPORT_URL=$SUPPORT_URL"
+            [ -s "$CM_BUILD_DIR/build/web/index.html" ] || { echo "Missing or empty web entry point." >&2; exit 1; }
           ) 2>&1 | tee "$CM_BUILD_DIR/build/logs/build-web.log"
       - name: Publish Web
         script: |
@@ -237,11 +238,6 @@ workflows:
       - build/web/**
       - $CM_BUILD_DIR/build/logs/*.log
     publishing:
-      scripts:
-        - name: Verify Collected Web
-          script: |
-            set -eu
-            ruby -rjson -e 'artifacts = JSON.parse(ENV.fetch("CM_ARTIFACT_LINKS", "[]")); abort "Codemagic collected no web artifacts" if artifacts.empty?'
       slack:
         channel: $SLACK_CHANNEL
         notify_on_build_start: false
@@ -438,7 +434,7 @@ workflows:
       cancel_previous_builds: true
     inputs: &patch_inputs
       release_version:
-        description: Exact installed build to fix, such as 1.0.0+1.2.3
+        description: Exact installed build to fix, such as 1.0.0+123
         type: string
         default: ''
       dry_run:

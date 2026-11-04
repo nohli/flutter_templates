@@ -9,18 +9,6 @@ workflows:
     max_build_duration: 30
     triggering:
       cancel_previous_builds: true
-      events:
-        - push
-      branch_patterns:
-        - pattern: main
-          include: true
-          source: true
-    when:
-      condition: >
-        env.CM_TRIGGER_SOURCE != "webhook" or not (
-          event.head_commit.author.name == "dependabot[bot]"
-          or "dependabot/" in event.head_commit.message
-        )
     environment:
       groups:
         - release_config

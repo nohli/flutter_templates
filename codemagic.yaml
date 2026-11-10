@@ -18,7 +18,7 @@ workflows:
       vars:
         CM_CLONE_UNSHALLOW: 'true'
       flutter: stable
-      xcode: '27.1'
+      xcode: '27.2'
     scripts:
       - &check_app_settings
         name: Check Release Contact Settings
@@ -113,7 +113,7 @@ workflows:
     triggering:
       cancel_previous_builds: true
     environment:
-      xcode: '27.1'
+      xcode: '27.2'
       groups:
         - google_play_credentials
         - release_config
@@ -188,7 +188,7 @@ workflows:
     triggering:
       cancel_previous_builds: true
     environment:
-      xcode: '27.1'
+      xcode: '27.2'
       groups:
         - cloudflare_credentials
         - release_config
@@ -257,7 +257,7 @@ workflows:
       vars:
         CM_CLONE_UNSHALLOW: 'true'
       flutter: stable
-      xcode: '27.1'
+      xcode: '27.2'
     scripts:
       - *check_app_settings
       - &prepare_shorebird
@@ -345,7 +345,7 @@ workflows:
     triggering:
       cancel_previous_builds: true
     environment:
-      xcode: '27.1'
+      xcode: '27.2'
       groups:
         - google_play_credentials
         - shorebird
@@ -441,7 +441,7 @@ workflows:
         - release_config
       ios_signing: *ios_signing
       flutter: stable
-      xcode: '27.1'
+      xcode: '27.2'
     scripts:
       - &validate_patch
         name: Validate Patch Inputs
@@ -499,7 +499,7 @@ workflows:
       cancel_previous_builds: true
     inputs: *patch_inputs
     environment:
-      xcode: '27.1'
+      xcode: '27.2'
       groups:
         - shorebird
         - release_config

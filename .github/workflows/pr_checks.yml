@@ -1,0 +1,33 @@
+name: PR Checks
+'on':
+  pull_request:
+    branches:
+    - main
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: "${{ github.workflow }}-${{ github.event.pull_request.number || github.ref
+    }}"
+  cancel-in-progress: true
+jobs:
+  validate:
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+    - name: Install Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: 3.50.0
+        cache: true
+    - name: Resolve Dependencies
+      run: flutter pub get
+    - name: Check Formatting
+      run: dart format --output=none --set-exit-if-changed lib test
+    - name: Analyze Dart
+      run: flutter analyze --no-pub --fatal-infos
+    - name: Run Host Tests
+      run: flutter test --no-pub test
+    name: PR validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10

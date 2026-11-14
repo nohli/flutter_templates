@@ -1,0 +1,79 @@
+name: Dependabot Approval
+'on':
+  pull_request:
+    branches:
+    - main
+  pull_request_review:
+    types:
+    - submitted
+    - edited
+    - dismissed
+permissions:
+  contents: read
+  pull-requests: read
+concurrency:
+  group: dependabot-approval-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  approval:
+    name: Dependabot approval
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-slim
+    timeout-minutes: 5
+    steps:
+    - name: Verify Current Approval
+      env:
+        GH_TOKEN: "${{ github.token }}"
+      run: |
+        python3 - <<'PY'
+        import json
+        import os
+        import subprocess
+
+        def api(path, paginate=False):
+            command = ["gh", "api", path]
+            if paginate:
+                command += ["--paginate", "--slurp"]
+            return json.loads(subprocess.check_output(command, text=True))
+
+        def approved(head, reviews, permission):
+            latest = {}
+            for review in sorted(reviews, key=lambda value: value["id"]):
+                user = review.get("user") or {}
+                if user.get("type") != "User" or review["state"] == "COMMENTED":
+                    continue
+                latest[user["login"]] = review
+            approvals = []
+            for login, review in latest.items():
+                if review["state"] not in ("APPROVED", "CHANGES_REQUESTED"):
+                    continue
+                if permission(login) not in ("admin", "maintain", "write"):
+                    continue
+                if review["state"] == "CHANGES_REQUESTED":
+                    return False
+                if review["commit_id"] == head:
+                    approvals.append(login)
+            return bool(approvals)
+
+        def main():
+            with open(os.environ["GITHUB_EVENT_PATH"], encoding="utf-8") as source:
+                event = json.load(source)
+            event_pr = event["pull_request"]
+            repository = os.environ["GITHUB_REPOSITORY"]
+            prefix = f"repos/{repository}"
+            pr = api(f"{prefix}/pulls/{int(event_pr['number'])}")
+            if pr["head"]["sha"] != event_pr["head"]["sha"]:
+                raise SystemExit("PR head changed; the newest run must decide approval.")
+            if pr["user"]["login"] != "dependabot[bot]":
+                raise SystemExit("Unexpected PR author; refusing the Dependabot check.")
+            pages = api(f"{prefix}/pulls/{int(pr['number'])}/reviews?per_page=100", True)
+            reviews = [review for page in pages for review in page]
+            def permission(login):
+                return api(f"{prefix}/collaborators/{login}/permission")["permission"]
+            if not approved(pr["head"]["sha"], reviews, permission):
+                raise SystemExit("Dependabot needs a current-head approval from a writer, with no outstanding changes requested.")
+            print("Verified current-head Dependabot approval.")
+
+        if __name__ == "__main__":
+            main()
+        PY

@@ -1,0 +1,48 @@
+name: Dependabot Approval
+
+on:
+  pull_request:
+    branches: [main]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: dependabot-approval-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  approval:
+    name: Dependabot approval
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check Dependabot approval
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          current_head=$(gh api "repos/$REPOSITORY/pulls/$PR_NUMBER" --jq .head.sha)
+          [ "$current_head" = "$HEAD_SHA" ]
+          reviews=$(gh api --paginate --slurp "repos/$REPOSITORY/pulls/$PR_NUMBER/reviews?per_page=100" --jq 'add | map(select(.user.type == "User" and .state != "COMMENTED")) | sort_by(.id) | group_by(.user.login) | map(last) | .[] | select(.state == "APPROVED" or .state == "CHANGES_REQUESTED") | [.user.login, .state, .commit_id] | @tsv')
+          has_approval=false
+          while IFS=$'\t' read -r reviewer decision commit; do
+            if [ -z "$reviewer" ]; then continue; fi
+            permission=$(gh api "repos/$REPOSITORY/collaborators/$reviewer/permission" --jq .permission)
+            case "$permission" in admin|maintain|write) ;; *) continue ;; esac
+            if [ "$decision" = CHANGES_REQUESTED ]; then
+              echo "Dependabot still has requested changes."
+              exit 1
+            fi
+            if [ "$commit" = "$HEAD_SHA" ]; then has_approval=true; fi
+          done <<< "$reviews"
+          if [ "$has_approval" != true ]; then
+            echo "Dependabot needs approval from a repository writer for this commit."
+            exit 1
+          fi

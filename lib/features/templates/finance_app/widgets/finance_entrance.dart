@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class FinanceEntrance extends StatelessWidget {
   const FinanceEntrance({required this.animation, required this.index, required this.child, super.key});

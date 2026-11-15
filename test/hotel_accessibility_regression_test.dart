@@ -1,6 +1,6 @@
 import 'dart:ui' show SemanticsAction, Tristate;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:templates/app/app_appearance.dart';
@@ -11,6 +11,7 @@ import 'package:templates/features/templates/hotel_booking/hotel_app_theme.dart'
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_list_view.dart';
 import 'package:templates/features/templates/hotel_booking/model/hotel_list_data.dart';
+
 import 'localized_test_app.dart';
 
 void main() {
@@ -469,9 +470,8 @@ Future<void> _pumpHotelWidget(
   addTearDown(tester.view.resetDevicePixelRatio);
   addTearDown(tester.view.resetPhysicalSize);
 
-  final mediaQuery = MediaQueryData.fromView(
-    tester.view,
-  ).copyWith(disableAnimations: true, textScaler: TextScaler.linear(textScale));
+  final mediaQuery = MediaQueryData.fromView(tester.view)
+      .copyWith(disableAnimations: true, textScaler: TextScaler.linear(textScale));
 
   await tester.pumpWidget(
     LocalizedTestApp(

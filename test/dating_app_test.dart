@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
@@ -11,6 +11,7 @@ import 'package:templates/features/templates/dating_app/models/dating_conversati
 import 'package:templates/features/templates/dating_app/models/dating_profile.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_action_bar.dart';
 import 'package:templates/features/templates/dating_app/widgets/dating_conversation_tile.dart';
+
 import 'localized_test_app.dart';
 
 void main() {
@@ -248,9 +249,8 @@ Future<void> _pumpDating(
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
 
-  final mediaQuery = MediaQueryData.fromView(
-    tester.view,
-  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
+  final mediaQuery = MediaQueryData.fromView(tester.view)
+      .copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
   await tester.pumpWidget(
     LocalizedTestApp(
       home: MediaQuery(

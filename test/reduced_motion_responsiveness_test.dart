@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
@@ -13,6 +13,7 @@ import 'package:templates/features/templates/fitness_app/ui_view/wave_view.dart'
 import 'package:templates/features/gallery/home_screen.dart';
 import 'package:templates/features/templates/hotel_booking/calendar_popup_view.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
+
 import 'localized_test_app.dart';
 
 void main() {
@@ -231,9 +232,8 @@ Future<void> _pumpScreen(
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
-  final mediaQuery = MediaQueryData.fromView(
-    tester.view,
-  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
+  final mediaQuery = MediaQueryData.fromView(tester.view)
+      .copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
 
   await tester.pumpWidget(
     LocalizedTestApp(

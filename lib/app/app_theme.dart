@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 abstract final class AppTheme {
   static const notWhite = Color(0xFFEDF0F2);

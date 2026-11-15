@@ -1,11 +1,12 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/language_learning/language_learning_home_screen.dart';
 import 'package:templates/features/templates/language_learning/language_learning_theme.dart';
 import 'package:templates/features/templates/language_learning/language_lesson_screen.dart';
+
 import 'localized_test_app.dart';
 
 void main() {

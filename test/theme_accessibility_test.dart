@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,6 +20,7 @@ import 'package:templates/features/templates/hotel_booking/filters_screen.dart';
 import 'package:templates/features/templates/hotel_booking/hotel_home_screen.dart';
 import 'package:templates/l10n/localizations.dart';
 import 'package:templates/main.dart';
+
 import 'localized_test_app.dart';
 import 'painted_text_contrast.dart';
 
@@ -354,9 +355,8 @@ Future<void> _pumpThemedScreen(
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
-  final mediaQuery = MediaQueryData.fromView(
-    tester.view,
-  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
+  final mediaQuery = MediaQueryData.fromView(tester.view)
+      .copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: true);
 
   await tester.pumpWidget(
     LocalizedTestApp(

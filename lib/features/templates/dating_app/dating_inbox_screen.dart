@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';

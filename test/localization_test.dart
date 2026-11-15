@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart' show GlobalCupertinoLocalizations;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart' show GlobalWidgetsLocalizations;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:material_ui/material_ui.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/gallery/models/template_gallery_item.dart';
 import 'package:templates/features/templates/channel_messenger/channel_messenger_home_screen.dart';

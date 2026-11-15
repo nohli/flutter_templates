@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../bottom_navigation_view/bottom_bar_view.dart';
 import '../fitness_app_theme.dart';

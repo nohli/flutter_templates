@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/rendering.dart' show RenderParagraph;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,6 +17,7 @@ import 'package:templates/features/templates/fitness_app/ui_view/fitness_section
 import 'package:templates/features/templates/fitness_app/ui_view/mediterranean_diet_view.dart';
 import 'package:templates/features/templates/fitness_app/ui_view/sample_date_header.dart';
 import 'package:templates/features/templates/fitness_app/ui_view/wave_view.dart';
+
 import 'localized_test_app.dart';
 
 void main() {
@@ -422,9 +423,8 @@ Future<void> _pumpFitnessScreen(
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
   addTearDown(tester.view.reset);
-  final mediaQuery = MediaQueryData.fromView(
-    tester.view,
-  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
+  final mediaQuery = MediaQueryData.fromView(tester.view)
+      .copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
 
   await tester.pumpWidget(
     LocalizedTestApp(

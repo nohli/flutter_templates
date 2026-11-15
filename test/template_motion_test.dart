@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/features/templates/shared/template_motion.dart';
+
 import 'localized_test_app.dart';
 
 void main() {

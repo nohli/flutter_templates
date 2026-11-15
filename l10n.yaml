@@ -1,6 +1,12 @@
 arb-dir: lib/l10n
 template-arb-file: app_en.arb
 output-dir: lib/l10n/gen
+# Workaround for https://github.com/flutter/flutter/issues/196475
+header: |
+  // ignore: unused_import
+  import '../material_localizations.dart' as GlobalMaterialLocalizations;
+  // ignore: unused_import
+  import '../cupertino_localizations.dart' as GlobalCupertinoLocalizations;
 output-localization-file: app_localizations.dart
 nullable-getter: false
 format: true

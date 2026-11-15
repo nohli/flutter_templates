@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../ui_view/area_list_view.dart';
 import '../ui_view/fitness_section_scaffold.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'channel_messenger_theme.dart';
 import 'models/channel_conversation.dart';

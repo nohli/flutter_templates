@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/features/support/about_screen.dart';
@@ -7,6 +7,7 @@ import 'package:templates/app/app_theme.dart';
 import 'package:templates/features/support/feedback_screen.dart';
 import 'package:templates/features/support/help_screen.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
+
 import 'localized_test_app.dart';
 
 void main() {

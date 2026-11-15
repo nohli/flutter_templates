@@ -1,6 +1,6 @@
 import 'dart:ui' show CheckedState, SemanticsAction, Tristate;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
@@ -17,6 +17,7 @@ import 'package:templates/features/templates/hotel_booking/model/hotel_list_data
 import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
 import 'package:templates/features/templates/shared/animated_favorite_icon.dart';
 import 'package:templates/features/gallery/home_screen.dart';
+
 import 'localized_test_app.dart';
 
 void main() {

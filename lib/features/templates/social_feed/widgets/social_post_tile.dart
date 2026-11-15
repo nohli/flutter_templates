@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../models/social_post.dart';
 import '../social_feed_theme.dart';

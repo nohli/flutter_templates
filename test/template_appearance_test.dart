@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/app/app_theme.dart';
@@ -17,6 +17,7 @@ import 'package:templates/features/templates/design_course/models/category.dart'
 import 'package:templates/features/templates/finance_app/finance_home_screen.dart';
 import 'package:templates/features/templates/shared/template_appearance.dart';
 import 'package:templates/main.dart';
+
 import 'localized_test_app.dart';
 
 void main() {

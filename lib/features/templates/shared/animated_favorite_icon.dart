@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class AnimatedFavoriteIcon extends StatelessWidget {
   const AnimatedFavoriteIcon({required this.isFavorite, required this.inactiveColor, this.size, super.key});

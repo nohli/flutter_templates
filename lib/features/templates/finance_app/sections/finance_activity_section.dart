@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../models/finance_transaction.dart';
 import '../widgets/finance_entrance.dart';

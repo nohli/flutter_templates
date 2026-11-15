@@ -181,8 +181,6 @@ void main() {
   });
 
   testWidgets('meal cards preserve the original open gradients at the default text size', (WidgetTester tester) async {
-    final roboto = FontLoader('Roboto')..addFont(rootBundle.load('assets/fonts/Roboto-Bold.ttf'));
-    await roboto.load();
     final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     _evictAssets(<String>['assets/fitness_app/breakfast.png']);
@@ -213,8 +211,6 @@ void main() {
   });
 
   testWidgets('large-text meal cards retain the accessible contrast surface', (WidgetTester tester) async {
-    final roboto = FontLoader('Roboto')..addFont(rootBundle.load('assets/fonts/Roboto-Bold.ttf'));
-    await roboto.load();
     final controller = AnimationController(vsync: tester, value: 1);
     addTearDown(controller.dispose);
     _evictAssets(<String>['assets/fitness_app/breakfast.png']);

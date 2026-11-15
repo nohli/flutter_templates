@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../fitness_app_theme.dart';
 import '../ui_view/animated_fitness_card.dart';

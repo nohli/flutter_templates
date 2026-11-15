@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_appearance.dart';
 import '../shared/template_appearance.dart';
@@ -73,9 +73,8 @@ class _PrivateMessengerHomeState extends State<_PrivateMessengerHome> {
         templatePageRoute<void>(
           context: context,
           builder: (context) => PrivateChatScreen(
-            conversation: PrivateConversation.samples(
-              context.l10n,
-            ).firstWhere((sample) => sample.initials == conversation.initials),
+            conversation: PrivateConversation.samples(context.l10n)
+                .firstWhere((sample) => sample.initials == conversation.initials),
           ),
         ),
       ),

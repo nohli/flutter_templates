@@ -1,12 +1,13 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/features/templates/social_feed/social_compose_screen.dart';
 import 'package:templates/features/templates/social_feed/social_feed_home_screen.dart';
 import 'package:templates/features/templates/social_feed/social_feed_theme.dart';
 import 'package:templates/features/templates/social_feed/social_thread_screen.dart';
+
 import 'localized_test_app.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'dart:ui' show Tristate;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
@@ -38,6 +38,7 @@ import 'package:templates/features/templates/hotel_booking/range_slider_view.dar
 import 'package:templates/features/templates/hotel_booking/slider_view.dart';
 import 'package:templates/features/templates/hotel_booking/smooth_star_rating.dart';
 import 'package:templates/main.dart' as app;
+
 import 'localized_test_app.dart';
 
 void main() {
@@ -1115,9 +1116,8 @@ Future<void> _expectStatusBarTapScrollsToTop(WidgetTester tester, Widget screen)
   await tester.pumpWidget(
     LocalizedTestApp(
       home: MediaQuery(
-        data: MediaQueryData.fromView(
-          tester.view,
-        ).copyWith(disableAnimations: true, padding: const EdgeInsets.only(top: 25)),
+        data: MediaQueryData.fromView(tester.view)
+            .copyWith(disableAnimations: true, padding: const EdgeInsets.only(top: 25)),
         child: screen,
       ),
     ),

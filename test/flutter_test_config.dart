@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:ui' show Locale;
 
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart' show GlobalMaterialLocalizations;
 import 'package:templates/app/sdf_rounded_rectangle_border.dart';
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {

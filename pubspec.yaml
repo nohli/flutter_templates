@@ -5,17 +5,19 @@ publish_to: 'none'
 version: 1.16.0+1
 
 environment:
-  sdk: '>=3.12.0 <4.0.0'
+  sdk: '>=3.13.0 <4.0.0'
   flutter: '>=3.47.8'
 
 dependencies:
   cupertino_icons: ^2.0.0
+  cupertino_ui: ^1.0.0
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
   font_awesome_flutter: ^11.0.0
   intl: ^0.20.0
+  material_ui: ^1.0.0
   share_plus: ^13.3.1
   url_launcher: ^6.3.3
 

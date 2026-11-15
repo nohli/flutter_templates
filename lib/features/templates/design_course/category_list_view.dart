@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../app/motion_preferences.dart';
 import 'design_course_app_theme.dart';

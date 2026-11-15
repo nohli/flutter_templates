@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/features/support/about_screen.dart';
@@ -11,6 +11,7 @@ import 'package:templates/features/support/feedback_screen.dart';
 import 'package:templates/app/font_licenses.dart';
 import 'package:templates/features/support/help_screen.dart';
 import 'package:templates/features/support/invite_friend_screen.dart';
+
 import 'localized_test_app.dart';
 
 const _fontLicenseAssets = <String>[

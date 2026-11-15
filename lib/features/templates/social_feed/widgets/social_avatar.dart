@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SocialAvatar extends StatelessWidget {
   const SocialAvatar({required this.initials, required this.colors, this.radius = 23, super.key});

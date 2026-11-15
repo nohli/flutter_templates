@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:templates/app/app_appearance.dart';
 import 'package:templates/app/sdf_rounded_rectangle_border.dart';
@@ -13,6 +13,7 @@ import 'package:templates/features/templates/finance_app/widgets/finance_entranc
 import 'package:templates/features/templates/finance_app/widgets/finance_surface.dart';
 import 'package:templates/features/templates/finance_app/widgets/quick_actions.dart';
 import 'package:templates/features/templates/finance_app/widgets/spending_overview.dart';
+
 import 'localized_test_app.dart';
 
 void main() {
@@ -445,9 +446,8 @@ Future<void> _pumpFinance(
   tester.view.physicalSize = size * devicePixelRatio;
   addTearDown(tester.view.reset);
 
-  final mediaQuery = MediaQueryData.fromView(
-    tester.view,
-  ).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
+  final mediaQuery = MediaQueryData.fromView(tester.view)
+      .copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: disableAnimations);
   await tester.pumpWidget(
     LocalizedTestApp(
       locale: locale,

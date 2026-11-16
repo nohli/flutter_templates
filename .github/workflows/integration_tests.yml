@@ -14,7 +14,7 @@ on:
       - 'test/**'
   push:
     branches:
-      - main
+      - '**'
     paths-ignore:
       - '**.md'
       - 'LICENSE'

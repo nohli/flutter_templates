@@ -17,7 +17,7 @@ workflows:
         bundle_identifier: com.achimsapps.templates
       vars:
         CM_CLONE_UNSHALLOW: 'true'
-      flutter: stable
+      flutter: fvm
       xcode: '27.2'
     scripts:
       - &check_app_settings
@@ -121,7 +121,7 @@ workflows:
         - $ANDROID_KEYSTORE_REFERENCE
       vars:
         CM_CLONE_UNSHALLOW: 'true'
-      flutter: stable
+      flutter: fvm
     scripts:
       - *check_app_settings
       - name: Get Packages
@@ -192,7 +192,7 @@ workflows:
       groups:
         - cloudflare_credentials
         - release_config
-      flutter: stable
+      flutter: fvm
     scripts:
       - *check_app_settings
       - name: Get Packages
@@ -256,7 +256,7 @@ workflows:
       ios_signing: *ios_signing
       vars:
         CM_CLONE_UNSHALLOW: 'true'
-      flutter: stable
+      flutter: fvm
       xcode: '27.2'
     scripts:
       - *check_app_settings
@@ -354,7 +354,7 @@ workflows:
         - $ANDROID_KEYSTORE_REFERENCE
       vars:
         CM_CLONE_UNSHALLOW: 'true'
-      flutter: stable
+      flutter: fvm
     scripts:
       - *check_app_settings
       - *prepare_shorebird
@@ -440,7 +440,7 @@ workflows:
         - shorebird
         - release_config
       ios_signing: *ios_signing
-      flutter: stable
+      flutter: fvm
       xcode: '27.2'
     scripts:
       - &validate_patch
@@ -505,7 +505,7 @@ workflows:
         - release_config
       android_signing:
         - $ANDROID_KEYSTORE_REFERENCE
-      flutter: stable
+      flutter: fvm
     scripts:
       - *validate_patch
       - *check_app_settings
